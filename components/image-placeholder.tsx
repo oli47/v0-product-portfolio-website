@@ -19,13 +19,12 @@ export function ImagePlaceholder({
   if (src) {
     return (
       <figure className={cn('w-full', className)}>
-        <div className={cn('relative w-full overflow-hidden rounded-[10px] border border-border')}>
+        <div className={cn('relative w-full overflow-hidden rounded-[10px] border border-border')} style={{ height }}>
           <Image
             src={src}
             alt={alt || label}
-            width={720}
-            height={height}
-            className="w-full h-auto object-cover"
+            fill
+            className="w-full h-full object-cover"
             priority
           />
         </div>

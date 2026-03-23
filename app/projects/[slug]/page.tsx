@@ -74,7 +74,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             height={360} 
             className="mb-8 rounded-xl" 
             src="/images/project-1-cover.jpg"
-            label="Signup redesign"
             alt="Project cover"
           />
 
@@ -88,11 +87,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.tagline}
           </p>
 
-          {/* Meta lines */}
-          <div className="space-y-1 text-[14px] font-medium text-text-caption mb-6">
-            <p>{project.meta.year} · {project.meta.company}</p>
-            <p>Role: {project.meta.role}</p>
-            <p>Team: 1 front-end dev (code review), 1 data analyst</p>
+          {/* Meta info - styled like metrics */}
+          <div className="grid grid-cols-3 gap-8 mb-8">
+            <div className="text-left">
+              <p className="text-[14px] font-medium text-text-caption mb-1">Year</p>
+              <p className="text-[16px] font-semibold text-foreground">{project.meta.year}</p>
+            </div>
+            <div className="text-left">
+              <p className="text-[14px] font-medium text-text-caption mb-1">Company</p>
+              <p className="text-[16px] font-semibold text-foreground">{project.meta.company}</p>
+            </div>
+            <div className="text-left">
+              <p className="text-[14px] font-medium text-text-caption mb-1">Team</p>
+              <p className="text-[16px] font-semibold text-foreground">2 people</p>
+            </div>
           </div>
 
           {/* Overview */}
@@ -107,19 +115,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* Section 2: Opportunity */}
         <section className="mb-16">
           <SectionLabel>Opportunity</SectionLabel>
-          <div className="space-y-4 mb-8">
+          <div className="space-y-4">
             {project.opportunity.map((paragraph, index) => (
               <p key={index} className="text-[16px] text-text-body leading-relaxed">
                 {paragraph}
               </p>
             ))}
-          </div>
-
-          {/* Amplitude placeholder */}
-          <div className="mb-8">
-            <div className="w-full bg-fill-subtle rounded-[10px] flex items-center justify-center" style={{ height: '240px' }}>
-              <span className="text-[14px] font-medium text-text-caption">Drop-off in Amplitude</span>
-            </div>
           </div>
         </section>
 
@@ -142,32 +143,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               return null
             })}
 
-            {/* Compare sliders */}
-            <div className="space-y-8 mt-8">
-              {/* Slider 1: Before vs After Step 1 */}
-              <div>
-                <CompareSlider
-                  beforeSrc="/images/project-1-signup-old.jpg"
-                  afterSrc="/images/project-1-signup-new-1.jpg"
-                  beforeLabel="Before"
-                  afterLabel="After — Step 1"
-                  beforeAlt="Original form"
-                  afterAlt="New step 1"
-                />
-              </div>
-
-              {/* Slider 2: Before vs After Step 2 */}
-              <div>
-                <CompareSlider
-                  beforeSrc="/images/project-1-signup-old.jpg"
-                  afterSrc="/images/project-1-signup-new-2.jpg"
-                  beforeLabel="Before"
-                  afterLabel="After — Step 2"
-                  beforeAlt="Original form"
-                  afterAlt="New step 2"
-                />
-              </div>
-            </div>
+            {/* Compare slider - single component with automatic cycling */}
+            <CompareSlider />
           </div>
         </section>
 

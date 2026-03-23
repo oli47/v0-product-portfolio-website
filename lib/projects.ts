@@ -33,7 +33,7 @@ export const projects: Project[] = [
       role: 'Senior Product Designer',
       company: 'edrone',
       companyUrl: 'https://edrone.me',
-      year: '2024–2025',
+      year: '2026',
     },
     overview:
       'edrone\'s signup was the entry point into a freemium e-commerce platform. I spotted a critical drop-off, designed the fix, coded it myself using AI, and shipped it the same day. Total time: under 5 hours.',

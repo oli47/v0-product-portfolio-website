@@ -1,136 +1,78 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-interface CompareSliderProps {
-  beforeSrc: string
-  afterSrc: string
-  beforeLabel: string
-  afterLabel: string
-  beforeAlt?: string
-  afterAlt?: string
-}
+export function CompareSlider() {
+  const [afterIndex, setAfterIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
-export function CompareSlider({
-  beforeSrc,
-  afterSrc,
-  beforeLabel,
-  afterLabel,
-  beforeAlt = 'Before',
-  afterAlt = 'After',
-}: CompareSliderProps) {
-  const [isResizing, setIsResizing] = useState(false)
-  const [position, setPosition] = useState(50)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const handleMouseDown = () => {
-    setIsResizing(true)
-  }
+  const afterImages = [
+    { src: '/images/signup-new1.jpg', label: 'After — Step 1' },
+    { src: '/images/signup-new2.jpg', label: 'After — Step 2' },
+  ]
 
   useEffect(() => {
-    const handleMouseUp = () => {
-      setIsResizing(false)
-    }
+    const interval = setInterval(() => {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setAfterIndex((prev) => (prev + 1) % afterImages.length)
+        setIsTransitioning(false)
+      }, 400)
+    }, 1800)
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing || !containerRef.current) return
-
-      const rect = containerRef.current.getBoundingClientRect()
-      const newPosition = ((e.clientX - rect.left) / rect.width) * 100
-      setPosition(Math.min(Math.max(newPosition, 0), 100))
-    }
-
-    if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-  }, [isResizing])
+    return () => clearInterval(interval)
+  }, [])
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full overflow-hidden rounded-[10px] border border-border cursor-col-resize select-none"
-    >
-      {/* After image (background) */}
-      <div className="relative w-full h-auto">
-        <Image
-          src={afterSrc}
-          alt={afterAlt}
-          width={720}
-          height={960}
-          className="w-full h-auto block"
-          priority
-        />
-      </div>
-
-      {/* Before image (overlay) */}
-      <div
-        className="absolute top-0 left-0 h-full overflow-hidden"
-        style={{ width: `${position}%` }}
-      >
-        <Image
-          src={beforeSrc}
-          alt={beforeAlt}
-          width={720}
-          height={960}
-          className="w-full h-auto block"
-          priority
-        />
-      </div>
-
-      {/* Slider handle */}
-      <div
-        className="absolute top-0 bottom-0 w-1 bg-foreground cursor-col-resize"
-        style={{ left: `${position}%` }}
-        onMouseDown={handleMouseDown}
-      >
-        {/* Handle indicators */}
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex gap-1">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            className="text-foreground"
-          >
-            <path
-              d="M8 6L4 10L8 14"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+    <div className="w-full rounded-[10px] border border-border overflow-hidden">
+      <div className="relative w-full" style={{ aspectRatio: '2/1' }}>
+        {/* Container for both images */}
+        <div className="flex w-full h-full">
+          {/* Before image - left side */}
+          <div className="w-1/2 h-full relative overflow-hidden">
+            <Image
+              src="/images/signup-old.jpg"
+              alt="Before"
+              fill
+              className="object-cover"
+              priority
             />
-          </svg>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            className="text-foreground"
-          >
-            <path
-              d="M12 6L16 10L12 14"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          </div>
+
+          {/* After image - right side with fade transition */}
+          <div className="w-1/2 h-full relative overflow-hidden">
+            {afterImages.map((img, idx) => (
+              <div
+                key={idx}
+                className="absolute inset-0 transition-opacity duration-400"
+                style={{
+                  opacity: idx === afterIndex ? 1 : 0,
+                  transitionTimingFunction: 'linear',
+                }}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.label}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Center divider */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border transform -translate-x-1/2" />
         </div>
-      </div>
 
-      {/* Labels */}
-      <div className="absolute top-4 left-4 px-2 py-1 bg-black/50 text-white text-[12px] font-medium rounded pointer-events-none">
-        {beforeLabel}
-      </div>
-      <div className="absolute top-4 right-4 px-2 py-1 bg-black/50 text-white text-[12px] font-medium rounded pointer-events-none">
-        {afterLabel}
+        {/* Labels */}
+        <div className="absolute bottom-4 left-4 text-[14px] font-medium text-foreground bg-white/80 px-3 py-1 rounded">
+          Before
+        </div>
+        <div className="absolute bottom-4 right-4 text-[14px] font-medium text-foreground bg-white/80 px-3 py-1 rounded">
+          After
+        </div>
       </div>
     </div>
   )

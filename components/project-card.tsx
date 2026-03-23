@@ -18,13 +18,13 @@ export function ProjectCard({ project, imagePosition }: ProjectCardProps) {
         }`}
       >
         {/* Image */}
-        <div className="w-full md:w-1/2 bg-fill-subtle flex items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden">
+        <div className="w-full md:w-1/2 bg-fill-subtle flex items-center justify-center md:min-h-[280px] overflow-hidden">
           {coverImage ? (
             <Image
               src={coverImage}
               alt={project.title}
-              width={360}
-              height={240}
+              width={400}
+              height={280}
               className="w-full h-full object-cover"
               priority
             />
@@ -38,9 +38,9 @@ export function ProjectCard({ project, imagePosition }: ProjectCardProps) {
           <h3 className="text-[16px] font-semibold text-foreground mb-2">
             {project.title}
           </h3>
-          <p className="text-[16px] text-text-body mb-3">{project.tagline}</p>
+          <p className="text-[14px] text-text-body line-clamp-2 mb-4">{project.tagline}</p>
           <p className="text-[14px] font-medium text-text-caption">
-            {project.meta.role} · {project.meta.company} · {project.meta.year}
+            {project.meta.company} · {project.meta.year}
           </p>
         </div>
       </article>
