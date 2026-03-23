@@ -73,8 +73,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <ImagePlaceholder 
             height={360} 
             className="mb-8 rounded-xl" 
-            src="/images/project-1-signup-old.jpg"
-            label="Signup form"
+            src="/images/project-1-cover.jpg"
+            label="Signup redesign"
             alt="Project cover"
           />
 

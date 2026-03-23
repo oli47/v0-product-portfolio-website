@@ -8,7 +8,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, imagePosition }: ProjectCardProps) {
-  const coverImage = project.slug === 'project-1' ? '/images/project-1-signup-old.jpg' : null
+  const coverImage = project.slug === 'project-1' ? '/images/project-1-cover.jpg' : null
 
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
