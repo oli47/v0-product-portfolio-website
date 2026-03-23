@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Project } from '@/lib/projects'
 
 interface ProjectCardProps {
@@ -7,6 +8,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, imagePosition }: ProjectCardProps) {
+  const coverImage = project.slug === 'project-1' ? '/images/project-1-signup-old.jpg' : null
+
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
       <article
@@ -14,9 +17,20 @@ export function ProjectCard({ project, imagePosition }: ProjectCardProps) {
           imagePosition === 'right' ? 'md:flex-row-reverse' : ''
         }`}
       >
-        {/* Image placeholder */}
-        <div className="w-full md:w-1/2 bg-fill-subtle flex items-center justify-center min-h-[200px] md:min-h-[240px]">
-          <span className="text-[14px] font-medium text-text-caption">cover image</span>
+        {/* Image */}
+        <div className="w-full md:w-1/2 bg-fill-subtle flex items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden">
+          {coverImage ? (
+            <Image
+              src={coverImage}
+              alt={project.title}
+              width={360}
+              height={240}
+              className="w-full h-full object-cover"
+              priority
+            />
+          ) : (
+            <span className="text-[14px] font-medium text-text-caption">cover image</span>
+          )}
         </div>
 
         {/* Text content */}

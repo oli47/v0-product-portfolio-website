@@ -4,6 +4,7 @@ import { projects, getProject, getProjectNavigation } from '@/lib/projects'
 import { SectionLabel } from '@/components/section-label'
 import { ImagePlaceholder, ImageRow } from '@/components/image-placeholder'
 import { Footer } from '@/components/footer'
+import { CompareSlider } from '@/components/compare-slider'
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -68,35 +69,36 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Section 1: Header */}
         <section className="mb-16">
-          {/* Cover image placeholder */}
-          <ImagePlaceholder height={360} className="mb-8 rounded-xl" label="cover image" />
+          {/* Cover image */}
+          <ImagePlaceholder 
+            height={360} 
+            className="mb-8 rounded-xl" 
+            src="/images/project-1-signup-old.jpg"
+            label="Signup form"
+            alt="Project cover"
+          />
 
           {/* Project title */}
-          <h1 className="text-[28px] font-semibold text-foreground leading-tight mb-4">
+          <h1 className="text-[28px] font-semibold text-foreground leading-tight mb-3">
             {project.title}
           </h1>
+
+          {/* Tagline */}
+          <p className="text-[18px] font-medium text-text-body leading-relaxed mb-6">
+            {project.tagline}
+          </p>
 
           {/* Meta lines */}
           <div className="space-y-1 text-[14px] font-medium text-text-caption mb-6">
             <p>{project.meta.year} · {project.meta.company}</p>
             <p>Role: {project.meta.role}</p>
-            <p>Team: [placeholder]</p>
+            <p>Team: 1 front-end dev (code review), 1 data analyst</p>
           </div>
 
           {/* Overview */}
-          <p className="text-[16px] text-text-body leading-relaxed mb-8">
+          <p className="text-[16px] text-text-body leading-relaxed">
             {project.overview}
           </p>
-
-          {/* First image after overview */}
-          {project.process.length > 0 && project.process[0].type === 'image' && (
-            <ImagePlaceholder
-              height={360}
-              src={project.process[0].src}
-              label={project.process[0].label}
-              alt={project.process[0].alt}
-            />
-          )}
         </section>
 
         {/* Divider */}
@@ -105,12 +107,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* Section 2: Opportunity */}
         <section className="mb-16">
           <SectionLabel>Opportunity</SectionLabel>
-          <div className="space-y-4">
+          <div className="space-y-4 mb-8">
             {project.opportunity.map((paragraph, index) => (
               <p key={index} className="text-[16px] text-text-body leading-relaxed">
                 {paragraph}
               </p>
             ))}
+          </div>
+
+          {/* Amplitude placeholder */}
+          <div className="mb-8">
+            <div className="w-full bg-fill-subtle rounded-[10px] flex items-center justify-center" style={{ height: '240px' }}>
+              <span className="text-[14px] font-medium text-text-caption">Drop-off in Amplitude</span>
+            </div>
           </div>
         </section>
 
@@ -130,22 +139,35 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </p>
                 )
               }
-              if (block.type === 'image') {
-                return (
-                  <ImagePlaceholder
-                    key={index}
-                    height={360}
-                    src={block.src}
-                    label={block.label}
-                    alt={block.alt}
-                  />
-                )
-              }
-              if (block.type === 'image-row') {
-                return <ImageRow key={index} images={block.images} />
-              }
               return null
             })}
+
+            {/* Compare sliders */}
+            <div className="space-y-8 mt-8">
+              {/* Slider 1: Before vs After Step 1 */}
+              <div>
+                <CompareSlider
+                  beforeSrc="/images/project-1-signup-old.jpg"
+                  afterSrc="/images/project-1-signup-new-1.jpg"
+                  beforeLabel="Before"
+                  afterLabel="After — Step 1"
+                  beforeAlt="Original form"
+                  afterAlt="New step 1"
+                />
+              </div>
+
+              {/* Slider 2: Before vs After Step 2 */}
+              <div>
+                <CompareSlider
+                  beforeSrc="/images/project-1-signup-old.jpg"
+                  afterSrc="/images/project-1-signup-new-2.jpg"
+                  beforeLabel="Before"
+                  afterLabel="After — Step 2"
+                  beforeAlt="Original form"
+                  afterAlt="New step 2"
+                />
+              </div>
+            </div>
           </div>
         </section>
 
