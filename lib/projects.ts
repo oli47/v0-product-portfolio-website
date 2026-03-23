@@ -28,7 +28,7 @@ export const projects: Project[] = [
     tagline: '+40% signups on desktop, +300% on mobile within 7 days.',
     meta: {
       role: 'Sr Product Designer',
-      team: '1 Front-end',
+      team: '1 Front-end developer',
       year: '2026',
     },
     coverImage: '/images/thumbnail1.jpg',
@@ -59,12 +59,12 @@ export const projects: Project[] = [
     tagline: 'Self-serve path from scratch, turning a sales-gated product into a scalable growth engine.',
     meta: {
       role: 'Sr Product Designer',
-      team: '3 Front-ends, 2 Back-ends',
+      team: '3 Front-end, 2 Back-end developers',
       year: '2025-2026',
     },
     coverImage: '/images/thumbnail2.jpg',
     thumbnailImage: '/images/thumbnail2small.jpg',
-    overview: 'Before freemium, every new edrone customer required a Sales call, manual onboarding, and hand-holding from Support. I proposed the freemium model, owned the full design from signup through onboarding, integration, feature activation, and Stripe payment, and stripped it end-to-end.',
+    overview: 'Before freemium, every new edrone customer required a Sales call, manual onboarding, and hand-holding from Support. I proposed the freemium model, owned the full design from signup through onboarding, integration, feature activation, and Stripe payment, and shipped it end-to-end.',
     overviewImage: '/images/activationflow.jpg',
     opportunity: [
       "edrone's growth had a hard ceiling: Sales. Every new user was expensive to acquire and slow to activate. The product was genuinely useful, users just never had a chance to find that out on their own. The opportunity was to let the product sell itself.",

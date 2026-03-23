@@ -17,7 +17,7 @@ export const experiences: Experience[] = [
     isCurrent: true,
   },
   {
-    dateRange: '2023 – 2022',
+    dateRange: '2020 – 2022',
     logo: '/images/logo-deepsolver.png',
     company: 'Deepsolver',
     companyUrl: 'https://deepsolver.com',
@@ -34,6 +34,7 @@ export const experiences: Experience[] = [
   },
   {
     dateRange: '2018',
+    logo: '/images/logo-inventive.png',
     company: 'Inventive Software',
     companyUrl: 'https://inventivesoftware.com',
     role: 'Junior UX/UI Designer',

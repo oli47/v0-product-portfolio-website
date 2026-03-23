@@ -32,7 +32,7 @@ export function ExperienceTimeline() {
 
           {/* Company and role - body-1: 16/160 */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[16px] font-semibold text-foreground leading-[160%]">
+            <span className="text-[16px] text-foreground leading-[160%]">
               {exp.company}
             </span>
             <span className="text-[16px] text-text-caption leading-[160%]">·</span>
