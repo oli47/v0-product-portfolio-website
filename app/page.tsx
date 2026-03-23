@@ -50,7 +50,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="text-foreground font-semibold hover:underline"
               >
-                Deepseeker
+                Deepsolver
               </a>
               , where I took two products from zero to launch. I use AI as a core part of my design process, think in systems, and code enough to go from prototype to production.
             </p>

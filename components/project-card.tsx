@@ -9,11 +9,11 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
-      <article className="flex flex-col md:flex-row gap-6 md:gap-8">
+      <article className="flex flex-col md:flex-row gap-6 md:gap-8 transition-opacity duration-200 hover:opacity-80">
         {/* Text content - left side */}
         <div className="w-full md:w-1/2 flex flex-col justify-center order-2 md:order-1">
           {/* Title - body-1-bold: 16/160 */}
-          <h3 className="text-[16px] font-semibold text-foreground leading-[160%] mb-1">
+          <h3 className="text-[16px] font-semibold text-foreground leading-[160%] mb-1 group-hover:text-gray-600 transition-colors duration-200">
             {project.title}
           </h3>
           {/* Tagline - body-1: 16/160 */}
@@ -28,12 +28,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Image - right side */}
         <div className="w-full md:w-1/2 order-1 md:order-2">
-          <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-border">
+          <div className="relative w-full overflow-hidden rounded-lg border border-border transition-shadow duration-200 group-hover:shadow-md">
             <Image
               src={project.thumbnailImage}
               alt={project.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              width={640}
+              height={400}
+              className="w-full h-auto object-contain"
               priority
             />
           </div>

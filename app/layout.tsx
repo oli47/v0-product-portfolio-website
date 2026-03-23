@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Sora } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { PageTransition } from '@/components/page-transition'
 import './globals.css'
 
 const sora = Sora({ 
@@ -43,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${sora.variable} font-sans antialiased`}>
-        {children}
+        <PageTransition>{children}</PageTransition>
         <Analytics />
       </body>
     </html>
