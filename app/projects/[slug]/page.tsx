@@ -84,9 +84,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
 
           {/* Overview */}
-          <p className="text-[16px] text-text-body leading-relaxed">
+          <p className="text-[16px] text-text-body leading-relaxed mb-8">
             {project.overview}
           </p>
+
+          {/* First image after overview */}
+          {project.process.length > 0 && project.process[0].type === 'image' && (
+            <ImagePlaceholder
+              height={360}
+              src={project.process[0].src}
+              label={project.process[0].label}
+              alt={project.process[0].alt}
+            />
+          )}
         </section>
 
         {/* Divider */}
@@ -107,11 +117,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* Divider */}
         <div className="h-px bg-border mb-16" />
 
-        {/* Section 3: Process & Solution */}
+        {/* Section 3: Decision */}
         <section className="mb-16">
-          <SectionLabel>Process & Solution</SectionLabel>
+          <SectionLabel>Decision</SectionLabel>
           <div className="space-y-6">
             {project.process.map((block, index) => {
+              if (index === 0) return null
               if (block.type === 'paragraph') {
                 return (
                   <p key={index} className="text-[16px] text-text-body leading-relaxed">
@@ -120,10 +131,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 )
               }
               if (block.type === 'image') {
-                return <ImagePlaceholder key={index} height={320} />
+                return (
+                  <ImagePlaceholder
+                    key={index}
+                    height={360}
+                    src={block.src}
+                    label={block.label}
+                    alt={block.alt}
+                  />
+                )
               }
               if (block.type === 'image-row') {
-                return <ImageRow key={index} />
+                return <ImageRow key={index} images={block.images} />
               }
               return null
             })}
