@@ -1,5 +1,6 @@
 'use client'
 
+// Compare slider with drag functionality
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 
@@ -91,14 +92,13 @@ export function CompareSlider({
       {/* Before image (clipped) */}
       <div
         className="absolute inset-0 overflow-hidden"
-        style={{ width: `${sliderPosition}%` }}
+        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
         <Image
           src={beforeImage}
           alt={beforeLabel}
           fill
           className="object-cover pointer-events-none"
-          style={{ width: `${100 / (sliderPosition / 100)}%`, maxWidth: 'none' }}
           priority
           draggable={false}
         />
