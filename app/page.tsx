@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { projects } from '@/lib/projects'
 import { SectionLabel } from '@/components/section-label'
 import { ProjectCard } from '@/components/project-card'
@@ -10,16 +11,25 @@ export default function HomePage() {
       <div className="max-w-[720px] mx-auto px-6 py-16 md:py-24">
         {/* Section 1: Intro */}
         <section className="mb-16">
-          {/* Avatar placeholder */}
-          <div className="w-16 h-16 rounded-[14px] bg-[#e8e8e8] mb-6" />
+          {/* Avatar */}
+          <div className="w-16 h-16 rounded-[14px] overflow-hidden mb-6">
+            <Image
+              src="/images/avatar.jpg"
+              alt="Olaf Otrząsek"
+              width={64}
+              height={64}
+              className="w-full h-full object-cover"
+              priority
+            />
+          </div>
 
-          {/* Headline */}
-          <h1 className="text-[28px] font-semibold text-foreground leading-tight mb-6">
+          {/* Headline - h1: 32/160 */}
+          <h1 className="text-[32px] font-semibold text-foreground leading-[160%] mb-6">
             Senior Product Designer building SaaS that performs.
           </h1>
 
-          {/* Body paragraphs */}
-          <div className="space-y-4 text-[16px] text-text-body leading-relaxed">
+          {/* Body paragraphs - body-1: 16/160 */}
+          <div className="space-y-4 text-[16px] text-text-body leading-[160%]">
             <p>
               {"I'm Olaf, a Warsaw-based product designer with 7+ years of experience. I build SaaS products where smart UX and AI meet business outcomes — from system thinking to the last pixel."}
             </p>
@@ -33,40 +43,42 @@ export default function HomePage() {
               >
                 edrone
               </a>
-              . Previously sole designer at{' '}
+              . Previously solo designer at{' '}
               <a
                 href="https://deepsolver.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground font-semibold hover:underline"
               >
-                Deepsolver
+                Deepseeker
               </a>
               , where I took two products from zero to launch. I use AI as a core part of my design process, think in systems, and code enough to go from prototype to production.
             </p>
           </div>
 
-          {/* Links row */}
-          <div className="flex items-center gap-4 mt-6 text-[14px] font-medium text-text-caption flex-wrap">
+          {/* Links row - body-2: 14/160 */}
+          <div className="flex items-center gap-2 mt-6 text-[14px] leading-[160%] text-text-caption flex-wrap">
             <a
               href="https://www.linkedin.com/in/olafotrzasek/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground hover:underline transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               LinkedIn
             </a>
+            <span className="text-text-caption">·</span>
             <a
               href="https://dribbble.com/olvsky"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground hover:underline transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               Dribbble
             </a>
+            <span className="text-text-caption">·</span>
             <a
               href="mailto:olafotrzasek@gmail.com"
-              className="hover:text-foreground hover:underline transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               olafotrzasek@gmail.com
             </a>
@@ -79,12 +91,11 @@ export default function HomePage() {
         {/* Section 2: Selected Work */}
         <section className="mb-16">
           <SectionLabel>Selected Work</SectionLabel>
-          <div className="space-y-6">
-            {projects.map((project, index) => (
+          <div className="space-y-12">
+            {projects.map((project) => (
               <ProjectCard
                 key={project.slug}
                 project={project}
-                imagePosition={index % 2 === 0 ? 'left' : 'right'}
               />
             ))}
           </div>

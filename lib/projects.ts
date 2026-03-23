@@ -4,131 +4,117 @@ export interface Project {
   tagline: string
   meta: {
     role: string
-    company: string
-    companyUrl: string
+    team: string
     year: string
   }
+  coverImage: string
+  thumbnailImage: string
   overview: string
+  overviewImage?: string
   opportunity: string[]
-  process: {
-    type: 'paragraph' | 'image' | 'image-row'
-    content?: string
-    src?: string
-    label?: string
-    alt?: string
-    images?: Array<{ src: string; label: string; alt?: string }>
-  }[]
+  decision: string[]
+  decisionImage?: string
   metrics: {
     value: string
     label: string
   }[]
+  nextSteps?: string[]
 }
 
 export const projects: Project[] = [
   {
-    slug: 'project-1',
+    slug: 'signup-redesign',
     title: 'Signup Redesign',
-    tagline: 'Removed one field, split into two steps, shipped in 5 hours. +40% signups on desktop, +300% on mobile within 7 days.',
+    tagline: '+40% signups on desktop, +300% on mobile within 7 days.',
     meta: {
-      role: 'Senior Product Designer',
-      company: 'edrone',
-      companyUrl: 'https://edrone.me',
+      role: 'Sr Product Designer',
+      team: '1 Front-end',
       year: '2026',
     },
-    overview:
-      'edrone\'s signup was the entry point into a freemium e-commerce platform. I spotted a critical drop-off, designed the fix, coded it myself using AI, and shipped it the same day. Total time: under 5 hours.',
+    coverImage: '/images/thumbnail1.jpg',
+    thumbnailImage: '/images/thumbnail1small.jpg',
+    overview: "edrone's signup was the entry point into a freemium e-commerce platform. I spotted a critical drop-off, designed the fix, coded it myself using AI, and shipped it the same day. Total time: under 5 hours.",
     opportunity: [
       'Amplitude data showed massive abandonment at the signup form. Two compounding issues were hiding in plain sight. The phone number field was the top drop-off point, confirmed by event data, a UX audit, and competitive benchmarks. A quick check with Sales confirmed they no longer needed phone numbers for lead qualification. The field was just still there.',
       'On top of that, Google SSO was broken because the single-page layout could not handle the redirect flow properly, so a fast and trusted signup method was silently failing. Two friction points, one root cause: a form that had not been questioned in years.',
     ],
-    process: [
-      { 
-        type: 'image',
-        src: '/images/project-1-signup-old.jpg',
-        label: 'The old form',
-        alt: 'Original single-page signup form'
-      },
-      { type: 'paragraph', content: 'I could have run two separate A/B tests over 6 weeks. Instead, I made one call: remove the phone field and split the form into two steps at once. Step 1: Email or Google SSO, account created immediately. Step 2: Name and store URL. This fixed the SSO flow structurally and eliminated the biggest friction point in one move.' },
-      { type: 'paragraph', content: 'I built the entire solution myself using Codex, going from design to working code without waiting on dev resources, then shipped after a light code review with one front-end dev.' },
-      {
-        type: 'image-row',
-        images: [
-          { src: '/images/project-1-signup-old.jpg', label: 'Before', alt: 'Original form' },
-          { src: '/images/project-1-signup-new-1.jpg', label: 'After — Step 1', alt: 'New step 1' },
-          { src: '/images/project-1-signup-new-2.jpg', label: 'After — Step 2', alt: 'New step 2' }
-        ]
-      }
+    decision: [
+      'I could have run two separate A/B tests over 6 weeks. Instead, I made one call: remove the phone field and split the form into two steps at once. Step 1: Email or Google SSO, account created immediately. Step 2: Name and store URL. This fixed the SSO flow structurally and eliminated the biggest friction point in one move.',
+      'I built the entire solution myself using Codex, going from design to working code without waiting on dev resources, then shipped after a light code review with one front-end dev.',
     ],
     metrics: [
-      { value: '+40%', label: 'signup rate desktop · 7 days' },
-      { value: '+300%', label: 'signup rate mobile · 7 days' },
-      { value: '+50%', label: 'integration rate increase' },
+      { value: '+40%', label: 'Signup rate desktop · 7 days' },
+      { value: '+300%', label: 'Signup rate mobile · 7 days' },
+      { value: '+50%', label: 'Integration rate increase' },
+    ],
+    nextSteps: [
+      'Creating an account takes up to 30 seconds, causing users to abandon the process.',
+      'By entering the store\'s URL, we create personalized and branded communication for the store, but the user is unaware of this.',
+      'Users coming from e-commerce marketplaces rather than the edrone website could have their accounts automatically created through authentication by those platforms, e.g., Shopify, Shoper, Tiendanube, etc.',
     ],
   },
   {
-    slug: 'project-2',
-    title: '[Project Title]',
-    tagline: '[Verb] [what] — resulting in [metric] within [timeframe].',
+    slug: 'freemium-activation',
+    title: 'Freemium Activation',
+    tagline: 'Self-serve path from scratch, turning a sales-gated product into a scalable growth engine.',
     meta: {
-      role: 'Senior Product Designer',
-      company: 'edrone',
-      companyUrl: 'https://edrone.me',
-      year: '2023–2024',
+      role: 'Sr Product Designer',
+      team: '3 Front-ends, 2 Back-ends',
+      year: '2025-2026',
     },
-    overview:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+    coverImage: '/images/thumbnail2.jpg',
+    thumbnailImage: '/images/thumbnail2small.jpg',
+    overview: 'Before freemium, every new edrone customer required a Sales call, manual onboarding, and hand-holding from Support. I proposed the freemium model, owned the full design from signup through onboarding, integration, feature activation, and Stripe payment, and stripped it end-to-end.',
+    overviewImage: '/images/activationflow.jpg',
     opportunity: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      "edrone's growth had a hard ceiling: Sales. Every new user was expensive to acquire and slow to activate. The product was genuinely useful, users just never had a chance to find that out on their own. The opportunity was to let the product sell itself.",
     ],
-    process: [
-      { type: 'paragraph', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.' },
-      { type: 'image' },
-      { type: 'image-row' },
-      { type: 'paragraph', content: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.' },
-      { type: 'image' },
-      { type: 'paragraph', content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.' },
-      { type: 'paragraph', content: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.' },
-      { type: 'image' },
-      { type: 'image-row' },
+    decision: [
+      'The hardest problem was not the paywall. It was activation: getting users to experience real value before they had a reason to trust the product. Two decisions changed the outcome.',
+      'First, the free tier was capped at 500 messages per month. Enough for a small store to see measurable ROI, but not enough to stay free forever if the product worked. Upgrading took two clicks via Stripe.',
+      'Second, the activation flow was reversed. Originally, platform integration was a hard gate before users could enter edrone. I flipped it: users first saw what would activate after they connected, then chose whether to integrate. Integration rate fell. Activated users rose. Business impact improved because the users who integrated actually used the product.',
+      'Sometimes the metric you optimize is not the one you started measuring.',
     ],
+    decisionImage: '/images/activationwidget.jpg',
     metrics: [
-      { value: '+X%', label: '[Metric name] increase · [timeframe]' },
-      { value: '+X%', label: '[Metric name] increase · [timeframe]' },
-      { value: '−X%', label: '[Metric name] decrease · [timeframe]' },
+      { value: 'TBA', label: 'Created accounts' },
+      { value: 'TBA', label: 'Time to integration' },
+      { value: 'TBA', label: 'Time to attributed order' },
+    ],
+    nextSteps: [
+      'The creation of an AI Assistant that generates ready-to-implement recommendations and modifications to active features based on an analysis of the account, industry, and store specifications—rather than simply running a fixed set of basic functions. Furthermore, it prompts the user to take action, rather than waiting for the user to articulate their needs and issues.',
     ],
   },
   {
-    slug: 'project-3',
-    title: '[Project Title]',
-    tagline: '[Verb] [what] — resulting in [metric] within [timeframe].',
+    slug: 'contacts-activation',
+    title: 'Contacts Activation',
+    tagline: 'Turned a manual Support task into a zero-touch feature with 92% adoption.',
     meta: {
-      role: 'Product Designer',
-      company: 'Deepsolver',
-      companyUrl: 'https://deepsolver.com',
-      year: '2021–2022',
+      role: 'Sr Product Designer',
+      team: '1 Back-end developer',
+      year: '2026',
     },
-    overview:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+    coverImage: '/images/thumbnail3.jpg',
+    thumbnailImage: '/images/thumbnail3small.jpg',
+    overview: 'In edrone, contacts must be identified, linked to browsing activity, before any automation or personalization can fire at scale. It was the single biggest bottleneck to user ROI, handled manually by Support one customer at a time. I designed and co-built the solution using Codex, automating what used to require human intervention entirely.',
+    overviewImage: '/images/identificationflow.jpg',
     opportunity: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      'Support was setting up identification emails for every new customer, their most requested onboarding task by far. Without identified contacts, automations fire at a fraction of their potential, and since automations convert significantly higher than newsletters, low identification directly capped what users could earn from the product. This was not just a UX opportunity. It was a leverage point for the entire product\'s value.',
     ],
-    process: [
-      { type: 'paragraph', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.' },
-      { type: 'image' },
-      { type: 'image-row' },
-      { type: 'paragraph', content: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.' },
-      { type: 'image' },
-      { type: 'paragraph', content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.' },
-      { type: 'paragraph', content: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.' },
-      { type: 'image' },
-      { type: 'image-row' },
+    decision: [
+      'The obvious approach would have been to explain contact identification during onboarding: walk the user through tracking pixels, newsletter signups, and purchase flows.',
+      'I did not do that.',
+      'Instead, the feature activates automatically 3 days after account creation. The first identification email sends itself. Users do not need to understand how it works, they just start seeing results. The email itself was the hardest design challenge: it is not a marketing email, it is infrastructure. It goes to the user\'s entire contact base every 30 days on their behalf.',
+      'I needed users to understand what they were opting into without making it feel heavy or technical. The solution was a visual treatment that merges the automation and newsletter concepts into a single, obvious interface, intentionally distinct from the standard automation builder to avoid confusion. I built the entire frontend in Codex, the backend dev handled the sending mechanism.',
     ],
+    decisionImage: '/images/identification.jpg',
     metrics: [
-      { value: '+X%', label: '[Metric name] increase · [timeframe]' },
-      { value: '+X%', label: '[Metric name] increase · [timeframe]' },
-      { value: '−X%', label: '[Metric name] decrease · [timeframe]' },
+      { value: '+14%', label: 'Contact identification rate in 6 days' },
+      { value: '92%', label: 'Feature adoption rate' },
+      { value: 'TBA', label: 'Revenue attributed to identified contacts' },
+    ],
+    nextSteps: [
+      'Identification is crucial at the outset, but mainly for new users; for users who have been using Edrone for a longer period, reactivation and list cleaning are the most important, as these allow them to remove inactive contacts and thereby effectively reduce the cost of their subscription.',
     ],
   },
 ]

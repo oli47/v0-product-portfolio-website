@@ -4,33 +4,42 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #fafafa;
-  --foreground: #1a1a1a;
-  --card: #ffffff;
-  --card-foreground: #1a1a1a;
-  --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
-  --primary: #1a1a1a;
-  --primary-foreground: #fafafa;
-  --secondary: #f0f0f0;
-  --secondary-foreground: #1a1a1a;
-  --muted: #f0f0f0;
-  --muted-foreground: #707070;
-  --accent: #f0f0f0;
-  --accent-foreground: #1a1a1a;
+  /* Figma color palette */
+  --color-000: #FAFAFA;
+  --color-100: #E5E5E5;
+  --color-150: #727272;
+  --color-200: #636363;
+  --color-300: #454545;
+  --color-400: #282828;
+  --color-500: #0A0A0A;
+  --color-white: #FFFFFF;
+  
+  /* Semantic tokens */
+  --background: var(--color-000);
+  --foreground: var(--color-500);
+  --card: var(--color-white);
+  --card-foreground: var(--color-500);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-500);
+  --primary: var(--color-500);
+  --primary-foreground: var(--color-000);
+  --secondary: var(--color-100);
+  --secondary-foreground: var(--color-500);
+  --muted: var(--color-100);
+  --muted-foreground: var(--color-150);
+  --accent: var(--color-100);
+  --accent-foreground: var(--color-500);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #707070;
+  --border: var(--color-100);
+  --input: var(--color-100);
+  --ring: var(--color-150);
   --radius: 0.625rem;
   
   /* Portfolio specific */
-  --text-body: #555555;
-  --text-caption: #707070;
-  --fill-subtle: #f0f0f0;
-  --timeline-line: #e0e0e0;
-  --timeline-dot-border: #cccccc;
+  --text-body: var(--color-200);
+  --text-caption: var(--color-150);
+  --fill-subtle: var(--color-100);
 }
 
 @theme inline {
@@ -64,8 +73,15 @@
   --color-text-body: var(--text-body);
   --color-text-caption: var(--text-caption);
   --color-fill-subtle: var(--fill-subtle);
-  --color-timeline-line: var(--timeline-line);
-  --color-timeline-dot-border: var(--timeline-dot-border);
+  
+  /* Figma colors direct access */
+  --color-gray-000: var(--color-000);
+  --color-gray-100: var(--color-100);
+  --color-gray-150: var(--color-150);
+  --color-gray-200: var(--color-200);
+  --color-gray-300: var(--color-300);
+  --color-gray-400: var(--color-400);
+  --color-gray-500: var(--color-500);
 }
 
 @layer base {
