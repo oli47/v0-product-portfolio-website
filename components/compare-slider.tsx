@@ -1,21 +1,17 @@
 'use client'
 
-// Compare slider with drag and cycling After images - v3
+// Compare slider with drag and cycling After images - v4 clean
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 
 interface CompareSliderProps {
   beforeImage?: string
   afterImages?: string[]
-  beforeLabel?: string
-  afterLabels?: string[]
 }
 
 export function CompareSlider({
   beforeImage = '/images/signup-old.jpg',
   afterImages = ['/images/signup-new1.jpg', '/images/signup-new2.jpg'],
-  beforeLabel = 'Before',
-  afterLabels = ['After — Step 1', 'After — Step 2'],
 }: CompareSliderProps) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
@@ -91,8 +87,8 @@ export function CompareSlider({
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
     >
-      {/* Container with proper aspect ratio based on image dimensions */}
-      <div className="relative w-full" style={{ paddingBottom: '62.5%' }}>
+      {/* Container with taller aspect ratio to show full images */}
+      <div className="relative w-full" style={{ paddingBottom: '85%' }}>
         {/* After images (cycling with crossfade) */}
         {afterImages.map((src, idx) => (
           <div
@@ -104,10 +100,9 @@ export function CompareSlider({
           >
             <Image
               src={src}
-              alt={afterLabels[idx] || 'After'}
+              alt="After"
               fill
               sizes="(max-width: 768px) 100vw, 720px"
-              quality={85}
               className="object-contain pointer-events-none"
               priority
               draggable={false}
@@ -122,29 +117,28 @@ export function CompareSlider({
         >
           <Image
             src={beforeImage}
-            alt={beforeLabel}
+            alt="Before"
             fill
             sizes="(max-width: 768px) 100vw, 720px"
-            quality={85}
             className="object-contain pointer-events-none"
             priority
             draggable={false}
           />
         </div>
 
-        {/* Slider line */}
+        {/* Slider vertical line */}
         <div
-          className="absolute top-0 bottom-0 w-[2px] bg-white shadow-lg z-10"
+          className="absolute top-0 bottom-0 w-[2px] bg-foreground z-10"
           style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
         >
           {/* Slider handle */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border border-gray-200">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center border border-border">
             <svg
               width="20"
               height="20"
               viewBox="0 0 20 20"
               fill="none"
-              className="text-gray-500"
+              className="text-foreground"
             >
               <path
                 d="M7 6L3 10L7 14"
@@ -164,26 +158,12 @@ export function CompareSlider({
           </div>
         </div>
 
-        {/* Labels - positioned dynamically with slider */}
-        <div 
-          className="absolute bottom-4 text-[14px] font-medium text-foreground bg-white px-3 py-1.5 rounded shadow-sm pointer-events-none transition-opacity duration-200 z-20"
-          style={{ 
-            left: `${Math.max(sliderPosition / 2, 8)}%`,
-            transform: 'translateX(-50%)',
-            opacity: sliderPosition > 15 ? 1 : 0
-          }}
-        >
-          {beforeLabel}
+        {/* Fixed labels at bottom corners */}
+        <div className="absolute bottom-4 left-4 text-[14px] font-medium text-foreground bg-white px-3 py-1.5 rounded shadow-sm pointer-events-none z-20">
+          Before
         </div>
-        <div 
-          className="absolute bottom-4 text-[14px] font-medium text-foreground bg-white px-3 py-1.5 rounded shadow-sm pointer-events-none transition-all duration-200 z-20"
-          style={{ 
-            right: `${Math.max((100 - sliderPosition) / 2, 8)}%`,
-            transform: 'translateX(50%)',
-            opacity: sliderPosition < 85 ? 1 : 0
-          }}
-        >
-          {afterLabels[currentAfterIndex]}
+        <div className="absolute bottom-4 right-4 text-[14px] font-medium text-foreground bg-white px-3 py-1.5 rounded shadow-sm pointer-events-none z-20">
+          After
         </div>
       </div>
     </div>

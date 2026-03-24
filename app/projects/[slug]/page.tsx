@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               fill
               sizes="(max-width: 768px) 100vw, 720px"
               className="object-cover"
-              quality={85}
+
               priority
             />
           </div>
@@ -128,7 +128,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 width={720}
                 height={400}
                 sizes="(max-width: 768px) 100vw, 720px"
-                quality={85}
+  
                 loading="lazy"
                 className="w-full h-auto"
               />
@@ -181,7 +181,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 width={720}
                 height={400}
                 sizes="(max-width: 768px) 100vw, 720px"
-                quality={85}
+  
                 loading="lazy"
                 className="w-full h-auto"
               />
