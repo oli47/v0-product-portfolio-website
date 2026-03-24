@@ -80,6 +80,15 @@ export default function HomePage() {
             >
               LinkedIn
             </a>
+            <span className="text-text-caption">·</span>
+            <a
+              href="/olaf-otrzasek-resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors"
+            >
+              Resume
+            </a>
           </div>
         </section>
 
