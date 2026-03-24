@@ -4,9 +4,10 @@ import type { Project } from '@/lib/projects'
 
 interface ProjectCardProps {
   project: Project
+  priority?: boolean
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, priority = false }: ProjectCardProps) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
       <article className="flex flex-col md:flex-row gap-6 md:gap-8 transition-opacity duration-200 hover:opacity-80">
@@ -35,8 +36,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
               width={640}
               height={400}
               sizes="(max-width: 768px) 100vw, 320px"
-
-              loading="lazy"
+              priority={priority}
+              loading={priority ? 'eager' : 'lazy'}
               className="w-full h-auto object-contain"
             />
           </div>

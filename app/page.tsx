@@ -31,7 +31,7 @@ export default function HomePage() {
           {/* Body paragraphs - body-1: 16/160 */}
           <div className="space-y-4 text-[16px] text-text-body leading-[160%]">
             <p>
-              {"I'm Olaf, a Warsaw-based product designer with 7+ years of experience in B2B SaaS. I rebuild broken products, design self-serve growth models, and ship code using Codex when waiting on dev capacity is not an option."}
+              {"I'm Olaf, a Warsaw-based product designer with 7+ years in B2B SaaS. I make decisions from data, ship with AI, and measure everything. UX that does not move a metric is decoration."}
             </p>
             <p>
               Previously led design at{' '}
@@ -59,28 +59,26 @@ export default function HomePage() {
           {/* Links row - body-2: 14/160 */}
           <div className="flex items-center gap-2 mt-6 text-[14px] leading-[160%] text-text-caption flex-wrap">
             <a
+              href="mailto:olafotrzasek@gmail.com"
+              className="hover:text-foreground transition-colors"
+            >
+              olafotrzasek@gmail.com
+            </a>
+            <span className="text-text-caption">·</span>
+            <a
+              href="tel:+48732188613"
+              className="hover:text-foreground transition-colors"
+            >
+              732 188 613
+            </a>
+            <span className="text-text-caption">·</span>
+            <a
               href="https://www.linkedin.com/in/olafotrzasek/"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors"
             >
               LinkedIn
-            </a>
-            <span className="text-text-caption">·</span>
-            <a
-              href="https://dribbble.com/olvsky"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              Dribbble
-            </a>
-            <span className="text-text-caption">·</span>
-            <a
-              href="mailto:olafotrzasek@gmail.com"
-              className="hover:text-foreground transition-colors"
-            >
-              olafotrzasek@gmail.com
             </a>
           </div>
         </section>
@@ -92,10 +90,11 @@ export default function HomePage() {
         <section className="mb-16">
           <SectionLabel>Selected Work</SectionLabel>
           <div className="space-y-12">
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <ProjectCard
                 key={project.slug}
                 project={project}
+                priority={index === 0}
               />
             ))}
           </div>
