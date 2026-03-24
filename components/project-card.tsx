@@ -34,8 +34,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
               alt={project.title}
               width={640}
               height={400}
+              sizes="(max-width: 768px) 100vw, 320px"
+              quality={85}
+              loading="lazy"
               className="w-full h-auto object-contain"
-              priority
             />
           </div>
         </div>

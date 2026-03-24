@@ -75,7 +75,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               src={project.coverImage}
               alt={project.title}
               fill
+              sizes="(max-width: 768px) 100vw, 720px"
               className="object-cover"
+              quality={85}
               priority
             />
           </div>
@@ -125,6 +127,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 alt="Overview diagram"
                 width={720}
                 height={400}
+                sizes="(max-width: 768px) 100vw, 720px"
+                quality={85}
+                loading="lazy"
                 className="w-full h-auto"
               />
             </div>
@@ -175,6 +180,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 alt="Decision visualization"
                 width={720}
                 height={400}
+                sizes="(max-width: 768px) 100vw, 720px"
+                quality={85}
+                loading="lazy"
                 className="w-full h-auto"
               />
             </div>
@@ -223,35 +231,31 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </>
         )}
 
-        {/* Project navigation */}
+        {/* Project navigation - loops infinitely */}
         <div className="border-t border-border pt-8">
           <div className="flex flex-col md:flex-row md:justify-between gap-6">
             {/* Previous */}
             <div className="flex-1">
-              {prev && (
-                <Link href={`/projects/${prev.slug}`} className="group block">
-                  <p className="text-[14px] text-text-caption leading-[160%] mb-1">
-                    ← Previous
-                  </p>
-                  <p className="text-[16px] font-semibold text-foreground leading-[160%] group-hover:underline">
-                    {prev.title}
-                  </p>
-                </Link>
-              )}
+              <Link href={`/projects/${prev.slug}`} className="group block">
+                <p className="text-[14px] text-text-caption leading-[160%] mb-1">
+                  ← Previous
+                </p>
+                <p className="text-[16px] font-semibold text-foreground leading-[160%] group-hover:underline">
+                  {prev.title}
+                </p>
+              </Link>
             </div>
 
             {/* Next */}
             <div className="flex-1 md:text-right">
-              {next && (
-                <Link href={`/projects/${next.slug}`} className="group block">
-                  <p className="text-[14px] text-text-caption leading-[160%] mb-1">
-                    Next →
-                  </p>
-                  <p className="text-[16px] font-semibold text-foreground leading-[160%] group-hover:underline">
-                    {next.title}
-                  </p>
-                </Link>
-              )}
+              <Link href={`/projects/${next.slug}`} className="group block">
+                <p className="text-[14px] text-text-caption leading-[160%] mb-1">
+                  Next →
+                </p>
+                <p className="text-[16px] font-semibold text-foreground leading-[160%] group-hover:underline">
+                  {next.title}
+                </p>
+              </Link>
             </div>
           </div>
         </div>

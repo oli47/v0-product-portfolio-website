@@ -124,12 +124,14 @@ export function getProject(slug: string): Project | undefined {
 }
 
 export function getProjectNavigation(slug: string): {
-  prev: Project | null
-  next: Project | null
+  prev: Project
+  next: Project
 } {
   const index = projects.findIndex((p) => p.slug === slug)
+  const total = projects.length
   return {
-    prev: index > 0 ? projects[index - 1] : null,
-    next: index < projects.length - 1 ? projects[index + 1] : null,
+    // Loop: if first project, prev is last; if last project, next is first
+    prev: projects[(index - 1 + total) % total],
+    next: projects[(index + 1) % total],
   }
 }

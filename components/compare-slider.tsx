@@ -1,6 +1,6 @@
 'use client'
 
-// Compare slider with drag and cycling After images - v2
+// Compare slider with drag and cycling After images - v3
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 
@@ -106,6 +106,8 @@ export function CompareSlider({
               src={src}
               alt={afterLabels[idx] || 'After'}
               fill
+              sizes="(max-width: 768px) 100vw, 720px"
+              quality={85}
               className="object-contain pointer-events-none"
               priority
               draggable={false}
@@ -122,6 +124,8 @@ export function CompareSlider({
             src={beforeImage}
             alt={beforeLabel}
             fill
+            sizes="(max-width: 768px) 100vw, 720px"
+            quality={85}
             className="object-contain pointer-events-none"
             priority
             draggable={false}
