@@ -1,6 +1,6 @@
 'use client'
 
-// Compare slider with drag and cycling After images - v4 clean
+// Compare slider with drag and cycling After images - v5 rebuild
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 

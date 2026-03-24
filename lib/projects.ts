@@ -32,7 +32,7 @@ export const projects: Project[] = [
       year: '2026',
     },
     coverImage: '/images/thumbnail1.jpg',
-    thumbnailImage: '/images/thumbnail1small.jpg',
+    thumbnailImage: '/images/thumbnail1.jpg',
     overview: "edrone's signup was the entry point into a freemium e-commerce platform. I spotted a critical drop-off, designed the fix, coded it myself using AI, and shipped it the same day. Total time: under 5 hours.",
     opportunity: [
       'Amplitude data showed massive abandonment at the signup form. Two compounding issues were hiding in plain sight. The phone number field was the top drop-off point, confirmed by event data, a UX audit, and competitive benchmarks. A quick check with Sales confirmed they no longer needed phone numbers for lead qualification. The field was just still there.',
@@ -63,7 +63,7 @@ export const projects: Project[] = [
       year: '2025-2026',
     },
     coverImage: '/images/thumbnail2.jpg',
-    thumbnailImage: '/images/thumbnail2small.jpg',
+    thumbnailImage: '/images/thumbnail2.jpg',
     overview: 'Before freemium, every new edrone customer required a Sales call, manual onboarding, and hand-holding from Support. I proposed the freemium model, owned the full design from signup through onboarding, integration, feature activation, and Stripe payment, and shipped it end-to-end.',
     overviewImage: '/images/activationflow.jpg',
     opportunity: [
@@ -95,7 +95,7 @@ export const projects: Project[] = [
       year: '2026',
     },
     coverImage: '/images/thumbnail3.jpg',
-    thumbnailImage: '/images/thumbnail3small.jpg',
+    thumbnailImage: '/images/thumbnail3.jpg',
     overview: 'In edrone, contacts must be identified, linked to browsing activity, before any automation or personalization can fire at scale. It was the single biggest bottleneck to user ROI, handled manually by Support one customer at a time. I designed and co-built the solution using Codex, automating what used to require human intervention entirely.',
     overviewImage: '/images/identificationflow.jpg',
     opportunity: [

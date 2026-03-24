@@ -11,13 +11,13 @@ export default function HomePage() {
       <div className="max-w-[720px] mx-auto px-6 py-16 md:py-24">
         {/* Section 1: Intro */}
         <section className="mb-16">
-          {/* Avatar */}
-          <div className="w-16 h-16 rounded-[14px] overflow-hidden mb-6">
+          {/* Avatar - 15% larger (64 -> 74px) */}
+          <div className="w-[74px] h-[74px] rounded-[16px] overflow-hidden mb-6">
             <Image
               src="/images/avatar.jpg"
               alt="Olaf Otrząsek"
-              width={64}
-              height={64}
+              width={74}
+              height={74}
               className="w-full h-full object-cover"
               priority
             />
@@ -31,28 +31,28 @@ export default function HomePage() {
           {/* Body paragraphs - body-1: 16/160 */}
           <div className="space-y-4 text-[16px] text-text-body leading-[160%]">
             <p>
-              {"I'm Olaf, a Warsaw-based product designer with 7+ years of experience. I build SaaS products where smart UX and AI meet business outcomes — from system thinking to the last pixel."}
+              {"I'm Olaf, a Warsaw-based product designer with 7+ years of experience in B2B SaaS. I rebuild broken products, design self-serve growth models, and ship code using Codex when waiting on dev capacity is not an option."}
             </p>
             <p>
-              Currently leading design at{' '}
+              Previously led design at{' '}
               <a
                 href="https://edrone.me"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground font-semibold hover:underline"
+                className="text-foreground hover:underline"
               >
                 edrone
               </a>
-              . Previously solo designer at{' '}
+              , where I rebuilt the entire product and took it from sales-gated to self-serve freemium. Before that, sole designer at{' '}
               <a
                 href="https://deepsolver.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground font-semibold hover:underline"
+                className="text-foreground hover:underline"
               >
                 Deepsolver
               </a>
-              , where I took two products from zero to launch. I use AI as a core part of my design process, think in systems, and code enough to go from prototype to production.
+              , taking two products from zero to launch.
             </p>
           </div>
 
