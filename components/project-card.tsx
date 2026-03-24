@@ -37,7 +37,6 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
               height={400}
               sizes="(max-width: 768px) 100vw, 320px"
               priority={priority}
-              loading={priority ? 'eager' : 'lazy'}
               className="w-full h-auto object-contain"
             />
           </div>

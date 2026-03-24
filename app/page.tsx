@@ -31,7 +31,7 @@ export default function HomePage() {
           {/* Body paragraphs - body-1: 16/160 */}
           <div className="space-y-4 text-[16px] text-text-body leading-[160%]">
             <p>
-              {"I'm Olaf, a Warsaw-based product designer with 7+ years in B2B SaaS. I make decisions from data, ship with AI, and measure everything. UX that does not move a metric is decoration."}
+              {"I'm Olaf, a Warsaw-based product designer with 7+ years in B2B SaaS. I start with data, ship with AI, and judge every decision by what it does to the metric."}
             </p>
             <p>
               Previously led design at{' '}
