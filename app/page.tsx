@@ -31,7 +31,7 @@ export default function HomePage() {
           {/* Body paragraphs - body-1: 16/160 */}
           <div className="space-y-4 text-[16px] text-text-body leading-[160%]">
             <p>
-              {"I'm Olaf, a Warsaw-based product designer with 7+ years in B2B SaaS. I start with data, ship with AI, and judge every decision by what it does to the metric."}
+              {"I'm Olaf, a Warsaw-based product designer with 7+ years in B2B SaaS. I read the data to find where the product has room to grow, ship fast using AI, and measure what actually changed."}
             </p>
             <p>
               Previously led design at{' '}
@@ -43,7 +43,7 @@ export default function HomePage() {
               >
                 edrone
               </a>
-              , where I rebuilt the entire product and took it from sales-gated to self-serve freemium. Before that, sole designer at{' '}
+              , where I rebuilt the entire marketing automation platform and took it from sales-gated to self-serve freemium. Before that, sole designer at{' '}
               <a
                 href="https://deepsolver.com"
                 target="_blank"
