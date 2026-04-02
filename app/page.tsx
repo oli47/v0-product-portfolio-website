@@ -191,7 +191,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-md border border-border grayscale-[10%] group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-300">
+                      <div className="relative overflow-hidden rounded-md border border-border group-hover:scale-[1.02] transition-all duration-300">
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}

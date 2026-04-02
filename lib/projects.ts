@@ -198,7 +198,7 @@ export const projects: Project[] = [
     thumbnailImage: '/images/thumbnail3.png',
     overview: 'In edrone, contacts must be identified — linked to browsing activity — before any automation can fire at scale. It was the single biggest bottleneck to user ROI, handled manually by Support one customer at a time. I designed and co-built the solution using Codex, automating what used to require human intervention entirely.',
     overviewDiagram: {
-      before: 'Unidentified contact',
+      before: 'Unidentified\ncontact',
       action: 'Opens email',
       after: 'John Doe\nj.doe@mail.com',
       caption: 'Imported contacts are initially unidentified. They become identified only after opening an email, which triggers a tracking pixel. This lets edrone recognize them on the store\'s website and send automated messages that convert 10x better than newsletters.',
@@ -216,7 +216,7 @@ export const projects: Project[] = [
       'The email itself was the hardest design challenge: it is not a marketing email, it is infrastructure. It goes to the user\'s entire contact base every 30 days on their behalf.',
       'I needed users to understand what they were opting into without making it feel heavy or technical. The solution was a visual treatment that merges the automation and newsletter concepts into a single, obvious interface, intentionally distinct from the standard automation builder to avoid confusion. I built the entire frontend in Codex; the backend dev handled the sending mechanism.',
     ],
-    solutionImages: ['/images/contacts-dashboard.png', '/images/contacts-modal.png'],
+    solutionImages: ['/images/contacts-dashboard-1.png', '/images/contacts-dashboard-2.png'],
     results: {
       headline: 'Turned a manual Support task into infrastructure that runs itself.',
       metrics: [
