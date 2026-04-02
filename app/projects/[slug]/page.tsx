@@ -3,8 +3,87 @@
 import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { projects, getProject, getProjectNavigation } from '@/lib/projects'
-import { useState, useEffect } from 'react'
+import { getProject, getProjectNavigation } from '@/lib/projects'
+import { useState, useEffect, useRef, useCallback } from 'react'
+
+// Compare Slider Component
+function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; afterImage: string }) {
+  const [sliderPosition, setSliderPosition] = useState(50)
+  const [isDragging, setIsDragging] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const handleMove = useCallback((clientX: number) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = clientX - rect.left
+    const percentage = Math.min(Math.max((x / rect.width) * 100, 0), 100)
+    setSliderPosition(percentage)
+  }, [])
+
+  useEffect(() => {
+    const handleMouseUp = () => setIsDragging(false)
+    const handleTouchEnd = () => setIsDragging(false)
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) handleMove(e.clientX)
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging && e.touches[0]) handleMove(e.touches[0].clientX)
+    }
+
+    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('touchend', handleTouchEnd)
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('touchmove', handleTouchMove)
+
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchend', handleTouchEnd)
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('touchmove', handleTouchMove)
+    }
+  }, [isDragging, handleMove])
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full rounded-md overflow-hidden border border-border select-none cursor-ew-resize"
+      style={{ aspectRatio: '16/10' }}
+      onMouseDown={() => setIsDragging(true)}
+      onTouchStart={() => setIsDragging(true)}
+    >
+      {/* After image (full) */}
+      <Image src={afterImage} alt="After" fill className="object-cover" />
+
+      {/* Before image (clipped) */}
+      <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
+        <Image src={beforeImage} alt="Before" fill className="object-cover" />
+      </div>
+
+      {/* Slider line */}
+      <div
+        className="absolute top-0 bottom-0 w-[2px] bg-foreground z-10"
+        style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center border border-border">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-foreground">
+            <path d="M7 6L3 10L7 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M13 6L17 10L13 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Labels */}
+      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-white px-2 py-1 rounded shadow-sm z-20">
+        Before
+      </div>
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-white px-2 py-1 rounded shadow-sm z-20">
+        After
+      </div>
+    </div>
+  )
+}
 
 export default function ProjectPage() {
   const params = useParams()
@@ -37,19 +116,28 @@ export default function ProjectPage() {
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
         <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-[14px] font-medium text-text-caption hover:text-foreground transition-colors">
+          <Link href="/" className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors">
             <span>←</span>
             <span>Back</span>
           </Link>
           <div className="flex items-center gap-2">
-            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
-              EN / PL
-            </button>
             <button 
               onClick={toggleDarkMode}
               className="h-7 w-7 flex items-center justify-center border border-border rounded-sm hover:bg-border/50 transition-colors"
             >
-              {darkMode ? '☀️' : '🌙'}
+              {darkMode ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="5"/>
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+              ) : (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              )}
+            </button>
+            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
+              EN / PL
             </button>
           </div>
         </div>
@@ -58,43 +146,20 @@ export default function ProjectPage() {
       <div className="max-w-[680px] mx-auto px-6 pt-24 pb-16">
         {/* Header */}
         <section className="mb-12">
-          {/* Eyebrow */}
-          <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
-            Case Study · edrone · {project.meta.timeline}
-          </div>
-
-          {/* Title */}
-          <h1 className="font-display text-[42px] leading-[1.1] mb-4">
-            {project.title}
-          </h1>
-
-          {/* Tagline */}
-          <p className="text-[16px] text-text-body leading-[1.75] mb-8">
-            {project.tagline}
-          </p>
-
-          {/* Meta row */}
-          <div className="flex flex-wrap gap-8 py-4 border-t border-b border-border mb-8">
-            <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Role</p>
-              <p className="text-[14px] font-medium">{project.meta.role}</p>
-            </div>
-            <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Team</p>
-              <p className="text-[14px] font-medium">{project.meta.team}</p>
-            </div>
-            <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Duration</p>
-              <p className="text-[14px] font-medium">{project.meta.timeline}</p>
-            </div>
-            <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Date</p>
-              <p className="text-[14px] font-medium">2025-2026</p>
-            </div>
+          {/* Title row */}
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 mb-8">
+            <h1 className="font-display text-[42px] leading-[1.1]">
+              {project.title.split(' ').map((word, i) => (
+                <span key={i}>{word}<br /></span>
+              ))}
+            </h1>
+            <p className="text-[16px] text-text-body leading-[1.75] self-end">
+              {project.tagline}
+            </p>
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-md overflow-hidden border border-border">
+          <div className="relative w-full rounded-md overflow-hidden border border-border mb-8">
             <Image
               src={project.coverImage}
               alt={project.title}
@@ -104,24 +169,91 @@ export default function ProjectPage() {
               priority
             />
           </div>
+
+          {/* Meta row */}
+          <div className="grid grid-cols-4 gap-4 py-4 border-t border-b border-border">
+            <div>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Role</p>
+              <p className="text-[14px]">{project.meta.role}</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Team</p>
+              <p className="text-[14px]">{project.meta.team}</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Duration</p>
+              <p className="text-[14px]">{project.meta.duration}</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Date</p>
+              <p className="text-[14px]">{project.meta.date}</p>
+            </div>
+          </div>
         </section>
 
         {/* Overview */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
+          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
             Overview
           </div>
           <p className="text-[16px] text-text-body leading-[1.75]">
             {project.overview}
           </p>
+
+          {/* Overview Diagram */}
+          {project.overviewDiagram && (
+            <div className="mt-8 p-6 bg-card rounded-md border border-border">
+              <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-border rounded-md flex items-center justify-center mb-2 mx-auto">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                    </svg>
+                  </div>
+                  <p className="text-[12px] text-text-caption">{project.overviewDiagram.before}</p>
+                </div>
+                <div className="flex-1 flex items-center gap-2">
+                  <div className="flex-1 h-px bg-border border-dashed" />
+                  <div className="px-3 py-1.5 bg-[#1a73e8] text-white text-[12px] rounded flex items-center gap-2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    {project.overviewDiagram.action}
+                  </div>
+                  <div className="flex-1 h-px bg-border border-dashed" />
+                </div>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-[#C8440A]/10 rounded-md flex items-center justify-center mb-2 mx-auto">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8440A" strokeWidth="1.5">
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                    </svg>
+                  </div>
+                  <p className="text-[12px] text-foreground font-medium whitespace-pre-line">{project.overviewDiagram.after}</p>
+                </div>
+              </div>
+              <p className="text-[12px] text-text-caption text-center italic">
+                {project.overviewDiagram.caption}
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Opportunity */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
+          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
             Opportunity
           </div>
-          <ul className="space-y-2">
+          
+          {project.opportunityHeadline && (
+            <h3 className="font-display text-[24px] leading-[1.3] mb-4">
+              {project.opportunityHeadline}
+            </h3>
+          )}
+
+          <ul className="space-y-2 mb-4">
             {project.opportunity.map((item, index) => (
               <li key={index} className="flex gap-3 text-[16px] text-text-body leading-[1.75]">
                 <span className="text-text-caption">•</span>
@@ -129,23 +261,27 @@ export default function ProjectPage() {
               </li>
             ))}
           </ul>
+
+          {project.opportunityFooter && (
+            <p className="text-[16px] text-text-body leading-[1.75] italic">
+              {project.opportunityFooter}
+            </p>
+          )}
         </section>
 
         {/* Solution */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
+          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
             Solution
           </div>
           
-          {project.solutionCallout && (
-            <div className="border-l-[3px] border-[#C8440A] pl-6 mb-6">
-              <p className="text-[18px] font-display leading-[1.5]">
-                {project.solutionCallout}
-              </p>
-            </div>
+          {project.solutionHeadline && (
+            <h3 className="font-display text-[24px] leading-[1.3] mb-6">
+              {project.solutionHeadline}
+            </h3>
           )}
 
-          <div className="space-y-4">
+          <div className="space-y-4 mb-8">
             {project.solution.map((paragraph, index) => (
               <p key={index} className="text-[16px] text-text-body leading-[1.75]">
                 {paragraph}
@@ -153,22 +289,31 @@ export default function ProjectPage() {
             ))}
           </div>
 
-          {project.solutionImage && (
-            <div className="relative w-full rounded-md overflow-hidden border border-border mt-8">
+          {/* Compare Slider for Signup Redesign */}
+          {project.hasCompareSlider && project.compareSliderImages && (
+            <CompareSlider 
+              beforeImage={project.compareSliderImages.before} 
+              afterImage={project.compareSliderImages.after} 
+            />
+          )}
+
+          {/* Solution Images */}
+          {project.solutionImages && project.solutionImages.map((img, index) => (
+            <div key={index} className="relative w-full rounded-md overflow-hidden border border-border mt-6">
               <Image
-                src={project.solutionImage}
-                alt="Solution"
+                src={img}
+                alt={`Solution ${index + 1}`}
                 width={680}
                 height={425}
                 className="w-full h-auto"
               />
             </div>
-          )}
+          ))}
         </section>
 
         {/* Results */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
+          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
             Results
           </div>
           
@@ -208,7 +353,7 @@ export default function ProjectPage() {
           )}
 
           {/* Metrics grid */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-4 bg-card rounded-md border border-border">
                 <div className={`font-display text-[28px] leading-none mb-2 ${metric.color === 'accent' ? 'text-[#C8440A]' : 'text-foreground'}`}>
@@ -217,11 +362,6 @@ export default function ProjectPage() {
                 <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption">
                   {metric.label}
                 </div>
-                {metric.sublabel && (
-                  <div className="text-[10px] font-mono text-text-caption mt-1">
-                    {metric.sublabel}
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -230,7 +370,7 @@ export default function ProjectPage() {
         {/* Next Steps */}
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-12 pb-12 border-b border-border">
-            <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-6">
+            <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-6">
               Next Steps
             </div>
             <div className="space-y-6">
@@ -250,29 +390,25 @@ export default function ProjectPage() {
         )}
 
         {/* Project navigation */}
-        <div className="grid grid-cols-2 gap-4 mb-12">
+        <div className="flex items-center justify-between mb-12">
           <Link 
             href={`/projects/${prev.slug}`}
-            className="p-4 border border-border rounded-md hover:border-[#C8440A] transition-colors"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors"
           >
-            <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">
-              ← Previous
-            </div>
-            <div className="text-[14px] font-medium">{prev.title}</div>
+            <span>←</span>
+            <span>Previous / {prev.title}</span>
           </Link>
           <Link 
             href={`/projects/${next.slug}`}
-            className="p-4 border border-border rounded-md hover:border-[#C8440A] transition-colors text-right"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors"
           >
-            <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">
-              Next →
-            </div>
-            <div className="text-[14px] font-medium">{next.title}</div>
+            <span>{next.title} / Next</span>
+            <span>→</span>
           </Link>
         </div>
 
         {/* Footer */}
-        <footer className="flex items-center justify-between pt-8 border-t border-border text-[11px] font-mono text-text-caption">
+        <footer className="flex items-center justify-center gap-8 pt-8 border-t border-border text-[11px] font-mono text-text-caption">
           <span>© 2026 Olaf Otrząsek</span>
           <span>
             ✦ Built with{' '}

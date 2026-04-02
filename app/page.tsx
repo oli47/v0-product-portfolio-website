@@ -6,10 +6,10 @@ import { projects } from '@/lib/projects'
 import { useState, useEffect } from 'react'
 
 const experience = [
-  { years: '2022 - 2026', company: 'edrone', role: 'Senior Product Designer & Team Lead', logo: '/images/edrone-logo.jpg' },
-  { years: '2021 - 2022', company: 'Deepsolver', role: 'Product Designer', logo: '/images/deepsolver-logo.jpg' },
-  { years: '2019 - 2020', company: 'eq system', role: 'UX Designer', logo: '/images/eq-logo.jpg' },
-  { years: '2018', company: 'Inventive Software', role: 'Junior UX/UI Designer', logo: '/images/inventive-logo.jpg' },
+  { years: '2022 - 2026', company: 'edrone', role: 'Senior Product Designer & Team Lead', logo: '/images/logo-edrone.png' },
+  { years: '2021 - 2022', company: 'Deepsolver', role: 'Product Designer', logo: '/images/logo-deepsolver.png' },
+  { years: '2019 - 2020', company: 'eq system', role: 'UX Designer', logo: '/images/logo-eqsystem.png' },
+  { years: '2018', company: 'Inventive Software', role: 'Junior UX/UI Designer', logo: '/images/logo-inventive.png' },
 ]
 
 export default function HomePage() {
@@ -33,19 +33,25 @@ export default function HomePage() {
     <main className="min-h-screen bg-background">
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="text-[14px] font-medium">
-            Olaf <span className="text-[#C8440A]">Otrząsek</span>
-          </Link>
+        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-end">
           <div className="flex items-center gap-2">
-            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
-              EN / PL
-            </button>
             <button 
               onClick={toggleDarkMode}
               className="h-7 w-7 flex items-center justify-center border border-border rounded-sm hover:bg-border/50 transition-colors"
             >
-              {darkMode ? '☀️' : '🌙'}
+              {darkMode ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="5"/>
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+              ) : (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              )}
+            </button>
+            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
+              EN / PL
             </button>
           </div>
         </div>
