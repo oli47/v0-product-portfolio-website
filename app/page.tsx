@@ -124,8 +124,8 @@ export default function HomePage() {
 
             {/* Status */}
             <div className="flex items-center gap-2 mt-6">
-              <span className="w-2 h-2 bg-[#22863A] rounded-sm animate-pulse-slow" />
-              <span className="text-[11px] font-mono uppercase tracking-wide text-[#22863A]">
+              <span className="w-2 h-2 bg-accent-green rounded-sm animate-pulse-slow" />
+              <span className="text-[11px] font-mono uppercase tracking-wide text-accent-green">
                 Open to opportunities
               </span>
             </div>
@@ -179,7 +179,7 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6 border border-border rounded-[4px] hover:bg-[#EBE8E2] hover:border-[#D8D4CC] md:hover:bg-transparent md:hover:border-border transition-all">
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6 border border-border rounded-sm hover:bg-card hover:border-border-md md:hover:bg-transparent md:hover:border-border transition-all">
                       {/* Text */}
                       <div className="flex flex-col justify-center order-2 md:order-1">
                         <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
@@ -204,7 +204,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-[4px] border border-border bg-card group-hover:scale-[1.02] transition-all duration-300 order-1 md:order-2" style={{ aspectRatio: '16/9' }}>
+                      <div className="relative overflow-hidden rounded-sm border border-border bg-card group-hover:scale-[1.02] transition-all duration-300 order-1 md:order-2" style={{ aspectRatio: '16/9' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}

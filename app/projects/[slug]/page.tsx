@@ -46,13 +46,13 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
   }, [isDragging, handleMove])
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full rounded-md overflow-hidden border border-border select-none cursor-ew-resize"
-      style={{ aspectRatio: '16/10' }}
-      onMouseDown={() => setIsDragging(true)}
-      onTouchStart={() => setIsDragging(true)}
-    >
+      <div 
+        ref={containerRef}
+        className="relative w-full rounded-sm overflow-hidden border border-border select-none cursor-ew-resize"
+        style={{ aspectRatio: '16/10' }}
+        onMouseDown={() => setIsDragging(true)}
+        onTouchStart={() => setIsDragging(true)}
+      >
       {/* After image (full) */}
       <Image src={afterImage} alt="After" fill className="object-cover" />
 
@@ -66,7 +66,7 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
         className="absolute top-0 bottom-0 w-[2px] bg-foreground z-10"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-background rounded-full shadow-md flex items-center justify-center border border-border">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-background rounded-sm shadow-md flex items-center justify-center border border-border">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-foreground">
             <path d="M7 6L3 10L7 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M13 6L17 10L13 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -75,10 +75,10 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
       </div>
 
       {/* Labels */}
-      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded shadow-sm z-20 border border-border">
+      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">
         Before
       </div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded shadow-sm z-20 border border-border">
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">
         After
       </div>
     </div>
@@ -156,7 +156,7 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-md overflow-hidden border border-border mb-8">
+          <div className="relative w-full rounded-sm overflow-hidden border border-border mb-8">
             <Image
               src={project.coverImage}
               alt={project.title}
@@ -199,10 +199,10 @@ export default function ProjectPage() {
 
           {/* Overview Diagram */}
           {project.overviewDiagram && (
-            <div className="mt-8 p-4 md:p-6 bg-card rounded-md border border-border">
+            <div className="mt-8 p-4 md:p-6 bg-card rounded-sm border border-border">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-border rounded-md flex items-center justify-center mb-2 mx-auto">
+                  <div className="w-12 h-12 bg-border rounded-sm flex items-center justify-center mb-2 mx-auto">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
@@ -212,7 +212,7 @@ export default function ProjectPage() {
                 </div>
                 <div className="flex-1 w-full md:flex md:items-center md:gap-2">
                   <div className="h-px md:flex-1 bg-border border-dashed mb-2 md:mb-0" />
-                  <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded flex items-center gap-2 shrink-0">
+                  <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded-sm flex items-center gap-2 shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                       <polyline points="22,6 12,13 2,6" />
@@ -222,7 +222,7 @@ export default function ProjectPage() {
                   <div className="h-px md:flex-1 bg-border border-dashed mt-2 md:mt-0" />
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-accent-orange/10 rounded-md flex items-center justify-center mb-2 mx-auto">
+                  <div className="w-12 h-12 bg-accent-orange/10 rounded-sm flex items-center justify-center mb-2 mx-auto">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-accent-orange">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
@@ -296,7 +296,7 @@ export default function ProjectPage() {
 
           {/* Solution Images */}
           {project.solutionImages && project.solutionImages.map((img, index) => (
-            <div key={index} className="relative w-full rounded-md overflow-hidden border border-border mt-6">
+            <div key={index} className="relative w-full rounded-sm overflow-hidden border border-border mt-6">
               <Image
                 src={img}
                 alt={`Solution ${index + 1}`}
@@ -325,7 +325,7 @@ export default function ProjectPage() {
 
           {/* North Star metric */}
           {project.results.northStar && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-md border border-border mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-sm border border-border mb-6">
               <div>
                 <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">
                   {project.results.northStar.label}
@@ -352,7 +352,7 @@ export default function ProjectPage() {
           {/* Metrics grid */}
           <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
             {project.results.metrics.map((metric, index) => (
-              <div key={index} className="p-4 bg-card rounded-md border border-border">
+              <div key={index} className="p-4 bg-card rounded-sm border border-border">
                 <div className={`font-display text-[clamp(22px,6vw,28px)] leading-none mb-2 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                   {metric.value}
                 </div>
