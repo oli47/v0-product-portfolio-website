@@ -31,31 +31,22 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-end">
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={toggleDarkMode}
-              className="h-7 w-7 flex items-center justify-center border border-border rounded-sm hover:bg-border/50 transition-colors"
-            >
-              {darkMode ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="5"/>
-                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-              )}
-            </button>
-            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
-              EN / PL
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Dark mode toggle - fixed top right */}
+      <button 
+        onClick={toggleDarkMode}
+        className="fixed top-4 right-4 z-50 h-8 w-8 flex items-center justify-center border border-border rounded-sm bg-background hover:bg-border/50 transition-colors"
+      >
+        {darkMode ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        )}
+      </button>
 
       <div className="max-w-[1040px] mx-auto px-6 pt-24 pb-16">
         <div className="flex gap-16">
@@ -111,7 +102,7 @@ export default function HomePage() {
 
             {/* Status */}
             <div className="flex items-center gap-2 mt-6">
-              <span className="w-2 h-2 bg-[#22863A] rounded-sm" />
+              <span className="w-2 h-2 bg-[#22863A] rounded-sm animate-pulse-slow" />
               <span className="text-[11px] font-mono uppercase tracking-wide text-[#22863A]">
                 Open to opportunities
               </span>
@@ -155,7 +146,7 @@ export default function HomePage() {
 
             {/* Selected Projects */}
             <section className="mb-16">
-              <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-8">
+              <div className="inline-block px-3 py-1.5 bg-[#EBE8E2] border border-[#D8D4CC] rounded-sm text-[11px] font-mono uppercase tracking-wider text-[#45433E] mb-8">
                 Selected Projects
               </div>
 
@@ -166,7 +157,7 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className={`grid grid-cols-1 md:grid-cols-2 gap-6 py-8 ${index === 0 ? 'border-t' : ''} border-b border-border hover:bg-[#C8440A]/5 transition-colors -mx-4 px-4`}>
+                    <article className={`grid grid-cols-1 md:grid-cols-2 gap-6 py-8 ${index === 0 ? '' : ''} -mx-4 px-4 rounded-lg hover:bg-[#EBE8E2] hover:border hover:border-[#D8D4CC] border border-transparent transition-all`}>
                       {/* Text */}
                       <div className="flex flex-col justify-center">
                         <h3 className="font-display text-[24px] leading-tight mb-2 group-hover:text-[#C8440A] transition-colors">
@@ -209,7 +200,7 @@ export default function HomePage() {
 
             {/* Experience */}
             <section className="mb-16">
-              <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-8">
+              <div className="inline-block px-3 py-1.5 bg-[#EBE8E2] border border-[#D8D4CC] rounded-sm text-[11px] font-mono uppercase tracking-wider text-[#45433E] mb-8">
                 Experience
               </div>
 
