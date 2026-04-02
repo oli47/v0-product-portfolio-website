@@ -31,8 +31,8 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Dark mode toggle - fixed top right */}
-      <button 
+      {/* Dark mode toggle - hidden for now */}
+      {/* <button 
         onClick={toggleDarkMode}
         className="fixed top-4 right-4 z-50 h-8 w-8 flex items-center justify-center border border-border rounded-sm bg-background hover:bg-border/50 transition-colors"
       >
@@ -46,7 +46,7 @@ export default function HomePage() {
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         )}
-      </button>
+      </button> */}
 
       <div className="max-w-[1040px] mx-auto px-6 pt-24 pb-16">
         <div className="flex gap-16">

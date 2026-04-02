@@ -113,8 +113,8 @@ export default function ProjectPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Dark mode toggle - fixed top right */}
-      <button
+      {/* Dark mode toggle - hidden for now */}
+      {/* <button
         onClick={toggleDarkMode}
         className="fixed top-4 right-4 z-50 h-8 w-8 flex items-center justify-center border border-border rounded-sm bg-background hover:bg-card transition-colors"
       >
@@ -128,7 +128,7 @@ export default function ProjectPage() {
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         )}
-      </button>
+      </button> */}
 
       {/* Back link */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm">
