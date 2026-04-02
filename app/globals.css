@@ -119,7 +119,7 @@
 
 /* Font utility classes */
 .font-display {
-  font-family: 'PPMondwest', serif;
+  font-family: 'PPMondwest', serif !important;
 }
 
 .font-body {
