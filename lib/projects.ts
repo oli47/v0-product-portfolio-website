@@ -63,7 +63,8 @@ export const projects: Project[] = [
     tagline: 'From sales call to self-serve. 4,600 accounts in 10 months.',
     description: "Rebuilt edrone's entire acquisition model. Turned a sales-gated platform into a scalable self-serve engine — signup, onboarding, integration, activation, Stripe.",
     metrics: [
-      { value: '+5000', label: 'Users', color: 'accent' },
+      { value: '4,657', label: 'Users', color: 'accent' },
+      { value: '9x Faster', label: 'To first order', color: 'accent' },
       { value: '78%', label: 'Activation rate', color: 'accent' },
     ],
     meta: {
@@ -127,7 +128,7 @@ export const projects: Project[] = [
     description: "Amplitude showed the drop-off. One field removed, form split in two steps, shipped in 5 hours. Results confirmed within 7 days.",
     metrics: [
       { value: '+100%', label: 'Desktop', color: 'accent' },
-      { value: '+5900%', label: 'Mobile', color: 'accent' },
+      { value: '0.05%→3%', label: 'Mobile', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
