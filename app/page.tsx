@@ -189,13 +189,13 @@ export default function HomePage() {
                         <p className="text-[14px] text-text-body leading-[1.75] mb-6">
                           {project.description}
                         </p>
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 sm:gap-y-0 sm:gap-x-0 items-start">
                           {project.metrics.map((metric, i) => (
-                            <div key={i} className="flex items-baseline gap-3">
-                              <span className={`font-display text-[18px] leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                            <div key={i} className="flex flex-col gap-1 items-start">
+                              <span className={`font-display text-[clamp(20px,5vw,26px)] leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="text-[11px] font-mono uppercase tracking-wider text-text-caption">
+                              <span className="text-[10px] font-mono uppercase tracking-[0.1em] text-text-caption">
                                 {metric.label}
                               </span>
                             </div>

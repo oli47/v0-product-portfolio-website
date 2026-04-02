@@ -61,7 +61,7 @@ export const projects: Project[] = [
     slug: 'freemium-activation',
     title: 'Freemium Activation',
     tagline: 'From sales call to self-serve. 4,600 accounts in 10 months.',
-    description: "Rebuilt edrone's entire acquisition model. Turned a sales-gated platform into a scalable self-serve engine — signup, onboarding, integration, activation, Stripe.",
+    description: "Rebuilt edrone's entire acquisition model. Turned a sales-gated platform into a scalable self-serve freemium engine, end-to-end.",
     metrics: [
       { value: '4,657', label: 'Users', color: 'accent' },
       { value: '9x Faster', label: 'To first order', color: 'accent' },
