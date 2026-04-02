@@ -1,17 +1,23 @@
 import type { Metadata, Viewport } from 'next'
-import { Sora } from 'next/font/google'
+import { DM_Sans, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { PageTransition } from '@/components/page-transition'
 import './globals.css'
 
-const sora = Sora({ 
+const dmSans = DM_Sans({ 
   subsets: ['latin'],
-  variable: '--font-sora',
+  variable: '--font-dm-sans',
+  weight: ['400', '500', '700'],
+})
+
+const dmMono = DM_Mono({ 
+  subsets: ['latin'],
+  variable: '--font-dm-mono',
+  weight: ['400', '500'],
 })
 
 export const metadata: Metadata = {
   title: 'Olaf Otrząsek · Senior Product Designer',
-  description: 'Senior Product Designer building SaaS that performs. 7+ years of experience crafting products where smart UX and AI meet business outcomes.',
+  description: 'Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -33,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#fafafa',
+  themeColor: '#F5F3EE',
 }
 
 export default function RootLayout({
@@ -43,8 +49,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sora.variable} font-sans antialiased`}>
-        <PageTransition>{children}</PageTransition>
+      <body className={`${dmSans.variable} ${dmMono.variable} font-sans antialiased`}>
+        {children}
         <Analytics />
       </body>
     </html>

@@ -3,48 +3,77 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* PPMondwest font - placeholder for custom font */
+@font-face {
+  font-family: 'PPMondwest';
+  src: local('PPMondwest');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* Figma color palette */
-  --color-000: #FAFAFA;
-  --color-100: #E5E5E5;
-  --color-150: #727272;
-  --color-200: #636363;
-  --color-300: #454545;
-  --color-400: #282828;
-  --color-500: #0A0A0A;
-  --color-white: #FFFFFF;
+  /* New design system colors */
+  --bg: #F5F3EE;
+  --ink: #111111;
+  --ink-secondary: #555555;
+  --ink-tertiary: #888888;
+  --accent: #C8440A;
+  --accent-green: #22863A;
+  --border-color: #DEDAD2;
+  --border-medium: #C4C0B8;
+  --white: #FFFFFF;
   
   /* Semantic tokens */
-  --background: var(--color-000);
-  --foreground: var(--color-500);
-  --card: var(--color-white);
-  --card-foreground: var(--color-500);
-  --popover: var(--color-white);
-  --popover-foreground: var(--color-500);
-  --primary: var(--color-500);
-  --primary-foreground: var(--color-000);
-  --secondary: var(--color-100);
-  --secondary-foreground: var(--color-500);
-  --muted: var(--color-100);
-  --muted-foreground: var(--color-150);
-  --accent: var(--color-100);
-  --accent-foreground: var(--color-500);
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--white);
+  --card-foreground: var(--ink);
+  --popover: var(--white);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--bg);
+  --secondary: var(--border-color);
+  --secondary-foreground: var(--ink);
+  --muted: var(--border-color);
+  --muted-foreground: var(--ink-tertiary);
+  --accent-color: var(--accent);
+  --accent-foreground: var(--white);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: var(--color-100);
-  --input: var(--color-100);
-  --ring: var(--color-150);
-  --radius: 0.625rem;
+  --border: var(--border-color);
+  --input: var(--border-color);
+  --ring: var(--ink-tertiary);
+  --radius: 4px;
   
   /* Portfolio specific */
-  --text-body: var(--color-200);
-  --text-caption: var(--color-150);
-  --fill-subtle: var(--color-100);
+  --text-body: var(--ink-secondary);
+  --text-caption: var(--ink-tertiary);
+}
+
+.dark {
+  --bg: #1a1a1a;
+  --ink: #F5F3EE;
+  --ink-secondary: #CCCCCC;
+  --ink-tertiary: #888888;
+  --accent: #E5632A;
+  --border-color: #333333;
+  --border-medium: #444444;
+  --white: #222222;
+  
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--white);
+  --card-foreground: var(--ink);
+  --border: var(--border-color);
+  --text-body: var(--ink-secondary);
+  --text-caption: var(--ink-tertiary);
 }
 
 @theme inline {
-  --font-sans: var(--font-sora), 'Sora', sans-serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-display: 'PPMondwest', serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -57,31 +86,26 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
+  --color-accent: var(--accent-color);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 8px;
   
   /* Portfolio specific colors */
   --color-text-body: var(--text-body);
   --color-text-caption: var(--text-caption);
-  --color-fill-subtle: var(--fill-subtle);
-  
-  /* Figma colors direct access */
-  --color-gray-000: var(--color-000);
-  --color-gray-100: var(--color-100);
-  --color-gray-150: var(--color-150);
-  --color-gray-200: var(--color-200);
-  --color-gray-300: var(--color-300);
-  --color-gray-400: var(--color-400);
-  --color-gray-500: var(--color-500);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-tertiary: var(--ink-tertiary);
+  --color-accent-orange: var(--accent);
+  --color-accent-green: var(--accent-green);
 }
 
 @layer base {
@@ -91,4 +115,35 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Font utility classes */
+.font-display {
+  font-family: 'PPMondwest', serif;
+}
+
+.font-body {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.font-mono {
+  font-family: 'DM Mono', monospace;
+}
+
+/* Scroll animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Strikethrough text */
+.strikethrough {
+  text-decoration: line-through;
+  color: var(--ink-tertiary);
 }
