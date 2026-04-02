@@ -19,7 +19,7 @@
   --color-500:  #0A0A0A;
   --color-400:  #282828;
   --color-300:  #525252;
-  --color-200:  #7A7A7A;
+  --color-200:  #767676;
   --color-150:  #D5CCB9;
   --color-100:  #E3DDCF;
   --color-000:  #F2EFE9;
@@ -46,22 +46,22 @@
   --secondary:            var(--color-100);
   --secondary-foreground: var(--ink);
   --muted:                var(--color-100);
-  --muted-foreground:     var(--ink-3);
+  --muted-foreground:     var(--ink-2);
   --accent-color:         var(--accent);
   --accent-foreground:    var(--white);
   --destructive:          oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
   --input:                var(--border);
-  --ring:                 var(--ink-3);
+  --ring:                 var(--ink-2);
   --radius:               4px;
 
   /* Portfolio aliases */
   --ink-secondary:  var(--ink-2);
-  --ink-tertiary:   var(--ink-3);
+  --ink-tertiary:   var(--ink-2);
   --border-color:   var(--border);
   --border-medium:  var(--border-md);
   --text-body:      var(--ink-2);
-  --text-caption:   var(--ink-3);
+  --text-caption:   var(--ink-2);
 }
 
 .dark {
@@ -70,7 +70,7 @@
   --accent:     #E05A1A;
   --color-500:  #E8E0D6;
   --color-400:  #B0A89E;
-  --color-300:  #6B6560;
+  --color-300:  #8A8480;
   --color-200:  #4A4540;
   --color-150:  #38332C;
   --color-100:  #2E2A24;
@@ -80,8 +80,8 @@
   --bg:         var(--white);
   --bg-card:    var(--color-000);
   --ink:        var(--color-500);
-  --ink-2:      var(--color-300);
-  --ink-3:      var(--color-200);
+  --ink-2:      var(--color-400);
+  --ink-3:      var(--color-300);
   --border:     var(--color-100);
   --border-md:  var(--color-150);
 
@@ -96,6 +96,7 @@
   --ink-tertiary:         var(--ink-3);
   --text-body:            var(--ink-2);
   --text-caption:         var(--ink-3);
+  --muted-foreground:     var(--ink-2);
 }
 
 @theme inline {
