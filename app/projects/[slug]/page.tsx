@@ -66,7 +66,7 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
         className="absolute top-0 bottom-0 w-[2px] bg-foreground z-10"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center border border-border">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-background rounded-full shadow-md flex items-center justify-center border border-border">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-foreground">
             <path d="M7 6L3 10L7 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M13 6L17 10L13 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -75,10 +75,10 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
       </div>
 
       {/* Labels */}
-      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-white px-2 py-1 rounded shadow-sm z-20">
+      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded shadow-sm z-20 border border-border">
         Before
       </div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-white px-2 py-1 rounded shadow-sm z-20">
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded shadow-sm z-20 border border-border">
         After
       </div>
     </div>
@@ -113,35 +113,32 @@ export default function ProjectPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-between">
+      {/* Dark mode toggle - fixed top right */}
+      <button
+        onClick={toggleDarkMode}
+        className="fixed top-4 right-4 z-50 h-8 w-8 flex items-center justify-center border border-border rounded-sm bg-background hover:bg-card transition-colors"
+      >
+        {darkMode ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        )}
+      </button>
+
+      {/* Back link */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm">
+        <div className="max-w-[680px] mx-auto px-6 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors">
             <span>←</span>
             <span>Back</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={toggleDarkMode}
-              className="h-7 w-7 flex items-center justify-center border border-border rounded-sm hover:bg-border/50 transition-colors"
-            >
-              {darkMode ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="5"/>
-                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-              )}
-            </button>
-            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
-              EN / PL
-            </button>
-          </div>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-[680px] mx-auto px-6 pt-24 pb-16">
         {/* Header */}
@@ -215,7 +212,7 @@ export default function ProjectPage() {
                 </div>
                 <div className="flex-1 flex items-center gap-2">
                   <div className="flex-1 h-px bg-border border-dashed" />
-                  <div className="px-3 py-1.5 bg-[#1a73e8] text-white text-[12px] rounded flex items-center gap-2">
+                  <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded flex items-center gap-2">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                       <polyline points="22,6 12,13 2,6" />
@@ -225,8 +222,8 @@ export default function ProjectPage() {
                   <div className="flex-1 h-px bg-border border-dashed" />
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-[#C8440A]/10 rounded-md flex items-center justify-center mb-2 mx-auto">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8440A" strokeWidth="1.5">
+                  <div className="w-12 h-12 bg-accent-orange/10 rounded-md flex items-center justify-center mb-2 mx-auto">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-accent-orange">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
@@ -334,13 +331,13 @@ export default function ProjectPage() {
                   {project.results.northStar.label}
                 </div>
                 {project.results.northStar.tag && (
-                  <span className="inline-block px-2 py-0.5 bg-[#C8440A] text-white text-[10px] font-mono uppercase rounded-sm">
+                  <span className="inline-block px-2 py-0.5 bg-accent-orange text-white text-[10px] font-mono uppercase rounded-sm">
                     {project.results.northStar.tag}
                   </span>
                 )}
               </div>
               <div className="text-right">
-                <div className="font-display text-[36px] text-[#C8440A] leading-none">
+                <div className="font-display text-[36px] text-accent-orange leading-none">
                   {project.results.northStar.value}
                 </div>
                 {project.results.northStar.sublabel && (
@@ -356,7 +353,7 @@ export default function ProjectPage() {
           <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-4 bg-card rounded-md border border-border">
-                <div className={`font-display text-[28px] leading-none mb-2 ${metric.color === 'accent' ? 'text-[#C8440A]' : 'text-foreground'}`}>
+                <div className={`font-display text-[28px] leading-none mb-2 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                   {metric.value}
                 </div>
                 <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption">
@@ -376,7 +373,7 @@ export default function ProjectPage() {
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <span className="text-[14px] font-mono text-[#C8440A] shrink-0">
+                  <span className="text-[14px] font-mono text-accent-orange shrink-0">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>

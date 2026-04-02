@@ -79,7 +79,7 @@ export default function HomePage() {
                 className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
               >
                 <span>olafotrzasek@gmail.com</span>
-                <span className="opacity-0 group-hover:opacity-100 text-[#C8440A] transition-opacity">↗</span>
+                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
               </a>
               <a 
                 href="/olaf-otrzasek-resume.pdf"
@@ -87,7 +87,7 @@ export default function HomePage() {
                 className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
               >
                 <span>Resume</span>
-                <span className="opacity-0 group-hover:opacity-100 text-[#C8440A] transition-opacity">↗</span>
+                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
               </a>
               <a 
                 href="https://www.linkedin.com/in/olafotrzasek/"
@@ -96,7 +96,7 @@ export default function HomePage() {
                 className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
               >
                 <span>LinkedIn</span>
-                <span className="opacity-0 group-hover:opacity-100 text-[#C8440A] transition-opacity">↗</span>
+                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
               </a>
             </div>
 
@@ -114,18 +114,18 @@ export default function HomePage() {
             {/* Hero */}
             <section className="mb-16">
               <h1 className="font-display text-[42px] md:text-[52px] leading-[1.1] mb-6">
-                I let the data find the <span className="text-[#C8440A]">opportunity.</span>
+                I let the data find the <span className="text-accent-orange">opportunity.</span>
                 <br />
                 Then I design the experience.
               </h1>
               
               <p className="text-[16px] text-text-body leading-[1.75] max-w-[600px]">
                 Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at{' '}
-                <a href="https://edrone.me" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-[#C8440A] transition-colors">
+                <a href="https://edrone.me" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">
                   edrone
                 </a>
                 {' '}— rebuilt the platform from sales-gated to self-serve freemium. Before that, sole designer at{' '}
-                <a href="https://deepsolver.com" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-[#C8440A] transition-colors">
+                <a href="https://deepsolver.com" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">
                   Deepsolver
                 </a>
                 {' '}— two products from zero to launch.
@@ -133,7 +133,7 @@ export default function HomePage() {
             </section>
 
             {/* P→C→O Section */}
-            <section className="mb-16 border-l-[3px] border-[#C8440A] pl-6">
+            <section className="mb-16 border-l-[3px] border-accent-orange pl-6">
               <h2 className="font-display text-[28px] leading-tight mb-4">
                 <span className="line-through text-text-caption">Problem</span>{' '}
                 <span className="line-through text-text-caption">Challenge</span>{' '}
@@ -146,7 +146,7 @@ export default function HomePage() {
 
             {/* Selected Projects */}
             <section className="mb-16">
-              <div className="inline-block px-3 py-1.5 bg-[#EBE8E2] border border-[#D8D4CC] rounded-sm text-[11px] font-mono uppercase tracking-wider text-[#45433E] mb-8">
+              <div className="inline-block px-3 py-1.5 bg-card border border-border-md rounded-sm text-[11px] font-mono uppercase tracking-wider text-foreground mb-8">
                 Selected Projects
               </div>
 
@@ -157,12 +157,12 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className={`grid grid-cols-1 md:grid-cols-2 gap-6 py-8 ${index === 0 ? '' : ''} -mx-4 px-4 rounded-lg hover:bg-[#EBE8E2] hover:border hover:border-[#D8D4CC] border border-transparent transition-all`}>
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8 -mx-4 px-4 rounded-lg hover:bg-card hover:border hover:border-border-md border border-transparent transition-all">
                       {/* Text */}
                       <div className="flex flex-col justify-center">
-                        <h3 className="font-display text-[24px] leading-tight mb-2 group-hover:text-[#C8440A] transition-colors">
+                        <h3 className="font-display text-[24px] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
                           {project.title}
-                          <span className="opacity-0 group-hover:opacity-100 ml-2 text-[#C8440A] transition-opacity">↗</span>
+                          <span className="opacity-0 group-hover:opacity-100 ml-2 text-accent-orange transition-opacity">↗</span>
                         </h3>
                         <p className="text-[14px] text-text-body leading-[1.75] mb-4">
                           {project.description}
@@ -170,10 +170,10 @@ export default function HomePage() {
                         <div className="flex items-center gap-5 flex-wrap">
                           {project.metrics.map((metric, i) => (
                             <div key={i} className="flex flex-col gap-0.5">
-                              <span className={`font-display text-[18px] leading-none ${metric.color === 'accent' ? 'text-[#C8440A]' : 'text-foreground'}`}>
+                              <span className={`font-display text-[18px] leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="text-[10px] font-mono uppercase tracking-wider text-[#888888]">
+                              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                                 {metric.label}
                               </span>
                             </div>
@@ -181,8 +181,8 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-md border border-border group-hover:scale-[1.02] transition-all duration-300">
+                      {/* Thumbnail — bg-card gives #F2EFE9 light / #242018 dark */}
+                      <div className="relative overflow-hidden rounded-md border border-border bg-card group-hover:scale-[1.02] transition-all duration-300">
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
@@ -200,7 +200,7 @@ export default function HomePage() {
 
             {/* Experience */}
             <section className="mb-16">
-              <div className="inline-block px-3 py-1.5 bg-[#EBE8E2] border border-[#D8D4CC] rounded-sm text-[11px] font-mono uppercase tracking-wider text-[#45433E] mb-8">
+              <div className="inline-block px-3 py-1.5 bg-card border border-border-md rounded-sm text-[11px] font-mono uppercase tracking-wider text-foreground mb-8">
                 Experience
               </div>
 

@@ -13,61 +13,89 @@
 }
 
 :root {
-  /* New design system colors */
-  --bg: #F5F3EE;
-  --ink: #111111;
-  --ink-secondary: #555555;
-  --ink-tertiary: #888888;
-  --accent: #C8440A;
+  /* Primitive palette — light */
+  --white:      #F7F6F2;
+  --accent:     #C8440A;
+  --color-500:  #0A0A0A;
+  --color-400:  #282828;
+  --color-300:  #525252;
+  --color-200:  #7A7A7A;
+  --color-150:  #D5CCB9;
+  --color-100:  #E3DDCF;
+  --color-000:  #F2EFE9;
   --accent-green: #22863A;
-  --border-color: #DEDAD2;
-  --border-medium: #C4C0B8;
-  --white: #FFFFFF;
-  
+
   /* Semantic tokens */
-  --background: var(--bg);
-  --foreground: var(--ink);
-  --card: var(--white);
-  --card-foreground: var(--ink);
-  --popover: var(--white);
-  --popover-foreground: var(--ink);
-  --primary: var(--ink);
-  --primary-foreground: var(--bg);
-  --secondary: var(--border-color);
+  --bg:         var(--white);
+  --bg-card:    var(--color-000);
+  --ink:        var(--color-500);
+  --ink-2:      var(--color-300);
+  --ink-3:      var(--color-200);
+  --border:     var(--color-100);
+  --border-md:  var(--color-150);
+
+  /* shadcn compatibility */
+  --background:           var(--bg);
+  --foreground:           var(--ink);
+  --card:                 var(--bg-card);
+  --card-foreground:      var(--ink);
+  --popover:              var(--bg);
+  --popover-foreground:   var(--ink);
+  --primary:              var(--ink);
+  --primary-foreground:   var(--bg);
+  --secondary:            var(--color-100);
   --secondary-foreground: var(--ink);
-  --muted: var(--border-color);
-  --muted-foreground: var(--ink-tertiary);
-  --accent-color: var(--accent);
-  --accent-foreground: var(--white);
-  --destructive: oklch(0.577 0.245 27.325);
+  --muted:                var(--color-100);
+  --muted-foreground:     var(--ink-3);
+  --accent-color:         var(--accent);
+  --accent-foreground:    var(--white);
+  --destructive:          oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: var(--border-color);
-  --input: var(--border-color);
-  --ring: var(--ink-tertiary);
-  --radius: 4px;
-  
-  /* Portfolio specific */
-  --text-body: var(--ink-secondary);
-  --text-caption: var(--ink-tertiary);
+  --input:                var(--border);
+  --ring:                 var(--ink-3);
+  --radius:               4px;
+
+  /* Portfolio aliases */
+  --ink-secondary:  var(--ink-2);
+  --ink-tertiary:   var(--ink-3);
+  --border-color:   var(--border);
+  --border-medium:  var(--border-md);
+  --text-body:      var(--ink-2);
+  --text-caption:   var(--ink-3);
 }
 
 .dark {
-  --bg: #1a1a1a;
-  --ink: #F5F3EE;
-  --ink-secondary: #CCCCCC;
-  --ink-tertiary: #888888;
-  --accent: #E5632A;
-  --border-color: #333333;
-  --border-medium: #444444;
-  --white: #222222;
-  
-  --background: var(--bg);
-  --foreground: var(--ink);
-  --card: var(--white);
-  --card-foreground: var(--ink);
-  --border: var(--border-color);
-  --text-body: var(--ink-secondary);
-  --text-caption: var(--ink-tertiary);
+  /* Primitive palette — dark */
+  --white:      #1C1A17;
+  --accent:     #E05A1A;
+  --color-500:  #E8E0D6;
+  --color-400:  #B0A89E;
+  --color-300:  #6B6560;
+  --color-200:  #4A4540;
+  --color-150:  #38332C;
+  --color-100:  #2E2A24;
+  --color-000:  #242018;
+
+  /* Semantic tokens (same mapping, dark values) */
+  --bg:         var(--white);
+  --bg-card:    var(--color-000);
+  --ink:        var(--color-500);
+  --ink-2:      var(--color-300);
+  --ink-3:      var(--color-200);
+  --border:     var(--color-100);
+  --border-md:  var(--color-150);
+
+  /* shadcn compatibility */
+  --background:           var(--bg);
+  --foreground:           var(--ink);
+  --card:                 var(--bg-card);
+  --card-foreground:      var(--ink);
+  --border-color:         var(--border);
+  --border-medium:        var(--border-md);
+  --ink-secondary:        var(--ink-2);
+  --ink-tertiary:         var(--ink-3);
+  --text-body:            var(--ink-2);
+  --text-caption:         var(--ink-3);
 }
 
 @theme inline {
@@ -106,6 +134,7 @@
   --color-ink-tertiary: var(--ink-tertiary);
   --color-accent-orange: var(--accent);
   --color-accent-green: var(--accent-green);
+  --color-border-md: var(--border-md);
 }
 
 @layer base {
