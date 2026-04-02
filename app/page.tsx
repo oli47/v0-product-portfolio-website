@@ -179,23 +179,23 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8 -mx-4 md:mx-0 px-4 md:px-0 rounded-lg md:rounded-none hover:bg-card hover:border hover:border-border-md md:hover:border-0 md:hover:bg-transparent border border-transparent md:border-transparent transition-all">
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6 border border-border rounded-[4px] hover:bg-[#EBE8E2] hover:border-[#D8D4CC] md:hover:bg-transparent md:hover:border-border transition-all">
                       {/* Text */}
                       <div className="flex flex-col justify-center order-2 md:order-1">
                         <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
                           {project.title}
                           <span className="opacity-0 group-hover:opacity-100 ml-2 text-accent-orange transition-opacity">↗</span>
                         </h3>
-                        <p className="text-[14px] text-text-body leading-[1.75] mb-4">
+                        <p className="text-[14px] text-text-body leading-[1.75] mb-6">
                           {project.description}
                         </p>
-                        <div className="flex items-center gap-5 flex-wrap">
+                        <div className="space-y-3">
                           {project.metrics.map((metric, i) => (
-                            <div key={i} className="flex flex-col gap-0.5">
+                            <div key={i} className="flex items-baseline gap-3">
                               <span className={`font-display text-[18px] leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                              <span className="text-[11px] font-mono uppercase tracking-wider text-text-caption">
                                 {metric.label}
                               </span>
                             </div>
@@ -204,7 +204,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-md border border-border bg-card group-hover:scale-[1.02] transition-all duration-300 order-1 md:order-2" style={{ aspectRatio: '16/9' }}>
+                      <div className="relative overflow-hidden rounded-[4px] border border-border bg-card group-hover:scale-[1.02] transition-all duration-300 order-1 md:order-2" style={{ aspectRatio: '16/9' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
