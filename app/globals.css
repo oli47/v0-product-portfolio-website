@@ -3,10 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* PPMondwest font - placeholder for custom font */
+/* PPMondwest font */
 @font-face {
   font-family: 'PPMondwest';
-  src: local('PPMondwest');
+  src: url('/fonts/ppmondwest-regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
