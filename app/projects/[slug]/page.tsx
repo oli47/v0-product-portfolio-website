@@ -144,13 +144,13 @@ export default function ProjectPage() {
         {/* Header */}
         <section className="mb-12">
           {/* Title row */}
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 mb-8">
-            <h1 className="font-display text-[42px] leading-[1.1]">
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-0 mb-8">
+            <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.1]">
               {project.title.split(' ').map((word, i) => (
                 <span key={i}>{word}<br /></span>
               ))}
             </h1>
-            <p className="text-[16px] text-text-body leading-[1.75] self-end">
+            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] md:self-end">
               {project.tagline}
             </p>
           </div>
@@ -168,22 +168,22 @@ export default function ProjectPage() {
           </div>
 
           {/* Meta row */}
-          <div className="grid grid-cols-4 gap-4 py-4 border-t border-b border-border">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-b border-border">
             <div>
               <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Role</p>
-              <p className="text-[14px]">{project.meta.role}</p>
+              <p className="text-[12px] md:text-[14px]">{project.meta.role}</p>
             </div>
             <div>
               <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Team</p>
-              <p className="text-[14px]">{project.meta.team}</p>
+              <p className="text-[12px] md:text-[14px]">{project.meta.team}</p>
             </div>
             <div>
               <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Duration</p>
-              <p className="text-[14px]">{project.meta.duration}</p>
+              <p className="text-[12px] md:text-[14px]">{project.meta.duration}</p>
             </div>
             <div>
               <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Date</p>
-              <p className="text-[14px]">{project.meta.date}</p>
+              <p className="text-[12px] md:text-[14px]">{project.meta.date}</p>
             </div>
           </div>
         </section>
@@ -193,14 +193,14 @@ export default function ProjectPage() {
           <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
             Overview
           </div>
-          <p className="text-[16px] text-text-body leading-[1.75]">
+          <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75]">
             {project.overview}
           </p>
 
           {/* Overview Diagram */}
           {project.overviewDiagram && (
-            <div className="mt-8 p-6 bg-card rounded-md border border-border">
-              <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="mt-8 p-4 md:p-6 bg-card rounded-md border border-border">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-border rounded-md flex items-center justify-center mb-2 mx-auto">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -210,16 +210,16 @@ export default function ProjectPage() {
                   </div>
                   <p className="text-[12px] text-text-caption">{project.overviewDiagram.before}</p>
                 </div>
-                <div className="flex-1 flex items-center gap-2">
-                  <div className="flex-1 h-px bg-border border-dashed" />
-                  <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded flex items-center gap-2">
+                <div className="flex-1 w-full md:flex md:items-center md:gap-2">
+                  <div className="h-px md:flex-1 bg-border border-dashed mb-2 md:mb-0" />
+                  <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded flex items-center gap-2 shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                       <polyline points="22,6 12,13 2,6" />
                     </svg>
                     {project.overviewDiagram.action}
                   </div>
-                  <div className="flex-1 h-px bg-border border-dashed" />
+                  <div className="h-px md:flex-1 bg-border border-dashed mt-2 md:mt-0" />
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-accent-orange/10 rounded-md flex items-center justify-center mb-2 mx-auto">
@@ -245,22 +245,22 @@ export default function ProjectPage() {
           </div>
           
           {project.opportunityHeadline && (
-            <h3 className="font-display text-[24px] leading-[1.3] mb-4">
+            <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-[1.3] mb-4">
               {project.opportunityHeadline}
             </h3>
           )}
 
           <ul className="space-y-2 mb-4">
             {project.opportunity.map((item, index) => (
-              <li key={index} className="flex gap-3 text-[16px] text-text-body leading-[1.75]">
-                <span className="text-text-caption">•</span>
+              <li key={index} className="flex gap-3 text-[14px] md:text-[16px] text-text-body leading-[1.75]">
+                <span className="text-text-caption shrink-0">•</span>
                 <span>{item}</span>
               </li>
             ))}
           </ul>
 
           {project.opportunityFooter && (
-            <p className="text-[16px] text-text-body leading-[1.75] italic">
+            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] italic">
               {project.opportunityFooter}
             </p>
           )}
@@ -273,14 +273,14 @@ export default function ProjectPage() {
           </div>
           
           {project.solutionHeadline && (
-            <h3 className="font-display text-[24px] leading-[1.3] mb-6">
+            <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-[1.3] mb-6">
               {project.solutionHeadline}
             </h3>
           )}
 
           <div className="space-y-4 mb-8">
             {project.solution.map((paragraph, index) => (
-              <p key={index} className="text-[16px] text-text-body leading-[1.75]">
+              <p key={index} className="text-[14px] md:text-[16px] text-text-body leading-[1.75]">
                 {paragraph}
               </p>
             ))}
@@ -314,18 +314,18 @@ export default function ProjectPage() {
             Results
           </div>
           
-          <h3 className="font-display text-[28px] leading-[1.2] mb-2">
+          <h3 className="font-display text-[clamp(22px,6vw,28px)] leading-[1.2] mb-2">
             {project.results.headline}
           </h3>
           {project.results.subheadline && (
-            <p className="font-display text-[28px] leading-[1.2] text-text-body mb-8">
+            <p className="font-display text-[clamp(18px,5vw,24px)] leading-[1.2] text-text-body mb-8">
               {project.results.subheadline}
             </p>
           )}
 
           {/* North Star metric */}
           {project.results.northStar && (
-            <div className="grid grid-cols-2 gap-4 p-4 bg-card rounded-md border border-border mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-md border border-border mb-6">
               <div>
                 <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">
                   {project.results.northStar.label}
@@ -336,8 +336,8 @@ export default function ProjectPage() {
                   </span>
                 )}
               </div>
-              <div className="text-right">
-                <div className="font-display text-[36px] text-accent-orange leading-none">
+              <div className="md:text-right">
+                <div className="font-display text-[clamp(22px,6vw,36px)] text-accent-orange leading-none">
                   {project.results.northStar.value}
                 </div>
                 {project.results.northStar.sublabel && (
@@ -350,10 +350,10 @@ export default function ProjectPage() {
           )}
 
           {/* Metrics grid */}
-          <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
+          <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-4 bg-card rounded-md border border-border">
-                <div className={`font-display text-[28px] leading-none mb-2 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                <div className={`font-display text-[clamp(22px,6vw,28px)] leading-none mb-2 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                   {metric.value}
                 </div>
                 <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption">
@@ -373,12 +373,12 @@ export default function ProjectPage() {
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <span className="text-[14px] font-mono text-accent-orange shrink-0">
+                  <span className="text-[12px] md:text-[14px] font-mono text-accent-orange shrink-0 min-w-fit">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h4 className="text-[16px] font-medium mb-1">{step.title}</h4>
-                    <p className="text-[14px] text-text-body leading-[1.75]">{step.description}</p>
+                    <h4 className="text-[14px] md:text-[16px] font-medium mb-1">{step.title}</h4>
+                    <p className="text-[12px] md:text-[14px] text-text-body leading-[1.75]">{step.description}</p>
                   </div>
                 </div>
               ))}
@@ -387,17 +387,17 @@ export default function ProjectPage() {
         )}
 
         {/* Project navigation */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
           <Link 
             href={`/projects/${prev.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors order-2 md:order-1"
           >
             <span>←</span>
             <span>Previous / {prev.title}</span>
           </Link>
           <Link 
             href={`/projects/${next.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors order-1 md:order-2"
           >
             <span>{next.title} / Next</span>
             <span>→</span>
@@ -405,9 +405,9 @@ export default function ProjectPage() {
         </div>
 
         {/* Footer */}
-        <footer className="flex items-center justify-center gap-8 pt-8 border-t border-border text-[11px] font-mono text-text-caption">
-          <span>© 2026 Olaf Otrząsek</span>
-          <span>
+        <footer className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8 pt-8 border-t border-border text-[11px] font-mono text-text-caption">
+          <span className="text-center md:text-left">© 2026 Olaf Otrząsek</span>
+          <span className="text-center md:text-center">
             ✦ Built with{' '}
             <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Claude</a>
             {' & '}

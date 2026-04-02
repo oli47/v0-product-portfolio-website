@@ -48,29 +48,51 @@ export default function HomePage() {
         )}
       </button> */}
 
-      <div className="max-w-[1040px] mx-auto px-6 pt-24 pb-16">
-        <div className="flex gap-16">
+      <div className="max-w-[1040px] mx-auto px-6 pt-16 md:pt-24 pb-16">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16">
           {/* Sidebar */}
-          <aside className="w-[180px] shrink-0 sticky top-24 self-start hidden lg:block">
-            {/* Avatar */}
-            <div className="w-[100px] h-[100px] rounded-lg overflow-hidden mb-4 grayscale-[50%]">
-              <Image
-                src="/images/avatar.jpg"
-                alt="Olaf Otrząsek"
-                width={100}
-                height={100}
-                className="w-full h-full object-cover"
-                priority
-              />
+          <aside className="w-full md:w-[180px] md:shrink-0 md:sticky md:top-24 md:self-start md:hidden lg:block">
+            {/* Mobile sidebar - avatar and text in row */}
+            <div className="md:hidden flex items-start gap-4 mb-6">
+              <div className="w-[60px] h-[60px] rounded-lg overflow-hidden shrink-0 grayscale-[50%]">
+                <Image
+                  src="/images/avatar.jpg"
+                  alt="Olaf Otrząsek"
+                  width={60}
+                  height={60}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+              </div>
+              <div>
+                <h2 className="font-display text-[16px] leading-tight mb-0">
+                  Olaf Otrząsek
+                </h2>
+                <p className="text-[12px] text-text-body">
+                  Senior Product Designer
+                </p>
+              </div>
             </div>
-            
-            {/* Name */}
-            <h2 className="font-display text-[20px] leading-tight mb-1">
-              Olaf Otrząsek
-            </h2>
-            <p className="text-[14px] text-text-body mb-6">
-              Senior Product Designer
-            </p>
+
+            {/* Desktop sidebar */}
+            <div className="hidden lg:block">
+              <div className="w-[100px] h-[100px] rounded-lg overflow-hidden mb-4 grayscale-[50%]">
+                <Image
+                  src="/images/avatar.jpg"
+                  alt="Olaf Otrząsek"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+              </div>
+              <h2 className="font-display text-[20px] leading-tight mb-1">
+                Olaf Otrząsek
+              </h2>
+              <p className="text-[14px] text-text-body mb-6">
+                Senior Product Designer
+              </p>
+            </div>
 
             {/* Contact links */}
             <div className="space-y-0">
@@ -78,8 +100,8 @@ export default function HomePage() {
                 href="mailto:olafotrzasek@gmail.com"
                 className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
               >
-                <span>olafotrzasek@gmail.com</span>
-                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
+                <span className="truncate">olafotrzasek@gmail.com</span>
+                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity shrink-0">↗</span>
               </a>
               <a 
                 href="/olaf-otrzasek-resume.pdf"
@@ -112,14 +134,14 @@ export default function HomePage() {
           {/* Main content */}
           <div className="flex-1 min-w-0">
             {/* Hero */}
-            <section className="mb-16">
-              <h1 className="font-display text-[42px] md:text-[52px] leading-[1.1] mb-6">
+            <section className="mb-12 md:mb-16">
+              <h1 className="font-display text-[clamp(24px,7vw,52px)] leading-[1.1] mb-4 md:mb-6">
                 I let the data find the <span className="text-accent-orange">opportunity.</span>
                 <br />
                 Then I design the experience.
               </h1>
               
-              <p className="text-[16px] text-text-body leading-[1.75] max-w-[600px]">
+              <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] max-w-[600px]">
                 Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at{' '}
                 <a href="https://edrone.me" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">
                   edrone
@@ -133,19 +155,19 @@ export default function HomePage() {
             </section>
 
             {/* P→C→O Section */}
-            <section className="mb-16 border-l-[3px] border-accent-orange pl-6">
-              <h2 className="font-display text-[28px] leading-tight mb-4">
+            <section className="mb-12 md:mb-16 border-l-[3px] border-accent-orange pl-4 md:pl-6">
+              <h2 className="font-display text-[clamp(18px,5vw,28px)] leading-tight mb-4">
                 <span className="line-through text-text-caption">Problem</span>{' '}
                 <span className="line-through text-text-caption">Challenge</span>{' '}
                 <span>Opportunity</span>
               </h2>
-              <p className="text-[16px] text-text-body leading-[1.75]">
+              <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75]">
                 Drop-offs, low usage, churn — not problems to fix. Signals showing where the product has room to grow. I&apos;ve stopped framing design as problem-solving. I frame it as opportunity capture.
               </p>
             </section>
 
             {/* Selected Projects */}
-            <section className="mb-16">
+            <section className="mb-12 md:mb-16">
               <div className="inline-block px-3 py-1.5 bg-card border border-border-md rounded-sm text-[11px] font-mono uppercase tracking-wider text-foreground mb-8">
                 Selected Projects
               </div>
@@ -157,10 +179,10 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8 -mx-4 px-4 rounded-lg hover:bg-card hover:border hover:border-border-md border border-transparent transition-all">
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8 -mx-4 md:mx-0 px-4 md:px-0 rounded-lg md:rounded-none hover:bg-card hover:border hover:border-border-md md:hover:border-0 md:hover:bg-transparent border border-transparent md:border-transparent transition-all">
                       {/* Text */}
-                      <div className="flex flex-col justify-center">
-                        <h3 className="font-display text-[24px] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
+                      <div className="flex flex-col justify-center order-2 md:order-1">
+                        <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
                           {project.title}
                           <span className="opacity-0 group-hover:opacity-100 ml-2 text-accent-orange transition-opacity">↗</span>
                         </h3>
@@ -181,14 +203,14 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      {/* Thumbnail — bg-card gives #F2EFE9 light / #242018 dark */}
-                      <div className="relative overflow-hidden rounded-md border border-border bg-card group-hover:scale-[1.02] transition-all duration-300">
+                      {/* Thumbnail */}
+                      <div className="relative overflow-hidden rounded-md border border-border bg-card group-hover:scale-[1.02] transition-all duration-300 order-1 md:order-2" style={{ aspectRatio: '16/9' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
                           width={480}
                           height={300}
-                          className="w-full h-auto"
+                          className="w-full h-full object-cover"
                           priority={index === 0}
                         />
                       </div>
@@ -199,15 +221,15 @@ export default function HomePage() {
             </section>
 
             {/* Experience */}
-            <section className="mb-16">
+            <section className="mb-12 md:mb-16">
               <div className="inline-block px-3 py-1.5 bg-card border border-border-md rounded-sm text-[11px] font-mono uppercase tracking-wider text-foreground mb-8">
                 Experience
               </div>
 
               <div className="space-y-4">
                 {experience.map((exp, index) => (
-                  <div key={index} className="flex items-center gap-4">
-                    <span className="text-[12px] font-mono text-text-caption w-[90px] shrink-0">
+                  <div key={index} className="flex items-center gap-4 flex-wrap md:flex-nowrap">
+                    <span className="text-[12px] font-mono text-text-caption w-[60px] md:w-[90px] shrink-0">
                       {exp.years}
                     </span>
                     <div className="w-[22px] h-[22px] rounded-sm bg-border flex items-center justify-center shrink-0 overflow-hidden">
@@ -217,11 +239,11 @@ export default function HomePage() {
                         <span className="text-[10px] font-mono">{exp.company[0]}</span>
                       )}
                     </div>
-                    <span className="text-[14px] text-text-caption">
+                    <span className="text-[12px] md:text-[14px] text-text-caption">
                       {exp.company}
                     </span>
-                    <span className="text-[14px] text-text-caption">/</span>
-                    <span className="text-[14px] font-medium text-foreground">
+                    <span className="text-[12px] md:text-[14px] text-text-caption hidden md:inline">/</span>
+                    <span className="text-[12px] md:text-[14px] font-medium text-foreground">
                       {exp.role}
                     </span>
                   </div>
@@ -230,9 +252,9 @@ export default function HomePage() {
             </section>
 
             {/* Footer */}
-            <footer className="flex items-center justify-between pt-8 border-t border-border text-[11px] font-mono text-text-caption">
-              <span>© 2026 Olaf Otrząsek</span>
-              <span>
+            <footer className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-8 border-t border-border text-[11px] font-mono text-text-caption">
+              <span className="text-center md:text-left">© 2026 Olaf Otrząsek</span>
+              <span className="text-center md:text-right">
                 ✦ Built with{' '}
                 <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Claude</a>
                 {' & '}
