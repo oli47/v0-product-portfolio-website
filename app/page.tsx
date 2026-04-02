@@ -6,10 +6,10 @@ import { projects } from '@/lib/projects'
 import { useState, useEffect } from 'react'
 
 const experience = [
-  { years: '2022 - 2026', company: 'edrone', role: 'Senior Product Designer & Team Lead', logo: '/images/logo-edrone.png' },
-  { years: '2021 - 2022', company: 'Deepsolver', role: 'Product Designer', logo: '/images/logo-deepsolver.png' },
-  { years: '2019 - 2020', company: 'eq system', role: 'UX Designer', logo: '/images/logo-eqsystem.png' },
-  { years: '2018', company: 'Inventive Software', role: 'Junior UX/UI Designer', logo: '/images/logo-inventive.png' },
+  { years: '2022 - 2026', company: 'edrone', role: 'Senior Product Designer & Team Lead', logo: '/images/edrone-logo.jpg' },
+  { years: '2021 - 2022', company: 'Deepsolver', role: 'Product Designer', logo: '/images/deepsolver-logo.jpg' },
+  { years: '2019 - 2020', company: 'eq system', role: 'UX Designer', logo: '/images/eq-logo.jpg' },
+  { years: '2018', company: 'Inventive Software', role: 'Junior UX/UI Designer', logo: '/images/inventive-logo.jpg' },
 ]
 
 export default function HomePage() {
@@ -33,25 +33,19 @@ export default function HomePage() {
     <main className="min-h-screen bg-background">
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-end">
+        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="text-[14px] font-medium">
+            Olaf <span className="text-[#C8440A]">Otrząsek</span>
+          </Link>
           <div className="flex items-center gap-2">
+            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
+              EN / PL
+            </button>
             <button 
               onClick={toggleDarkMode}
               className="h-7 w-7 flex items-center justify-center border border-border rounded-sm hover:bg-border/50 transition-colors"
-              aria-label="Toggle dark mode"
             >
-              {darkMode ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-              )}
-            </button>
-            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
-              EN / PL
+              {darkMode ? '☀️' : '🌙'}
             </button>
           </div>
         </div>
@@ -166,22 +160,23 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className={`grid grid-cols-1 md:grid-cols-2 gap-8 py-10 ${index === 0 ? 'border-t' : ''} border-b border-border -mx-4 px-4`}>
+                    <article className={`grid grid-cols-1 md:grid-cols-2 gap-6 py-8 ${index === 0 ? 'border-t' : ''} border-b border-border hover:bg-[#C8440A]/5 transition-colors -mx-4 px-4`}>
                       {/* Text */}
                       <div className="flex flex-col justify-center">
-                        <h3 className="font-display text-[24px] leading-tight mb-3 group-hover:text-[#C8440A] transition-colors">
+                        <h3 className="font-display text-[24px] leading-tight mb-2 group-hover:text-[#C8440A] transition-colors">
                           {project.title}
+                          <span className="opacity-0 group-hover:opacity-100 ml-2 text-[#C8440A] transition-opacity">↗</span>
                         </h3>
-                        <p className="text-[15px] text-text-body leading-[1.7] mb-5">
+                        <p className="text-[14px] text-text-body leading-[1.75] mb-4">
                           {project.description}
                         </p>
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-4">
                           {project.metrics.slice(0, 2).map((metric, i) => (
-                            <div key={i} className="flex items-baseline gap-2">
-                              <span className={`font-mono text-[15px] ${metric.color === 'accent' ? 'text-[#C8440A]' : 'text-foreground'}`}>
+                            <div key={i} className="flex items-baseline gap-1">
+                              <span className={`font-display text-[18px] ${metric.color === 'accent' ? 'text-[#C8440A]' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="text-[13px] font-mono text-text-caption">
+                              <span className="text-[11px] font-mono uppercase tracking-wide text-text-caption">
                                 {metric.label}
                               </span>
                             </div>
@@ -190,7 +185,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-lg border border-border shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300">
+                      <div className="relative overflow-hidden rounded-md border border-border grayscale-[10%] group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-300">
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}

@@ -4,7 +4,6 @@ import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { projects, getProject, getProjectNavigation } from '@/lib/projects'
-import { CompareSlider } from '@/components/compare-slider'
 import { useState, useEffect } from 'react'
 
 export default function ProjectPage() {
@@ -37,29 +36,20 @@ export default function ProjectPage() {
     <main className="min-h-screen bg-background">
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="max-w-[680px] mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-1 text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors">
+        <div className="max-w-[1040px] mx-auto px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-[14px] font-medium text-text-caption hover:text-foreground transition-colors">
             <span>←</span>
             <span>Back</span>
           </Link>
           <div className="flex items-center gap-2">
+            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
+              EN / PL
+            </button>
             <button 
               onClick={toggleDarkMode}
               className="h-7 w-7 flex items-center justify-center border border-border rounded-sm hover:bg-border/50 transition-colors"
-              aria-label="Toggle dark mode"
             >
-              {darkMode ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-              )}
-            </button>
-            <button className="h-7 px-2 text-[12px] font-mono border border-border rounded-sm hover:bg-border/50 transition-colors">
-              EN / PL
+              {darkMode ? '☀️' : '🌙'}
             </button>
           </div>
         </div>
@@ -163,16 +153,7 @@ export default function ProjectPage() {
             ))}
           </div>
 
-          {project.hasCompareSlider && project.compareSliderImages && (
-            <div className="mt-8">
-              <CompareSlider
-                beforeImage={project.compareSliderImages.before}
-                afterImages={project.compareSliderImages.after}
-              />
-            </div>
-          )}
-
-          {project.solutionImage && !project.hasCompareSlider && (
+          {project.solutionImage && (
             <div className="relative w-full rounded-md overflow-hidden border border-border mt-8">
               <Image
                 src={project.solutionImage}
