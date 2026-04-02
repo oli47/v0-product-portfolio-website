@@ -21,6 +21,11 @@ export interface Project {
   solution: string[]
   solutionCallout?: string
   solutionImage?: string
+  hasCompareSlider?: boolean
+  compareSliderImages?: {
+    before: string
+    after: string[]
+  }
   results: {
     headline: string
     subheadline?: string
@@ -131,6 +136,12 @@ export const projects: Project[] = [
       'I could have run two separate A/B tests over 6 weeks. Instead, I made one call: remove the phone field and split the form into two steps at once. Step 1: Email or Google SSO, account created immediately. Step 2: Name and store URL. This fixed the SSO flow structurally and eliminated the biggest friction point in one move.',
       'Built the entire solution in Codex, shipped after a light code review with one front-end dev.',
     ],
+    solutionCallout: 'The textbook answer would have been to run an A/B test on the phone field, then a separate test on the form structure. Six weeks, conclusive data, low risk.',
+    hasCompareSlider: true,
+    compareSliderImages: {
+      before: '/images/signup-old.jpg',
+      after: ['/images/signup-new1.jpg', '/images/signup-new2.jpg'],
+    },
     results: {
       headline: 'Results confirmed in first 7 days.',
       metrics: [
