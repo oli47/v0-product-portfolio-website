@@ -172,16 +172,28 @@ export default function HomePage() {
                 Selected Projects
               </div>
 
-              <div className="space-y-0">
+              <div className="space-y-6">
                 {projects.map((project, index) => (
                   <Link 
                     key={project.slug}
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6 border border-border rounded-sm hover:bg-card hover:border-border-md md:hover:bg-transparent md:hover:border-border transition-all">
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-border rounded-sm bg-white hover:bg-card transition-all">
+                      {/* Thumbnail */}
+                      <div className="relative overflow-hidden rounded-sm order-1" style={{ aspectRatio: '16/9' }}>
+                        <Image
+                          src={project.thumbnailImage}
+                          alt={project.title}
+                          width={480}
+                          height={300}
+                          className="w-full h-full object-cover"
+                          priority={index === 0}
+                        />
+                      </div>
+
                       {/* Text */}
-                      <div className="flex flex-col justify-center order-2 md:order-1">
+                      <div className="flex flex-col justify-center p-6 md:p-8 order-2">
                         <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
                           {project.title}
                           <span className="opacity-0 group-hover:opacity-100 ml-2 text-accent-orange transition-opacity">↗</span>
@@ -189,7 +201,7 @@ export default function HomePage() {
                         <p className="text-[14px] text-text-body leading-[1.75] mb-6">
                           {project.description}
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 sm:gap-y-0 sm:gap-x-0 items-start">
+                        <div className="grid grid-cols-2 gap-y-4 gap-x-6 items-start">
                           {project.metrics.map((metric, i) => (
                             <div key={i} className="flex flex-col gap-1 items-start">
                               <span className={`font-display text-[clamp(20px,5vw,26px)] leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
@@ -199,6 +211,13 @@ export default function HomePage() {
                                 {metric.label}
                               </span>
                             </div>
+                          ))}
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
+                ))}
+              </div>
                           ))}
                         </div>
                       </div>
