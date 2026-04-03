@@ -179,7 +179,7 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="flex h-70 border border-color-100 rounded-sm overflow-hidden">
+                    <article className="flex h-70 border border-color-100 group-hover:border-color-200 rounded-sm overflow-hidden transition-colors duration-200">
                       {/* Thumbnail - 55% */}
                       <div className="w-[55%] relative bg-color-000">
                         <Image
@@ -193,7 +193,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Content - 45% */}
-                      <div className="w-[45%] flex flex-col justify-center border-l border-color-100 p-5 gap-8 bg-background group-hover:bg-color-000 transition-colors duration-200">
+                      <div className="w-[45%] flex flex-col justify-center border-l border-color-100 group-hover:border-color-200 p-5 gap-8 bg-background group-hover:bg-color-000 transition-colors duration-200">
                         {/* Title and Description */}
                         <div className="flex flex-col gap-4">
                           <h3 className="font-display text-[20px] font-normal leading-[1.6] text-foreground">
