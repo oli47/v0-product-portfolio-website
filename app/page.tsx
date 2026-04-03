@@ -221,6 +221,9 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Email
               </span>
+              <span className="text-[#525252] text-[12px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace" }}>
+                ⧉
+              </span>
             </a>
 
             {/* Phone */}
@@ -231,21 +234,8 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Phone
               </span>
-              <span className="text-[#525252] text-[20px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace" }}>
-                ↗
-              </span>
-            </a>
-
-            {/* Portfolio */}
-            <a
-              href="#portfolio"
-              className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200"
-            >
-              <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
-                Portfolio
-              </span>
-              <span className="text-[#525252] text-[20px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace" }}>
-                ↗
+              <span className="text-[#525252] text-[12px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace" }}>
+                ⧉
               </span>
             </a>
 
