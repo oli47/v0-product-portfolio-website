@@ -64,9 +64,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </p>
           </div>
 
-          <div className="flex flex-col gap-2 md:flex-col">
+          <div className="flex flex-row gap-8">
             {project.metrics.slice(0, 2).map((metric, i) => (
-              <div key={i} className="flex items-baseline gap-2 md:flex-col md:gap-1">
+              <div key={i} className="flex flex-col gap-1">
                 <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                   {metric.value}
                 </span>
