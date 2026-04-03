@@ -29,7 +29,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
       <article
-        className="flex flex-col md:flex-row overflow-hidden rounded-sm border transition-colors duration-200 md:min-h-[500px]"
+        className="flex flex-col md:flex-row overflow-hidden rounded-sm border transition-colors duration-200"
         style={{ borderColor: 'var(--color-100)' }}
         onMouseEnter={handleArticleEnter}
         onMouseLeave={handleArticleLeave}
@@ -155,6 +155,32 @@ const EXPERIENCE = [
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
 export default function Home() {
+  useEffect(() => {
+    const equalizeCardHeights = () => {
+      const articles = document.querySelectorAll('section.mb-20:nth-of-type(2) > div > a > article')
+      if (!articles.length) return
+
+      const isDesktop = window.innerWidth >= 768
+
+      articles.forEach((article) => {
+        ;(article as HTMLElement).style.minHeight = 'auto'
+      })
+
+      const maxHeight = Array.from(articles).reduce((max, article) => {
+        const height = (article as HTMLElement).offsetHeight
+        return Math.max(max, height)
+      }, 0)
+
+      articles.forEach((article) => {
+        ;(article as HTMLElement).style.minHeight = `${maxHeight}px`
+      })
+    }
+
+    equalizeCardHeights()
+    window.addEventListener('resize', equalizeCardHeights)
+    return () => window.removeEventListener('resize', equalizeCardHeights)
+  }, [])
+
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
