@@ -1,4 +1,3 @@
-// v2
 'use client'
 
 import Image from 'next/image'
@@ -40,7 +39,7 @@ export default function HomePage() {
                 <span className="truncate">olafotrzasek@gmail.com</span>
                 <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity shrink-0">↗</span>
               </a>
-              <a href="/olaf-otrzasek-resume.pdf" target="_blank" className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all">
+              <a href="/olaf-otrzasek-resume.html" target="_blank" className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all">
                 <span>Resume</span>
                 <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
               </a>

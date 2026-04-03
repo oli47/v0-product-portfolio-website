@@ -61,7 +61,7 @@ export const projects: Project[] = [
     slug: 'freemium-activation',
     title: 'Freemium Activation',
     tagline: 'From sales call to self-serve. 4,600 accounts in 10 months.',
-    description: "Rebuilt edrone's entire acquisition model. Turned a sales-gated platform into a scalable self-serve freemium engine, end-to-end.",
+    description: "Rebuilt edrone's entire acquisition model. Turned a sales-gated platform into a scalable self-serve freemium engine.",
     metrics: [
       { value: '4,657', label: 'NEW USERS', color: 'accent' },
       { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
@@ -74,7 +74,7 @@ export const projects: Project[] = [
     },
     coverImage: '/thumbnails/freemium-activation.png',
     thumbnailImage: '/thumbnails/freemium-activation.png',
-    overview: "edrone had no way for a new user to try the product without going through Sales first. I designed and built the entire acquisition path: signup, onboarding, integration flow, feature activation, and Stripe paywall. In 10 months the model acquired 4657 freemium accounts and cut the median time to first order driven by edrone from 44 to 5 days.",
+    overview: "edrone had no way for a new user to try the product without going through Sales first. I designed and built the entire acquisition path: signup, onboarding, integration flow, feature activation, and Stripe paywall. In 10 months the model acquired 4,657 freemium accounts and cut the median time to first attributed order from 44 to 5 days.",
     opportunity: [
       'The data made the case clearly before any design work started.',
       'The product had no signup flow, no free tier, no onboarding, no paywall.',
@@ -83,9 +83,9 @@ export const projects: Project[] = [
       'Website to created account: 0.17% overall, mobile at 0.01%.',
       'Users wanted to try the product. There was nowhere to try it.',
     ],
-    solutionHeadline: 'The hardest problem was not the paywall. It was activation: getting users to experience real value before they had a reason to trust the product.',
+    solutionHeadline: 'The hardest problem was not the paywall. It was activation: getting users to experience real value before they had a reason to trust it.',
     solution: [
-      'The original flow required platform integration before users could enter edrone. I reversed it: users first see what would activate after they connected, then chose whether to integrate. Integration rate fell slightly. Activated users rose. Business impact improved because the users who connected actually stayed and used the product.',
+      'The original flow required platform integration before users could enter edrone. I reversed it: users first see what would activate after connecting, then choose whether to integrate. Integration rate fell slightly. Activated users rose. Business impact improved because the users who connected actually stayed and used the product.',
       'The free tier was capped at 500 messages per month. Enough for a small store to see measurable ROI, but not enough to stay free forever if the product worked. Upgrading took two clicks via Stripe.',
     ],
     solutionImages: ['/images/freemium-hero.png'],
@@ -149,7 +149,7 @@ export const projects: Project[] = [
     solutionHeadline: 'The textbook answer would have been to run an A/B test on the phone field, then a separate test on the form structure. Six weeks, conclusive data, low risk.',
     solution: [
       'I made one call: remove the field and restructure the form into two steps at the same time. Step 1 creates the account immediately via email or Google SSO. Step 2 collects the store name and URL. This structure fixed the SSO redirect at a structural level.',
-      'The solution was built in Codex and shipped after a single code review.',
+      'Built in Codex and shipped after a single code review.',
     ],
     hasCompareSlider: true,
     compareSliderImages: {
@@ -182,7 +182,7 @@ export const projects: Project[] = [
   {
     slug: 'contacts-activation',
     title: 'Contacts Activation',
-    tagline: 'Turned a manual Support task into a zero-touch feature. 92% adoption, without a single line of onboarding copy.',
+    tagline: 'Turned a manual Support task into a zero-touch feature. 95% adoption, without a single line of onboarding copy.',
     description: 'Turned the biggest bottleneck to user ROI into a feature that activates itself. No onboarding copy. No support ticket. Just results.',
     metrics: [
       { value: '95%', label: 'ADOPTION', color: 'accent' },
@@ -212,8 +212,8 @@ export const projects: Project[] = [
     solutionHeadline: 'The obvious approach would have been to explain contact identification during onboarding: walk the user through tracking pixels, newsletter signups, and purchase flows.',
     solution: [
       'I did not do that.',
-      'Instead, the feature activates automatically 3 days after account creation. The first identification email sends itself. Users do not need to understand how it works — they just start seeing results.',
-      'The email itself was the hardest design challenge: it is not a marketing email, it is infrastructure. It goes to the user\'s entire contact base every 30 days on their behalf.',
+      'Instead, the feature activates automatically 3 days after account creation. The first identification email sends itself. Users do not need to understand how it works. They just start seeing results.',
+      'The email itself was the hardest design challenge: it is not a marketing email, it is infrastructure. It goes to the entire contact base every 30 days on their behalf.',
       'I needed users to understand what they were opting into without making it feel heavy or technical. The solution was a visual treatment that merges the automation and newsletter concepts into a single, obvious interface, intentionally distinct from the standard automation builder to avoid confusion. I built the entire frontend in Codex; the backend dev handled the sending mechanism.',
     ],
     solutionImages: ['/images/contacts-dashboard-1.png', '/images/contacts-dashboard-2.png'],

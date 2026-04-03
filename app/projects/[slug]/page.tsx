@@ -135,6 +135,11 @@ export default function ProjectPage() {
 
   const { prev, next } = getProjectNavigation(slug)
 
+  // metrics grid: 3-col if exactly 3 metrics and no northStar, else 2-col
+  const metricsGridCols = project.results.metrics.length === 3
+    ? 'grid-cols-1 md:grid-cols-3'
+    : 'grid-cols-1 md:grid-cols-2'
+
   return (
     <main className="min-h-screen bg-background">
       {/* Back link */}
@@ -156,12 +161,12 @@ export default function ProjectPage() {
                 <span key={i}>{word}<br /></span>
               ))}
             </h1>
-            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] md:self-end">
+            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] md:self-end text-balance">
               {project.tagline}
             </p>
           </div>
 
-          {/* Hero image - bg color-000, clickable */}
+          {/* Hero image */}
           <div className="relative w-full rounded-sm overflow-hidden border border-border mb-8" style={{ backgroundColor: 'var(--color-000)' }}>
             <ClickableImage
               src={project.coverImage}
@@ -197,7 +202,7 @@ export default function ProjectPage() {
         {/* Overview */}
         <section className="mb-12 pb-12 border-b border-border">
           <SectionBadge>Overview</SectionBadge>
-          <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75]">
+          <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] text-pretty">
             {project.overview}
           </p>
 
@@ -211,7 +216,7 @@ export default function ProjectPage() {
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
                   </div>
-                  <p className="text-[12px] text-text-caption">{project.overviewDiagram.before}</p>
+                  <p className="text-[12px] text-text-caption whitespace-pre-line">{project.overviewDiagram.before}</p>
                 </div>
                 <div className="flex-1 w-full md:flex md:items-center md:gap-2">
                   <div className="h-px md:flex-1 bg-border border-dashed mb-2 md:mb-0" />
@@ -246,22 +251,22 @@ export default function ProjectPage() {
           <SectionBadge>Opportunity</SectionBadge>
 
           {project.opportunityHeadline && (
-            <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-[1.3] mb-4">
+            <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] mb-4 text-pretty">
               {project.opportunityHeadline}
-            </h3>
+            </h2>
           )}
 
           <ul className="space-y-2 mb-4">
             {project.opportunity.map((item, index) => (
               <li key={index} className="flex gap-3 text-[14px] md:text-[16px] text-text-body leading-[1.75]">
                 <span className="text-text-caption shrink-0">•</span>
-                <span>{item}</span>
+                <span className="text-pretty">{item}</span>
               </li>
             ))}
           </ul>
 
           {project.opportunityFooter && (
-            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] italic">
+            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] italic text-pretty">
               {project.opportunityFooter}
             </p>
           )}
@@ -272,14 +277,14 @@ export default function ProjectPage() {
           <SectionBadge>Solution</SectionBadge>
 
           {project.solutionHeadline && (
-            <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-[1.3] mb-6">
+            <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] mb-6 text-pretty">
               {project.solutionHeadline}
-            </h3>
+            </h2>
           )}
 
           <div className="space-y-4 mb-8">
             {project.solution.map((paragraph, index) => (
-              <p key={index} className="text-[14px] md:text-[16px] text-text-body leading-[1.75]">
+              <p key={index} className="text-[14px] md:text-[16px] text-text-body leading-[1.75] text-pretty">
                 {paragraph}
               </p>
             ))}
@@ -309,14 +314,15 @@ export default function ProjectPage() {
         <section className="mb-12 pb-12 border-b border-border">
           <SectionBadge>Results</SectionBadge>
 
-          <h3 className="font-display text-[clamp(22px,6vw,28px)] leading-[1.2] mb-2">
+          <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] text-pretty">
             {project.results.headline}
-          </h3>
+          </h2>
           {project.results.subheadline && (
-            <p className="font-display text-[clamp(18px,5vw,24px)] leading-[1.2] text-text-body mb-8">
+            <p className="font-display text-[clamp(20px,5vw,28px)] leading-[1.25] text-text-caption mb-8 text-pretty">
               {project.results.subheadline}
             </p>
           )}
+          {!project.results.subheadline && <div className="mb-8" />}
 
           {project.results.northStar && (
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
@@ -343,7 +349,7 @@ export default function ProjectPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className={`grid gap-3 ${metricsGridCols}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
                 <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
@@ -368,8 +374,8 @@ export default function ProjectPage() {
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h4 className="text-[14px] md:text-[16px] font-medium mb-1">{step.title}</h4>
-                    <p className="text-[12px] md:text-[14px] text-text-body leading-[1.75]">{step.description}</p>
+                    <h4 className="text-[14px] md:text-[16px] font-medium mb-1 text-pretty">{step.title}</h4>
+                    <p className="text-[12px] md:text-[14px] text-text-body leading-[1.75] text-pretty">{step.description}</p>
                   </div>
                 </div>
               ))}
@@ -378,17 +384,17 @@ export default function ProjectPage() {
         )}
 
         {/* Project navigation */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
+        <div className="flex items-center justify-between gap-4 mb-12">
           <Link
             href={`/projects/${prev.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors order-2 md:order-1"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-accent-orange transition-colors whitespace-nowrap"
           >
             <span>←</span>
             <span>Previous / {prev.title}</span>
           </Link>
           <Link
             href={`/projects/${next.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors order-1 md:order-2"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-accent-orange transition-colors whitespace-nowrap"
           >
             <span>{next.title} / Next</span>
             <span>→</span>
@@ -399,9 +405,9 @@ export default function ProjectPage() {
         <footer className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8 pt-8 border-t border-border text-[11px] font-mono text-text-caption">
           <span className="text-center md:text-left">© 2026 Olaf Otrząsek</span>
           <span className="text-center md:text-center">
-            ✦ Built with{' '}
+            Built with{' '}
             <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Claude</a>
-            {' & '}
+            {' and '}
             <a href="https://v0.dev" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">v0.dev</a>
           </span>
         </footer>
