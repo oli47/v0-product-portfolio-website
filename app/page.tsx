@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { projects, type Project } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
+import { useEffect, useState } from 'react'
 
 // ─── Project Card ──────────────────────────────────────────────────────────
 
@@ -63,9 +64,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-y-1 gap-x-10">
+          <div className="flex flex-col gap-2 md:flex-col">
             {project.metrics.slice(0, 2).map((metric, i) => (
-              <div key={i} className="flex flex-col gap-1">
+              <div key={i} className="flex items-baseline gap-2 md:flex-col md:gap-1">
                 <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                   {metric.value}
                 </span>
@@ -87,6 +88,69 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     </Link>
   )
 }
+
+// ─── Scroll To Top ─────────────────────────────────────────────────────────
+
+function ScrollToTop() {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Back to top"
+      className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-9 h-9 rounded-sm border border-[var(--color-150)] bg-background text-ink-2 hover:text-accent-orange hover:border-[var(--color-150)] transition-all duration-200"
+      style={{
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? 'auto' : 'none',
+        transform: visible ? 'translateY(0)' : 'translateY(8px)',
+        transition: 'opacity 200ms, transform 200ms, color 200ms',
+      }}
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </button>
+  )
+}
+
+// ─── Experience data ───────────────────────────────────────────────────────
+
+const EXPERIENCE = [
+  {
+    logo: '/logos/edrone.jpg',
+    company: 'edrone',
+    url: 'https://edrone.me',
+    role: 'Senior Product Designer & Team Lead',
+    period: 'NOV 2022 \u2013 MAR 2026',
+  },
+  {
+    logo: '/logos/deepsolver.jpg',
+    company: 'Deepsolver',
+    url: 'https://deepsolver.com',
+    role: 'Product Designer',
+    period: 'NOV 2020 \u2013 OCT 2022',
+  },
+  {
+    logo: '/logos/eqsystem.jpg',
+    company: 'eq system',
+    url: 'https://eqsystem.pl',
+    role: 'UX Designer',
+    period: 'SEP 2019 \u2013 JUL 2020',
+  },
+  {
+    logo: '/logos/inventive.jpg',
+    company: 'Inventive Software',
+    url: 'https://inventivesoftware.pl',
+    role: 'Junior UX/UI Designer',
+    period: 'JAN 2019 \u2013 JUN 2019',
+  },
+]
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
@@ -152,24 +216,30 @@ export default function Home() {
             <SectionBadge>Experience</SectionBadge>
           </div>
           <div className="flex flex-col">
-            <div className="flex items-start justify-between py-4 border-b border-[var(--color-100)]">
-              <div>
-                <p className="text-[15px] text-foreground font-normal">edrone</p>
-                <p className="text-[13px] text-ink-2 mt-0.5">Product Designer</p>
+            {EXPERIENCE.map((job) => (
+              <div key={job.company} className="flex items-center justify-between py-4 border-b border-[var(--color-100)] gap-4">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-10 h-10 rounded-lg border border-[var(--color-100)] overflow-hidden shrink-0 flex items-center justify-center bg-white">
+                    <Image src={job.logo} alt={job.company} width={40} height={40} className="object-contain" />
+                  </div>
+                  <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                    <a
+                      href={job.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[14px] text-foreground underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200 shrink-0"
+                    >
+                      {job.company}
+                    </a>
+                    <span className="text-ink-3 text-[14px]">/</span>
+                    <span className="text-[14px] font-medium text-foreground">{job.role}</span>
+                  </div>
+                </div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-2 shrink-0 whitespace-nowrap">
+                  {job.period}
+                </p>
               </div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-2 mt-0.5">
-                2020 — 2025
-              </p>
-            </div>
-            <div className="flex items-start justify-between py-4 border-b border-[var(--color-100)]">
-              <div>
-                <p className="text-[15px] text-foreground font-normal">Freelance</p>
-                <p className="text-[13px] text-ink-2 mt-0.5">Product Design</p>
-              </div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-2 mt-0.5">
-                2018 — 2020
-              </p>
-            </div>
+            ))}
             <div className="pt-6">
               <a
                 href="/olaf-otrzasek-resume.html"
@@ -177,13 +247,14 @@ export default function Home() {
                 className="group flex items-center justify-between py-2 border-b border-[var(--color-100)] text-[11px] font-mono uppercase tracking-wide text-ink-2 hover:text-accent-orange transition-colors duration-200"
               >
                 <span>Full Resume</span>
-                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">→</span>
+                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">{'→'}</span>
               </a>
             </div>
           </div>
         </section>
 
       </div>
+      <ScrollToTop />
     </main>
   )
 }
