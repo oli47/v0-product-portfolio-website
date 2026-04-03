@@ -221,7 +221,7 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Email
               </span>
-              <span className="text-[#525252] text-[12px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace" }}>
+              <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
                 ⧉
               </span>
             </a>
@@ -234,7 +234,7 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Phone
               </span>
-              <span className="text-[#525252] text-[12px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace" }}>
+              <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
                 ⧉
               </span>
             </a>
