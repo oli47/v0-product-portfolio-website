@@ -192,26 +192,38 @@ export default function HomePage() {
                         />
                       </div>
 
-                      {/* Text */}
-                      <div className="flex flex-col justify-center p-6 md:p-8 order-2">
-                        <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-tight mb-2 group-hover:text-accent-orange transition-colors">
-                          {project.title}
-                          <span className="opacity-0 group-hover:opacity-100 ml-2 text-accent-orange transition-opacity">↗</span>
-                        </h3>
-                        <p className="text-[14px] text-text-body leading-[1.75] mb-6">
-                          {project.description}
-                        </p>
-                        <div className="grid grid-cols-2 gap-y-4 gap-x-6 items-start">
+                      {/* Text - with left border, specific padding and gap */}
+                      <div className="flex flex-col justify-center border-l border-border p-5 order-2 gap-8">
+                        {/* Title and Description */}
+                        <div className="flex flex-col gap-1">
+                          <h3 className="font-display text-[20px] leading-[1.6] text-foreground">
+                            {project.title}
+                          </h3>
+                          <p className="text-[14px] text-[#525252] leading-[1.71]">
+                            {project.description}
+                          </p>
+                        </div>
+
+                        {/* Metrics */}
+                        <div className="flex flex-wrap gap-y-1 gap-x-10">
                           {project.metrics.map((metric, i) => (
-                            <div key={i} className="flex flex-col gap-1 items-start">
-                              <span className={`font-display text-[clamp(20px,5vw,26px)] leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                            <div key={i} className="flex flex-col gap-0">
+                              <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="text-[10px] font-mono uppercase tracking-[0.1em] text-text-caption">
+                              <span className="font-mono text-[12px] uppercase tracking-[0.167em] text-[#525252] leading-5">
                                 {metric.label}
                               </span>
                             </div>
                           ))}
+                        </div>
+
+                        {/* VIEW link */}
+                        <div className="pt-2">
+                          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.167em] text-[#525252] group-hover:underline group-hover:bg-[#F2EFE9] group-hover:text-[#282828] group-hover:px-3 group-hover:py-1 rounded-sm transition-all">
+                            <span>VIEW</span>
+                            <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">→</span>
+                          </span>
                         </div>
                       </div>
                     </article>
