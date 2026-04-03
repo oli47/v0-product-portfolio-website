@@ -123,28 +123,28 @@ function ScrollToTop() {
 
 const EXPERIENCE = [
   {
-    logo: '/logos/edrone.jpg',
+    logo: '/logos/logoedrone.png',
     company: 'edrone',
     url: 'https://edrone.me',
     role: 'Senior Product Designer & Team Lead',
     period: 'NOV 2022 \u2013 MAR 2026',
   },
   {
-    logo: '/logos/deepsolver.jpg',
+    logo: '/logos/logodeepsolver.png',
     company: 'Deepsolver',
     url: 'https://deepsolver.com',
     role: 'Product Designer',
     period: 'NOV 2020 \u2013 OCT 2022',
   },
   {
-    logo: '/logos/eqsystem.jpg',
+    logo: '/logos/logoeq.png',
     company: 'eq system',
     url: 'https://www.eqsystem.pl/en/',
     role: 'UX Designer',
     period: 'SEP 2019 \u2013 JUL 2020',
   },
   {
-    logo: '/logos/inventive.jpg',
+    logo: '/logos/logois.png',
     company: 'Inventive Software',
     url: 'https://inventivesoftwarellc.com/',
     role: 'Junior UX/UI Designer',
