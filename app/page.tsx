@@ -191,10 +191,11 @@ export default function Home() {
             Olaf Otrzasek
           </p>
           <h1 className="font-display text-[clamp(28px,6vw,44px)] leading-[1.2] text-foreground mb-6 text-pretty">
-            Product designer focused on growth, conversion, and systems that work.
+            I let the data find the <span className="text-accent-orange">opportunity.</span>
+            <br /> Then I design the experience.
           </h1>
-          <p className="text-[15px] leading-relaxed text-ink-2 max-w-xl text-pretty">
-            5 years at edrone building SaaS for e-commerce. I work at the intersection of design, data, and product — from 0-to-1 features to conversion optimisation.
+          <p className="text-[15px] leading-relaxed text-ink-2 text-pretty">
+            Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at <a href="https://edrone.me/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">edrone</a>, rebuilding the platform from sales-gated to self-serve freemium. Before that, sole designer at <a href="https://deepsolver.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">Deepsolver</a> & <a href="https://plogenius.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">PLO Genius</a>, two products from zero to launch.
           </p>
 
           <div className="flex flex-wrap gap-3 mt-8">
