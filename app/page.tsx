@@ -79,7 +79,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 group-hover:text-foreground transition-colors duration-200">
             VIEW
-            <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">
+            <span className="font-neubit opacity-0 group-hover:opacity-100 text-accent-orange text-[20px] leading-[1] transition-opacity duration-200">
               {'→'}
             </span>
           </span>
@@ -208,7 +208,7 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium underline underline-offset-2 decoration-[#E3DDCF] uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Resume
               </span>
-              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+              <span className="font-neubit text-[#525252] text-[20px] leading-[1]">
                 ↗
               </span>
             </a>
@@ -221,9 +221,6 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Email
               </span>
-              <span className="text-[#525252] text-[20px] font-bold leading-[1] hidden">
-                →
-              </span>
             </a>
 
             {/* Phone */}
@@ -234,7 +231,7 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Phone
               </span>
-              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+              <span className="font-neubit text-[#525252] text-[20px] leading-[1]">
                 ↗
               </span>
             </a>
@@ -247,7 +244,7 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 Portfolio
               </span>
-              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+              <span className="font-neubit text-[#525252] text-[20px] leading-[1]">
                 ↗
               </span>
             </a>
@@ -262,7 +259,7 @@ export default function Home() {
               <span className="font-mono text-[12px] font-medium underline underline-offset-2 decoration-[#E3DDCF] uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
                 LinkedIn
               </span>
-              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+              <span className="font-neubit text-[#525252] text-[20px] leading-[1]">
                 ↗
               </span>
             </a>
@@ -318,7 +315,7 @@ export default function Home() {
                 className="group flex items-center justify-between py-2 border-b border-[var(--color-100)] text-[11px] font-mono uppercase tracking-wide text-ink-2 hover:text-accent-orange transition-colors duration-200"
               >
                 <span>Full Resume</span>
-                <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">{'→'}</span>
+                <span className="font-neubit opacity-0 group-hover:opacity-100 text-accent-orange text-[20px] leading-[1] transition-opacity duration-200">{'→'}</span>
               </a>
             </div>
           </div>

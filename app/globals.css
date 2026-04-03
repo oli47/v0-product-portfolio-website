@@ -12,6 +12,15 @@
   font-display: swap;
 }
 
+/* PP NeueBit Bold */
+@font-face {
+  font-family: 'PPNeueBit';
+  src: url('/fonts/ppneuebit-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Primitive palette — light */
   --white:      #F7F6F2;
@@ -154,6 +163,11 @@
 /* Font utility classes */
 .font-display {
   font-family: 'PPMondwest', serif !important;
+}
+
+.font-neubit {
+  font-family: 'PPNeueBit', monospace !important;
+  font-weight: 700;
 }
 
 .font-body {
