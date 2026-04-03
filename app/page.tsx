@@ -205,13 +205,13 @@ export default function HomePage() {
                         </div>
 
                         {/* Metrics */}
-                        <div className="flex flex-wrap gap-y-1 gap-x-10">
-                          {project.metrics.map((metric, i) => (
-                            <div key={i} className="flex flex-col gap-0">
-                              <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                        <div className="grid grid-cols-2 gap-y-2 gap-x-8">
+                          {project.metrics.slice(0, 2).map((metric, i) => (
+                            <div key={i} className="flex flex-col gap-1">
+                              <span className={`font-mono text-[14px] font-bold leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="font-mono text-[12px] uppercase tracking-[0.167em] text-ink-2 leading-5">
+                              <span className="font-mono text-[11px] uppercase tracking-[0.167em] text-ink-2 leading-tight">
                                 {metric.label}
                               </span>
                             </div>

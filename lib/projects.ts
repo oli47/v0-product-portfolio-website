@@ -63,9 +63,8 @@ export const projects: Project[] = [
     tagline: 'From sales call to self-serve. 4,600 accounts in 10 months.',
     description: "Rebuilt edrone's entire acquisition model. Turned a sales-gated platform into a scalable self-serve freemium engine, end-to-end.",
     metrics: [
-      { value: '4,657', label: 'Users', color: 'accent' },
-      { value: '9x Faster', label: 'To first order', color: 'accent' },
-      { value: '78%', label: 'Activation rate', color: 'accent' },
+      { value: '4,657', label: 'NEW USERS', color: 'accent' },
+      { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -127,8 +126,8 @@ export const projects: Project[] = [
     tagline: 'One field removed. Two steps. Five hours from diagnosis to production.',
     description: "Amplitude showed the drop-off. One field removed, form split in two steps, shipped in 5 hours. Results confirmed within 7 days.",
     metrics: [
-      { value: '+100%', label: 'Desktop', color: 'accent' },
-      { value: '0.05%→3%', label: 'Mobile', color: 'accent' },
+      { value: '+40%', label: 'DESKTOP', color: 'accent' },
+      { value: '+300%', label: 'MOBILE', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -186,8 +185,8 @@ export const projects: Project[] = [
     tagline: 'Turned a manual Support task into a zero-touch feature. 92% adoption, without a single line of onboarding copy.',
     description: 'Turned the biggest bottleneck to user ROI into a feature that activates itself. No onboarding copy. No support ticket. Just results.',
     metrics: [
-      { value: '95%', label: 'Adoption', color: 'accent' },
-      { value: '+19%', label: 'Identification', color: 'accent' },
+      { value: '95%', label: 'ADOPTION', color: 'accent' },
+      { value: '+19%', label: 'IDENTIFICATION', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
