@@ -155,6 +155,16 @@ const EXPERIENCE = [
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  const handleCopyClick = (e: React.MouseEvent<HTMLButtonElement>, text: string, id: string) => {
+    e.preventDefault()
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedId(id)
+      setTimeout(() => setCopiedId(null), 2000)
+    })
+  }
+
   useEffect(() => {
     const equalizeCardHeights = () => {
       const articles = document.querySelectorAll('section.mb-20:nth-of-type(2) > div > a > article')
@@ -163,7 +173,7 @@ export default function Home() {
       const isDesktop = window.innerWidth >= 768
 
       articles.forEach((article) => {
-        ; (article as HTMLElement).style.minHeight = 'auto'
+        ;(article as HTMLElement).style.minHeight = 'auto'
       })
 
       const maxHeight = Array.from(articles).reduce((max, article) => {
@@ -172,7 +182,7 @@ export default function Home() {
       }, 0)
 
       articles.forEach((article) => {
-        ; (article as HTMLElement).style.minHeight = `${maxHeight}px`
+        ;(article as HTMLElement).style.minHeight = `${maxHeight}px`
       })
     }
 
@@ -214,30 +224,44 @@ export default function Home() {
             </a>
 
             {/* Email */}
-            <a
-              href="mailto:olaf.otrzasek@gmail.com"
-              className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200"
-            >
-              <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
-                Email
-              </span>
-              <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
-                ⧉
-              </span>
-            </a>
+            <div className="relative">
+              <button
+                onClick={(e) => handleCopyClick(e, 'olafotrzasek@gmail.com', 'email')}
+                className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200 cursor-pointer"
+              >
+                <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
+                  Email
+                </span>
+                <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
+                  ⧉
+                </span>
+              </button>
+              {copiedId === 'email' && (
+                <div className="absolute top-full left-0 mt-1 whitespace-nowrap text-[11px] font-mono text-accent-orange">
+                  ✓ COPIED
+                </div>
+              )}
+            </div>
 
             {/* Phone */}
-            <a
-              href="tel:+48123456789"
-              className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200"
-            >
-              <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
-                Phone
-              </span>
-              <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
-                ⧉
-              </span>
-            </a>
+            <div className="relative">
+              <button
+                onClick={(e) => handleCopyClick(e, '732188613', 'phone')}
+                className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200 cursor-pointer"
+              >
+                <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
+                  Phone
+                </span>
+                <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
+                  ⧉
+                </span>
+              </button>
+              {copiedId === 'phone' && (
+                <div className="absolute top-full left-0 mt-1 whitespace-nowrap text-[11px] font-mono text-accent-orange">
+                  ✓ COPIED
+                </div>
+              )}
+            </div>
 
             {/* LinkedIn */}
             <a
