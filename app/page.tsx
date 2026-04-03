@@ -29,7 +29,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
       <article
-        className="flex flex-col md:flex-row overflow-hidden rounded-sm border transition-colors duration-200 min-h-[500px]"
+        className="flex flex-col md:flex-row overflow-hidden rounded-sm border transition-colors duration-200 md:min-h-[500px]"
         style={{ borderColor: 'var(--color-100)' }}
         onMouseEnter={handleArticleEnter}
         onMouseLeave={handleArticleLeave}
