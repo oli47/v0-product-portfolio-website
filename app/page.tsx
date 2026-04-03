@@ -179,9 +179,9 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-border rounded-sm bg-white hover:bg-card transition-all">
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-color-100 rounded-sm bg-white hover:bg-color-000 hover:border-color-200 transition-all">
                       {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-sm order-1" style={{ aspectRatio: '16/9' }}>
+                      <div className="relative overflow-hidden rounded-sm order-1 bg-color-000" style={{ aspectRatio: '16/9' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
@@ -193,13 +193,13 @@ export default function HomePage() {
                       </div>
 
                       {/* Text - with left border, specific padding and gap */}
-                      <div className="flex flex-col justify-center border-l border-border p-5 order-2 gap-8">
+                      <div className="flex flex-col justify-center border-l border-color-100 p-5 order-2 gap-8 hover:border-color-200 transition-colors">
                         {/* Title and Description */}
                         <div className="flex flex-col gap-1">
                           <h3 className="font-display text-[20px] leading-[1.6] text-foreground">
                             {project.title}
                           </h3>
-                          <p className="text-[14px] text-[#525252] leading-[1.71]">
+                          <p className="text-[14px] text-ink-2 leading-[1.71]">
                             {project.description}
                           </p>
                         </div>
@@ -211,7 +211,7 @@ export default function HomePage() {
                               <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="font-mono text-[12px] uppercase tracking-[0.167em] text-[#525252] leading-5">
+                              <span className="font-mono text-[12px] uppercase tracking-[0.167em] text-ink-2 leading-5">
                                 {metric.label}
                               </span>
                             </div>
@@ -220,7 +220,7 @@ export default function HomePage() {
 
                         {/* VIEW link */}
                         <div className="pt-2">
-                          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.167em] text-[#525252] group-hover:underline group-hover:bg-[#F2EFE9] group-hover:text-[#282828] group-hover:px-3 group-hover:py-1 rounded-sm transition-all">
+                          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.167em] text-ink-2 group-hover:underline group-hover:bg-color-000 group-hover:text-foreground group-hover:px-3 group-hover:py-1 rounded-sm transition-all">
                             <span>VIEW</span>
                             <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">→</span>
                           </span>
