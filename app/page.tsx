@@ -172,16 +172,16 @@ export default function HomePage() {
                 Selected Projects
               </div>
 
-              <div className="space-y-6">
+              <div className="flex flex-col gap-6">
                 {projects.map((project, index) => (
                   <Link 
                     key={project.slug}
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="flex h-70 border border-color-100 group-hover:border-color-200 rounded-sm overflow-hidden transition-colors duration-200">
+                    <article className="flex h-70 border border-[var(--color-100)] group-hover:border-[var(--color-200)] rounded-sm overflow-hidden transition-colors duration-200">
                       {/* Thumbnail - 55% */}
-                      <div className="w-[55%] relative bg-color-000">
+                      <div className="w-[55%] relative" style={{ backgroundColor: 'var(--color-000)' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
@@ -193,7 +193,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Content - 45% */}
-                      <div className="w-[45%] flex flex-col justify-center border-l border-color-100 group-hover:border-color-200 p-5 gap-8 bg-background group-hover:bg-color-000 transition-colors duration-200">
+                      <div className="w-[45%] flex flex-col justify-center border-l border-[var(--color-100)] group-hover:border-[var(--color-200)] p-5 gap-8 bg-background group-hover:bg-card transition-colors duration-200">
                         {/* Title and Description */}
                         <div className="flex flex-col gap-4">
                           <h3 className="font-display text-[20px] font-normal leading-[1.6] text-foreground">
