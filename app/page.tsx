@@ -218,25 +218,6 @@ export default function HomePage() {
                   </Link>
                 ))}
               </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-sm border border-border bg-card group-hover:scale-[1.02] transition-all duration-300 order-1 md:order-2" style={{ aspectRatio: '16/9' }}>
-                        <Image
-                          src={project.thumbnailImage}
-                          alt={project.title}
-                          width={480}
-                          height={300}
-                          className="w-full h-full object-cover"
-                          priority={index === 0}
-                        />
-                      </div>
-                    </article>
-                  </Link>
-                ))}
-              </div>
             </section>
 
             {/* Experience */}
