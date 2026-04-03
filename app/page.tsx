@@ -31,108 +31,53 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Dark mode toggle - hidden for now */}
-      {/* <button 
-        onClick={toggleDarkMode}
-        className="fixed top-4 right-4 z-50 h-8 w-8 flex items-center justify-center border border-border rounded-sm bg-background hover:bg-border/50 transition-colors"
-      >
-        {darkMode ? (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-        ) : (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        )}
-      </button> */}
-
       <div className="max-w-[1040px] mx-auto px-6 pt-16 md:pt-24 pb-16">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16">
+
           {/* Sidebar */}
           <aside className="w-full md:w-[180px] md:shrink-0 md:sticky md:top-24 md:self-start md:hidden lg:block">
-            {/* Mobile sidebar - avatar and text in row */}
             <div className="md:hidden flex items-start gap-4 mb-6">
               <div className="w-[60px] h-[60px] rounded-lg overflow-hidden shrink-0 grayscale-[50%]">
-                <Image
-                  src="/images/avatar.jpg"
-                  alt="Olaf Otrząsek"
-                  width={60}
-                  height={60}
-                  className="w-full h-full object-cover"
-                  priority
-                />
+                <Image src="/images/avatar.jpg" alt="Olaf Otrząsek" width={60} height={60} className="w-full h-full object-cover" priority />
               </div>
               <div>
-                <h2 className="font-display text-[16px] leading-tight mb-0">
-                  Olaf Otrząsek
-                </h2>
-                <p className="text-[12px] text-text-body">
-                  Senior Product Designer
-                </p>
+                <h2 className="font-display text-[16px] leading-tight mb-0">Olaf Otrząsek</h2>
+                <p className="text-[12px] text-text-body">Senior Product Designer</p>
               </div>
             </div>
 
-            {/* Desktop sidebar */}
             <div className="hidden lg:block">
               <div className="w-[100px] h-[100px] rounded-lg overflow-hidden mb-4 grayscale-[50%]">
-                <Image
-                  src="/images/avatar.jpg"
-                  alt="Olaf Otrząsek"
-                  width={100}
-                  height={100}
-                  className="w-full h-full object-cover"
-                  priority
-                />
+                <Image src="/images/avatar.jpg" alt="Olaf Otrząsek" width={100} height={100} className="w-full h-full object-cover" priority />
               </div>
-              <h2 className="font-display text-[20px] leading-tight mb-1">
-                Olaf Otrząsek
-              </h2>
-              <p className="text-[14px] text-text-body mb-6">
-                Senior Product Designer
-              </p>
+              <h2 className="font-display text-[20px] leading-tight mb-1">Olaf Otrząsek</h2>
+              <p className="text-[14px] text-text-body mb-6">Senior Product Designer</p>
             </div>
 
-            {/* Contact links */}
             <div className="space-y-0">
-              <a 
-                href="mailto:olafotrzasek@gmail.com"
-                className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
-              >
+              <a href="mailto:olafotrzasek@gmail.com" className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all">
                 <span className="truncate">olafotrzasek@gmail.com</span>
                 <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity shrink-0">↗</span>
               </a>
-              <a 
-                href="/olaf-otrzasek-resume.pdf"
-                target="_blank"
-                className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
-              >
+              <a href="/olaf-otrzasek-resume.pdf" target="_blank" className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all">
                 <span>Resume</span>
                 <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
               </a>
-              <a 
-                href="https://www.linkedin.com/in/olafotrzasek/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all"
-              >
+              <a href="https://www.linkedin.com/in/olafotrzasek/" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between py-2 border-b border-border text-[11px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground hover:pl-1 transition-all">
                 <span>LinkedIn</span>
                 <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">↗</span>
               </a>
             </div>
 
-            {/* Status */}
             <div className="flex items-center gap-2 mt-6">
               <span className="w-2 h-2 bg-accent-green rounded-sm animate-pulse-slow" />
-              <span className="text-[11px] font-mono uppercase tracking-wide text-accent-green">
-                Open to opportunities
-              </span>
+              <span className="text-[11px] font-mono uppercase tracking-wide text-accent-green">Open to opportunities</span>
             </div>
           </aside>
 
           {/* Main content */}
           <div className="flex-1 min-w-0">
+
             {/* Hero */}
             <section className="mb-12 md:mb-16">
               <h1 className="font-display text-[clamp(24px,7vw,52px)] leading-[1.1] mb-4 md:mb-6">
@@ -140,16 +85,11 @@ export default function HomePage() {
                 <br />
                 Then I design the experience.
               </h1>
-              
               <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] max-w-[600px]">
                 Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at{' '}
-                <a href="https://edrone.me" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">
-                  edrone
-                </a>
+                <a href="https://edrone.me" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">edrone</a>
                 {' '}— rebuilt the platform from sales-gated to self-serve freemium. Before that, sole designer at{' '}
-                <a href="https://deepsolver.com" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">
-                  Deepsolver
-                </a>
+                <a href="https://deepsolver.com" target="_blank" rel="noopener noreferrer" className="text-foreground underline underline-offset-2 hover:text-accent-orange transition-colors">Deepsolver</a>
                 {' '}— two products from zero to launch.
               </p>
             </section>
@@ -174,27 +114,41 @@ export default function HomePage() {
 
               <div className="flex flex-col gap-6">
                 {projects.map((project, index) => (
-                  <Link 
+                  <Link
                     key={project.slug}
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="flex h-70 border border-[var(--color-100)] group-hover:border-[var(--color-200)] rounded-sm overflow-hidden transition-colors duration-200">
-                      {/* Thumbnail - 55% */}
-                      <div className="w-[55%] relative" style={{ backgroundColor: 'var(--color-000)' }}>
+                    <article
+                      className="flex overflow-hidden rounded-sm border transition-colors duration-200"
+                      style={{ borderColor: 'var(--color-100)', height: '280px' }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--color-150)')}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--color-100)')}
+                    >
+                      {/* Left - thumbnail 55% */}
+                      <div className="w-[55%] relative shrink-0" style={{ backgroundColor: 'var(--color-000)' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
-                          width={480}
-                          height={280}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                           priority={index === 0}
                         />
                       </div>
 
-                      {/* Content - 45% */}
-                      <div className="w-[45%] flex flex-col justify-center border-l border-[var(--color-100)] group-hover:border-[var(--color-200)] p-5 gap-8 bg-background group-hover:bg-card transition-colors duration-200">
-                        {/* Title and Description */}
+                      {/* Right - content 45% */}
+                      <div
+                        className="w-[45%] flex flex-col justify-center p-5 gap-8 border-l transition-colors duration-200"
+                        style={{ backgroundColor: 'var(--background)', borderColor: 'var(--color-100)' }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.backgroundColor = 'var(--color-000)'
+                          e.currentTarget.style.borderColor = 'var(--color-150)'
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.backgroundColor = 'var(--background)'
+                          e.currentTarget.style.borderColor = 'var(--color-100)'
+                        }}
+                      >
                         <div className="flex flex-col gap-4">
                           <h3 className="font-display text-[20px] font-normal leading-[1.6] text-foreground">
                             {project.title}
@@ -204,27 +158,23 @@ export default function HomePage() {
                           </p>
                         </div>
 
-                        {/* Metrics */}
                         <div className="flex flex-wrap gap-y-1 gap-x-10">
                           {project.metrics.slice(0, 2).map((metric, i) => (
                             <div key={i} className="flex flex-col gap-1">
                               <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="font-mono text-[12px] font-medium leading-5 uppercase tracking-[0.167em] text-ink-2">
+                              <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 leading-5">
                                 {metric.label}
                               </span>
                             </div>
                           ))}
                         </div>
 
-                        {/* VIEW link */}
-                        <div>
-                          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] font-medium leading-5 uppercase tracking-[0.167em] text-ink-2 group-hover:text-foreground transition-colors duration-200">
-                            <span>VIEW</span>
-                            <span className="text-ink-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
-                          </span>
-                        </div>
+                        <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 group-hover:text-foreground transition-colors duration-200">
+                          VIEW
+                          <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">→</span>
+                        </span>
                       </div>
                     </article>
                   </Link>
@@ -241,9 +191,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 {experience.map((exp, index) => (
                   <div key={index} className="flex items-center gap-4 flex-wrap md:flex-nowrap">
-                    <span className="text-[12px] font-mono text-text-caption w-[60px] md:w-[90px] shrink-0">
-                      {exp.years}
-                    </span>
+                    <span className="text-[12px] font-mono text-text-caption w-[60px] md:w-[90px] shrink-0">{exp.years}</span>
                     <div className="w-[22px] h-[22px] rounded-sm bg-border flex items-center justify-center shrink-0 overflow-hidden">
                       {exp.logo ? (
                         <Image src={exp.logo} alt={exp.company} width={22} height={22} className="w-full h-full object-contain" />
@@ -251,13 +199,9 @@ export default function HomePage() {
                         <span className="text-[10px] font-mono">{exp.company[0]}</span>
                       )}
                     </div>
-                    <span className="text-[12px] md:text-[14px] text-text-caption">
-                      {exp.company}
-                    </span>
+                    <span className="text-[12px] md:text-[14px] text-text-caption">{exp.company}</span>
                     <span className="text-[12px] md:text-[14px] text-text-caption hidden md:inline">/</span>
-                    <span className="text-[12px] md:text-[14px] font-medium text-foreground">
-                      {exp.role}
-                    </span>
+                    <span className="text-[12px] md:text-[14px] font-medium text-foreground">{exp.role}</span>
                   </div>
                 ))}
               </div>
