@@ -113,7 +113,7 @@ function ScrollToTop() {
       }}
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
   )
@@ -139,14 +139,14 @@ const EXPERIENCE = [
   {
     logo: '/logos/eqsystem.jpg',
     company: 'eq system',
-    url: 'https://eqsystem.pl',
+    url: 'https://www.eqsystem.pl/en/',
     role: 'UX Designer',
     period: 'SEP 2019 \u2013 JUL 2020',
   },
   {
     logo: '/logos/inventive.jpg',
     company: 'Inventive Software',
-    url: 'https://inventivesoftware.pl',
+    url: 'https://inventivesoftwarellc.com/',
     role: 'Junior UX/UI Designer',
     period: 'JAN 2019 \u2013 JUN 2019',
   },
@@ -163,7 +163,7 @@ export default function Home() {
       const isDesktop = window.innerWidth >= 768
 
       articles.forEach((article) => {
-        ;(article as HTMLElement).style.minHeight = 'auto'
+        ; (article as HTMLElement).style.minHeight = 'auto'
       })
 
       const maxHeight = Array.from(articles).reduce((max, article) => {
@@ -172,7 +172,7 @@ export default function Home() {
       }, 0)
 
       articles.forEach((article) => {
-        ;(article as HTMLElement).style.minHeight = `${maxHeight}px`
+        ; (article as HTMLElement).style.minHeight = `${maxHeight}px`
       })
     }
 
