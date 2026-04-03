@@ -319,23 +319,23 @@ export default function ProjectPage() {
           )}
 
           {project.results.northStar && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-sm border border-border mb-6">
-              <div>
-                <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div className="flex flex-col gap-1">
+                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-text-caption">
                   {project.results.northStar.label}
                 </div>
                 {project.results.northStar.tag && (
-                  <span className="inline-block px-2 py-0.5 bg-accent-orange text-white text-[10px] font-mono uppercase rounded-sm">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-accent-orange">
                     {project.results.northStar.tag}
-                  </span>
+                  </div>
                 )}
               </div>
               <div className="md:text-right">
-                <div className="font-display text-[clamp(22px,6vw,36px)] text-accent-orange leading-none">
+                <div className="font-display text-[clamp(28px,7vw,48px)] text-accent-orange leading-none">
                   {project.results.northStar.value}
                 </div>
                 {project.results.northStar.sublabel && (
-                  <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption mt-1">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-text-caption mt-1">
                     {project.results.northStar.sublabel}
                   </div>
                 )}
@@ -343,13 +343,13 @@ export default function ProjectPage() {
             </div>
           )}
 
-          <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {project.results.metrics.map((metric, index) => (
-              <div key={index} className="p-4 bg-card rounded-sm border border-border">
-                <div className={`font-display text-[clamp(22px,6vw,28px)] leading-none mb-2 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+              <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                   {metric.value}
                 </div>
-                <div className="text-[11px] font-mono uppercase tracking-wide text-text-caption">
+                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-text-caption">
                   {metric.label}
                 </div>
               </div>
