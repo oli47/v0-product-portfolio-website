@@ -4,7 +4,65 @@ import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProject, getProjectNavigation } from '@/lib/projects'
+import { SectionBadge } from '@/components/section-badge'
 import { useState, useEffect, useRef, useCallback } from 'react'
+
+// Lightbox Component
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handleKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 cursor-zoom-out"
+      onClick={onClose}
+    >
+      <div className="relative max-w-5xl w-full max-h-full" onClick={e => e.stopPropagation()}>
+        <button
+          onClick={onClose}
+          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors"
+        >
+          Close ✕
+        </button>
+        <Image
+          src={src}
+          alt={alt}
+          width={1200}
+          height={750}
+          className="w-full h-auto rounded-sm"
+        />
+      </div>
+    </div>
+  )
+}
+
+// Clickable image wrapper
+function ClickableImage({ src, alt, width, height, className, priority }: {
+  src: string; alt: string; width: number; height: number; className?: string; priority?: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={`${className} cursor-zoom-in`}
+        priority={priority}
+        onClick={() => setOpen(true)}
+      />
+      {open && <Lightbox src={src} alt={alt} onClose={() => setOpen(false)} />}
+    </>
+  )
+}
 
 // Compare Slider Component
 function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; afterImage: string }) {
@@ -23,14 +81,8 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
   useEffect(() => {
     const handleMouseUp = () => setIsDragging(false)
     const handleTouchEnd = () => setIsDragging(false)
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) handleMove(e.clientX)
-    }
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (isDragging && e.touches[0]) handleMove(e.touches[0].clientX)
-    }
+    const handleMouseMove = (e: MouseEvent) => { if (isDragging) handleMove(e.clientX) }
+    const handleTouchMove = (e: TouchEvent) => { if (isDragging && e.touches[0]) handleMove(e.touches[0].clientX) }
 
     document.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('touchend', handleTouchEnd)
@@ -46,22 +98,17 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
   }, [isDragging, handleMove])
 
   return (
-      <div 
-        ref={containerRef}
-        className="relative w-full rounded-sm overflow-hidden border border-border select-none cursor-ew-resize"
-        style={{ aspectRatio: '16/10' }}
-        onMouseDown={() => setIsDragging(true)}
-        onTouchStart={() => setIsDragging(true)}
-      >
-      {/* After image (full) */}
+    <div
+      ref={containerRef}
+      className="relative w-full rounded-sm overflow-hidden border border-border select-none cursor-ew-resize"
+      style={{ aspectRatio: '16/10' }}
+      onMouseDown={() => setIsDragging(true)}
+      onTouchStart={() => setIsDragging(true)}
+    >
       <Image src={afterImage} alt="After" fill className="object-cover" />
-
-      {/* Before image (clipped) */}
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
         <Image src={beforeImage} alt="Before" fill className="object-cover" />
       </div>
-
-      {/* Slider line */}
       <div
         className="absolute top-0 bottom-0 w-[2px] bg-foreground z-10"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
@@ -73,14 +120,8 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
           </svg>
         </div>
       </div>
-
-      {/* Labels */}
-      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">
-        Before
-      </div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">
-        After
-      </div>
+      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">Before</div>
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">After</div>
     </div>
   )
 }
@@ -89,47 +130,13 @@ export default function ProjectPage() {
   const params = useParams()
   const slug = params.slug as string
   const project = getProject(slug)
-  const [darkMode, setDarkMode] = useState(false)
 
-  useEffect(() => {
-    const stored = localStorage.getItem('darkMode')
-    if (stored === 'true') {
-      setDarkMode(true)
-      document.documentElement.classList.add('dark')
-    }
-  }, [])
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-    document.documentElement.classList.toggle('dark')
-    localStorage.setItem('darkMode', (!darkMode).toString())
-  }
-
-  if (!project) {
-    notFound()
-  }
+  if (!project) notFound()
 
   const { prev, next } = getProjectNavigation(slug)
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Dark mode toggle - hidden for now */}
-      {/* <button
-        onClick={toggleDarkMode}
-        className="fixed top-4 right-4 z-50 h-8 w-8 flex items-center justify-center border border-border rounded-sm bg-background hover:bg-card transition-colors"
-      >
-        {darkMode ? (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-        ) : (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        )}
-      </button> */}
-
       {/* Back link */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm">
         <div className="max-w-[680px] mx-auto px-6 h-14 flex items-center">
@@ -143,7 +150,6 @@ export default function ProjectPage() {
       <div className="max-w-[680px] mx-auto px-6 pt-24 pb-16">
         {/* Header */}
         <section className="mb-12">
-          {/* Title row */}
           <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-0 mb-8">
             <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.1]">
               {project.title.split(' ').map((word, i) => (
@@ -155,9 +161,9 @@ export default function ProjectPage() {
             </p>
           </div>
 
-          {/* Hero image */}
-          <div className="relative w-full rounded-sm overflow-hidden border border-border mb-8">
-            <Image
+          {/* Hero image - bg color-000, clickable */}
+          <div className="relative w-full rounded-sm overflow-hidden border border-border mb-8" style={{ backgroundColor: 'var(--color-000)' }}>
+            <ClickableImage
               src={project.coverImage}
               alt={project.title}
               width={680}
@@ -190,14 +196,11 @@ export default function ProjectPage() {
 
         {/* Overview */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
-            Overview
-          </div>
+          <SectionBadge>Overview</SectionBadge>
           <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75]">
             {project.overview}
           </p>
 
-          {/* Overview Diagram */}
           {project.overviewDiagram && (
             <div className="mt-8 p-4 md:p-6 bg-card rounded-sm border border-border">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
@@ -240,10 +243,8 @@ export default function ProjectPage() {
 
         {/* Opportunity */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
-            Opportunity
-          </div>
-          
+          <SectionBadge>Opportunity</SectionBadge>
+
           {project.opportunityHeadline && (
             <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-[1.3] mb-4">
               {project.opportunityHeadline}
@@ -268,10 +269,8 @@ export default function ProjectPage() {
 
         {/* Solution */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
-            Solution
-          </div>
-          
+          <SectionBadge>Solution</SectionBadge>
+
           {project.solutionHeadline && (
             <h3 className="font-display text-[clamp(18px,5vw,24px)] leading-[1.3] mb-6">
               {project.solutionHeadline}
@@ -286,18 +285,16 @@ export default function ProjectPage() {
             ))}
           </div>
 
-          {/* Compare Slider for Signup Redesign */}
           {project.hasCompareSlider && project.compareSliderImages && (
-            <CompareSlider 
-              beforeImage={project.compareSliderImages.before} 
-              afterImage={project.compareSliderImages.after} 
+            <CompareSlider
+              beforeImage={project.compareSliderImages.before}
+              afterImage={project.compareSliderImages.after}
             />
           )}
 
-          {/* Solution Images */}
           {project.solutionImages && project.solutionImages.map((img, index) => (
-            <div key={index} className="relative w-full rounded-sm overflow-hidden border border-border mt-6">
-              <Image
+            <div key={index} className="relative w-full rounded-sm overflow-hidden border border-border mt-6" style={{ backgroundColor: 'var(--color-000)' }}>
+              <ClickableImage
                 src={img}
                 alt={`Solution ${index + 1}`}
                 width={680}
@@ -310,10 +307,8 @@ export default function ProjectPage() {
 
         {/* Results */}
         <section className="mb-12 pb-12 border-b border-border">
-          <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-4">
-            Results
-          </div>
-          
+          <SectionBadge>Results</SectionBadge>
+
           <h3 className="font-display text-[clamp(22px,6vw,28px)] leading-[1.2] mb-2">
             {project.results.headline}
           </h3>
@@ -323,7 +318,6 @@ export default function ProjectPage() {
             </p>
           )}
 
-          {/* North Star metric */}
           {project.results.northStar && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-sm border border-border mb-6">
               <div>
@@ -349,7 +343,6 @@ export default function ProjectPage() {
             </div>
           )}
 
-          {/* Metrics grid */}
           <div className={`grid gap-4 ${project.results.metrics.length === 3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-4 bg-card rounded-sm border border-border">
@@ -367,9 +360,7 @@ export default function ProjectPage() {
         {/* Next Steps */}
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-12 pb-12 border-b border-border">
-            <div className="inline-block px-2 py-1 border border-border rounded-sm text-[11px] font-mono uppercase tracking-wide text-text-caption mb-6">
-              Next Steps
-            </div>
+            <SectionBadge>Next Steps</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
@@ -388,14 +379,14 @@ export default function ProjectPage() {
 
         {/* Project navigation */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
-          <Link 
+          <Link
             href={`/projects/${prev.slug}`}
             className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors order-2 md:order-1"
           >
             <span>←</span>
             <span>Previous / {prev.title}</span>
           </Link>
-          <Link 
+          <Link
             href={`/projects/${next.slug}`}
             className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors order-1 md:order-2"
           >
