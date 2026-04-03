@@ -179,9 +179,9 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-color-100 rounded-sm bg-white hover:bg-color-000 hover:border-color-200 transition-all">
+                    <article className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-color-100 rounded-sm bg-white group-hover:bg-color-000 group-hover:border-color-200 transition-colors duration-200">
                       {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-sm order-1 bg-color-000" style={{ aspectRatio: '16/9' }}>
+                      <div className="relative overflow-hidden rounded-sm order-1" style={{ aspectRatio: '16/9' }}>
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
@@ -193,7 +193,7 @@ export default function HomePage() {
                       </div>
 
                       {/* Text - with left border, specific padding and gap */}
-                      <div className="flex flex-col justify-center border-l border-color-100 p-5 order-2 gap-8 hover:border-color-200 transition-colors">
+                      <div className="flex flex-col justify-center border-l border-color-100 p-5 order-2 gap-6 group-hover:border-color-200 transition-colors duration-200">
                         {/* Title and Description */}
                         <div className="flex flex-col gap-1">
                           <h3 className="font-display text-[20px] leading-[1.6] text-foreground">
@@ -205,13 +205,13 @@ export default function HomePage() {
                         </div>
 
                         {/* Metrics */}
-                        <div className="grid grid-cols-2 gap-y-2 gap-x-8">
+                        <div className="grid grid-cols-2 gap-y-1 gap-x-6">
                           {project.metrics.slice(0, 2).map((metric, i) => (
-                            <div key={i} className="flex flex-col gap-1">
-                              <span className={`font-mono text-[14px] font-bold leading-none ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                            <div key={i} className="flex flex-col gap-0.5">
+                              <span className={`font-display text-[16px] font-semibold leading-tight ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="font-mono text-[11px] uppercase tracking-[0.167em] text-ink-2 leading-tight">
+                              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-ink-2 leading-tight">
                                 {metric.label}
                               </span>
                             </div>
@@ -219,10 +219,10 @@ export default function HomePage() {
                         </div>
 
                         {/* VIEW link */}
-                        <div className="pt-2">
-                          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.167em] text-ink-2 group-hover:underline group-hover:bg-color-000 group-hover:text-foreground group-hover:px-3 group-hover:py-1 rounded-sm transition-all">
+                        <div>
+                          <span className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 transition-all duration-200">
                             <span>VIEW</span>
-                            <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity">→</span>
+                            <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">→</span>
                           </span>
                         </div>
                       </div>

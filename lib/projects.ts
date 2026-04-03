@@ -72,8 +72,8 @@ export const projects: Project[] = [
       duration: '8 months',
       date: '2025-2026',
     },
-    coverImage: '/images/thumbnail2.png',
-    thumbnailImage: '/images/thumbnail2.png',
+    coverImage: '/thumbnails/freemium-activation.png',
+    thumbnailImage: '/thumbnails/freemium-activation.png',
     overview: "edrone had no way for a new user to try the product without going through Sales first. I designed and built the entire acquisition path: signup, onboarding, integration flow, feature activation, and Stripe paywall. In 10 months the model acquired 4657 freemium accounts and cut the median time to first order driven by edrone from 44 to 5 days.",
     opportunity: [
       'The data made the case clearly before any design work started.',
@@ -135,8 +135,8 @@ export const projects: Project[] = [
       duration: '5h',
       date: '2026',
     },
-    coverImage: '/images/thumbnail1.png',
-    thumbnailImage: '/images/thumbnail1.png',
+    coverImage: '/thumbnails/signup-redesign.png',
+    thumbnailImage: '/thumbnails/signup-redesign.png',
     overview: "Amplitude showed where users were dropping off on the signup form. Once the data confirmed the cause, the fix was clear. Removing one field and restructuring the form into two steps doubled desktop conversion and took mobile from near-zero to 3% within the first seven days.",
     opportunityHeadline: 'The signup form was inherited from the sales-led era, built for lead qualification rather than user activation.',
     opportunity: [
@@ -194,8 +194,8 @@ export const projects: Project[] = [
       duration: '8 days',
       date: '2026',
     },
-    coverImage: '/images/thumbnail3.png',
-    thumbnailImage: '/images/thumbnail3.png',
+    coverImage: '/thumbnails/contacts-activation.png',
+    thumbnailImage: '/thumbnails/contacts-activation.png',
     overview: 'In edrone, contacts must be identified — linked to browsing activity — before any automation can fire at scale. It was the single biggest bottleneck to user ROI, handled manually by Support one customer at a time. I designed and co-built the solution using Codex, automating what used to require human intervention entirely.',
     overviewDiagram: {
       before: 'Unidentified\ncontact',
