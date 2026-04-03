@@ -179,39 +179,39 @@ export default function HomePage() {
                     href={`/projects/${project.slug}`}
                     className="group block"
                   >
-                    <article className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-color-100 rounded-sm bg-white group-hover:bg-color-000 group-hover:border-color-200 transition-colors duration-200">
-                      {/* Thumbnail */}
-                      <div className="relative overflow-hidden rounded-sm order-1" style={{ aspectRatio: '16/9' }}>
+                    <article className="flex h-70 border border-color-100 rounded-sm overflow-hidden">
+                      {/* Thumbnail - 55% */}
+                      <div className="w-[55%] relative bg-color-000">
                         <Image
                           src={project.thumbnailImage}
                           alt={project.title}
                           width={480}
-                          height={300}
+                          height={280}
                           className="w-full h-full object-cover"
                           priority={index === 0}
                         />
                       </div>
 
-                      {/* Text - with left border, specific padding and gap */}
-                      <div className="flex flex-col justify-center border-l border-color-100 p-5 order-2 gap-6 group-hover:border-color-200 transition-colors duration-200">
+                      {/* Content - 45% */}
+                      <div className="w-[45%] flex flex-col justify-center border-l border-color-100 p-5 gap-8 bg-background group-hover:bg-color-000 transition-colors duration-200">
                         {/* Title and Description */}
-                        <div className="flex flex-col gap-1">
-                          <h3 className="font-display text-[20px] leading-[1.6] text-foreground">
+                        <div className="flex flex-col gap-4">
+                          <h3 className="font-display text-[20px] font-normal leading-[1.6] text-foreground">
                             {project.title}
                           </h3>
-                          <p className="text-[14px] text-ink-2 leading-[1.71]">
+                          <p className="text-[14px] font-normal leading-[1.71] text-ink-2">
                             {project.description}
                           </p>
                         </div>
 
                         {/* Metrics */}
-                        <div className="grid grid-cols-2 gap-y-1 gap-x-6">
+                        <div className="flex flex-wrap gap-y-1 gap-x-10">
                           {project.metrics.slice(0, 2).map((metric, i) => (
-                            <div key={i} className="flex flex-col gap-0.5">
-                              <span className={`font-display text-[16px] font-semibold leading-tight ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                            <div key={i} className="flex flex-col gap-1">
+                              <span className={`font-mono text-[12px] font-medium leading-5 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
                                 {metric.value}
                               </span>
-                              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-ink-2 leading-tight">
+                              <span className="font-mono text-[12px] font-medium leading-5 uppercase tracking-[0.167em] text-ink-2">
                                 {metric.label}
                               </span>
                             </div>
@@ -220,9 +220,9 @@ export default function HomePage() {
 
                         {/* VIEW link */}
                         <div>
-                          <span className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 transition-all duration-200">
+                          <span className="inline-flex items-center gap-1.5 font-mono text-[12px] font-medium leading-5 uppercase tracking-[0.167em] text-ink-2 group-hover:text-foreground transition-colors duration-200">
                             <span>VIEW</span>
-                            <span className="opacity-0 group-hover:opacity-100 text-accent-orange transition-opacity duration-200">→</span>
+                            <span className="text-ink-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
                           </span>
                         </div>
                       </div>
