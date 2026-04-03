@@ -36,15 +36,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       >
         {/* Top / Left — thumbnail */}
         <div
-          className="relative w-full md:w-[55%] shrink-0"
+          className="relative w-full md:w-[55%] shrink-0 flex items-end justify-center"
           style={{ backgroundColor: 'var(--color-000)', aspectRatio: '16/9' }}
         >
           <Image
             src={project.thumbnailImage}
             alt={project.title}
             fill
-            className="object-cover"
-            priority={index < 2}
+            className="object-contain object-bottom"
+            priority={index < 3}
           />
         </div>
 
