@@ -198,29 +198,59 @@ export default function Home() {
             Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at <a href="https://edrone.me/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">edrone</a>, rebuilding the platform from sales-gated to self-serve freemium. Before that, sole designer at <a href="https://deepsolver.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">Deepsolver</a> & <a href="https://plogenius.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">PLO Genius</a>, two products from zero to launch.
           </p>
 
-          <div className="flex flex-wrap gap-3 mt-8">
+          <div className="flex flex-row gap-0 mt-8 border border-[#E3DDCF] rounded-sm overflow-hidden w-fit">
+            {/* Email */}
             <a
               href="mailto:olaf.otrzasek@gmail.com"
-              className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 hover:text-accent-orange transition-colors duration-200"
+              className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200"
             >
-              Email
+              <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
+                Email
+              </span>
+              <span className="text-[#525252] text-[20px] font-bold leading-[1] hidden">
+                →
+              </span>
             </a>
-            <span className="text-ink-3">·</span>
+
+            {/* Phone */}
+            <a
+              href="tel:+48123456789"
+              className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200"
+            >
+              <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
+                Phone
+              </span>
+              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+                ↗
+              </span>
+            </a>
+
+            {/* Portfolio */}
+            <a
+              href="#portfolio"
+              className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200"
+            >
+              <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
+                Portfolio
+              </span>
+              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+                ↗
+              </span>
+            </a>
+
+            {/* LinkedIn */}
             <a
               href="https://linkedin.com/in/olafotrzasek"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 hover:text-accent-orange transition-colors duration-200"
+              className="flex flex-row items-center gap-1.5 px-4 py-2 hover:bg-[var(--color-000)] transition-colors duration-200"
             >
-              LinkedIn
-            </a>
-            <span className="text-ink-3">·</span>
-            <a
-              href="/olaf-otrzasek-resume.html"
-              target="_blank"
-              className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 hover:text-accent-orange transition-colors duration-200"
-            >
-              Resume
+              <span className="font-mono text-[12px] font-medium underline underline-offset-2 decoration-[#E3DDCF] uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
+                LinkedIn
+              </span>
+              <span className="text-[#525252] text-[20px] font-bold leading-[1]">
+                ↗
+              </span>
             </a>
           </div>
         </section>
