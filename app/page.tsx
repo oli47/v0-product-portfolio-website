@@ -159,8 +159,8 @@ export default function Home() {
 
   const handleCopyClick = (e: React.MouseEvent<HTMLButtonElement>, text: string, id: string) => {
     e.preventDefault()
+    setCopiedId(id)
     navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(id)
       setTimeout(() => setCopiedId(null), 2000)
     })
   }
@@ -230,7 +230,7 @@ export default function Home() {
                 className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200 cursor-pointer"
               >
                 <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
-                  Email
+                  olafotrzasek@gmail.com
                 </span>
                 <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
                   ⧉
@@ -250,7 +250,7 @@ export default function Home() {
                 className="flex flex-row items-center gap-1.5 px-4 py-2 border-r border-[#E3DDCF] hover:bg-[var(--color-000)] transition-colors duration-200 cursor-pointer"
               >
                 <span className="font-mono text-[12px] font-medium uppercase tracking-[0.15em] text-[#525252] hover:text-accent-orange transition-colors duration-200">
-                  Phone
+                  732188613
                 </span>
                 <span className="text-[#525252] text-[14px] leading-[1]" style={{ fontFamily: "'PPNeueBit', monospace", paddingTop: '4px' }}>
                   ⧉
