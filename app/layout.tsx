@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Sans, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Nav } from '@/components/nav'
+import { PageTransition } from '@/components/page-transition'
 import './globals.css'
 
 const dmSans = DM_Sans({ 
@@ -48,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           rel="preload"
@@ -59,7 +62,12 @@ export default function RootLayout({
         />
       </head>
       <body className={`${dmSans.variable} ${dmMono.variable} font-sans antialiased`}>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+          <Nav />
+          <PageTransition>
+            {children}
+          </PageTransition>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

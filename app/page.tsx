@@ -2,37 +2,22 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { projects, type Project } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
+import { FadeUp } from '@/components/fade-up'
 import { useEffect, useState } from 'react'
 
 // ─── Project Card ──────────────────────────────────────────────────────────
 
-function handleArticleEnter(e: React.MouseEvent<HTMLElement>) {
-  const el = e.currentTarget as HTMLElement
-  el.style.borderColor = 'var(--color-150)'
-}
-function handleArticleLeave(e: React.MouseEvent<HTMLElement>) {
-  const el = e.currentTarget as HTMLElement
-  el.style.borderColor = 'var(--color-100)'
-}
-function handleContentEnter(e: React.MouseEvent<HTMLDivElement>) {
-  e.currentTarget.style.backgroundColor = 'var(--color-000)'
-  e.currentTarget.style.borderColor = 'var(--color-150)'
-}
-function handleContentLeave(e: React.MouseEvent<HTMLDivElement>) {
-  e.currentTarget.style.backgroundColor = 'var(--background)'
-  e.currentTarget.style.borderColor = 'var(--color-100)'
-}
-
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
-      <article
-        className="flex flex-col md:flex-row overflow-hidden rounded-sm border transition-colors duration-200"
+      <motion.article
+        className="flex flex-col md:flex-row overflow-hidden rounded-sm border"
         style={{ borderColor: 'var(--color-100)' }}
-        onMouseEnter={handleArticleEnter}
-        onMouseLeave={handleArticleLeave}
+        whileHover={{ scale: 1.015, borderColor: '#D9D0BC' }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
       >
         {/* Top / Left — thumbnail */}
         <div
@@ -50,10 +35,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
         {/* Bottom / Right — content */}
         <div
-          className="flex flex-col justify-center p-5 gap-6 border-t md:border-t-0 md:border-l transition-colors duration-200 md:w-[45%]"
-          style={{ backgroundColor: 'var(--background)', borderColor: 'var(--color-100)' }}
-          onMouseEnter={handleContentEnter}
-          onMouseLeave={handleContentLeave}
+          className="flex flex-col justify-center p-5 gap-6 border-t md:border-t-0 md:border-l md:w-[45%]"
+          style={{ backgroundColor: 'var(--background)', borderColor: 'inherit' }}
         >
           <div className="flex flex-col gap-3">
             <h3 className="font-display text-[20px] font-normal leading-[1.5] text-foreground text-pretty">
@@ -77,14 +60,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             ))}
           </div>
 
-          <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 group-hover:text-foreground transition-colors duration-200">
-            VIEW
-            <span className="opacity-0 group-hover:opacity-100 text-accent-orange text-[20px] leading-[1] transition-opacity duration-200" style={{ fontFamily: "'PPNeueBit', monospace" }}>
+          <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 group-hover:text-foreground transition-colors duration-150">
+            DISCOVER
+            <span className="opacity-0 group-hover:opacity-100 text-accent-orange text-[20px] leading-[1] transition-opacity duration-150" style={{ fontFamily: "'PPNeueBit', monospace" }}>
               {'→'}
             </span>
           </span>
         </div>
-      </article>
+      </motion.article>
     </Link>
   )
 }
@@ -193,21 +176,28 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
+      <div className="max-w-3xl mx-auto px-6 pt-24 pb-16 md:pt-28 md:pb-24">
 
         {/* Hero */}
         <section className="mb-20">
-          <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 mb-4">
-            Olaf Otrzasek
-          </p>
-          <h1 className="font-display text-[clamp(28px,6vw,44px)] leading-[1.2] text-foreground mb-6 text-pretty">
-            I let the data find the <span className="text-accent-orange">opportunity.</span>
-            <br /> Then I design the experience.
-          </h1>
-          <p className="text-[15px] leading-relaxed text-ink-2 text-pretty">
-            Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at <a href="https://edrone.me/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">edrone</a>, rebuilding the platform from sales-gated to self-serve freemium. Before that, sole designer at <a href="https://deepsolver.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">Deepsolver</a> & <a href="https://plogenius.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">PLO Genius</a>, two products from zero to launch.
-          </p>
+          <FadeUp delay={0}>
+            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-2 mb-4">
+              Olaf Otrzasek
+            </p>
+          </FadeUp>
+          <FadeUp delay={0.08}>
+            <h1 className="font-display text-[clamp(28px,6vw,44px)] leading-[1.2] text-foreground mb-6 text-pretty">
+              I let the data find the <span className="text-accent-orange">opportunity.</span>
+              <br /> Then I design the experience.
+            </h1>
+          </FadeUp>
+          <FadeUp delay={0.16}>
+            <p className="text-[15px] leading-relaxed text-ink-2 text-pretty">
+              Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed. Previously led design at <a href="https://edrone.me/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">edrone</a>, rebuilding the platform from sales-gated to self-serve freemium. Before that, sole designer at <a href="https://deepsolver.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">Deepsolver</a> & <a href="https://plogenius.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200">PLO Genius</a>, two products from zero to launch.
+            </p>
+          </FadeUp>
 
+          <FadeUp delay={0.24}>
           <div className="flex flex-row gap-0 mt-8 border border-[#E3DDCF] rounded-sm overflow-hidden w-fit">
             {/* Resume */}
             <a
@@ -278,60 +268,71 @@ export default function Home() {
               </span>
             </a>
           </div>
+          </FadeUp>
         </section>
 
         {/* Selected Projects */}
         <section className="mb-20">
-          <div className="mb-8">
-            <SectionBadge>Selected Projects</SectionBadge>
-          </div>
+          <FadeUp delay={0}>
+            <div className="mb-8">
+              <SectionBadge>Selected Projects</SectionBadge>
+            </div>
+          </FadeUp>
           <div className="flex flex-col gap-4">
             {projects.map((project, index) => (
-              <ProjectCard key={project.slug} project={project} index={index} />
+              <FadeUp key={project.slug} delay={index * 0.08}>
+                <ProjectCard project={project} index={index} />
+              </FadeUp>
             ))}
           </div>
         </section>
 
         {/* Experience */}
         <section>
-          <div className="mb-8">
-            <SectionBadge>Experience</SectionBadge>
-          </div>
-          <div className="flex flex-col">
-            {EXPERIENCE.map((job) => (
-              <div key={job.company} className="flex items-center justify-between py-4 border-b border-[var(--color-100)] gap-4">
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-lg border border-[var(--color-100)] overflow-hidden shrink-0 flex items-center justify-center bg-white">
-                    <Image src={job.logo} alt={job.company} width={40} height={40} className="object-contain" />
-                  </div>
-                  <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                    <a
-                      href={job.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[14px] text-foreground underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200 shrink-0"
-                    >
-                      {job.company}
-                    </a>
-                    <span className="text-ink-3 text-[14px]">/</span>
-                    <span className="text-[14px] font-medium text-foreground">{job.role}</span>
-                  </div>
-                </div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-2 shrink-0 whitespace-nowrap">
-                  {job.period}
-                </p>
-              </div>
-            ))}
-            <div className="pt-6">
-              <a
-                href="/olaf-otrzasek-resume.html"
-                target="_blank"
-                className="group flex items-center justify-between py-2 border-b border-[var(--color-100)] text-[11px] font-mono uppercase tracking-wide text-ink-2 hover:text-accent-orange transition-colors duration-200"
-              >
-                <span>Full Resume</span>
-                <span className="opacity-0 group-hover:opacity-100 text-accent-orange text-[20px] leading-[1] transition-opacity duration-200" style={{ fontFamily: "'PPNeueBit', monospace" }}>{'→'}</span>
-              </a>
+          <FadeUp delay={0}>
+            <div className="mb-8">
+              <SectionBadge>Experience</SectionBadge>
             </div>
+          </FadeUp>
+          <div className="flex flex-col">
+            {EXPERIENCE.map((job, index) => (
+              <FadeUp key={job.company} delay={index * 0.08}>
+                <div className="flex items-center justify-between py-4 border-b border-[var(--color-100)] gap-4">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="w-10 h-10 rounded-lg border border-[var(--color-100)] overflow-hidden shrink-0 flex items-center justify-center bg-white">
+                      <Image src={job.logo} alt={job.company} width={40} height={40} className="object-contain" />
+                    </div>
+                    <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[14px] text-foreground underline underline-offset-2 decoration-[var(--color-150)] hover:text-accent-orange transition-colors duration-200 shrink-0"
+                      >
+                        {job.company}
+                      </a>
+                      <span className="text-ink-3 text-[14px]">/</span>
+                      <span className="text-[14px] font-medium text-foreground">{job.role}</span>
+                    </div>
+                  </div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-2 shrink-0 whitespace-nowrap">
+                    {job.period}
+                  </p>
+                </div>
+              </FadeUp>
+            ))}
+            <FadeUp delay={EXPERIENCE.length * 0.08}>
+              <div className="pt-6">
+                <a
+                  href="/olaf-otrzasek-resume.html"
+                  target="_blank"
+                  className="group flex items-center justify-between py-2 border-b border-[var(--color-100)] text-[11px] font-mono uppercase tracking-wide text-ink-2 hover:text-accent-orange transition-colors duration-200"
+                >
+                  <span>Full Resume</span>
+                  <span className="opacity-0 group-hover:opacity-100 text-accent-orange text-[20px] leading-[1] transition-opacity duration-200" style={{ fontFamily: "'PPNeueBit', monospace" }}>{'→'}</span>
+                </a>
+              </div>
+            </FadeUp>
           </div>
         </section>
 
