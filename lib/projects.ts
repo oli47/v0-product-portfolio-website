@@ -126,8 +126,8 @@ export const projects: Project[] = [
     tagline: 'One field removed. Two steps. Five hours from diagnosis to production.',
     description: "Amplitude showed the drop-off. One field removed, form split in two steps, shipped in 5 hours. Results confirmed within 7 days.",
     metrics: [
-      { value: '+40%', label: 'DESKTOP', color: 'accent' },
-      { value: '+300%', label: 'MOBILE', color: 'accent' },
+      { value: '+100%', label: 'DESKTOP', color: 'accent' },
+      { value: '+5900%', label: 'MOBILE', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',

@@ -3,6 +3,7 @@ import { DM_Sans, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Nav } from '@/components/nav'
+import { Footer } from '@/components/footer'
 import { PageTransition } from '@/components/page-transition'
 import './globals.css'
 
@@ -67,6 +68,7 @@ export default function RootLayout({
           <PageTransition>
             {children}
           </PageTransition>
+          <Footer />
         </ThemeProvider>
         <Analytics />
       </body>

@@ -1,30 +1,12 @@
 export function Footer() {
   return (
-    <footer className="py-12 text-center">
-      {/* Line 1 - body-2: 14/160 */}
-      <p className="text-[14px] text-text-caption leading-[160%] mb-3">
-        Olaf Otrząsek · Senior Product Designer
+    <footer className="max-w-[45rem] mx-auto px-5 py-10 flex items-center justify-between border-t border-[var(--color-100)] mt-16">
+      <p className="font-mono text-[0.75rem] font-medium uppercase leading-[1.25rem] text-[var(--color-300)]">
+        <span className="font-display">©</span> 2026 Olaf Otrząsek
       </p>
-      {/* Line 2 - body-2: 14/160 */}
-      <div className="flex items-center justify-center gap-2 text-[14px] text-text-caption leading-[160%] flex-wrap">
-        <span>Built with Claude & v0.dev</span>
-        <span>·</span>
-        <a
-          href="mailto:olafotrzasek@gmail.com"
-          className="hover:text-foreground transition-colors"
-        >
-          olafotrzasek@gmail.com
-        </a>
-        <span>·</span>
-        <a
-          href="https://www.linkedin.com/in/olafotrzasek/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors"
-        >
-          LinkedIn
-        </a>
-      </div>
+      <p className="font-mono text-[0.75rem] font-medium uppercase leading-[1.25rem] text-[var(--color-300)]">
+        Built with Claude Code <span className="font-display">✨</span>
+      </p>
     </footer>
   )
 }

@@ -3,7 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* PPMondwest font */
+/* ─────────────────────────────────────────────
+   FONTS
+   Loaded via next/font in layout.tsx.
+   DM Sans and DM Mono are available as CSS
+   variables --font-dm-sans / --font-dm-mono.
+   PP Mondwest and PP NeueBit are self-hosted.
+───────────────────────────────────────────── */
+
 @font-face {
   font-family: 'PPMondwest';
   src: url('/fonts/ppmondwest-regular.woff2') format('woff2');
@@ -12,7 +19,6 @@
   font-display: swap;
 }
 
-/* PP NeueBit Bold */
 @font-face {
   font-family: 'PPNeueBit';
   src: url('/fonts/ppneuebit-bold.woff2') format('woff2');
@@ -21,212 +27,235 @@
   font-display: swap;
 }
 
+/* ─────────────────────────────────────────────
+   COLOR TOKENS
+   Source of truth. All colors in components
+   must reference these variables — never
+   use hardcoded hex values.
+
+   Light values are in :root.
+   Dark overrides are in .dark.
+───────────────────────────────────────────── */
+
 :root {
-  /* Primitive palette — light */
-  --white:      #F7F6F2;
-  --accent:     #C8440A;
-  --color-500:  #0A0A0A;
-  --color-400:  #282828;
-  --color-300:  #525252;
-  --color-200:  #767676;
-  --color-150:  #D5CCB9;
-  --color-100:  #E3DDCF;
-  --color-000:  #F2EFE9;
-  --accent-green: #22863A;
+  /* Brand */
+  --accent:       #C4521A;  /* Orange. Hover states, CTAs, highlights, active indicators, metrics */
+  --accent-green: #3A800F;  /* Green. "Open to opportunities" status only */
 
-  /* Semantic tokens */
-  --bg:         var(--white);
-  --bg-card:    var(--color-000);
-  --ink:        var(--color-500);
-  --ink-2:      var(--color-300);
-  --ink-3:      var(--color-200);
-  --border:     var(--color-100);
-  --border-md:  var(--color-150);
+  /* Neutral scale — light mode
+     Use color-500 → color-000 from darkest to lightest */
+  --color-500: #1A1714;  /* Primary text: main headings, high-emphasis labels */
+  --color-400: #3D3730;  /* Secondary text: card titles, job titles */
+  --color-300: #6B6258;  /* Body text: paragraphs, descriptions, supporting copy */
+  --color-200: #B5A990;  /* Muted: icon fills, divider text, decorative arrows */
+  --color-150: #D9D0BC;  /* Border medium: stronger separators, discover button border */
+  --color-100: #E8E0D0;  /* Border default: card borders, input lines, section dividers */
+  --color-000: #F2EDE3;  /* Card / hover bg: project row hover, logo box fill, floating nav */
+  --white:     #FAF7F2;  /* Page background only */
 
-  /* shadcn compatibility */
-  --background:           var(--bg);
-  --foreground:           var(--ink);
+  /* Semantic aliases — use these in components for dark-mode compatibility */
+  --background: var(--white);       /* Page/layout background */
+  --foreground: var(--color-500);   /* Default text color */
+  --border:     var(--color-100);   /* Default border color */
+  --border-md:  var(--color-150);   /* Medium border (discover button etc.) */
+  --bg-card:    var(--color-000);   /* Card / hover background */
+
+  /* Next.js / Tailwind internals — do not use directly in components */
   --card:                 var(--bg-card);
-  --card-foreground:      var(--ink);
-  --popover:              var(--bg);
-  --popover-foreground:   var(--ink);
-  --primary:              var(--ink);
-  --primary-foreground:   var(--bg);
+  --card-foreground:      var(--foreground);
+  --popover:              var(--background);
+  --popover-foreground:   var(--foreground);
+  --primary:              var(--foreground);
+  --primary-foreground:   var(--background);
   --secondary:            var(--color-100);
-  --secondary-foreground: var(--ink);
+  --secondary-foreground: var(--foreground);
   --muted:                var(--color-100);
-  --muted-foreground:     var(--ink-2);
+  --muted-foreground:     var(--color-300);
   --accent-color:         var(--accent);
   --accent-foreground:    var(--white);
   --destructive:          oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
   --input:                var(--border);
-  --ring:                 var(--ink-2);
+  --ring:                 var(--color-300);
   --radius:               4px;
-
-  /* Portfolio aliases */
-  --ink-secondary:  var(--ink-2);
-  --ink-tertiary:   var(--ink-2);
-  --border-color:   var(--border);
-  --border-medium:  var(--border-md);
-  --text-body:      var(--ink-2);
-  --text-caption:   var(--ink-2);
 }
 
 .dark {
-  /* Primitive palette — dark */
-  --white:      #1C1A17;
-  --accent:     #E05A1A;
-  --color-500:  #E8E0D6;
-  --color-400:  #B0A89E;
-  --color-300:  #8A8480;
-  --color-200:  #4A4540;
-  --color-150:  #38332C;
-  --color-100:  #2E2A24;
-  --color-000:  #242018;
+  --accent:       #E05A1A;
+  --accent-green: #3A800F;
 
-  /* Semantic tokens (same mapping, dark values) */
-  --bg:         var(--white);
-  --bg-card:    var(--color-000);
-  --ink:        var(--color-500);
-  --ink-2:      var(--color-400);
-  --ink-3:      var(--color-300);
+  --color-500: #E8E0D6;
+  --color-400: #B0A89E;
+  --color-300: #8A8480;
+  --color-200: #4A4540;
+  --color-150: #38332C;
+  --color-100: #2E2A24;
+  --color-000: #242018;
+  --white:     #1C1A17;
+
+  --background: var(--white);
+  --foreground: var(--color-500);
   --border:     var(--color-100);
   --border-md:  var(--color-150);
+  --bg-card:    var(--color-000);
 
-  /* shadcn compatibility */
-  --background:           var(--bg);
-  --foreground:           var(--ink);
-  --card:                 var(--bg-card);
-  --card-foreground:      var(--ink);
-  --border-color:         var(--border);
-  --border-medium:        var(--border-md);
-  --ink-secondary:        var(--ink-2);
-  --ink-tertiary:         var(--ink-3);
-  --text-body:            var(--ink-2);
-  --text-caption:         var(--ink-3);
-  --muted-foreground:     var(--ink-2);
+  --card:               var(--bg-card);
+  --card-foreground:    var(--foreground);
+  --muted-foreground:   var(--color-300);
 }
 
+/* ─────────────────────────────────────────────
+   TAILWIND THEME BRIDGE
+   Exposes CSS variables to Tailwind utilities.
+───────────────────────────────────────────── */
+
 @theme inline {
-  --font-sans: 'DM Sans', sans-serif;
-  --font-mono: 'DM Mono', monospace;
+  --font-sans:    var(--font-dm-sans), sans-serif;
+  --font-mono:    var(--font-dm-mono), monospace;
   --font-display: 'PPMondwest', serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent-color);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 4px;
-  --radius-xl: 8px;
-  
-  /* Portfolio specific colors */
-  --color-text-body: var(--text-body);
-  --color-text-caption: var(--text-caption);
-  --color-ink: var(--ink);
-  --color-ink-secondary: var(--ink-secondary);
-  --color-ink-tertiary: var(--ink-tertiary);
-  --color-accent-orange: var(--accent);
-  --color-accent-green: var(--accent-green);
-  --color-border-md: var(--border-md);
-  --color-color-000: var(--color-000);
-  --color-color-100: var(--color-100);
-  --color-color-150: var(--color-150);
-  --color-color-200: var(--color-200);
+  --color-card:       var(--bg-card);
+  --color-border:     var(--border);
+  --color-accent:     var(--accent);
+  --color-muted:      var(--color-100);
+  --color-muted-foreground: var(--color-300);
+
+  --radius-sm: 0.125rem;  /* 2px — buttons, badges, cards */
+  --radius-md: 0.25rem;   /* 4px — modals, larger containers */
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
 }
 
-/* Font utility classes */
-.font-display {
-  font-family: 'PPMondwest', serif !important;
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY SCALE
+   Named classes matching Figma text styles.
+   Always use these instead of arbitrary values.
+
+   Fonts:
+   - font-display  PP Mondwest — display headings
+   - font-body     DM Sans — all prose and UI text
+   - font-mono     DM Mono — labels, metrics, nav, badges
+   - font-neubit   PP NeueBit — decorative arrows/icons only
+───────────────────────────────────────────── */
+
+/* font families */
+.font-display { font-family: 'PPMondwest', serif !important; }
+.font-neubit  { font-family: 'PPNeueBit', monospace !important; font-weight: 700; }
+.font-body    { font-family: var(--font-dm-sans), 'DM Sans', sans-serif; }
+.font-mono    { font-family: var(--font-dm-mono), 'DM Mono', monospace; }
+
+/* h1 — Hero headline. One per page. Clamps 40→52px for responsive. */
+.text-h1 {
+  font-family: 'PPMondwest', serif;
+  font-size: clamp(2.5rem, 5vw, 3.25rem);
+  line-height: clamp(3rem, 6vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: 0.025rem;
 }
 
-.font-neubit {
-  font-family: 'PPNeueBit', monospace !important;
-  font-weight: 700;
+/* h2 — Section headline in project detail pages (Overview, Results…) */
+.text-h2 {
+  font-family: 'PPMondwest', serif;
+  font-size: 2.5rem;       /* 40px */
+  line-height: 3rem;       /* 48px */
+  font-weight: 400;
+  letter-spacing: 0.025rem;
 }
 
-.font-body {
-  font-family: 'DM Sans', sans-serif;
+/* h3 — Sub-section headings inside project pages */
+.text-h3 {
+  font-family: 'PPMondwest', serif;
+  font-size: 2rem;         /* 32px */
+  line-height: 2.5rem;     /* 40px */
+  font-weight: 400;
+  letter-spacing: 0.025rem;
 }
 
-.font-mono {
-  font-family: 'DM Mono', monospace;
+/* h4 — Project card titles, list item headings, result metric values */
+.text-h4 {
+  font-family: 'PPMondwest', serif;
+  font-size: 1.5rem;       /* 24px */
+  line-height: 2rem;       /* 32px */
+  font-weight: 400;
+  letter-spacing: 0.025rem;
 }
 
-/* Nav link: underline slides in left→right */
-.nav-link {
-  position: relative;
-  display: inline-block;
+/* body-1 — Main prose: hero description, section paragraphs, currently section */
+.text-body-1 {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 1rem;         /* 16px */
+  line-height: 1.75rem;    /* 28px */
+  font-weight: 400;
 }
+
+/* body-2 — Secondary prose: card descriptions, project detail body copy */
+.text-body-2 {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 0.875rem;     /* 14px */
+  line-height: 1.5rem;     /* 24px */
+  font-weight: 400;
+}
+
+/* eyebrow — All mono uppercase labels: nav, metrics, badges, section labels,
+             contact bar, experience dates, discover button, period fields */
+.text-eyebrow {
+  font-family: var(--font-dm-mono), 'DM Mono', monospace;
+  font-size: 0.75rem;      /* 12px */
+  line-height: 1.25rem;    /* 20px */
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+/* ─────────────────────────────────────────────
+   UTILITIES & ANIMATIONS
+───────────────────────────────────────────── */
+
+/* Prevent orphaned words at line ends (Chrome 117+) */
+.text-pretty { text-wrap: pretty; }
+
+/* Nav link: underline animates left → right on hover */
+.nav-link { position: relative; display: inline-block; }
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1px;
+  bottom: -2px; left: 0;
+  width: 100%; height: 1px;
   background-color: currentColor;
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 200ms ease;
 }
-.nav-link:hover::after {
-  transform: scaleX(1);
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* ── Dark mode transition via View Transitions API ──────────────────────────
+   Old theme frozen as screenshot. New theme clips via an SVG polygon that
+   approximates a circle quantized to a 3px pixel grid — pixelated edge.
+   Polygon points are driven by requestAnimationFrame in nav.tsx. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
-/* Scroll animations */
-.fade-up {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+::view-transition-new(root) {
+  clip-path: url(#theme-pixel-clip);
 }
 
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Copied progress bar: depletes width over 1.5s */
+@keyframes progress-shrink {
+  from { width: 100%; }
+  to   { width: 0%; }
 }
+.animate-progress { animation: progress-shrink 1.5s linear forwards; }
 
-/* Strikethrough text */
-.strikethrough {
-  text-decoration: line-through;
-  color: var(--ink-tertiary);
-}
-
-/* Slow pulse animation for status indicator */
+/* Status dot pulse */
 @keyframes pulse-slow {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
 }
-
-.animate-pulse-slow {
-  animation: pulse-slow 2s ease-in-out infinite;
-}
+.animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
