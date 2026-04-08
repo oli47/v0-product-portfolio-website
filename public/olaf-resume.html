@@ -13,7 +13,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── TOKENS — synced with olafotrzasek.com ─────────────────────────────── */
+/* ── TOKENS ─────────────────────────────────────────────────────────────── */
 :root {
   --ink:     #1A1714;
   --ink-2:   #3D3730;
@@ -46,17 +46,21 @@ body {
 }
 
 /* ── HEADER ─────────────────────────────────────────────────────────────── */
-.hdr { margin-bottom: 28px; }
+.hdr { margin-bottom: 24px; }
 
+/* Responsive: fits 2 lines at all viewport widths the resume will be viewed at.
+   clamp(22px, 3.2vw, 34px) ensures line-1 stays on one line above ~750px */
 .hdr-name {
   font-family: var(--disp);
-  font-size: 34px;
+  font-size: clamp(20px, 3.2vw, 34px);
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.2;
   color: var(--ink);
   margin-bottom: 2px;
-  white-space: normal;
+  white-space: nowrap;        /* keep name+tagline on one line */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .hdr-name a { color: inherit; text-decoration: none; }
 .hdr-name a:hover { color: var(--accent); }
@@ -64,16 +68,19 @@ body {
 
 .hdr-line2 {
   font-family: var(--disp);
-  font-size: 34px;
+  font-size: clamp(20px, 3.2vw, 34px);
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.2;
   color: var(--ink);
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .hdr-line2 .acc { color: var(--accent); }
 
-/* Contact bar — matches portfolio ContactBar */
+/* Contact bar */
 .hdr-links {
   display: flex;
   width: fit-content;
@@ -113,26 +120,25 @@ body {
   display: inline-block;
   padding-bottom: 6px;
   border-bottom: 1px solid var(--accent);
-  margin-bottom: 18px;
-  margin-top: 36px;
+  margin-bottom: 16px;
+  margin-top: 32px;
   width: fit-content;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
 /* ── EXPERIENCE ─────────────────────────────────────────────────────────── */
-.exp { margin-bottom: 24px; }
+.exp { margin-bottom: 22px; }
 .exp:last-of-type { margin-bottom: 0; }
 
 .exp-hdr {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
-.exp-left { display: flex; align-items: center; gap: 8px; }
+.exp-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-/* Logo box — bordered container matching portfolio */
 .logo-box {
   width: 28px; height: 28px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -151,161 +157,95 @@ body {
 }
 
 .role {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink);
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);
 }
 .co {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-3);
-  text-decoration: none;
-  transition: color 0.15s;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
+  text-decoration: none; transition: color 0.15s;
 }
 .co:hover { color: var(--accent); }
 .meta {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-3);
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
+  white-space: nowrap; flex-shrink: 0;
 }
 
-/* Body indented to align with role text — logo 28px + gap 8px */
 .exp-body { padding-left: 36px; }
 
 .intro {
-  font-size: 13px;
-  color: var(--ink-2);
-  line-height: 1.7;
-  margin-bottom: 10px;
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.7; margin-bottom: 9px;
 }
-.bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.bullets { list-style: none; display: flex; flex-direction: column; gap: 5px; }
 .bullets li {
-  font-size: 13px;
-  color: var(--ink-2);
-  line-height: 1.65;
-  padding-left: 14px;
-  position: relative;
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.65; padding-left: 14px; position: relative;
 }
 .bullets li::before {
-  content: '•';
-  position: absolute; left: 0;
-  color: var(--ink-3);
-  line-height: 1.75;
+  content: '•'; position: absolute; left: 0;
+  color: var(--ink-3); line-height: 1.75;
 }
 .bullets li strong { font-weight: 600; color: var(--ink); }
 
 /* ── BOTTOM ─────────────────────────────────────────────────────────────── */
-.spacer { flex: 1; min-height: 28px; }
+.spacer { flex: 1; min-height: 24px; }
 .bottom {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 40px;
-  align-items: start;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0 40px; align-items: start;
 }
 
-.edu-hdr {
-  display: flex; align-items: flex-start; gap: 8px;
-  margin-bottom: 0;
-}
+.edu-hdr { display: flex; align-items: flex-start; gap: 8px; }
 .edu-meta-row {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   margin-bottom: 4px;
 }
 .edu-co {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-3);
-  text-decoration: none;
-  transition: color 0.15s;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
+  text-decoration: none; transition: color 0.15s;
 }
 .edu-co:hover { color: var(--accent); }
 .edu-deg {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink);
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);
 }
 .edu-date {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-3);
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
   margin-left: auto;
 }
-.edu-desc {
-  font-size: 13px;
-  color: var(--ink-2);
-  line-height: 1.65;
-  margin-top: 4px;
-}
+.edu-desc { font-size: 13px; color: var(--ink-2); line-height: 1.65; margin-top: 4px; }
 
-/* Skills — DM Sans bold labels matching Figma */
-.skills { display: flex; flex-direction: column; gap: 8px; }
-.sk { display: flex; font-size: 13px; line-height: 1.55; gap: 12px; }
+.skills { display: flex; flex-direction: column; gap: 7px; }
+.sk { display: flex; font-size: 13px; line-height: 1.5; gap: 12px; }
 .sk-l {
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  min-width: 76px;
-  flex-shrink: 0;
+  font-family: var(--sans); font-size: 13px; font-weight: 600;
+  color: var(--ink); min-width: 76px; flex-shrink: 0;
 }
 .sk-v { color: var(--ink-2); }
 .sk-v strong { font-weight: 600; color: var(--ink); }
 
 /* ── TOAST ──────────────────────────────────────────────────────────────── */
 .toast {
-  position: fixed;
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--bg);
-  background: var(--ink);
-  padding: 5px 10px;
-  border-radius: 2px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  z-index: 200;
-  white-space: nowrap;
+  position: fixed; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--bg); background: var(--ink);
+  padding: 5px 10px; border-radius: 2px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.15s ease; z-index: 200; white-space: nowrap;
 }
 .toast.visible { opacity: 1; }
 
-/* ── DOWNLOAD BUTTON ────────────────────────────────────────────────────── */
+/* ── DOWNLOAD ───────────────────────────────────────────────────────────── */
 .dl-inline {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  background: transparent;
-  cursor: pointer;
-  border: none;
-  height: 34px;
-  padding: 0 12px;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3);
+  background: transparent; cursor: pointer; border: none;
+  height: 34px; padding: 0 12px;
   display: flex; align-items: center; gap: 5px;
-  white-space: nowrap;
-  box-sizing: border-box;
+  white-space: nowrap; box-sizing: border-box;
   transition: color 0.15s, background 0.15s;
 }
 .dl-inline:hover { color: var(--accent); background: var(--bg-card); }
@@ -315,20 +255,21 @@ body {
 
 @media screen and (max-width: 700px) {
   body { padding: 24px 20px 100px; min-height: unset; }
-  .hdr-name, .hdr-line2 { font-size: 24px; }
+  .hdr-name, .hdr-line2 {
+    font-size: 22px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
   .hdr-links { flex-wrap: wrap; width: 100%; }
   .hl {
-    flex: 1 1 40%;
-    justify-content: center;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    height: 44px;
-    padding: 0 10px;
+    flex: 1 1 40%; justify-content: center;
+    border-right: none; border-bottom: 1px solid var(--border);
+    height: 44px; padding: 0 10px;
   }
   .hl:last-child { border-bottom: none; }
-  .slabel { margin-top: 32px; }
+  .slabel { margin-top: 28px; }
   .exp-hdr { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .exp-left { flex-wrap: wrap; }
   .exp-body { padding-left: 0; }
   .bottom { grid-template-columns: 1fr; }
   .spacer { display: none; }
@@ -347,17 +288,54 @@ body {
   .dl-btn-mobile:active { background: var(--accent); }
 }
 
-/* ── PRINT ──────────────────────────────────────────────────────────────── */
+/* ── PRINT — tightened to fit single A4 page ────────────────────────────── */
 @media print {
   html { background: var(--bg); }
-  body { margin: 0; padding: 12mm 14mm; max-width: none; padding-bottom: 12mm; }
-  .hdr-name, .hdr-line2 { font-size: 26px; }
+  body {
+    margin: 0;
+    padding: 11mm 14mm 10mm;
+    max-width: none;
+    min-height: 0 !important;
+    display: block;       /* kill flex so spacer has no effect */
+  }
+
+  /* Scale heading down for print */
+  .hdr-name, .hdr-line2 {
+    font-size: 22px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .hdr { margin-bottom: 16px; }
+  .hdr-line2 { margin-bottom: 14px; }
+
+  /* Tighter spacing */
+  .slabel { margin-top: 18px; margin-bottom: 12px; padding-bottom: 4px; }
+  .exp { margin-bottom: 14px; }
+  .exp-hdr { margin-bottom: 6px; }
+  .exp-body { padding-left: 28px; }
+  .intro { font-size: 12px; line-height: 1.6; margin-bottom: 6px; }
+  .bullets { gap: 4px; }
+  .bullets li { font-size: 12px; line-height: 1.55; }
+
+  /* Bottom */
+  .spacer { display: none !important; }
+  .skills { gap: 5px; }
+  .sk { font-size: 12px; }
+  .sk-l { font-size: 12px; }
+  .edu-desc { font-size: 12px; }
+
+  /* Hide interactive elements */
   a { text-decoration: none; color: inherit; }
   .dl-btn-mobile, .dl-inline { display: none !important; }
-  .exp { page-break-inside: avoid; }
-  .bottom { page-break-inside: avoid; }
+
+  /* Preserve colors */
   .logo-box { border: 1px solid var(--border) !important; background: var(--bg-card) !important; }
   .slabel { border-bottom: 1px solid var(--accent) !important; }
+
+  /* Allow section to break if truly needed, but prefer keeping exp together */
+  .exp { page-break-inside: avoid; }
+  .bottom { page-break-inside: avoid; }
 }
 @page { size: A4; margin: 0; }
 </style>
@@ -453,7 +431,7 @@ body {
     <div class="slabel">Education</div>
     <div class="edu-hdr">
       <div class="logo-box" style="flex-shrink:0;"><img class="logo-img" alt="University WSB" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt=""></div>
-      <div style="flex:1; min-width:0;">
+      <div style="flex:1;min-width:0;">
         <div class="edu-meta-row">
           <span class="edu-deg">BA of Management</span>
           <a href="https://wsb.edu.pl/en" class="edu-co" target="_blank">/University WSB</a>
