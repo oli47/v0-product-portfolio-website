@@ -26,9 +26,9 @@ export function ProjectRow({
       onMouseLeave={discover.reset}
     >
       <div
-        className={`flex items-end justify-between p-4 sm:p-6 gap-4 sm:gap-10 transition-colors duration-[250ms] ease group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
+        className={`flex flex-col sm:flex-row sm:items-end sm:justify-between p-4 sm:p-6 gap-4 sm:gap-10 transition-colors duration-[250ms] ease group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
       >
-        {/* Left — title + description + metrics */}
+        {/* Content — title + description + metrics */}
         <div className="flex flex-col gap-4 min-w-0">
           <div className="flex flex-col gap-2">
             <h3 className="text-h4 text-[var(--color-400)] transition-colors duration-[320ms] group-hover:text-[var(--accent)] text-pretty">
@@ -60,9 +60,8 @@ export function ProjectRow({
           )}
         </div>
 
-        {/* Right — discover button */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Label — scrambles on card mouseenter */}
+        {/* Discover — hidden on mobile (whole card is tappable anyway) */}
+        <div className="hidden sm:flex items-center gap-2 shrink-0">
           <span
             ref={discover.spanRef}
             className="text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] group-hover:text-[var(--accent)]"
@@ -71,13 +70,11 @@ export function ProjectRow({
           </span>
 
           {/* Square button — orange fill sweeps left→right */}
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[#B5A990] group-hover:border-[#C4521A] transition-colors duration-[320ms]">
-            {/* Fill layer */}
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[320ms]">
             <div
               className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
               style={{ transition: 'transform 320ms cubic-bezier(.4,0,.2,1)' }}
             />
-            {/* Arrow */}
             <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 inline-block">
               →
             </span>

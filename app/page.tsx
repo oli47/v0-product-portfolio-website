@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
 import { projects } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
@@ -79,17 +78,18 @@ function ContactBar() {
   const icon     = 'font-mono text-[0.75rem] leading-[1.25rem] text-[var(--color-200)]'
   const arrow    = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
 
-  /* overflow-x-auto wrapper makes the bar scrollable on narrow screens */
+  // Mobile: full-width stacked column. Desktop: hug-content horizontal row.
+  const mobileItem = 'border-b border-[var(--color-100)] sm:border-b-0 sm:border-l'
   return (
-    <div className="max-w-full overflow-x-auto">
-      <div className="flex border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden min-w-max">
+    <div className="w-full sm:w-fit border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden">
+      <div className="flex flex-col sm:flex-row">
 
-        {/* Resume — scramble on hover */}
+        {/* Resume */}
         <a
           href="#"
           target="_blank"
           rel="noopener noreferrer"
-          className={`${baseItem} border-l-0 cursor-pointer`}
+          className={`${baseItem} ${mobileItem} sm:border-l-0 cursor-pointer`}
           onMouseEnter={resume.scramble}
           onMouseLeave={resume.reset}
         >
@@ -100,7 +100,7 @@ function ContactBar() {
         {/* Email — scramble + fixed width when copied */}
         <button
           onClick={() => copy(t.contact.email, 'email')}
-          className={`${baseItem} cursor-pointer`}
+          className={`${baseItem} ${mobileItem} cursor-pointer`}
           onMouseEnter={() => { if (copiedId !== 'email') email.scramble() }}
           onMouseLeave={email.reset}
         >
@@ -119,7 +119,7 @@ function ContactBar() {
         {/* Phone — scramble + fixed width when copied */}
         <button
           onClick={() => copy(t.contact.phoneRaw, 'phone')}
-          className={`${baseItem} cursor-pointer`}
+          className={`${baseItem} ${mobileItem} cursor-pointer`}
           onMouseEnter={() => { if (copiedId !== 'phone') phone.scramble() }}
           onMouseLeave={phone.reset}
         >
@@ -135,12 +135,12 @@ function ContactBar() {
           )}
         </button>
 
-        {/* LinkedIn — scramble on hover */}
+        {/* LinkedIn */}
         <a
           href="https://www.linkedin.com/in/olafotrzasek/"
           target="_blank"
           rel="noopener noreferrer"
-          className={`${baseItem} cursor-pointer`}
+          className={`${baseItem} sm:border-l cursor-pointer`}
           onMouseEnter={linkedin.scramble}
           onMouseLeave={linkedin.reset}
         >
@@ -187,7 +187,7 @@ function ScrollToTop() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      <div className="max-w-[45rem] mx-auto px-5 pt-24 pb-24 md:pt-28">
+      <div className="max-w-[45rem] mx-auto px-5 pt-[7.5rem] pb-24">
 
         {/* ── Hero ── */}
         <section className="mb-16">

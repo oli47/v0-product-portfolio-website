@@ -137,8 +137,8 @@ export default function ProjectPage() {
   const { prev, next } = getProjectNavigation(slug)
 
   const backLabel = useScramble('Back')
-  const prevLabel = useScramble(`← ${prev.title}`)
-  const nextLabel = useScramble(`${next.title} →`)
+  const prevLabel = useScramble(prev.title)
+  const nextLabel = useScramble(next.title)
 
   // metrics grid: 3-col if exactly 3 metrics and no northStar, else 2-col
   const metricsGridCols = project.results.metrics.length === 3
@@ -147,7 +147,7 @@ export default function ProjectPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-[45rem] mx-auto px-5 pt-20 pb-16">
+      <div className="max-w-[45rem] mx-auto px-5 pt-[7.5rem] pb-16">
 
         {/* Back link */}
         <Link
@@ -236,7 +236,7 @@ export default function ProjectPage() {
                   <div className="h-px md:flex-1 bg-border border-dashed mt-2 md:mt-0" />
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-accent-orange/10 rounded-sm flex items-center justify-center mb-2 mx-auto">
+                  <div className="w-12 h-12 bg-[var(--accent)]/10 rounded-sm flex items-center justify-center mb-2 mx-auto">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--accent)]">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
@@ -390,22 +390,28 @@ export default function ProjectPage() {
         )}
 
         {/* Project navigation */}
-        <div className="flex items-center justify-between gap-4 mb-12">
+        <div className="flex items-center justify-between gap-8 mb-12">
           <Link
             href={`/projects/${prev.slug}`}
-            className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors"
+            className="group flex items-center gap-2 min-w-0"
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
-            <span ref={prevLabel.spanRef}>← {prev.title}</span>
+            <span className="text-eyebrow text-[var(--color-200)] shrink-0">←</span>
+            <span ref={prevLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-150 truncate">
+              {prev.title}
+            </span>
           </Link>
           <Link
             href={`/projects/${next.slug}`}
-            className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors"
+            className="group flex items-center gap-2 min-w-0"
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
-            <span ref={nextLabel.spanRef}>{next.title} →</span>
+            <span ref={nextLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-150 truncate text-right">
+              {next.title}
+            </span>
+            <span className="text-eyebrow text-[var(--color-200)] shrink-0">→</span>
           </Link>
         </div>
 

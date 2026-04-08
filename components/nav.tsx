@@ -139,8 +139,8 @@ export function Nav() {
     'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-150 cursor-pointer px-3 py-[0.625rem]'
 
   return (
-    /* py-3 = 0.75rem top + bottom — consistent in both states, no jump */
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-3">
+    /* py-[2.5rem] = 40px top + bottom — consistent in both states, no jump */
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem]">
       <div
         className="pointer-events-auto w-full transition-all duration-300 ease-out"
         style={
