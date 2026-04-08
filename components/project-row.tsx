@@ -40,22 +40,34 @@ export function ProjectRow({
           </div>
 
           {project.metrics.length > 0 && (
-            <div className="flex flex-wrap gap-6 py-2">
-              {project.metrics.slice(0, 2).map((metric, i) => (
-                <div key={i} className="flex items-center gap-1.5">
-                  <span
-                    className="text-eyebrow"
-                    style={{
-                      color: metric.color === 'accent' ? 'var(--accent)' : 'var(--color-400)',
-                    }}
-                  >
-                    {metric.value}
-                  </span>
-                  <span className="text-eyebrow text-[var(--color-300)]">
-                    {metric.label}
-                  </span>
-                </div>
-              ))}
+            <div className="flex items-center justify-between sm:block">
+              <div className="flex flex-wrap gap-6 py-2">
+                {project.metrics.slice(0, 2).map((metric, i) => (
+                  <div key={i} className="flex items-center gap-1.5">
+                    <span
+                      className="text-eyebrow"
+                      style={{
+                        color: metric.color === 'accent' ? 'var(--accent)' : 'var(--color-400)',
+                      }}
+                    >
+                      {metric.value}
+                    </span>
+                    <span className="text-eyebrow text-[var(--color-300)]">
+                      {metric.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {/* Arrow button — mobile only, no "Discover" text */}
+              <div className="sm:hidden relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[320ms] shrink-0">
+                <div
+                  className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
+                  style={{ transition: 'transform 320ms cubic-bezier(.4,0,.2,1)' }}
+                />
+                <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 inline-block">
+                  →
+                </span>
+              </div>
             </div>
           )}
         </div>
