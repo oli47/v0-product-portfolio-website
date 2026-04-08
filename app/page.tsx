@@ -237,7 +237,7 @@ export default function Home() {
                 <ProjectRow
                   key={project.slug}
                   project={project}
-                  isLast={false}
+                  isLast={i === projects.length - 1}
                 />
               ))}
             </div>
