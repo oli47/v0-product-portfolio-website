@@ -61,7 +61,7 @@ export const projects: Project[] = [
     slug: 'freemium-activation',
     title: 'Freemium Activation',
     tagline: 'From sales-gated to self-serve. 4,657 accounts in 10 months.',
-    description: "Rebuilt edrone's entire acquisition model. 4,657 freemium accounts, 78% activation rate, 9x faster time to first attributed order.",
+    description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model that replaced it.",
     metrics: [
       { value: '4,657', label: 'NEW USERS', color: 'accent' },
       { value: '9x faster', label: 'TIME TO VALUE', color: 'accent' },
@@ -120,7 +120,7 @@ export const projects: Project[] = [
     slug: 'signup-redesign',
     title: 'Signup Redesign',
     tagline: 'One field removed. Two steps. Five hours from diagnosis to production.',
-    description: 'One field removed, form split in two steps, shipped in 5 hours. +67% total signup conversion confirmed within 7 days.',
+    description: 'One field removed. Two steps. Five hours from diagnosis to production.',
     metrics: [
       { value: '+67%', label: 'SIGNUP CONVERSION', color: 'accent' },
       { value: '0.05% → 3%', label: 'MOBILE', color: 'accent' },
@@ -169,7 +169,7 @@ export const projects: Project[] = [
     slug: 'contacts-activation',
     title: 'Contacts Activation',
     tagline: 'Turned a manual Support task into a zero-touch feature. 95% adoption.',
-    description: 'Turned the biggest bottleneck to user ROI into a feature that activates itself. 95% adoption, +19% identification rate.',
+    description: 'Contact identification was the single biggest bottleneck to user ROI. Support was handling it manually, one customer at a time.',
     metrics: [
       { value: '95%', label: 'ADOPTION', color: 'accent' },
       { value: '+19%', label: 'IDENTIFICATION', color: 'accent' },
