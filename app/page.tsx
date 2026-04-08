@@ -7,7 +7,8 @@ import { SectionBadge } from '@/components/section-badge'
 import { FadeUp } from '@/components/fade-up'
 import { ProjectRow, ProjectRowSoon } from '@/components/project-row'
 import { content, defaultLang } from '@/lib/content'
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { useScramble } from '@/lib/use-scramble'
 
 const t = content[defaultLang]
 
@@ -55,35 +56,6 @@ const EXPERIENCE = [
 // ─── Contact Bar ────────────────────────────────────────────────────────────
 
 type CopiedId = 'email' | 'phone' | null
-
-// ── Scramble hook ────────────────────────────────────────────────────────────
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-function useScramble(word: string) {
-  const spanRef  = useRef<HTMLSpanElement>(null)
-  const timerId  = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  const scramble = useCallback(() => {
-    const el = spanRef.current
-    if (!el) return
-    if (timerId.current) clearInterval(timerId.current)
-    let n = 0; const max = 14
-    timerId.current = setInterval(() => {
-      el.textContent = word.split('').map((c, i) =>
-        n / max > i / word.length ? c : CHARS[Math.floor(Math.random() * 26)]
-      ).join('')
-      if (++n > max) { clearInterval(timerId.current!); el.textContent = word }
-    }, 28)
-  }, [word])
-
-  const reset = useCallback(() => {
-    if (timerId.current) clearInterval(timerId.current)
-    if (spanRef.current) spanRef.current.textContent = word
-  }, [word])
-
-  useEffect(() => () => { if (timerId.current) clearInterval(timerId.current) }, [])
-
-  return { spanRef, scramble, reset }
-}
 
 function ContactBar() {
   const [copiedId, setCopiedId] = useState<CopiedId>(null)

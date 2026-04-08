@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useScramble } from '@/lib/use-scramble'
 import { content, defaultLang } from '@/lib/content'
 import type { Project } from '@/lib/projects'
 
@@ -15,10 +16,17 @@ export function ProjectRow({
   project: Project
   isLast?: boolean
 }) {
+  const discover = useScramble(t.discover)
+
   return (
-    <Link href={`/projects/${project.slug}`} className="group block">
+    <Link
+      href={`/projects/${project.slug}`}
+      className="group block"
+      onMouseEnter={discover.scramble}
+      onMouseLeave={discover.reset}
+    >
       <div
-        className={`flex items-end justify-between p-6 gap-10 transition-colors duration-[320ms] group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
+        className={`flex items-end justify-between p-6 gap-10 transition-colors duration-[250ms] ease group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
       >
         {/* Left — title + description + metrics */}
         <div className="flex flex-col gap-4 min-w-0">
@@ -54,11 +62,23 @@ export function ProjectRow({
 
         {/* Right — discover button */}
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] group-hover:text-[var(--accent)]">
+          {/* Label — scrambles on card mouseenter */}
+          <span
+            ref={discover.spanRef}
+            className="text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] group-hover:text-[var(--accent)]"
+          >
             {t.discover}
           </span>
-          <div className="flex items-center justify-center w-10 h-10 border border-[var(--color-150)] rounded-[0.125rem] overflow-hidden transition-colors duration-[320ms] group-hover:bg-[var(--color-100)] group-hover:border-[var(--color-100)]">
-            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-300)] transition-all duration-[320ms] group-hover:text-[var(--accent)] group-hover:translate-x-[3px] inline-block">
+
+          {/* Square button — orange fill sweeps left→right */}
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[#B5A990] group-hover:border-[#C4521A] transition-colors duration-[320ms]">
+            {/* Fill layer */}
+            <div
+              className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
+              style={{ transition: 'transform 320ms cubic-bezier(.4,0,.2,1)' }}
+            />
+            {/* Arrow */}
+            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 group-hover:translate-x-[3px] inline-block">
               →
             </span>
           </div>

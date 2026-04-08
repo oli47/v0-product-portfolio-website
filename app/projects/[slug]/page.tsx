@@ -160,7 +160,7 @@ export default function ProjectPage() {
                 <span key={i}>{word}<br /></span>
               ))}
             </h1>
-            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] md:self-end text-balance">
+            <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] md:self-end text-balance">
               {project.tagline}
             </p>
           </div>
@@ -180,19 +180,19 @@ export default function ProjectPage() {
           {/* Meta row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-b border-border">
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Role</p>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Role</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.role}</p>
             </div>
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Team</p>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Team</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.team}</p>
             </div>
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Duration</p>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Duration</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.duration}</p>
             </div>
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-text-caption mb-1">Date</p>
+              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Date</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.date}</p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export default function ProjectPage() {
         {/* Overview */}
         <section className="mb-12 pb-12 border-b border-border">
           <SectionBadge>Overview</SectionBadge>
-          <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] text-pretty">
+          <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-pretty">
             {project.overview}
           </p>
 
@@ -215,7 +215,7 @@ export default function ProjectPage() {
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
                   </div>
-                  <p className="text-[12px] text-text-caption whitespace-pre-line">{project.overviewDiagram.before}</p>
+                  <p className="text-[12px] text-[var(--color-300)] whitespace-pre-line">{project.overviewDiagram.before}</p>
                 </div>
                 <div className="flex-1 w-full md:flex md:items-center md:gap-2">
                   <div className="h-px md:flex-1 bg-border border-dashed mb-2 md:mb-0" />
@@ -230,7 +230,7 @@ export default function ProjectPage() {
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-accent-orange/10 rounded-sm flex items-center justify-center mb-2 mx-auto">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-accent-orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-[var(--accent)]">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
@@ -238,7 +238,7 @@ export default function ProjectPage() {
                   <p className="text-[12px] text-foreground font-medium whitespace-pre-line">{project.overviewDiagram.after}</p>
                 </div>
               </div>
-              <p className="text-[12px] text-text-caption text-center italic">
+              <p className="text-[12px] text-[var(--color-300)] text-center italic">
                 {project.overviewDiagram.caption}
               </p>
             </div>
@@ -257,15 +257,15 @@ export default function ProjectPage() {
 
           <ul className="space-y-2 mb-4">
             {project.opportunity.map((item, index) => (
-              <li key={index} className="flex gap-3 text-[14px] md:text-[16px] text-text-body leading-[1.75]">
-                <span className="text-text-caption shrink-0">•</span>
+              <li key={index} className="flex gap-3 text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75]">
+                <span className="text-[var(--color-300)] shrink-0">•</span>
                 <span className="text-pretty">{item}</span>
               </li>
             ))}
           </ul>
 
           {project.opportunityFooter && (
-            <p className="text-[14px] md:text-[16px] text-text-body leading-[1.75] italic text-pretty">
+            <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] italic text-pretty">
               {project.opportunityFooter}
             </p>
           )}
@@ -283,7 +283,7 @@ export default function ProjectPage() {
 
           <div className="space-y-4 mb-8">
             {project.solution.map((paragraph, index) => (
-              <p key={index} className="text-[14px] md:text-[16px] text-text-body leading-[1.75] text-pretty">
+              <p key={index} className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-pretty">
                 {paragraph}
               </p>
             ))}
@@ -317,7 +317,7 @@ export default function ProjectPage() {
             {project.results.headline}
           </h2>
           {project.results.subheadline && (
-            <p className="font-display text-[clamp(20px,5vw,28px)] leading-[1.25] text-text-caption mb-8 text-pretty">
+            <p className="font-display text-[clamp(20px,5vw,28px)] leading-[1.25] text-[var(--color-300)] mb-8 text-pretty">
               {project.results.subheadline}
             </p>
           )}
@@ -326,21 +326,21 @@ export default function ProjectPage() {
           {project.results.northStar && (
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
               <div className="flex flex-col gap-1">
-                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-text-caption">
+                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--color-300)]">
                   {project.results.northStar.label}
                 </div>
                 {project.results.northStar.tag && (
-                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-accent-orange">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--accent)]">
                     {project.results.northStar.tag}
                   </div>
                 )}
               </div>
               <div className="md:text-right">
-                <div className="font-display text-[clamp(28px,7vw,48px)] text-accent-orange leading-none">
+                <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none">
                   {project.results.northStar.value}
                 </div>
                 {project.results.northStar.sublabel && (
-                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-text-caption mt-1">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--color-300)] mt-1">
                     {project.results.northStar.sublabel}
                   </div>
                 )}
@@ -351,10 +351,10 @@ export default function ProjectPage() {
           <div className={`grid gap-3 ${metricsGridCols}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-                <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-accent-orange' : 'text-foreground'}`}>
+                <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-foreground'}`}>
                   {metric.value}
                 </div>
-                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-text-caption">
+                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--color-300)]">
                   {metric.label}
                 </div>
               </div>
@@ -369,12 +369,12 @@ export default function ProjectPage() {
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <span className="text-[12px] md:text-[14px] font-mono text-accent-orange shrink-0 min-w-fit">
+                  <span className="text-[12px] md:text-[14px] font-mono text-[var(--accent)] shrink-0 min-w-fit">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h4 className="text-[14px] md:text-[16px] font-medium mb-1 text-pretty">{step.title}</h4>
-                    <p className="text-[12px] md:text-[14px] text-text-body leading-[1.75] text-pretty">{step.description}</p>
+                    <p className="text-[12px] md:text-[14px] text-[var(--color-300)] leading-[1.75] text-pretty">{step.description}</p>
                   </div>
                 </div>
               ))}
@@ -386,14 +386,14 @@ export default function ProjectPage() {
         <div className="flex items-center justify-between gap-4 mb-12">
           <Link
             href={`/projects/${prev.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-accent-orange transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-[var(--color-300)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
           >
             <span>←</span>
             <span>Previous / {prev.title}</span>
           </Link>
           <Link
             href={`/projects/${next.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-accent-orange transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-[var(--color-300)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
           >
             <span>{next.title} / Next</span>
             <span>→</span>

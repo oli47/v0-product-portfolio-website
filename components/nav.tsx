@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { useEffect, useState, useRef, useCallback } from 'react'
-
+import { useScramble } from '@/lib/use-scramble'
 import { content, defaultLang } from '@/lib/content'
 
 const t = content[defaultLang].nav
@@ -130,13 +130,17 @@ export function Nav() {
     [isDark, setTheme],
   )
 
+  // ── Scramble on theme button ──────────────────────────────────────────────
+  const themeWord   = mounted ? (isDark ? t.light : t.dark) : t.dark
+  const themeLabel  = useScramble(themeWord)
+
   // ── Styles ────────────────────────────────────────────────────────────────
   const btnClass =
-    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-150 cursor-pointer px-3 py-2.5'
+    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-150 cursor-pointer px-3 py-[0.625rem]'
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none transition-[padding] duration-300 ease-out"
       style={{ paddingTop: scrolled ? '0.75rem' : '0' }}
     >
       <div
@@ -160,20 +164,21 @@ export function Nav() {
               }
         }
       >
+        {/* h-[2.5rem] = 40px = 0.625rem py × 2 + 1.25rem line-height */}
         <div
-          className="mx-auto px-5 h-11 flex items-center justify-between"
+          className="mx-auto px-5 h-[2.5rem] flex items-center justify-between"
           style={{ maxWidth: scrolled ? '100%' : '45rem' }}
         >
           {/* Left */}
           <div className="flex items-center">
             <Link
               href="/"
-              className="nav-link text-eyebrow text-[var(--color-500)] px-3 py-2.5"
+              className="nav-link text-eyebrow text-[var(--color-500)] px-3 py-[0.625rem]"
             >
               {t.name}
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
-            <div className="flex items-center gap-2 px-3 py-2.5">
+            <div className="flex items-center gap-2 px-3 py-[0.625rem]">
               <span
                 className="w-1.5 h-1.5 rounded-full bg-[var(--accent-green)] animate-pulse-slow shrink-0"
                 aria-hidden="true"
@@ -190,8 +195,10 @@ export function Nav() {
               onClick={handleThemeToggle}
               aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
               className={btnClass}
+              onMouseEnter={themeLabel.scramble}
+              onMouseLeave={themeLabel.reset}
             >
-              {mounted ? (isDark ? t.light : t.dark) : t.dark}
+              <span ref={themeLabel.spanRef}>{themeWord}</span>
             </button>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Language switcher — wire to i18n context when ready */}
