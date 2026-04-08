@@ -59,12 +59,11 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'freemium-activation',
-    title: 'Freemium Activation',
+    title: 'Freemium launch',
     tagline: 'From sales-gated to self-serve. 4,657 accounts in 10 months.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model that replaced it.",
     metrics: [
-      { value: '4,657', label: 'NEW USERS', color: 'accent' },
-      { value: '9x faster', label: 'TIME TO VALUE', color: 'accent' },
+      { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -118,12 +117,11 @@ export const projects: Project[] = [
   },
   {
     slug: 'signup-redesign',
-    title: 'Signup Redesign',
+    title: 'Signup flow',
     tagline: 'One field removed. Two steps. Five hours from diagnosis to production.',
     description: 'One field removed. Two steps. Five hours from diagnosis to production.',
     metrics: [
       { value: '+67%', label: 'SIGNUP CONVERSION', color: 'accent' },
-      { value: '0.05% → 3%', label: 'MOBILE', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -167,12 +165,11 @@ export const projects: Project[] = [
   },
   {
     slug: 'contacts-activation',
-    title: 'Contacts Activation',
+    title: 'Contacts identification',
     tagline: 'Turned a manual Support task into a zero-touch feature. 95% adoption.',
     description: 'Contact identification was the single biggest bottleneck to user ROI. Support was handling it manually, one customer at a time.',
     metrics: [
-      { value: '95%', label: 'ADOPTION', color: 'accent' },
-      { value: '+19%', label: 'IDENTIFICATION', color: 'accent' },
+      { value: '+19%', label: 'IDENTIFICATION RATE', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
