@@ -13,40 +13,31 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── DESIGN SYSTEM TOKENS (synced with olafotrzasek.com) ─────────────────── */
+/* ── TOKENS — synced with olafotrzasek.com ─────────────────────────────── */
 :root {
-  /* Ink scale — matches portfolio --color-500/400/300 */
-  --ink:     #1A1714;  /* --color-500: primary text */
-  --ink-2:   #3D3730;  /* --color-400: secondary text */
-  --ink-3:   #6B6258;  /* --color-300: muted / dates / company slugs */
-
-  /* Brand */
-  --accent:  #C4521A;  /* portfolio --accent */
-
-  /* Surfaces */
-  --border:  #E8E0D0;  /* portfolio --color-100 */
-  --bg:      #FAF7F2;  /* portfolio --white — page bg */
-  --bg-card: #F2EDE3;  /* portfolio --color-000 — logo box bg / hover */
-
-  /* Fonts */
+  --ink:     #1A1714;
+  --ink-2:   #3D3730;
+  --ink-3:   #6B6258;
+  --accent:  #C4521A;
+  --border:  #E8E0D0;
+  --bg:      #FAF7F2;
+  --bg-card: #F2EDE3;
   --sans:    'DM Sans', system-ui, sans-serif;
   --mono:    'DM Mono', monospace;
   --disp:    'PPMondwest', sans-serif;
 }
-
-/* Outer page chrome — same warm tint as portfolio outer bg */
 html { background: #F2EDE3; }
 
 body {
   font-family: var(--sans);
-  font-size: 12px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.65;
   color: var(--ink);
   background: var(--bg);
   max-width: 210mm;
   min-height: 297mm;
   margin: 0 auto;
-  padding: 16mm 18mm;
+  padding: 14mm 18mm;
   -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
@@ -54,29 +45,38 @@ body {
   print-color-adjust: exact;
 }
 
-
-/* ── HEADER ──────────────────────────────────────────────────────────────── */
-.hdr { margin-bottom: 20px; }
+/* ── HEADER ─────────────────────────────────────────────────────────────── */
+.hdr { margin-bottom: 28px; }
 
 .hdr-name {
   font-family: var(--disp);
-  font-size: 22px; font-weight: 400; letter-spacing: 0.01em;
-  line-height: 1.2; white-space: nowrap; color: var(--ink); margin-bottom: 2px;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 2px;
+  white-space: normal;
 }
-.hdr-name a, .hdr-line2 a { color: inherit; text-decoration: none; }
+.hdr-name a { color: inherit; text-decoration: none; }
 .hdr-name a:hover { color: var(--accent); }
 .hdr-name .dim { color: var(--ink-2); }
 
 .hdr-line2 {
   font-family: var(--disp);
-  font-size: 22px; font-weight: 400; letter-spacing: 0.01em;
-  line-height: 1.2; margin-bottom: 14px;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 20px;
 }
 .hdr-line2 .acc { color: var(--accent); }
 
-/* Contact bar — matches portfolio ContactBar pattern */
+/* Contact bar — matches portfolio ContactBar */
 .hdr-links {
-  display: flex; width: fit-content;
+  display: flex;
+  width: fit-content;
   border: 1px solid var(--border);
   border-radius: 2px;
   overflow: hidden;
@@ -92,18 +92,17 @@ body {
   padding: 0 12px;
   border-right: 1px solid var(--border);
   white-space: nowrap;
-  display: flex; align-items: center;
+  display: flex; align-items: center; gap: 5px;
   cursor: pointer;
-  height: 32px;
+  height: 34px;
   box-sizing: border-box;
   transition: color 0.15s, background 0.15s;
 }
 .hl:last-child { border-right: none; }
 .hl:hover { color: var(--accent); background: var(--bg-card); text-decoration: none; }
-.hl.copyable { cursor: pointer; }
+.hl-icon { opacity: 0.65; }
 
-
-/* ── SECTION BADGE — matches portfolio SectionBadge component ────────────── */
+/* ── SECTION BADGE ──────────────────────────────────────────────────────── */
 .slabel {
   font-family: var(--mono);
   font-size: 11px;
@@ -114,25 +113,26 @@ body {
   display: inline-block;
   padding-bottom: 6px;
   border-bottom: 1px solid var(--accent);
-  margin-bottom: 14px;
-  margin-top: 20px;
+  margin-bottom: 18px;
+  margin-top: 36px;
   width: fit-content;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
-
-/* ── EXPERIENCE ──────────────────────────────────────────────────────────── */
-.exp { margin-bottom: 20px; }
+/* ── EXPERIENCE ─────────────────────────────────────────────────────────── */
+.exp { margin-bottom: 24px; }
 .exp:last-of-type { margin-bottom: 0; }
 
 .exp-hdr {
-  display: flex; justify-content: space-between;
-  align-items: center; margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 .exp-left { display: flex; align-items: center; gap: 8px; }
 
-/* Logo box — matches portfolio: w-9 h-9 p-1 border bg-card rounded-[2px] */
+/* Logo box — bordered container matching portfolio */
 .logo-box {
   width: 28px; height: 28px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -150,7 +150,14 @@ body {
   object-fit: contain;
 }
 
-/* Company slug — eyebrow style, muted, matches portfolio /companySlug */
+.role {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
 .co {
   font-family: var(--mono);
   font-size: 11px;
@@ -162,18 +169,6 @@ body {
   transition: color 0.15s;
 }
 .co:hover { color: var(--accent); }
-
-/* Role — eyebrow style, primary ink, matches portfolio role label */
-.role {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink);
-}
-
-/* Dates + location — eyebrow muted */
 .meta {
   font-family: var(--mono);
   font-size: 11px;
@@ -185,28 +180,48 @@ body {
   flex-shrink: 0;
 }
 
+/* Body indented to align with role text — logo 28px + gap 8px */
+.exp-body { padding-left: 36px; }
+
 .intro {
-  font-size: 12px; color: var(--ink-2);
-  line-height: 1.7; margin-bottom: 9px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin-bottom: 10px;
 }
-.bullets { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .bullets li {
-  font-size: 12px; color: var(--ink-2);
-  line-height: 1.6; padding-left: 12px; position: relative;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  padding-left: 14px;
+  position: relative;
 }
 .bullets li::before {
-  content: '–'; position: absolute; left: 0;
-  color: var(--ink-3); font-size: 11px; line-height: 1.7;
+  content: '•';
+  position: absolute; left: 0;
+  color: var(--ink-3);
+  line-height: 1.75;
 }
 .bullets li strong { font-weight: 600; color: var(--ink); }
 
-
-/* ── BOTTOM (Education + Skills) ─────────────────────────────────────────── */
-.spacer { flex: 1; }
+/* ── BOTTOM ─────────────────────────────────────────────────────────────── */
+.spacer { flex: 1; min-height: 28px; }
 .bottom {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  align-items: start;
 }
-.edu-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+
+.edu-hdr {
+  display: flex; align-items: flex-start; gap: 8px;
+  margin-bottom: 0;
+}
+.edu-meta-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 4px;
+}
 .edu-co {
   font-family: var(--mono);
   font-size: 11px;
@@ -226,35 +241,37 @@ body {
   letter-spacing: 0.05em;
   color: var(--ink);
 }
-.edu-meta {
+.edu-date {
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ink-3);
-  margin-bottom: 4px;
+  margin-left: auto;
 }
-.edu-desc { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+.edu-desc {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin-top: 4px;
+}
 
-.skills { display: flex; flex-direction: column; gap: 5px; }
-.sk { display: flex; font-size: 12px; line-height: 1.5; }
+/* Skills — DM Sans bold labels matching Figma */
+.skills { display: flex; flex-direction: column; gap: 8px; }
+.sk { display: flex; font-size: 13px; line-height: 1.55; gap: 12px; }
 .sk-l {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
   color: var(--ink);
   min-width: 76px;
   flex-shrink: 0;
-  padding-top: 1px;
 }
 .sk-v { color: var(--ink-2); }
 .sk-v strong { font-weight: 600; color: var(--ink); }
 
-
-/* ── TOAST ───────────────────────────────────────────────────────────────── */
+/* ── TOAST ──────────────────────────────────────────────────────────────── */
 .toast {
   position: fixed;
   font-family: var(--mono);
@@ -273,8 +290,7 @@ body {
 }
 .toast.visible { opacity: 1; }
 
-
-/* ── INLINE DOWNLOAD BUTTON ──────────────────────────────────────────────── */
+/* ── DOWNLOAD BUTTON ────────────────────────────────────────────────────── */
 .dl-inline {
   font-family: var(--mono);
   font-size: 11px;
@@ -285,74 +301,59 @@ body {
   background: transparent;
   cursor: pointer;
   border: none;
-  height: 32px;
+  height: 34px;
   padding: 0 12px;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 5px;
   white-space: nowrap;
   box-sizing: border-box;
   transition: color 0.15s, background 0.15s;
 }
 .dl-inline:hover { color: var(--accent); background: var(--bg-card); }
 
-
-/* ── MOBILE BUTTON ───────────────────────────────────────────────────────── */
+/* ── MOBILE ─────────────────────────────────────────────────────────────── */
 .dl-btn-mobile { display: none; }
 
 @media screen and (max-width: 700px) {
-  body {
-    padding: 20px 20px 32px;
-    min-height: unset;
-    font-size: 13px;
-  }
-  .hdr-name, .hdr-line2 { font-size: 18px; white-space: normal; }
+  body { padding: 24px 20px 100px; min-height: unset; }
+  .hdr-name, .hdr-line2 { font-size: 24px; }
   .hdr-links { flex-wrap: wrap; width: 100%; }
   .hl {
-    flex: 1 1 auto;
-    text-align: center;
+    flex: 1 1 40%;
+    justify-content: center;
     border-right: none;
     border-bottom: 1px solid var(--border);
-    padding: 8px;
-    justify-content: center;
+    height: 44px;
+    padding: 0 10px;
   }
   .hl:last-child { border-bottom: none; }
-  .slabel { margin-top: 24px; }
+  .slabel { margin-top: 32px; }
   .exp-hdr { flex-direction: column; align-items: flex-start; gap: 4px; }
   .exp-left { flex-wrap: wrap; }
-  .bottom { grid-template-columns: 1fr; gap: 0; }
+  .exp-body { padding-left: 0; }
+  .bottom { grid-template-columns: 1fr; }
   .spacer { display: none; }
-  .sk { flex-direction: column; gap: 1px; margin-bottom: 6px; }
+  .sk { flex-direction: column; gap: 2px; margin-bottom: 4px; }
   .sk-l { min-width: unset; }
   .dl-btn-mobile {
-    display: flex;
-    position: fixed;
+    display: flex; position: fixed;
     bottom: 0; left: 0; right: 0;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--bg);
-    background: var(--ink);
-    border: none;
-    padding: 18px 20px;
-    cursor: pointer;
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    -webkit-tap-highlight-color: transparent;
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--bg); background: var(--ink);
+    border: none; padding: 18px 20px; cursor: pointer;
+    z-index: 100; align-items: center; justify-content: center;
+    width: 100%; -webkit-tap-highlight-color: transparent;
   }
   .dl-btn-mobile:active { background: var(--accent); }
-  body { padding-bottom: 80px; }
 }
 
-
-/* ── PRINT ───────────────────────────────────────────────────────────────── */
+/* ── PRINT ──────────────────────────────────────────────────────────────── */
 @media print {
   html { background: var(--bg); }
   body { margin: 0; padding: 12mm 14mm; max-width: none; padding-bottom: 12mm; }
+  .hdr-name, .hdr-line2 { font-size: 26px; }
   a { text-decoration: none; color: inherit; }
-  .dl-btn-mobile { display: none !important; }
-  .dl-inline { display: none !important; }
+  .dl-btn-mobile, .dl-inline { display: none !important; }
   .exp { page-break-inside: avoid; }
   .bottom { page-break-inside: avoid; }
   .logo-box { border: 1px solid var(--border) !important; background: var(--bg-card) !important; }
@@ -363,16 +364,17 @@ body {
 </head>
 <body>
 
-
 <header class="hdr">
-  <div class="hdr-name"><a href="https://olafotrzasek.com" target="_blank">Olaf Otrząsek</a> <span class="dim">Senior Product Designer with 7+ years in B2B SaaS.</span></div>
-  <div class="hdr-line2">I let the data find the <span class="acc">opportunity.</span> Then I design the experience.</div>
+  <div class="hdr-name">
+    <a href="https://olafotrzasek.com" target="_blank">Olaf Otrząsek</a><span class="dim"> Senior Product Designer with 7+ years in B2B SaaS.</span>
+  </div>
+  <div class="hdr-line2">I design the moments where products <span class="acc">start working</span> for people.</div>
   <div class="hdr-links">
-    <a href="https://olafotrzasek.com" class="hl" target="_blank">Portfolio &#8599;</a>
+    <a href="https://olafotrzasek.com" class="hl" target="_blank">Portfolio <span class="hl-icon">&#8599;</span></a>
     <span class="hl copyable" id="email-el" onclick="copyText('email')"></span>
-    <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613</span>
-    <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn &#8599;</a>
-    <button class="dl-inline" onclick="window.print()">Save PDF &#8595;</button>
+    <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613 <span class="hl-icon">&#8853;</span></span>
+    <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn <span class="hl-icon">&#8599;</span></a>
+    <button class="dl-inline" onclick="window.print()">Download as PDF <span class="hl-icon">&#8595;</span></button>
   </div>
 </header>
 
@@ -385,17 +387,19 @@ body {
       <span class="role">Sr Product Designer &amp; Team Lead</span>
       <a href="https://edrone.me/" class="co" target="_blank">/edrone</a>
     </div>
-    <div class="meta">Remote / Cracow &nbsp;&middot;&nbsp; Nov 2022 – Mar 2026</div>
+    <div class="meta">Nov 2022 – Mar 2026</div>
   </div>
-  <p class="intro">AI-powered marketing automation and CRM for e-commerce, serving 3,000+ clients across Poland and Brazil. Rebuilt 99% of the product over 3.5 years across all core areas, creating the foundation that made freemium possible.</p>
-  <ul class="bullets">
-    <li>Designed freemium model end-to-end: signup, onboarding, integration, activation, and Stripe paywall. <strong>4,657 accounts in 10 months, 78% activation rate, 8.4% paid conversion, CAC reduced 20x vs sales-led model.</strong></li>
-    <li>Unified 5 legacy newsletter types into one builder. <strong>77% adoption within the first week.</strong></li>
-    <li>The team&#39;s North Star metric: cut median time to first order driven by edrone from <strong>44 to 5 days (9x faster).</strong></li>
-    <li><strong>Built design system from scratch: 50+ components</strong> in Storybook. Prototype-driven handoffs enabled developers to own features end-to-end without designer involvement.</li>
-    <li>Led the design team for over two years, growing it from solo to three: Senior Product Designer, UX Researcher, and Senior Product Data Analyst. The team owned all product design, research, and data analysis across the platform.</li>
-    <li>Shipped production frontend code independently in the final six months, unblocking dev bottlenecks on smaller features.</li>
-  </ul>
+  <div class="exp-body">
+    <p class="intro">AI-powered marketing automation and CRM for e-commerce, serving 3,000+ clients across Poland and Brazil. Rebuilt 99% of the product over 3.5 years across all core areas, creating the foundation that made freemium possible.</p>
+    <ul class="bullets">
+      <li>Designed freemium model end-to-end: signup, onboarding, integration, activation, and Stripe paywall. <strong>4,657 accounts in 10 months, 78% activation rate, 8.4% paid conversion, CAC reduced 20x vs sales-led model.</strong></li>
+      <li>Unified 5 legacy newsletter types into one builder. <strong>77% adoption within the first week.</strong></li>
+      <li>The team&#39;s North Star metric: cut median time to first order driven by edrone from <strong>44 to 5 days (9x faster).</strong></li>
+      <li><strong>Built design system from scratch: 50+ components</strong> in Storybook. Prototype-driven handoffs enabled developers to own features end-to-end without designer involvement.</li>
+      <li>Led the design team for over two years, growing it from solo to three: Senior Product Designer, UX Researcher, and Senior Product Data Analyst. The team owned all product design, research, and data analysis across the platform.</li>
+      <li>Shipped production frontend code independently in the final six months, unblocking dev bottlenecks on smaller features.</li>
+    </ul>
+  </div>
 </div>
 
 <div class="exp">
@@ -407,9 +411,11 @@ body {
       <span class="co">&amp;</span>
       <a href="https://plogenius.com/" class="co" target="_blank">/PLO Genius</a>
     </div>
-    <div class="meta">Remote / Warsaw &nbsp;&middot;&nbsp; Nov 2020 – Oct 2022</div>
+    <div class="meta">Nov 2020 – Oct 2022</div>
   </div>
-  <p class="intro">Sole designer across two B2C SaaS products for poker strategy training, both still live and generating revenue. Took both from zero to launch: research, UX, UI, design system, and ongoing feature development.</p>
+  <div class="exp-body">
+    <p class="intro">Sole designer across two B2C SaaS products for poker strategy training, both still live and generating revenue. Took both from zero to launch: research, UX, UI, design system, and ongoing feature development.</p>
+  </div>
 </div>
 
 <div class="exp">
@@ -419,9 +425,11 @@ body {
       <span class="role">UX Designer</span>
       <a href="https://eqsystem.eu" class="co" target="_blank">/EQ System</a>
     </div>
-    <div class="meta">Katowice &nbsp;&middot;&nbsp; Sep 2019 – Jul 2020</div>
+    <div class="meta">Sep 2019 – Jul 2020</div>
   </div>
-  <p class="intro">Designed modular ERP, CRM and HRM systems across desktop, tablet and mobile for enterprise clients.</p>
+  <div class="exp-body">
+    <p class="intro">Designed modular ERP, CRM and HRM systems across desktop, tablet and mobile for enterprise clients.</p>
+  </div>
 </div>
 
 <div class="exp">
@@ -431,9 +439,11 @@ body {
       <span class="role">Jr UX/UI Designer</span>
       <a href="https://inventivesoftwarellc.com/" class="co" target="_blank">/Inventive Software</a>
     </div>
-    <div class="meta">Remote, US &nbsp;&middot;&nbsp; Jan 2019 – Jun 2019</div>
+    <div class="meta">Jan 2019 – Jun 2019</div>
   </div>
-  <p class="intro">Designed interfaces for real estate and e-commerce platforms as first UX/UI role.</p>
+  <div class="exp-body">
+    <p class="intro">Designed interfaces for real estate and e-commerce platforms as first UX/UI role.</p>
+  </div>
 </div>
 
 <div class="spacer"></div>
@@ -442,19 +452,23 @@ body {
   <div>
     <div class="slabel">Education</div>
     <div class="edu-hdr">
-      <div class="logo-box"><img class="logo-img" alt="University WSB" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt=""></div>
-      <a href="https://wsb.edu.pl/en" class="edu-co" target="_blank">/University WSB</a>
-      <span class="edu-deg">Bachelor of Management</span>
+      <div class="logo-box" style="flex-shrink:0;"><img class="logo-img" alt="University WSB" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt=""></div>
+      <div style="flex:1; min-width:0;">
+        <div class="edu-meta-row">
+          <span class="edu-deg">BA of Management</span>
+          <a href="https://wsb.edu.pl/en" class="edu-co" target="_blank">/University WSB</a>
+          <span class="edu-date">2017 – 2020</span>
+        </div>
+        <p class="edu-desc">Business Psychology, focus on consumer behaviour and decision-making.</p>
+      </div>
     </div>
-    <div class="edu-meta">Katowice &nbsp;&middot;&nbsp; 2017 – 2020</div>
-    <p class="edu-desc">Business Psychology, focus on consumer behaviour and decision-making.</p>
   </div>
   <div>
     <div class="slabel">Skills</div>
     <div class="skills">
-      <div class="sk"><span class="sk-l">Design</span><span class="sk-v">Figma (components, variables, advanced prototyping, custom libraries), <strong>Design Systems</strong></span></div>
+      <div class="sk"><span class="sk-l">Design</span><span class="sk-v">Figma, <strong>Design Systems</strong></span></div>
       <div class="sk"><span class="sk-l">Analytics</span><span class="sk-v">Amplitude, Google Analytics</span></div>
-      <div class="sk"><span class="sk-l">AI Tools</span><span class="sk-v">Claude Code, Codex, v0.dev</span></div>
+      <div class="sk"><span class="sk-l">AI tools</span><span class="sk-v">Claude Code, Codex, v0.dev</span></div>
       <div class="sk"><span class="sk-l">Research</span><span class="sk-v">User interviews, usability testing, surveys, data analysis</span></div>
       <div class="sk"><span class="sk-l">Language</span><span class="sk-v">English C1, Polish native</span></div>
     </div>
@@ -473,12 +487,14 @@ document.addEventListener('DOMContentLoaded', function() {
     _data.email.orig = _data.email.val;
     _data.email.check = '\u2713 ' + _data.email.val;
     el.textContent = _data.email.val;
+    var icon = document.createElement('span');
+    icon.className = 'hl-icon';
+    icon.innerHTML = ' &#8853;';
+    el.appendChild(icon);
     el.style.minWidth = el.offsetWidth + 'px';
   }
   var ph = document.getElementById('phone-el');
-  if (ph) {
-    ph.style.minWidth = ph.offsetWidth + 'px';
-  }
+  if (ph) ph.style.minWidth = ph.offsetWidth + 'px';
 });
 
 function showToast(msg, el) {
@@ -486,7 +502,7 @@ function showToast(msg, el) {
   t.textContent = msg;
   if (el) {
     var r = el.getBoundingClientRect();
-    t.style.top = (r.bottom + 6) + 'px';
+    t.style.top  = (r.bottom + 6) + 'px';
     t.style.left = (r.left + r.width / 2) + 'px';
     t.style.transform = 'translateX(-50%)';
   }
@@ -496,14 +512,10 @@ function showToast(msg, el) {
 }
 
 function copyText(type) {
-  var d = _data[type];
-  var id = type === 'email' ? 'email-el' : 'phone-el';
-  var el = document.getElementById(id);
-  navigator.clipboard.writeText(d.val).then(function() {
+  var el = document.getElementById(type === 'email' ? 'email-el' : 'phone-el');
+  navigator.clipboard.writeText(_data[type].val).then(function() {
     showToast('\u2713 Copied', el);
-  }).catch(function() {
-    showToast('Failed', el);
-  });
+  }).catch(function() { showToast('Failed', el); });
 }
 </script>
 
