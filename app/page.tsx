@@ -240,12 +240,6 @@ export default function Home() {
                   isLast={false}
                 />
               ))}
-              <div className="border-t border-[var(--color-100)]">
-                <ProjectRowSoon
-                  title="PLO Genius"
-                  description="Poker odds calculator and learning platform, designed from zero to launch."
-                />
-              </div>
             </div>
           </FadeUp>
         </section>
