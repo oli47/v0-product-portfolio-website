@@ -355,7 +355,7 @@ body {
   <div class="hdr-links">
     <a href="https://olafotrzasek.com" class="hl" target="_blank">Portfolio <span class="hl-arrow">&#8599;</span></a>
     <span class="hl copyable" id="email-el" onclick="copyText('email')"></span>
-    <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613 <span class="hl-copy">&#8853;</span></span>
+    <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613 <span class="hl-copy">⧉</span></span>
     <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn <span class="hl-arrow">&#8599;</span></a>
     <button class="dl-inline" onclick="window.print()">Download as PDF <span class="hl-arrow">&#8595;</span></button>
   </div>
@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
     el.textContent = _data.email.val;
     var ic = document.createElement('span');
     ic.className = 'hl-copy';
-    ic.textContent = '⊕';
+    ic.textContent = '⧉';
     el.appendChild(ic);
     el.style.minWidth = el.offsetWidth + 'px';
   }
