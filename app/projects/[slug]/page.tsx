@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getProject, getProjectNavigation } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
+import { useScramble } from '@/lib/use-scramble'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 // Lightbox Component
@@ -135,6 +136,10 @@ export default function ProjectPage() {
 
   const { prev, next } = getProjectNavigation(slug)
 
+  const backLabel = useScramble('Back')
+  const prevLabel = useScramble(`← ${prev.title}`)
+  const nextLabel = useScramble(`${next.title} →`)
+
   // metrics grid: 3-col if exactly 3 metrics and no northStar, else 2-col
   const metricsGridCols = project.results.metrics.length === 3
     ? 'grid-cols-1 md:grid-cols-3'
@@ -148,9 +153,11 @@ export default function ProjectPage() {
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-150 mb-10"
+          onMouseEnter={backLabel.scramble}
+          onMouseLeave={backLabel.reset}
         >
           <span>←</span>
-          <span>Back</span>
+          <span ref={backLabel.spanRef}>Back</span>
         </Link>
         {/* Header */}
         <section className="mb-12">
@@ -386,17 +393,19 @@ export default function ProjectPage() {
         <div className="flex items-center justify-between gap-4 mb-12">
           <Link
             href={`/projects/${prev.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-[var(--color-300)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
+            className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors"
+            onMouseEnter={prevLabel.scramble}
+            onMouseLeave={prevLabel.reset}
           >
-            <span>←</span>
-            <span>Previous / {prev.title}</span>
+            <span ref={prevLabel.spanRef}>← {prev.title}</span>
           </Link>
           <Link
             href={`/projects/${next.slug}`}
-            className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-[var(--color-300)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
+            className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors"
+            onMouseEnter={nextLabel.scramble}
+            onMouseLeave={nextLabel.reset}
           >
-            <span>{next.title} / Next</span>
-            <span>→</span>
+            <span ref={nextLabel.spanRef}>{next.title} →</span>
           </Link>
         </div>
 

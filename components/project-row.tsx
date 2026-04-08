@@ -26,7 +26,7 @@ export function ProjectRow({
       onMouseLeave={discover.reset}
     >
       <div
-        className={`flex items-end justify-between p-6 gap-10 transition-colors duration-[250ms] ease group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
+        className={`flex items-end justify-between p-4 sm:p-6 gap-4 sm:gap-10 transition-colors duration-[250ms] ease group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
       >
         {/* Left — title + description + metrics */}
         <div className="flex flex-col gap-4 min-w-0">
@@ -78,7 +78,7 @@ export function ProjectRow({
               style={{ transition: 'transform 320ms cubic-bezier(.4,0,.2,1)' }}
             />
             {/* Arrow */}
-            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 group-hover:translate-x-[3px] inline-block">
+            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 inline-block">
               →
             </span>
           </div>

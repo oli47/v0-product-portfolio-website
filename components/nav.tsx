@@ -139,10 +139,8 @@ export function Nav() {
     'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-150 cursor-pointer px-3 py-[0.625rem]'
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none transition-[padding] duration-300 ease-out"
-      style={{ paddingTop: scrolled ? '0.75rem' : '0' }}
-    >
+    /* py-3 = 0.75rem top + bottom — consistent in both states, no jump */
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-3">
       <div
         className="pointer-events-auto w-full transition-all duration-300 ease-out"
         style={
@@ -164,7 +162,7 @@ export function Nav() {
               }
         }
       >
-        {/* h-[2.5rem] = 40px = 0.625rem py × 2 + 1.25rem line-height */}
+        {/* h-[2.5rem] = 40px */}
         <div
           className="mx-auto px-5 h-[2.5rem] flex items-center justify-between"
           style={{ maxWidth: scrolled ? '100%' : '45rem' }}
@@ -178,7 +176,8 @@ export function Nav() {
               {t.name}
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
-            <div className="flex items-center gap-2 px-3 py-[0.625rem]">
+            {/* Status — hidden on mobile to prevent overflow */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-[0.625rem]">
               <span
                 className="w-1.5 h-1.5 rounded-full bg-[var(--accent-green)] animate-pulse-slow shrink-0"
                 aria-hidden="true"

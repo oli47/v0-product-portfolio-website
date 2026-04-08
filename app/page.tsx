@@ -61,6 +61,8 @@ function ContactBar() {
   const [copiedId, setCopiedId] = useState<CopiedId>(null)
   const [progressKey, setProgressKey] = useState(0)
   const resume   = useScramble(t.contact.resume)
+  const email    = useScramble(t.contact.email)
+  const phone    = useScramble(t.contact.phone)
   const linkedin = useScramble(t.contact.linkedin)
 
   const copy = useCallback((text: string, id: CopiedId) => {
@@ -77,68 +79,75 @@ function ContactBar() {
   const icon     = 'font-mono text-[0.75rem] leading-[1.25rem] text-[var(--color-200)]'
   const arrow    = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
 
+  /* overflow-x-auto wrapper makes the bar scrollable on narrow screens */
   return (
-    <div className="flex border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden w-fit">
+    <div className="max-w-full overflow-x-auto">
+      <div className="flex border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden min-w-max">
 
-      {/* Resume — scramble on hover */}
-      <a
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${baseItem} border-l-0 cursor-pointer`}
-        onMouseEnter={resume.scramble}
-        onMouseLeave={resume.reset}
-      >
-        <span ref={resume.spanRef} className={labelCls}>{t.contact.resume}</span>
-        <span className={arrow}>↗</span>
-      </a>
+        {/* Resume — scramble on hover */}
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${baseItem} border-l-0 cursor-pointer`}
+          onMouseEnter={resume.scramble}
+          onMouseLeave={resume.reset}
+        >
+          <span ref={resume.spanRef} className={labelCls}>{t.contact.resume}</span>
+          <span className={arrow}>↗</span>
+        </a>
 
-      {/* Email — fixed width: show original invisible to hold space, copied state absolute */}
-      <button
-        onClick={() => copy(t.contact.email, 'email')}
-        className={`${baseItem} cursor-pointer`}
-      >
-        <span className={`flex items-center gap-1.5 ${copiedId === 'email' ? 'invisible' : ''}`}>
-          <span className={labelCls}>{t.contact.email}</span>
-          <span className={icon}>⧉</span>
-        </span>
-        {copiedId === 'email' && (
-          <span className="absolute inset-0 flex items-center px-3">
-            <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
-            <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
+        {/* Email — scramble + fixed width when copied */}
+        <button
+          onClick={() => copy(t.contact.email, 'email')}
+          className={`${baseItem} cursor-pointer`}
+          onMouseEnter={() => { if (copiedId !== 'email') email.scramble() }}
+          onMouseLeave={email.reset}
+        >
+          <span className={`flex items-center gap-1.5 ${copiedId === 'email' ? 'invisible' : ''}`}>
+            <span ref={email.spanRef} className={labelCls}>{t.contact.email}</span>
+            <span className={icon}>⧉</span>
           </span>
-        )}
-      </button>
+          {copiedId === 'email' && (
+            <span className="absolute inset-0 flex items-center px-3">
+              <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
+              <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
+            </span>
+          )}
+        </button>
 
-      {/* Phone — fixed width: same approach */}
-      <button
-        onClick={() => copy(t.contact.phoneRaw, 'phone')}
-        className={`${baseItem} cursor-pointer`}
-      >
-        <span className={`flex items-center gap-1.5 ${copiedId === 'phone' ? 'invisible' : ''}`}>
-          <span className={labelCls}>{t.contact.phone}</span>
-          <span className={icon}>⧉</span>
-        </span>
-        {copiedId === 'phone' && (
-          <span className="absolute inset-0 flex items-center px-3">
-            <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
-            <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
+        {/* Phone — scramble + fixed width when copied */}
+        <button
+          onClick={() => copy(t.contact.phoneRaw, 'phone')}
+          className={`${baseItem} cursor-pointer`}
+          onMouseEnter={() => { if (copiedId !== 'phone') phone.scramble() }}
+          onMouseLeave={phone.reset}
+        >
+          <span className={`flex items-center gap-1.5 ${copiedId === 'phone' ? 'invisible' : ''}`}>
+            <span ref={phone.spanRef} className={labelCls}>{t.contact.phone}</span>
+            <span className={icon}>⧉</span>
           </span>
-        )}
-      </button>
+          {copiedId === 'phone' && (
+            <span className="absolute inset-0 flex items-center px-3">
+              <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
+              <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
+            </span>
+          )}
+        </button>
 
-      {/* LinkedIn — scramble on hover */}
-      <a
-        href="https://www.linkedin.com/in/olafotrzasek/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`${baseItem} cursor-pointer`}
-        onMouseEnter={linkedin.scramble}
-        onMouseLeave={linkedin.reset}
-      >
-        <span ref={linkedin.spanRef} className={labelCls}>{t.contact.linkedin}</span>
-        <span className={arrow}>↗</span>
-      </a>
+        {/* LinkedIn — scramble on hover */}
+        <a
+          href="https://www.linkedin.com/in/olafotrzasek/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${baseItem} cursor-pointer`}
+          onMouseEnter={linkedin.scramble}
+          onMouseLeave={linkedin.reset}
+        >
+          <span ref={linkedin.spanRef} className={labelCls}>{t.contact.linkedin}</span>
+          <span className={arrow}>↗</span>
+        </a>
+      </div>
     </div>
   )
 }
@@ -262,7 +271,7 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             {EXPERIENCE.map((job, i) => (
               <FadeUp key={job.company} delay={i * 0.06}>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   {/* Logo */}
                   <div className="shrink-0 flex items-center justify-center w-9 h-9 p-1 border border-[var(--color-100)] bg-[var(--color-000)] rounded-[0.125rem]">
                     <Image
@@ -274,25 +283,25 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* Role + company */}
-                  <div className="flex items-center gap-1 flex-1 min-w-0 flex-wrap">
-                    <span className="text-eyebrow text-[var(--color-500)] whitespace-nowrap">
-                      {job.role}
+                  {/* Role + company + period (period below on mobile) */}
+                  <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:flex-1 sm:min-w-0 sm:justify-between">
+                    <div className="flex items-center gap-1 flex-wrap">
+                      <span className="text-eyebrow text-[var(--color-500)] whitespace-nowrap">
+                        {job.role}
+                      </span>
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-200 whitespace-nowrap"
+                      >
+                        {job.companySlug}
+                      </a>
+                    </div>
+                    <span className="text-eyebrow text-[var(--color-300)] whitespace-nowrap">
+                      {job.from} – {job.to}
                     </span>
-                    <a
-                      href={job.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-200 whitespace-nowrap"
-                    >
-                      {job.companySlug}
-                    </a>
                   </div>
-
-                  {/* Period */}
-                  <span className="text-eyebrow text-[var(--color-300)] shrink-0 whitespace-nowrap">
-                    {job.from} – {job.to}
-                  </span>
                 </div>
               </FadeUp>
             ))}
