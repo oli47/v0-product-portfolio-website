@@ -13,18 +13,30 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── DESIGN SYSTEM TOKENS (synced with olafotrzasek.com) ─────────────────── */
 :root {
-  --ink:    #1A1714;
-  --ink-2:  #3D3730;
-  --ink-3:  #6B6258;
-  --accent: #C4521A;
-  --border: #E8E0D0;
-  --bg:     #FAF7F2;
-  --sans:   'DM Sans', system-ui, sans-serif;
-  --mono:   'DM Mono', monospace;
-  --disp:   'PPMondwest', sans-serif;
+  /* Ink scale — matches portfolio --color-500/400/300 */
+  --ink:     #1A1714;  /* --color-500: primary text */
+  --ink-2:   #3D3730;  /* --color-400: secondary text */
+  --ink-3:   #6B6258;  /* --color-300: muted / dates / company slugs */
+
+  /* Brand */
+  --accent:  #C4521A;  /* portfolio --accent */
+
+  /* Surfaces */
+  --border:  #E8E0D0;  /* portfolio --color-100 */
+  --bg:      #FAF7F2;  /* portfolio --white — page bg */
+  --bg-card: #F2EDE3;  /* portfolio --color-000 — logo box bg / hover */
+
+  /* Fonts */
+  --sans:    'DM Sans', system-ui, sans-serif;
+  --mono:    'DM Mono', monospace;
+  --disp:    'PPMondwest', sans-serif;
 }
+
+/* Outer page chrome — same warm tint as portfolio outer bg */
 html { background: #F2EDE3; }
+
 body {
   font-family: var(--sans);
   font-size: 12px;
@@ -38,80 +50,141 @@ body {
   -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 
-/* HEADER */
+/* ── HEADER ──────────────────────────────────────────────────────────────── */
 .hdr { margin-bottom: 20px; }
-/* Override browser default blue on links inside header */
-.hdr-name a, .hdr-line2 a {
-  color: var(--ink);
-  text-decoration: none;
-}
 
 .hdr-name {
   font-family: var(--disp);
   font-size: 22px; font-weight: 400; letter-spacing: 0.01em;
   line-height: 1.2; white-space: nowrap; color: var(--ink); margin-bottom: 2px;
 }
+.hdr-name a, .hdr-line2 a { color: inherit; text-decoration: none; }
+.hdr-name a:hover { color: var(--accent); }
 .hdr-name .dim { color: var(--ink-2); }
+
 .hdr-line2 {
   font-family: var(--disp);
   font-size: 22px; font-weight: 400; letter-spacing: 0.01em;
   line-height: 1.2; margin-bottom: 14px;
 }
 .hdr-line2 .acc { color: var(--accent); }
+
+/* Contact bar — matches portfolio ContactBar pattern */
 .hdr-links {
   display: flex; width: fit-content;
-  border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
 }
 .hl {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.05em;
-  text-transform: uppercase; color: var(--ink-2); text-decoration: none;
-  padding: 0 10px; border-right: 1px solid var(--border);
-  white-space: nowrap; display: flex; align-items: center;
-  cursor: pointer; height: 28px; box-sizing: border-box;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 0 12px;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+  display: flex; align-items: center;
+  cursor: pointer;
+  height: 32px;
+  box-sizing: border-box;
+  transition: color 0.15s, background 0.15s;
 }
 .hl:last-child { border-right: none; }
-.hl:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.hl:hover { color: var(--accent); background: var(--bg-card); text-decoration: none; }
 .hl.copyable { cursor: pointer; }
 
-/* SECTION LABEL */
+
+/* ── SECTION BADGE — matches portfolio SectionBadge component ────────────── */
 .slabel {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--ink-3);
-  padding-bottom: 5px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  display: inline-block;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--accent);
-  margin-bottom: 14px; margin-top: 20px;
+  margin-bottom: 14px;
+  margin-top: 20px;
   width: fit-content;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-/* EXP */
+
+/* ── EXPERIENCE ──────────────────────────────────────────────────────────── */
 .exp { margin-bottom: 20px; }
 .exp:last-of-type { margin-bottom: 0; }
+
 .exp-hdr {
   display: flex; justify-content: space-between;
   align-items: center; margin-bottom: 5px;
 }
-.exp-left { display: flex; align-items: center; gap: 7px; }
-.logo {
-  width: 18px; height: 18px; border-radius: 3px;
-  object-fit: contain; flex-shrink: 0;
+.exp-left { display: flex; align-items: center; gap: 8px; }
+
+/* Logo box — matches portfolio: w-9 h-9 p-1 border bg-card rounded-[2px] */
+.logo-box {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 2px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: 2px;
+  flex-shrink: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
+.logo-img {
+  width: 100%; height: 100%;
+  border-radius: 1px;
+  object-fit: contain;
+}
+
+/* Company slug — eyebrow style, muted, matches portfolio /companySlug */
 .co {
-  font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em;
-  color: var(--ink-3); text-decoration: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  text-decoration: none;
+  transition: color 0.15s;
 }
-.co:hover { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 2px; }
+.co:hover { color: var(--accent); }
+
+/* Role — eyebrow style, primary ink, matches portfolio role label */
 .role {
-  font-size: 13px; font-weight: 600;
-  color: var(--ink); letter-spacing: -0.01em;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
 }
+
+/* Dates + location — eyebrow muted */
 .meta {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--ink-3);
-  white-space: nowrap; flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+
 .intro {
   font-size: 12px; color: var(--ink-2);
   line-height: 1.7; margin-bottom: 9px;
@@ -127,64 +200,61 @@ body {
 }
 .bullets li strong { font-weight: 600; color: var(--ink); }
 
-/* BOTTOM */
+
+/* ── BOTTOM (Education + Skills) ─────────────────────────────────────────── */
 .spacer { flex: 1; }
 .bottom {
   display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px;
 }
-.edu-hdr { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; }
+.edu-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
 .edu-co {
-  font-family: var(--mono); font-size: 12px;
-  letter-spacing: 0.02em; color: var(--ink-3);
-  text-decoration: none; transition: color 0.15s;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  text-decoration: none;
+  transition: color 0.15s;
 }
-.edu-co:hover { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 2px; }
-.edu-deg { font-size: 13px; font-weight: 600; color: var(--ink); }
+.edu-co:hover { color: var(--accent); }
+.edu-deg {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
 .edu-meta {
-  font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  margin-bottom: 4px;
 }
 .edu-desc { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+
 .skills { display: flex; flex-direction: column; gap: 5px; }
 .sk { display: flex; font-size: 12px; line-height: 1.5; }
-.sk-l { font-weight: 600; color: var(--ink); min-width: 72px; flex-shrink: 0; }
+.sk-l {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  min-width: 76px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
 .sk-v { color: var(--ink-2); }
 .sk-v strong { font-weight: 600; color: var(--ink); }
 
 
-/* ── MOBILE ── */
-@media screen and (max-width: 700px) {
-  body {
-    padding: 20px 20px 32px;
-    min-height: unset;
-    font-size: 13px;
-  }
-  .dl-btn { top: 12px; right: 12px; font-size: 9px; padding: 6px 10px; }
-  .hdr-name, .hdr-line2 { font-size: 18px; white-space: normal; }
-  .hdr-links { flex-wrap: wrap; width: 100%; }
-  .hl {
-    flex: 1 1 auto;
-    text-align: center;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 7px 8px;
-  }
-  .hl:last-child { border-bottom: none; }
-  .slabel { margin-top: 24px; }
-  .exp-hdr { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .meta { font-size: 9px; }
-  .exp-left { flex-wrap: wrap; }
-  .bottom { grid-template-columns: 1fr; gap: 0; }
-  .spacer { display: none; }
-  .intro { font-size: 12px; }
-  .bullets li { font-size: 12px; }
-  .sk { flex-direction: column; gap: 1px; margin-bottom: 6px; }
-  .sk-l { min-width: unset; }
-}
-
-/* PRINT */
-
-/* TOAST */
+/* ── TOAST ───────────────────────────────────────────────────────────────── */
 .toast {
   position: fixed;
   font-family: var(--mono);
@@ -204,33 +274,54 @@ body {
 .toast.visible { opacity: 1; }
 
 
-
-/* INLINE DOWNLOAD BUTTON */
+/* ── INLINE DOWNLOAD BUTTON ──────────────────────────────────────────────── */
 .dl-inline {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink-3);
   background: transparent;
   cursor: pointer;
   border: none;
-  border-left: none;
-  height: 28px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  display: flex; align-items: center; gap: 6px;
   white-space: nowrap;
   box-sizing: border-box;
-  transition: color 0.15s;
+  transition: color 0.15s, background 0.15s;
 }
-.dl-inline:hover { color: var(--accent); }
+.dl-inline:hover { color: var(--accent); background: var(--bg-card); }
 
-/* MOBILE BUTTON */
+
+/* ── MOBILE BUTTON ───────────────────────────────────────────────────────── */
 .dl-btn-mobile { display: none; }
 
 @media screen and (max-width: 700px) {
+  body {
+    padding: 20px 20px 32px;
+    min-height: unset;
+    font-size: 13px;
+  }
+  .hdr-name, .hdr-line2 { font-size: 18px; white-space: normal; }
+  .hdr-links { flex-wrap: wrap; width: 100%; }
+  .hl {
+    flex: 1 1 auto;
+    text-align: center;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 8px;
+    justify-content: center;
+  }
+  .hl:last-child { border-bottom: none; }
+  .slabel { margin-top: 24px; }
+  .exp-hdr { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .exp-left { flex-wrap: wrap; }
+  .bottom { grid-template-columns: 1fr; gap: 0; }
+  .spacer { display: none; }
+  .sk { flex-direction: column; gap: 1px; margin-bottom: 6px; }
+  .sk-l { min-width: unset; }
   .dl-btn-mobile {
     display: flex;
     position: fixed;
@@ -251,19 +342,21 @@ body {
     -webkit-tap-highlight-color: transparent;
   }
   .dl-btn-mobile:active { background: var(--accent); }
-  body { padding-bottom: 120px; }
+  body { padding-bottom: 80px; }
 }
 
+
+/* ── PRINT ───────────────────────────────────────────────────────────────── */
 @media print {
   html { background: var(--bg); }
   body { margin: 0; padding: 12mm 14mm; max-width: none; padding-bottom: 12mm; }
   a { text-decoration: none; color: inherit; }
-  .dl-btn { display: none !important; }
   .dl-btn-mobile { display: none !important; }
-  .dl-inline { display: none !important; border: none !important; }
-  .dl-btn-wrap { display: none !important; }
+  .dl-inline { display: none !important; }
   .exp { page-break-inside: avoid; }
   .bottom { page-break-inside: avoid; }
+  .logo-box { border: 1px solid var(--border) !important; background: var(--bg-card) !important; }
+  .slabel { border-bottom: 1px solid var(--accent) !important; }
 }
 @page { size: A4; margin: 0; }
 </style>
@@ -272,14 +365,14 @@ body {
 
 
 <header class="hdr">
-  <div class="hdr-name"><a href="https://olvsky.io" target="_blank" class="name-link">Olaf Otrząsek</a> <span class="dim">Senior Product Designer with 7+ years in B2B SaaS.</span></div>
+  <div class="hdr-name"><a href="https://olafotrzasek.com" target="_blank">Olaf Otrząsek</a> <span class="dim">Senior Product Designer with 7+ years in B2B SaaS.</span></div>
   <div class="hdr-line2">I let the data find the <span class="acc">opportunity.</span> Then I design the experience.</div>
   <div class="hdr-links">
-    <a href="https://olvsky.io" class="hl" target="_blank">Portfolio &#8599;</a>
+    <a href="https://olafotrzasek.com" class="hl" target="_blank">Portfolio &#8599;</a>
     <span class="hl copyable" id="email-el" onclick="copyText('email')"></span>
     <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613</span>
     <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn &#8599;</a>
-    <button class="dl-inline" onclick="window.print()">Download PDF &#8595;</button>
+    <button class="dl-inline" onclick="window.print()">Save PDF &#8595;</button>
   </div>
 </header>
 
@@ -288,31 +381,33 @@ body {
 <div class="exp">
   <div class="exp-hdr">
     <div class="exp-left">
-      <img class="logo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGQABAQADAQAAAAAAAAAAAAAAAAcFBggB/8QAMhAAAAQEAwMLBQEAAAAAAAAAAAEDBgIEBREHEhgUUlYTFRYXIihBkpTT4ggxZ6Gkgf/EABsBAAEFAQEAAAAAAAAAAAAAAAABAgMEBQYH/8QAKBEAAQMDAwIGAwAAAAAAAAAAAAECAwQREgUhURMxFBUjJFJhU1Rx/9oADAMBAAIRAxEAPwDrYAExxAxwZLIdC7crcNWOeRTgUj2eUzwWjK5WPMXgPKoaeSd2Mbbr9F5VRO5TgES1PYZ7lf8AQfINT2Gm5X/QfIWfKqz8ajc28ltARLU9hpuV/wBB8hn8P8cWS+HQg3KJDVinlk41INolMkFoCudzzH4Br9Nq2NVzo1REFybyU4AAUhQJHiXgM23475hzVKs1mVmV0k0okpaJIkyKCGxGWaAzv/org5Y+onre61p7oj005o2aX5Lm3aOQzZO1bJ2b3+409KZK+ZUifgtu419rbobPpVZfEjj8yHthpWZfEjj8yHtiLd4P8k/1h3g/yT/WOg8PW/tIQ3b8S06VmXxI4/Mh7Y2TDXAZtMN3S7lptarM1MoJKJQpzMSRwGUcNjM8sBH+xzl3g/yT/WKF9O/W91rSPS7ppzRsy/K85bRyGbJ2b5+ze/2EFVBVpC5XVCKll25Farb9jqcgAByZYAkmJePLbYbvmGzUqNWZqZQSTViUloUjgMo4blbNGR/oVsTLEDA9kvh0LOOtxVYp1ZOBOMpebyQWgKxWLKfgLlCtMknub4/Q117bGmaqmZw24/Ih7g91VMzhtx+RD3Bk9MWGe/X/AF/xDTFhnv1/1/xGtlo3DiP1DGaqmZw24/Ih7g2PDXHptPx3y7ZptGrMrMrpKKQqTMKRJkUEOY75YzP9DH6YsM9+v+v+IzzAwOZLIdCDjokVWOeRTjTg2ibzwWjKx3LKXgIpnaT03dNHZW2/oqZ33KcQAAwiQAAAAAAAAAAAAAAAA//Z" alt="">
-      <a href="https://edrone.me/" class="co" target="_blank">edrone</a>
-      <span class="role">Senior Product Designer &amp; Team Lead</span>
+      <div class="logo-box"><img class="logo-img" alt="edrone" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGQABAQADAQAAAAAAAAAAAAAAAAcFBggB/8QAMhAAAAQEAwMLBQEAAAAAAAAAAAEDBgIEBREHEhgUUlYTFRYXIihBkpTT4ggxZ6Gkgf/EABsBAAEFAQEAAAAAAAAAAAAAAAABAgMEBQYH/8QAKBEAAQMDAwIGAwAAAAAAAAAAAAECAwQREgUhURMxFBUjJFJhU1Rx/9oADAMBAAIRAxEAPwDrYAExxAxwZLIdC7crcNWOeRTgUj2eUzwWjK5WPMXgPKoaeSd2Mbbr9F5VRO5TgES1PYZ7lf8AQfINT2Gm5X/QfIWfKqz8ajc28ltARLU9hpuV/wBB8hn8P8cWS+HQg3KJDVinlk41INolMkFoCudzzH4Br9Nq2NVzo1REFybyU4AAUhQJHiXgM23475hzVKs1mVmV0k0okpaJIkyKCGxGWaAzv/org5Y+onre61p7oj005o2aX5Lm3aOQzZO1bJ2b3+409KZK+ZUifgtu419rbobPpVZfEjj8yHthpWZfEjj8yHtiLd4P8k/1h3g/yT/WOg8PW/tIQ3b8S06VmXxI4/Mh7Y2TDXAZtMN3S7lptarM1MoJKJQpzMSRwGUcNjM8sBH+xzl3g/yT/WKF9O/W91rSPS7ppzRsy/K85bRyGbJ2b5+ze/2EFVBVpC5XVCKll25Farb9jqcgAByZYAkmJePLbYbvmGzUqNWZqZQSTViUloUjgMo4blbNGR/oVsTLEDA9kvh0LOOtxVYp1ZOBOMpebyQWgKxWLKfgLlCtMknub4/Q117bGmaqmZw24/Ih7g91VMzhtx+RD3Bk9MWGe/X/AF/xDTFhnv1/1/xGtlo3DiP1DGaqmZw24/Ih7g2PDXHptPx3y7ZptGrMrMrpKKQqTMKRJkUEOY75YzP9DH6YsM9+v+v+IzzAwOZLIdCDjokVWOeRTjTg2ibzwWjKx3LKXgIpnaT03dNHZW2/oqZ33KcQAAwiQAAAAAAAAAAAAAAAA//Z" alt=""></div>
+      <span class="role">Sr Product Designer &amp; Team Lead</span>
+      <a href="https://edrone.me/" class="co" target="_blank">/edrone</a>
     </div>
-    <div class="meta">Remote / Cracow, PL &nbsp; Nov 2022 – Mar 2026</div>
+    <div class="meta">Remote / Cracow &nbsp;&middot;&nbsp; Nov 2022 – Mar 2026</div>
   </div>
-  <p class="intro">AI-powered marketing automation and CRM platform for ecommerce — 2,500+ paying clients during my tenure, up from 1,300, across Poland and Brazil. Joined when the product had fundamental UX issues and no self-serve path; rebuilt 99% of it over 3.5 years, creating the foundation that made freemium possible.</p>
+  <p class="intro">AI-powered marketing automation and CRM for e-commerce, serving 3,000+ clients across Poland and Brazil. Rebuilt 99% of the product over 3.5 years across all core areas, creating the foundation that made freemium possible.</p>
   <ul class="bullets">
     <li>Designed freemium model end-to-end: signup, onboarding, integration, activation, and Stripe paywall. <strong>4,657 accounts in 10 months, 78% activation rate, 8.4% paid conversion, CAC reduced 20x vs sales-led model.</strong></li>
     <li>Unified 5 legacy newsletter types into one builder. <strong>77% adoption within the first week.</strong></li>
     <li>The team&#39;s North Star metric: cut median time to first order driven by edrone from <strong>44 to 5 days (9x faster).</strong></li>
-    <li><strong>Built design system from scratch: 50+ components</strong> in Storybook. Prototype-driven handoffs let developers own features end-to-end without design involvement — adopted across engineering within two sprints.</li>
-    <li>Led the design team for two years, growing it from solo to three (Senior Product Designer, UX Researcher, Senior Product Data Analyst), and established a data-informed design practice that became standard process across product.</li>
-    <li>Shipped production frontend code independently in the final six months, removing dev bottlenecks and shipping smaller features without engineering support.</li>
+    <li><strong>Built design system from scratch: 50+ components</strong> in Storybook. Prototype-driven handoffs enabled developers to own features end-to-end without designer involvement.</li>
+    <li>Led the design team for over two years, growing it from solo to three: Senior Product Designer, UX Researcher, and Senior Product Data Analyst. The team owned all product design, research, and data analysis across the platform.</li>
+    <li>Shipped production frontend code independently in the final six months, unblocking dev bottlenecks on smaller features.</li>
   </ul>
 </div>
 
 <div class="exp">
   <div class="exp-hdr">
     <div class="exp-left">
-      <img class="logo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAQEBAAMAAAAAAAAAAAAAAAUDBgIECP/EADYQAAEEAQICBQgLAQAAAAAAAAEAAgMEEQUSBhMhMTJRgQcUFRZBU3GxIiMzNlJhYnJzkqGi/8QAGQEAAwEBAQAAAAAAAAAAAAAAAAIEAwEF/8QAJxEAAQQABQMEAwAAAAAAAAAAAQACAxEEEiExURNhkSJBcfChscH/2gAMAwEAAhEDEQA/APllERWpURbUqlq9aZVpVprM7+zHEwucfAKz6ncR52+j2cz3XnUPM+GzfnPgkc9rdyqIsLNMLjYSOwKgItrtS1RtOq3a01awztRSsLXDwKxTXaxc0tNEUUREXUqLajVnvXYKVVm+exI2KNve5xwFir/k9++FLb9ptm5X8nJft/6wke7K0lUYWITTMjOxIH5XuyzvdqcPB3DNjkVpZ21p7bctfdkzhz3EdPLBztYOjAyetSeJNH0+hHUuaXakuUbXMDJJYQx4fG/a4EAn8iD3OW3k/PJ1l2oOBxQo2LWT7HCItb47nNVfgWm7WdLoUdokdpmsxWZR+Gu8ASPP6QYxn4hYE9M37Df74XrRsGNYGuHqdeXsBWgHxm8cqHqF7Wm0GaFqkEz9jmvrttQuM8IPsjJ+kGu7ukH2KQu6i4gq2KM+uTak1urUI70VVr3HnSc52YXM79pfJ+3oUPyhADjHUOgCQmMzYGPrDEwv8dxKaJ+uWqWOOwrWxdYSZtgL4N1ZvcEEUoKIioXjotqNqeldgu1ZDHPXkbLG/uc05CxRcItM1xaQ4bhdLb1WlZp6lFoOh269rUGh98h/NZFEHBzmxtAy1hdgkuzgABcy2bYSGTbSQWna7BIPWDj5Lelbt0bLbVK1NWnZ2ZInlrh4hWfXLiTtekW8z3vmsPM/vsz/AKs8pbo0WPvyrnTx4inTOII4aK/Y72vPQ9KbprItf1+ExU4jvqVZBtkvSDsta3rEeelz+rHQM5UO9Znu3Z7tp/MnnkdLK7vc45PzS7atXbT7V2zNZnf2pZXlzj4lYpmtN2d1jPMwtEcYpo113J5P8Ht5KIiJ1KiIiEIiIhCIiIQiIiEL/9k=" alt="">
-      <a href="https://deepsolver.com/" class="co" target="_blank">Deepsolver</a> <span class="co">&amp;</span> <a href="https://plogenius.com/" class="co" target="_blank">PLO Genius</a>
+      <div class="logo-box"><img class="logo-img" alt="Deepsolver" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAQEBAAMAAAAAAAAAAAAAAAUDBgIECP/EADYQAAEEAQICBQgLAQAAAAAAAAEAAgMEEQUSBhMhMTJRgQcUFRZBU3GxIiMzNlJhYnJzkqGi/8QAGQEAAwEBAQAAAAAAAAAAAAAAAAIEAwEF/8QAJxEAAQQABQMEAwAAAAAAAAAAAQACAxEEEiExURNhkSJBcfChscH/2gAMAwEAAhEDEQA/APllERWpURbUqlq9aZVpVprM7+zHEwucfAKz6ncR52+j2cz3XnUPM+GzfnPgkc9rdyqIsLNMLjYSOwKgItrtS1RtOq3a01awztRSsLXDwKxTXaxc0tNEUUREXUqLajVnvXYKVVm+exI2KNve5xwFir/k9++FLb9ptm5X8nJft/6wke7K0lUYWITTMjOxIH5XuyzvdqcPB3DNjkVpZ21p7bctfdkzhz3EdPLBztYOjAyetSeJNH0+hHUuaXakuUbXMDJJYQx4fG/a4EAn8iD3OW3k/PJ1l2oOBxQo2LWT7HCItb47nNVfgWm7WdLoUdokdpmsxWZR+Gu8ASPP6QYxn4hYE9M37Df74XrRsGNYGuHqdeXsBWgHxm8cqHqF7Wm0GaFqkEz9jmvrttQuM8IPsjJ+kGu7ukH2KQu6i4gq2KM+uTak1urUI70VVr3HnSc52YXM79pfJ+3oUPyhADjHUOgCQmMzYGPrDEwv8dxKaJ+uWqWOOwrWxdYSZtgL4N1ZvcEEUoKIioXjotqNqeldgu1ZDHPXkbLG/uc05CxRcItM1xaQ4bhdLb1WlZp6lFoOh269rUGh98h/NZFEHBzmxtAy1hdgkuzgABcy2bYSGTbSQWna7BIPWDj5Lelbt0bLbVK1NWnZ2ZInlrh4hWfXLiTtekW8z3vmsPM/vsz/AKs8pbo0WPvyrnTx4inTOII4aK/Y72vPQ9KbprItf1+ExU4jvqVZBtkvSDsta3rEeelz+rHQM5UO9Znu3Z7tp/MnnkdLK7vc45PzS7atXbT7V2zNZnf2pZXlzj4lYpmtN2d1jPMwtEcYpo113J5P8Ht5KIiJ1KiIiEIiIhCIiIQiIiEL/9k=" alt=""></div>
       <span class="role">Product Designer</span>
+      <a href="https://deepsolver.com/" class="co" target="_blank">/Deepsolver</a>
+      <span class="co">&amp;</span>
+      <a href="https://plogenius.com/" class="co" target="_blank">/PLO Genius</a>
     </div>
-    <div class="meta">Remote / Warsaw, PL &nbsp; Nov 2020 – Oct 2022</div>
+    <div class="meta">Remote / Warsaw &nbsp;&middot;&nbsp; Nov 2020 – Oct 2022</div>
   </div>
   <p class="intro">Sole designer across two B2C SaaS products for poker strategy training, both still live and generating revenue. Took both from zero to launch: research, UX, UI, design system, and ongoing feature development.</p>
 </div>
@@ -320,11 +415,11 @@ body {
 <div class="exp">
   <div class="exp-hdr">
     <div class="exp-left">
-      <img class="logo" src="data:image/png;base64,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" alt="">
-      <a href="https://eqsystem.eu" class="co" target="_blank">EQ System</a>
+      <div class="logo-box"><img class="logo-img" alt="EQ System" src="data:image/png;base64,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" alt=""></div>
       <span class="role">UX Designer</span>
+      <a href="https://eqsystem.eu" class="co" target="_blank">/EQ System</a>
     </div>
-    <div class="meta">Katowice, PL &nbsp; Sep 2019 – Jul 2020</div>
+    <div class="meta">Katowice &nbsp;&middot;&nbsp; Sep 2019 – Jul 2020</div>
   </div>
   <p class="intro">Designed modular ERP, CRM and HRM systems across desktop, tablet and mobile for enterprise clients.</p>
 </div>
@@ -332,11 +427,11 @@ body {
 <div class="exp">
   <div class="exp-hdr">
     <div class="exp-left">
-      <img class="logo" src="data:image/png;base64,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" alt="">
-      <a href="https://inventivesoftwarellc.com/" class="co" target="_blank">Inventive Software</a>
+      <div class="logo-box"><img class="logo-img" alt="Inventive Software" src="data:image/png;base64,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" alt=""></div>
       <span class="role">Jr UX/UI Designer</span>
+      <a href="https://inventivesoftwarellc.com/" class="co" target="_blank">/Inventive Software</a>
     </div>
-    <div class="meta">Remote, US &nbsp; Jan 2019 – Jun 2019</div>
+    <div class="meta">Remote, US &nbsp;&middot;&nbsp; Jan 2019 – Jun 2019</div>
   </div>
   <p class="intro">Designed interfaces for real estate and e-commerce platforms as first UX/UI role.</p>
 </div>
@@ -347,11 +442,11 @@ body {
   <div>
     <div class="slabel">Education</div>
     <div class="edu-hdr">
-      <img class="logo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt="">
-      <a href="https://wsb.edu.pl/en" class="edu-co" target="_blank">University WSB</a>
+      <div class="logo-box"><img class="logo-img" alt="University WSB" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt=""></div>
+      <a href="https://wsb.edu.pl/en" class="edu-co" target="_blank">/University WSB</a>
       <span class="edu-deg">Bachelor of Management</span>
     </div>
-    <div class="edu-meta">Katowice, PL &nbsp; 2017 – 2020</div>
+    <div class="edu-meta">Katowice &nbsp;&middot;&nbsp; 2017 – 2020</div>
     <p class="edu-desc">Business Psychology, focus on consumer behaviour and decision-making.</p>
   </div>
   <div>
@@ -359,8 +454,8 @@ body {
     <div class="skills">
       <div class="sk"><span class="sk-l">Design</span><span class="sk-v">Figma (components, variables, advanced prototyping, custom libraries), <strong>Design Systems</strong></span></div>
       <div class="sk"><span class="sk-l">Analytics</span><span class="sk-v">Amplitude, Google Analytics</span></div>
-      <div class="sk"><span class="sk-l">AI tools</span><span class="sk-v">Claude Code, Codex, v0.dev</span></div>
-      <div class="sk"><span class="sk-l">Research</span><span class="sk-v">User interviews, Usability testing, Surveys, Data analysis</span></div>
+      <div class="sk"><span class="sk-l">AI Tools</span><span class="sk-v">Claude Code, Codex, v0.dev</span></div>
+      <div class="sk"><span class="sk-l">Research</span><span class="sk-v">User interviews, usability testing, surveys, data analysis</span></div>
       <div class="sk"><span class="sk-l">Language</span><span class="sk-v">English C1, Polish native</span></div>
     </div>
   </div>
@@ -369,7 +464,7 @@ body {
 <script>
 var _data = {
   email: { val: 'olafotrzasek' + String.fromCharCode(64) + 'gmail.com', orig: '', check: '' },
-  phone: { val: '732188613', orig: '732188613', check: '\u2713 732188613' }
+  phone: { val: '732188613', orig: '732 188 613', check: '\u2713 732 188 613' }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
