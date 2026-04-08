@@ -13,7 +13,6 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── TOKENS ─────────────────────────────────────────────────────────────── */
 :root {
   --ink:     #1A1714;
   --ink-2:   #3D3730;
@@ -48,19 +47,15 @@ body {
 /* ── HEADER ─────────────────────────────────────────────────────────────── */
 .hdr { margin-bottom: 24px; }
 
-/* Responsive: fits 2 lines at all viewport widths the resume will be viewed at.
-   clamp(22px, 3.2vw, 34px) ensures line-1 stays on one line above ~750px */
+/* No truncation — wraps naturally; both lines fit at ≥210mm content width */
 .hdr-name {
   font-family: var(--disp);
-  font-size: clamp(20px, 3.2vw, 34px);
+  font-size: 26px;
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.2;
   color: var(--ink);
   margin-bottom: 2px;
-  white-space: nowrap;        /* keep name+tagline on one line */
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .hdr-name a { color: inherit; text-decoration: none; }
 .hdr-name a:hover { color: var(--accent); }
@@ -68,19 +63,16 @@ body {
 
 .hdr-line2 {
   font-family: var(--disp);
-  font-size: clamp(20px, 3.2vw, 34px);
+  font-size: 26px;
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.2;
   color: var(--ink);
   margin-bottom: 18px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .hdr-line2 .acc { color: var(--accent); }
 
-/* Contact bar */
+/* Contact bar — matches portfolio ContactBar (no download button in bar) */
 .hdr-links {
   display: flex;
   width: fit-content;
@@ -99,7 +91,7 @@ body {
   padding: 0 12px;
   border-right: 1px solid var(--border);
   white-space: nowrap;
-  display: flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 6px;
   cursor: pointer;
   height: 34px;
   box-sizing: border-box;
@@ -107,7 +99,12 @@ body {
 }
 .hl:last-child { border-right: none; }
 .hl:hover { color: var(--accent); background: var(--bg-card); text-decoration: none; }
-.hl-icon { opacity: 0.65; }
+/* Force copy icons to render in DM Mono */
+.hl-icon {
+  font-family: var(--mono);
+  opacity: 0.7;
+  line-height: 1;
+}
 
 /* ── SECTION BADGE ──────────────────────────────────────────────────────── */
 .slabel {
@@ -150,11 +147,7 @@ body {
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-.logo-img {
-  width: 100%; height: 100%;
-  border-radius: 1px;
-  object-fit: contain;
-}
+.logo-img { width: 100%; height: 100%; border-radius: 1px; object-fit: contain; }
 
 .role {
   font-family: var(--mono); font-size: 11px; font-weight: 500;
@@ -190,34 +183,40 @@ body {
 .bullets li strong { font-weight: 600; color: var(--ink); }
 
 /* ── BOTTOM ─────────────────────────────────────────────────────────────── */
-.spacer { flex: 1; min-height: 24px; }
+/* flex:1 spacer pushes bottom section to foot of page (works in both screen + print flex) */
+.spacer { flex: 1; min-height: 20px; }
 .bottom {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 0 40px; align-items: start;
 }
 
+/* Education — all on one row: [logo-box] DEGREE /SCHOOL  DATE */
 .edu-hdr { display: flex; align-items: flex-start; gap: 8px; }
-.edu-meta-row {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+.edu-content { flex: 1; min-width: 0; }
+.edu-row {
+  display: flex; align-items: baseline; gap: 7px;
+  flex-wrap: nowrap;   /* try single line first */
   margin-bottom: 4px;
+}
+.edu-deg {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);
+  white-space: nowrap;
 }
 .edu-co {
   font-family: var(--mono); font-size: 11px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
-  text-decoration: none; transition: color 0.15s;
+  text-decoration: none; transition: color 0.15s; white-space: nowrap;
 }
 .edu-co:hover { color: var(--accent); }
-.edu-deg {
-  font-family: var(--mono); font-size: 11px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);
-}
 .edu-date {
   font-family: var(--mono); font-size: 11px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3);
-  margin-left: auto;
+  white-space: nowrap; margin-left: auto;
 }
-.edu-desc { font-size: 13px; color: var(--ink-2); line-height: 1.65; margin-top: 4px; }
+.edu-desc { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
 
+/* Skills */
 .skills { display: flex; flex-direction: column; gap: 7px; }
 .sk { display: flex; font-size: 13px; line-height: 1.5; gap: 12px; }
 .sk-l {
@@ -238,29 +237,12 @@ body {
 }
 .toast.visible { opacity: 1; }
 
-/* ── DOWNLOAD ───────────────────────────────────────────────────────────── */
-.dl-inline {
-  font-family: var(--mono); font-size: 11px; font-weight: 500;
-  letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3);
-  background: transparent; cursor: pointer; border: none;
-  height: 34px; padding: 0 12px;
-  display: flex; align-items: center; gap: 5px;
-  white-space: nowrap; box-sizing: border-box;
-  transition: color 0.15s, background 0.15s;
-}
-.dl-inline:hover { color: var(--accent); background: var(--bg-card); }
-
 /* ── MOBILE ─────────────────────────────────────────────────────────────── */
 .dl-btn-mobile { display: none; }
 
 @media screen and (max-width: 700px) {
   body { padding: 24px 20px 100px; min-height: unset; }
-  .hdr-name, .hdr-line2 {
-    font-size: 22px;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-  }
+  .hdr-name, .hdr-line2 { font-size: 20px; }
   .hdr-links { flex-wrap: wrap; width: 100%; }
   .hl {
     flex: 1 1 40%; justify-content: center;
@@ -273,6 +255,8 @@ body {
   .exp-body { padding-left: 0; }
   .bottom { grid-template-columns: 1fr; }
   .spacer { display: none; }
+  .edu-row { flex-wrap: wrap; }
+  .edu-date { margin-left: 0; }
   .sk { flex-direction: column; gap: 2px; margin-bottom: 4px; }
   .sk-l { min-width: unset; }
   .dl-btn-mobile {
@@ -288,54 +272,47 @@ body {
   .dl-btn-mobile:active { background: var(--accent); }
 }
 
-/* ── PRINT — tightened to fit single A4 page ────────────────────────────── */
+/* ── PRINT — flex layout so spacer pushes bottom to foot of page ─────────── */
 @media print {
   html { background: var(--bg); }
   body {
     margin: 0;
-    padding: 11mm 14mm 10mm;
+    /* Use exact A4 height so flex spacer fills it to the bottom */
+    height: 297mm;
+    min-height: 0;
     max-width: none;
-    min-height: 0 !important;
-    display: block;       /* kill flex so spacer has no effect */
+    padding: 11mm 14mm 11mm;
+    /* Keep flex so spacer works */
+    display: flex;
+    flex-direction: column;
   }
 
-  /* Scale heading down for print */
-  .hdr-name, .hdr-line2 {
-    font-size: 22px;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-  }
-  .hdr { margin-bottom: 16px; }
-  .hdr-line2 { margin-bottom: 14px; }
+  .hdr-name, .hdr-line2 { font-size: 22px; }
+  .hdr { margin-bottom: 14px; }
+  .hdr-line2 { margin-bottom: 12px; }
+  .hdr-links { display: none; }   /* no interactive bar in PDF */
 
-  /* Tighter spacing */
-  .slabel { margin-top: 18px; margin-bottom: 12px; padding-bottom: 4px; }
-  .exp { margin-bottom: 14px; }
+  .slabel { margin-top: 16px; margin-bottom: 12px; padding-bottom: 4px; }
+  .exp { margin-bottom: 13px; }
   .exp-hdr { margin-bottom: 6px; }
   .exp-body { padding-left: 28px; }
   .intro { font-size: 12px; line-height: 1.6; margin-bottom: 6px; }
   .bullets { gap: 4px; }
   .bullets li { font-size: 12px; line-height: 1.55; }
 
-  /* Bottom */
-  .spacer { display: none !important; }
+  .spacer { flex: 1; min-height: 0; }  /* spreads content to use full page */
   .skills { gap: 5px; }
   .sk { font-size: 12px; }
   .sk-l { font-size: 12px; }
   .edu-desc { font-size: 12px; }
 
-  /* Hide interactive elements */
-  a { text-decoration: none; color: inherit; }
-  .dl-btn-mobile, .dl-inline { display: none !important; }
-
-  /* Preserve colors */
-  .logo-box { border: 1px solid var(--border) !important; background: var(--bg-card) !important; }
-  .slabel { border-bottom: 1px solid var(--accent) !important; }
-
-  /* Allow section to break if truly needed, but prefer keeping exp together */
+  a { text-decoration: none !important; }
+  a[href]::after { content: none !important; }
+  .dl-btn-mobile { display: none !important; }
   .exp { page-break-inside: avoid; }
   .bottom { page-break-inside: avoid; }
+  .logo-box { border: 1px solid var(--border) !important; background: var(--bg-card) !important; }
+  .slabel { border-bottom: 1px solid var(--accent) !important; }
 }
 @page { size: A4; margin: 0; }
 </style>
@@ -352,7 +329,6 @@ body {
     <span class="hl copyable" id="email-el" onclick="copyText('email')"></span>
     <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613 <span class="hl-icon">&#8853;</span></span>
     <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn <span class="hl-icon">&#8599;</span></a>
-    <button class="dl-inline" onclick="window.print()">Download as PDF <span class="hl-icon">&#8595;</span></button>
   </div>
 </header>
 
@@ -430,9 +406,9 @@ body {
   <div>
     <div class="slabel">Education</div>
     <div class="edu-hdr">
-      <div class="logo-box" style="flex-shrink:0;"><img class="logo-img" alt="University WSB" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt=""></div>
-      <div style="flex:1;min-width:0;">
-        <div class="edu-meta-row">
+      <div class="logo-box" style="flex-shrink:0;margin-top:1px;"><img class="logo-img" alt="University WSB" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAA4ADgDASIAAhEBAxEB/8QAGgABAAMBAQEAAAAAAAAAAAAAAAYHCAUDBP/EADAQAAEDAwIDBgQHAAAAAAAAAAEAAgMEBQYRIQcSMQgTQVFhkRQVgdEYIlJUcZOh/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIGAwQFAQj/xAAqEQACAQMCBAQHAAAAAAAAAAABAgADBBEhMQUGEkFRYYGhFSMyQnGxwf/aAAwDAQACEQMRAD8ArVERdWfRsL6DRVwj7w0FYGaa85gdy6eeunRdjh1YX5PnNosjGlzKioaZfSNu7j7BbQ+Z2K5Xq5YKGMM1PQNdLHoNO6eC0Afxt7rDUq9BxiVzjfMHwyoqLT6zjJ1xgZxnY95g9F08qtE1gya5WSdpa+iqXxDX9Ov5T7LmLLvLCjq6h12OsIiL2ShEQ8x2aCXHYAeJ8EiX32RbAwVt5zKsAbBSRGmgcfA6c0jvoAB9VGsFz+Q9oQ5LPKRSXOrfSuGuwiceVntoFZ14oK/BOzZDZ7VRVNRdK+ERvEEZc5r5d3uOnkNlnFmNZRFyuix+7NewhzHCmdsRuCtdcOWJ/EptgtHidW7uKrDpf5a5P2jv6nWWp2t8cNuzejyGGPSnukHdyEDbvWfduipVas4mUNRnnZ5guctJNDc6OBlUY5GEPa9mzxofMalZTBBAI6FSonK48Jv8r3TVbEUX+qmSp9Nvb9QiIs0scKYcGMeOT8S7PbXMLqeOX4mo9I2b/wCnQKHqacKc/n4e3Ctr6Oz01wqaqMRc80hb3bQdSBp5lRfODiaXERXNrUFuMuQQO2p09t5c/HHjJe8RzMWDHYaB7IIGuqHTsLtHu6AaHbZQP8RGfftrL/Q77qsclvFXkGQV17riPiK2YyvA6N16NHoFzlBaSgaicqy5asKVuiVaQZgBk+J7zVvAXifcOIVRd7HkkNE2ZsIfEIGlofG7UOBBJ1KzXnNlkxzMrvY5Bp8JVOaz1YTq0+xXvw+yquwvKafILfEyeWJrmOhe4hsjXDcEhe/EvL35xkvz6e1wW+odC2KVkLy4ScvRx18dNkVCrnG0WHCnsOI1GoKBRdRt2YeXn/ZGERFllihERIhERIhERIhERIn/2Q==" alt=""></div>
+      <div class="edu-content">
+        <div class="edu-row">
           <span class="edu-deg">BA of Management</span>
           <a href="https://wsb.edu.pl/en" class="edu-co" target="_blank">/University WSB</a>
           <span class="edu-date">2017 – 2020</span>
@@ -455,20 +431,18 @@ body {
 
 <script>
 var _data = {
-  email: { val: 'olafotrzasek' + String.fromCharCode(64) + 'gmail.com', orig: '', check: '' },
-  phone: { val: '732188613', orig: '732 188 613', check: '\u2713 732 188 613' }
+  email: { val: 'olafotrzasek' + String.fromCharCode(64) + 'gmail.com' },
+  phone: { val: '732188613' }
 };
 
 document.addEventListener('DOMContentLoaded', function() {
   var el = document.getElementById('email-el');
   if (el) {
-    _data.email.orig = _data.email.val;
-    _data.email.check = '\u2713 ' + _data.email.val;
     el.textContent = _data.email.val;
-    var icon = document.createElement('span');
-    icon.className = 'hl-icon';
-    icon.innerHTML = ' &#8853;';
-    el.appendChild(icon);
+    var ic = document.createElement('span');
+    ic.className = 'hl-icon';
+    ic.textContent = '⊕';
+    el.appendChild(ic);
     el.style.minWidth = el.offsetWidth + 'px';
   }
   var ph = document.getElementById('phone-el');
@@ -492,7 +466,7 @@ function showToast(msg, el) {
 function copyText(type) {
   var el = document.getElementById(type === 'email' ? 'email-el' : 'phone-el');
   navigator.clipboard.writeText(_data[type].val).then(function() {
-    showToast('\u2713 Copied', el);
+    showToast('✓ Copied', el);
   }).catch(function() { showToast('Failed', el); });
 }
 </script>
