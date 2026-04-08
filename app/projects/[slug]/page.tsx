@@ -205,12 +205,17 @@ export default function ProjectPage() {
           </div>
         </section>
 
-        {/* Overview */}
+        {/* Opportunity — includes overviewDiagram if present */}
         <section className="mb-12 pb-12 border-b border-border">
-          <SectionBadge>Overview</SectionBadge>
-          <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-pretty">
-            {project.overview}
-          </p>
+          <SectionBadge>Opportunity</SectionBadge>
+
+          <div className="space-y-4">
+            {project.opportunity.map((paragraph, index) => (
+              <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
+                {paragraph}
+              </p>
+            ))}
+          </div>
 
           {project.overviewDiagram && (
             <div className="mt-8 p-4 md:p-6 bg-card rounded-sm border border-border">
@@ -252,45 +257,13 @@ export default function ProjectPage() {
           )}
         </section>
 
-        {/* Opportunity */}
+        {/* Process */}
         <section className="mb-12 pb-12 border-b border-border">
-          <SectionBadge>Opportunity</SectionBadge>
-
-          {project.opportunityHeadline && (
-            <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] mb-4 text-pretty">
-              {project.opportunityHeadline}
-            </h2>
-          )}
-
-          <ul className="space-y-2 mb-4">
-            {project.opportunity.map((item, index) => (
-              <li key={index} className="flex gap-3 text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75]">
-                <span className="text-[var(--color-300)] shrink-0">•</span>
-                <span className="text-pretty">{item}</span>
-              </li>
-            ))}
-          </ul>
-
-          {project.opportunityFooter && (
-            <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] italic text-pretty">
-              {project.opportunityFooter}
-            </p>
-          )}
-        </section>
-
-        {/* Solution */}
-        <section className="mb-12 pb-12 border-b border-border">
-          <SectionBadge>Solution</SectionBadge>
-
-          {project.solutionHeadline && (
-            <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] mb-6 text-pretty">
-              {project.solutionHeadline}
-            </h2>
-          )}
+          <SectionBadge>Process</SectionBadge>
 
           <div className="space-y-4 mb-8">
             {project.solution.map((paragraph, index) => (
-              <p key={index} className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-pretty">
+              <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
                 {paragraph}
               </p>
             ))}
@@ -307,7 +280,7 @@ export default function ProjectPage() {
             <div key={index} className="relative w-full rounded-sm overflow-hidden border border-border mt-6" style={{ backgroundColor: 'var(--color-000)' }}>
               <ClickableImage
                 src={img}
-                alt={`Solution ${index + 1}`}
+                alt={`Process image ${index + 1}`}
                 width={680}
                 height={425}
                 className="w-full h-auto"
@@ -316,9 +289,9 @@ export default function ProjectPage() {
           ))}
         </section>
 
-        {/* Results */}
+        {/* Impact */}
         <section className="mb-12 pb-12 border-b border-border">
-          <SectionBadge>Results</SectionBadge>
+          <SectionBadge>Impact</SectionBadge>
 
           <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] text-pretty">
             {project.results.headline}
@@ -369,10 +342,10 @@ export default function ProjectPage() {
           </div>
         </section>
 
-        {/* Next Steps */}
+        {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-12 pb-12 border-b border-border">
-            <SectionBadge>Next Steps</SectionBadge>
+            <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
