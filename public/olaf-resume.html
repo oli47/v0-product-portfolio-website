@@ -226,6 +226,19 @@ body {
 .sk-v { color: var(--ink-2); }
 .sk-v strong { font-weight: 600; color: var(--ink); }
 
+.dl-inline {
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--ink-3); background: transparent;
+  cursor: pointer; border: none;
+  height: 34px; padding: 0 12px;
+  display: flex; align-items: center; gap: 5px;
+  white-space: nowrap; box-sizing: border-box;
+  transition: color 0.15s, background 0.15s;
+}}
+.dl-inline:hover {{ color: var(--accent); background: var(--bg-card); }}
+
 /* ── TOAST ──────────────────────────────────────────────────────────────── */
 .toast {
   position: fixed; font-family: var(--mono); font-size: 10px;
@@ -329,6 +342,7 @@ body {
     <span class="hl copyable" id="email-el" onclick="copyText('email')"></span>
     <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613 <span class="hl-icon">&#8853;</span></span>
     <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn <span class="hl-icon">&#8599;</span></a>
+    <button class="dl-inline" onclick="window.print()">Download as PDF <span class="hl-icon">&#8595;</span></button>
   </div>
 </header>
 
