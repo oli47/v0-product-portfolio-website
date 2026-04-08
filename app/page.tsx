@@ -7,7 +7,7 @@ import { SectionBadge } from '@/components/section-badge'
 import { FadeUp } from '@/components/fade-up'
 import { ProjectRow, ProjectRowSoon } from '@/components/project-row'
 import { content, defaultLang } from '@/lib/content'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 
 const t = content[defaultLang]
 
@@ -56,9 +56,40 @@ const EXPERIENCE = [
 
 type CopiedId = 'email' | 'phone' | null
 
+// ── Scramble hook ────────────────────────────────────────────────────────────
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+function useScramble(word: string) {
+  const spanRef  = useRef<HTMLSpanElement>(null)
+  const timerId  = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const scramble = useCallback(() => {
+    const el = spanRef.current
+    if (!el) return
+    if (timerId.current) clearInterval(timerId.current)
+    let n = 0; const max = 14
+    timerId.current = setInterval(() => {
+      el.textContent = word.split('').map((c, i) =>
+        n / max > i / word.length ? c : CHARS[Math.floor(Math.random() * 26)]
+      ).join('')
+      if (++n > max) { clearInterval(timerId.current!); el.textContent = word }
+    }, 28)
+  }, [word])
+
+  const reset = useCallback(() => {
+    if (timerId.current) clearInterval(timerId.current)
+    if (spanRef.current) spanRef.current.textContent = word
+  }, [word])
+
+  useEffect(() => () => { if (timerId.current) clearInterval(timerId.current) }, [])
+
+  return { spanRef, scramble, reset }
+}
+
 function ContactBar() {
   const [copiedId, setCopiedId] = useState<CopiedId>(null)
   const [progressKey, setProgressKey] = useState(0)
+  const resume   = useScramble(t.contact.resume)
+  const linkedin = useScramble(t.contact.linkedin)
 
   const copy = useCallback((text: string, id: CopiedId) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -70,76 +101,70 @@ function ContactBar() {
 
   const baseItem =
     'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-200 hover:bg-[var(--color-000)] overflow-hidden'
-  const label = 'text-eyebrow text-[var(--color-300)] transition-colors duration-150'
-  const icon  = 'font-mono text-[0.75rem] leading-[1.25rem] text-[var(--color-200)]'
-  const arrow = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
-
-  const CopiedOverlay = ({ id }: { id: CopiedId }) =>
-    copiedId === id ? (
-      <>
-        <span className="text-eyebrow text-[var(--accent)]">
-          {t.contact.copied}
-        </span>
-        {/* Progress bar depleting along the bottom border */}
-        <span
-          key={progressKey}
-          className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]"
-        />
-      </>
-    ) : null
+  const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-150'
+  const icon     = 'font-mono text-[0.75rem] leading-[1.25rem] text-[var(--color-200)]'
+  const arrow    = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
 
   return (
     <div className="flex border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden w-fit">
 
-      {/* Resume */}
+      {/* Resume — scramble on hover */}
       <a
         href="#"
         target="_blank"
         rel="noopener noreferrer"
         className={`${baseItem} border-l-0 cursor-pointer`}
+        onMouseEnter={resume.scramble}
+        onMouseLeave={resume.reset}
       >
-        <span className={label}>{t.contact.resume}</span>
+        <span ref={resume.spanRef} className={labelCls}>{t.contact.resume}</span>
         <span className={arrow}>↗</span>
       </a>
 
-      {/* Email */}
+      {/* Email — fixed width: show original invisible to hold space, copied state absolute */}
       <button
         onClick={() => copy(t.contact.email, 'email')}
         className={`${baseItem} cursor-pointer`}
       >
-        {copiedId === 'email' ? (
-          <CopiedOverlay id="email" />
-        ) : (
-          <>
-            <span className={label}>{t.contact.email}</span>
-            <span className={icon}>⧉</span>
-          </>
+        <span className={`flex items-center gap-1.5 ${copiedId === 'email' ? 'invisible' : ''}`}>
+          <span className={labelCls}>{t.contact.email}</span>
+          <span className={icon}>⧉</span>
+        </span>
+        {copiedId === 'email' && (
+          <span className="absolute inset-0 flex items-center px-3">
+            <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
+            <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
+          </span>
         )}
       </button>
 
-      {/* Phone */}
+      {/* Phone — fixed width: same approach */}
       <button
         onClick={() => copy(t.contact.phoneRaw, 'phone')}
         className={`${baseItem} cursor-pointer`}
       >
-        {copiedId === 'phone' ? (
-          <CopiedOverlay id="phone" />
-        ) : (
-          <>
-            <span className={label}>{t.contact.phone}</span>
-            <span className={icon}>⧉</span>
-          </>
+        <span className={`flex items-center gap-1.5 ${copiedId === 'phone' ? 'invisible' : ''}`}>
+          <span className={labelCls}>{t.contact.phone}</span>
+          <span className={icon}>⧉</span>
+        </span>
+        {copiedId === 'phone' && (
+          <span className="absolute inset-0 flex items-center px-3">
+            <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
+            <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
+          </span>
         )}
       </button>
 
-      {/* LinkedIn */}
+      {/* LinkedIn — scramble on hover */}
       <a
         href="https://www.linkedin.com/in/olafotrzasek/"
         target="_blank"
         rel="noopener noreferrer"
         className={`${baseItem} cursor-pointer`}
+        onMouseEnter={linkedin.scramble}
+        onMouseLeave={linkedin.reset}
       >
-        <span className={label}>{t.contact.linkedin}</span>
+        <span ref={linkedin.spanRef} className={labelCls}>{t.contact.linkedin}</span>
         <span className={arrow}>↗</span>
       </a>
     </div>
@@ -222,9 +247,7 @@ export default function Home() {
         {/* ── Selected Projects ── */}
         <section className="mb-16">
           <FadeUp delay={0}>
-            <div className="mb-6">
-              <SectionBadge>{t.sections.projects}</SectionBadge>
-            </div>
+            <SectionBadge>{t.sections.projects}</SectionBadge>
           </FadeUp>
 
           <FadeUp delay={0.06}>
@@ -249,9 +272,7 @@ export default function Home() {
         {/* ── Currently ── */}
         <section className="mb-16">
           <FadeUp delay={0}>
-            <div className="mb-6">
-              <SectionBadge>{t.sections.currently}</SectionBadge>
-            </div>
+            <SectionBadge>{t.sections.currently}</SectionBadge>
           </FadeUp>
           <FadeUp delay={0.08}>
             <p className="text-body-1 text-[var(--color-300)] text-pretty">
@@ -263,9 +284,7 @@ export default function Home() {
         {/* ── Experience ── */}
         <section className="mb-0">
           <FadeUp delay={0}>
-            <div className="mb-6">
-              <SectionBadge>{t.sections.experience}</SectionBadge>
-            </div>
+            <SectionBadge>{t.sections.experience}</SectionBadge>
           </FadeUp>
 
           <div className="flex flex-col gap-6">

@@ -2,8 +2,6 @@
 // To add PL: duplicate the `en` block below, translate, then wire
 // up a language context/hook and pass `lang` to the page.
 
-export type Lang = 'en' | 'pl'
-
 export const content = {
   en: {
     nav: {
@@ -45,4 +43,5 @@ export const content = {
   // pl: { ... } — TODO: Polish translations
 } as const
 
+export type Lang = keyof typeof content
 export const defaultLang: Lang = 'en'

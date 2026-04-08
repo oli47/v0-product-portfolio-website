@@ -142,17 +142,16 @@ export default function ProjectPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Back link */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm">
-        <div className="max-w-[680px] mx-auto px-6 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-wide text-text-caption hover:text-foreground transition-colors">
-            <span>←</span>
-            <span>Back</span>
-          </Link>
-        </div>
-      </div>
+      <div className="max-w-[45rem] mx-auto px-5 pt-20 pb-16">
 
-      <div className="max-w-[680px] mx-auto px-6 pt-24 pb-16">
+        {/* Back link */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-150 mb-10"
+        >
+          <span>←</span>
+          <span>Back</span>
+        </Link>
         {/* Header */}
         <section className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-0 mb-8">
@@ -401,16 +400,6 @@ export default function ProjectPage() {
           </Link>
         </div>
 
-        {/* Footer */}
-        <footer className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8 pt-8 border-t border-border text-[11px] font-mono text-text-caption">
-          <span className="text-center md:text-left">© 2026 Olaf Otrząsek</span>
-          <span className="text-center md:text-center">
-            Built with{' '}
-            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Claude</a>
-            {' and '}
-            <a href="https://v0.dev" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">v0.dev</a>
-          </span>
-        </footer>
       </div>
     </main>
   )

@@ -4,12 +4,6 @@ import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { useEffect, useState, useRef, useCallback } from 'react'
 
-// startViewTransition is not yet in all TS lib defs
-declare global {
-  interface Document {
-    startViewTransition?: (cb: () => void) => { finished: Promise<void> }
-  }
-}
 import { content, defaultLang } from '@/lib/content'
 
 const t = content[defaultLang].nav
