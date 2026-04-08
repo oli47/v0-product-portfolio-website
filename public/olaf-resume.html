@@ -120,6 +120,7 @@ body {
   line-height: 1;
 }
 
+.phone-print { display: none; }
 /* ── SECTION BADGE ──────────────────────────────────────────────────────── */
 .slabel {
   font-family: var(--mono);
@@ -335,6 +336,10 @@ body {
 
   a { text-decoration: none !important; }
   .dl-inline { display: none !important; }
+  .hl-copy { display: none !important; }
+  .hl-arrow { display: none !important; }
+  .phone-screen { display: none; }
+  .phone-print { display: inline; }
   a[href]::after { content: none !important; }
   .dl-btn-mobile { display: none !important; }
   .exp { page-break-inside: avoid; }
@@ -355,7 +360,7 @@ body {
   <div class="hdr-links">
     <a href="https://olafotrzasek.com" class="hl" target="_blank">Portfolio <span class="hl-arrow">&#8599;</span></a>
     <span class="hl copyable" id="email-el" onclick="copyText('email')"></span>
-    <span class="hl copyable" id="phone-el" onclick="copyText('phone')">732 188 613 <span class="hl-copy">⧉</span></span>
+    <span class="hl copyable" id="phone-el" onclick="copyText('phone')"><span class="phone-screen">732 188 613</span><span class="phone-print">732188613</span></span>
     <a href="https://linkedin.com/in/olafotrzasek" class="hl" target="_blank">LinkedIn <span class="hl-arrow">&#8599;</span></a>
     <button class="dl-inline" onclick="window.print()">Download as PDF <span class="hl-arrow">&#8595;</span></button>
   </div>
