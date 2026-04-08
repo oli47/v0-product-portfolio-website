@@ -251,6 +251,7 @@ body {
 .toast.visible { opacity: 1; }
 
 /* ── MOBILE ─────────────────────────────────────────────────────────────── */
+.spacer-top { display: none; }   /* hidden on screen, shown in print */
 .dl-btn-mobile { display: none; }
 
 @media screen and (max-width: 700px) {
@@ -303,7 +304,6 @@ body {
   .hdr-name, .hdr-line2 { font-size: 24px; }
   .hdr { margin-bottom: 14px; }
   .hdr-line2 { margin-bottom: 12px; }
-  .hdr-links { display: none; }   /* no interactive bar in PDF */
 
   .slabel { margin-top: 16px; margin-bottom: 12px; padding-bottom: 4px; }
   .exp { margin-bottom: 13px; }
@@ -313,13 +313,15 @@ body {
   .bullets { gap: 4px; }
   .bullets li { font-size: 12px; line-height: 1.55; }
 
-  .spacer { flex: 1; min-height: 0; }  /* spreads content to use full page */
+  .spacer-top { display: block; flex: 1; min-height: 0; }  /* equal gap above experience */
+  .spacer { flex: 1; min-height: 0; }  /* equal gap above education */
   .skills { gap: 5px; }
   .sk { font-size: 12px; }
   .sk-l { font-size: 12px; }
   .edu-desc { font-size: 12px; }
 
   a { text-decoration: none !important; }
+  .dl-inline { display: none !important; }
   a[href]::after { content: none !important; }
   .dl-btn-mobile { display: none !important; }
   .exp { page-break-inside: avoid; }
@@ -346,6 +348,7 @@ body {
   </div>
 </header>
 
+<div class="spacer-top"></div>
 <div class="slabel">Experience</div>
 
 <div class="exp">
