@@ -22,9 +22,6 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   title: 'Olaf Otrząsek • Design',
   description: 'Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed.',
-  icons: {
-    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
-  },
 }
 
 export const viewport: Viewport = {

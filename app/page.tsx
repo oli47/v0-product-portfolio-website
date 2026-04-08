@@ -187,7 +187,7 @@ function ScrollToTop() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      <div className="max-w-[45rem] mx-auto px-5 pt-[7.5rem] pb-24">
+      <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-24">
 
         {/* ── Hero ── */}
         <section className="mb-16">
