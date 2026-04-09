@@ -1,3 +1,22 @@
+// ─── Process content block types ────────────────────────────────────────────
+
+export interface ProcessStep {
+  num: string
+  title: string
+  description: string
+  imageSrc?: string   // undefined = placeholder
+}
+
+export type ProcessBlock =
+  | { kind: 'text'; content: string }
+  | { kind: 'heading'; content: string }
+  | { kind: 'image'; src: string; caption?: string }
+  | { kind: 'placeholder'; caption?: string }
+  | { kind: 'steps'; items: ProcessStep[] }
+  | { kind: 'compare'; before: string; after: string; caption?: string }
+
+// ─── Project interface ───────────────────────────────────────────────────────
+
 export interface Project {
   slug: string
   title: string
@@ -23,10 +42,10 @@ export interface Project {
     after: string
     caption: string
   }
-  opportunityHeadline?: string
   opportunity: string[]
-  opportunityFooter?: string
-  solutionHeadline?: string
+  opportunityExtra?: string[]   // shown after overviewDiagram
+  processContent?: ProcessBlock[]
+  // legacy fields (fallback if processContent not set)
   solution: string[]
   hasCompareSlider?: boolean
   compareSliderImages?: {
@@ -56,6 +75,8 @@ export interface Project {
   }[]
 }
 
+// ─── Projects ────────────────────────────────────────────────────────────────
+
 export const projects: Project[] = [
   {
     slug: 'freemium-activation',
@@ -77,13 +98,63 @@ export const projects: Project[] = [
     opportunity: [
       'edrone is a marketing automation CRM for ecommerce. The platform had no way for a new user to try the product without going through Sales. Every account required a demo, a proposal, a handoff to Support. Amplitude showed consistent inbound traffic bouncing before reaching Sales. Website conversion sat at 0.05%. Users were arriving and leaving without ever seeing the product.',
     ],
-    solution: [
-      'Without identified contacts, automations fire at a fraction of their potential. Without a first attributed order, the value of the product stays invisible. The original flow started with integration — connect your ecommerce platform to edrone, then see what the product does. Users had to trust edrone before edrone gave them a reason to.',
-      'I reversed the sequence. Account creation first via email, Google, or Shopify. Then AI-generated content from the store\'s brand — ready-to-send newsletters, automations, and pop-ups. Users see what the product can do for their store before connecting anything. Feature activation based on what they already see working. Integration comes last, after value is demonstrated.',
-      'The aha moment is the first attributed order appearing in the dashboard. That is when the upgrade decision becomes obvious. Free tier: 500 messages per month. Upgrade: two clicks via Stripe.',
-      'One designer, five engineers. Built end-to-end in six months with zero prior self-serve infrastructure.',
+    solution: [],
+    processContent: [
+      {
+        kind: 'text',
+        content: 'Without identified contacts, automations fire at a fraction of their potential. Without a first attributed order, the value of the product stays invisible. The original flow started with integration: connect your ecommerce platform to edrone, then see what the product does. Users had to trust edrone before edrone gave them a reason to.',
+      },
+      {
+        kind: 'text',
+        content: "I reversed the sequence. Account creation first via email, Google, or Shopify. Then AI-generated content from the store's brand, including ready-to-send newsletters, automations, and pop-ups. Users see what the product can do for their store before connecting anything. Feature activation based on what they already see working. Integration comes last, after value is demonstrated.",
+      },
+      {
+        kind: 'placeholder',
+        caption: 'Original flow started with integration. The redesigned flow starts with value.',
+      },
+      {
+        kind: 'heading',
+        content: 'The full activation path has five steps:',
+      },
+      {
+        kind: 'steps',
+        items: [
+          {
+            num: '01',
+            title: 'Create an account',
+            description: 'Get started with email, Google, or Shopify. Account created immediately, no demo, no sales call.',
+          },
+          {
+            num: '02',
+            title: 'Create AI-powered branded content',
+            description: "edrone reads the store's brand and generates ready-to-send newsletters, automations, and pop-ups. Users see what the product can do for their store before connecting anything.",
+          },
+          {
+            num: '03',
+            title: 'Activation',
+            description: "Browse ready-to-use features. Users choose what to turn on based on what they've already seen, not based on instructions.",
+          },
+          {
+            num: '04',
+            title: 'Integration',
+            description: "Connect the ecommerce platform to edrone. This step comes after users have already experienced the product's value, not before. This sequencing was the core design decision.",
+          },
+          {
+            num: '05',
+            title: 'AHA Moment',
+            description: "Get your first order and see edrone's value. The moment an attributed order appears is when the upgrade decision becomes obvious.",
+          },
+        ],
+      },
+      {
+        kind: 'text',
+        content: 'The aha moment is the first attributed order appearing in the dashboard. That is when the upgrade decision becomes obvious. Free tier: 500 messages per month. Upgrade: two clicks via Stripe.',
+      },
+      {
+        kind: 'text',
+        content: 'One designer, five engineers. Built end-to-end in six months with zero prior self-serve infrastructure.',
+      },
     ],
-    solutionImages: ['/images/freemium-hero.png'],
     results: {
       headline: '4,657 freemium accounts in 10 months. 78% activation rate.',
       subheadline: '9x faster time to first attributed order. CAC reduced 20x vs the previous sales-led model.',
@@ -133,17 +204,25 @@ export const projects: Project[] = [
     thumbnailImage: '/thumbnails/signup-redesign.png',
     overview: '',
     opportunity: [
-      'edrone is a marketing automation CRM for ecommerce. The platform had just launched its first self-serve freemium tier, but the signup form was still built for the sales-led era — designed to qualify leads, not activate users. Amplitude funnels showed massive drop-off at the registration form. Mobile conversion sat at 0.05%.',
+      'edrone is a marketing automation CRM for ecommerce. The platform had just launched its first self-serve freemium tier, but the signup form was still built for the sales-led era. Designed to qualify leads, not activate users. Amplitude funnels showed massive drop-off at the registration form. Mobile conversion sat at 0.05%.',
     ],
-    solution: [
-      'I had our Senior Product Data Analyst run a full audit of the signup flow. The data confirmed what I suspected: the phone number field was the primary drop-off point. A check with Sales confirmed they had not used it for qualification in months. Google SSO was also silently broken — the single-page layout could not handle the redirect, so the fastest signup path was failing with no error state.',
-      'I made one call: remove the field and restructure the form into two steps at the same time rather than running sequential A/B tests. Step 1 creates the account via email or Google SSO. Step 2 collects the store URL. This fixed SSO at a structural level rather than as a patch. Built in Codex, shipped after a single code review.',
+    solution: [],
+    processContent: [
+      {
+        kind: 'text',
+        content: 'I had our Senior Product Data Analyst run a full audit of the signup flow. The data confirmed what I suspected: the phone number field was the primary drop-off point. A check with Sales confirmed they had not used it for qualification in months. Google SSO was also silently broken. The single-page layout could not handle the redirect, so the fastest signup path was failing with no error state.',
+      },
+      {
+        kind: 'compare',
+        before: '/images/signup-old.jpg',
+        after: '/images/signup-new1.jpg',
+        caption: 'Before: a single-page form built for lead qualification. After: two steps built for activation.',
+      },
+      {
+        kind: 'text',
+        content: 'I made one call: remove the field and restructure the form into two steps at the same time rather than running sequential A/B tests. Step 1 creates the account via email or Google SSO. Step 2 collects the store URL. This fixed SSO at a structural level rather than as a patch. Built in Codex, shipped after a single code review.',
+      },
     ],
-    hasCompareSlider: true,
-    compareSliderImages: {
-      before: '/images/signup-old.jpg',
-      after: '/images/signup-new1.jpg',
-    },
     results: {
       headline: '+67% total signup conversion. Desktop doubled. Mobile went from 0.05% to 3%.',
       subheadline: 'Results confirmed within 7 days.',
@@ -177,23 +256,46 @@ export const projects: Project[] = [
       duration: '8 days',
       date: '2026',
     },
-    coverImage: '/thumbnails/contacts-activation.png',
-    thumbnailImage: '/thumbnails/contacts-activation.png',
+    coverImage: '/images/ci-cover.png',
+    thumbnailImage: '/images/ci-cover.png',
     overview: '',
     overviewDiagram: {
       before: 'Unidentified\ncontact',
       action: 'Opens email',
       after: 'John Doe\nj.doe@mail.com',
-      caption: 'Imported contacts are initially unidentified. They become identified only after opening an email, which triggers a tracking pixel. This lets edrone recognize them on the store\'s website and send automated messages that convert 10x better than newsletters.',
+      caption: "Imported contacts are initially unidentified. They become identified only after opening an email, which triggers a tracking pixel. This lets edrone recognize them on the store's website and send automated messages that convert 10x better than newsletters.",
     },
     opportunity: [
       'edrone is a marketing automation CRM for ecommerce. Contacts in edrone start anonymous — they become identified only after opening an email, which fires a tracking pixel and links them to their browsing activity. Without identified contacts, automations run at a fraction of their potential. Setting this up was the most requested Support task for every new customer, handled manually, one account at a time. Zero scalability.',
     ],
-    solution: [
-      'The obvious approach would have been to explain identification during onboarding — walk users through tracking pixels and newsletter mechanics. I skipped that. Instead I designed a dedicated screen that explains what identification is, why it matters, and activates it automatically 3 days after account creation. The first identification email sends itself. Users do not need to understand the infrastructure — they see results.',
-      'The hardest part was the email itself: infrastructure sent to the user\'s entire contact base every 30 days on their behalf. I needed it to feel lightweight, not heavy. The solution was a visual treatment that merges the automation and newsletter concepts into a single interface, intentionally distinct from the standard automation builder. Built the entire frontend in Codex; backend dev handled the sending mechanism. One Support person consulted throughout. Shipped in about a week and a half.',
+    opportunityExtra: [
+      "Contacts in edrone are initially anonymous. They become identified only after opening an email, which fires a tracking pixel, links the contact to their browsing activity, and enables the full automation suite. Identified contacts convert significantly better than newsletter recipients alone. Without identification, automations run at a fraction of their potential.",
     ],
-    solutionImages: ['/images/contacts-dashboard-1.png', '/images/contacts-dashboard-2.png'],
+    solution: [],
+    processContent: [
+      {
+        kind: 'text',
+        content: 'The obvious approach would have been to explain identification during onboarding — walking users through tracking pixels and newsletter mechanics. I skipped that. Instead I designed a dedicated screen that explains what identification is, why it matters, and activates it automatically 3 days after account creation. The first identification email sends itself. Users do not need to understand the infrastructure. They see results.',
+      },
+      {
+        kind: 'image',
+        src: '/images/ci-dashboard.png',
+        caption: 'The identification screen. Explains the mechanism, activates automatically after 3 days.',
+      },
+      {
+        kind: 'text',
+        content: "The hardest part was the email itself: infrastructure sent to the user's entire contact base every 30 days on their behalf. I needed it to feel lightweight, not heavy. The solution was a visual treatment that merges the automation and newsletter concepts into a single interface, intentionally distinct from the standard automation builder.",
+      },
+      {
+        kind: 'image',
+        src: '/images/ci-email.png',
+        caption: 'The identification email. Sent every 30 days. Designed to feel lightweight, not like infrastructure.',
+      },
+      {
+        kind: 'text',
+        content: 'Built the entire frontend in Codex; backend dev handled the sending mechanism. One Support person consulted throughout. Shipped in about a week and a half.',
+      },
+    ],
     results: {
       headline: '95% feature adoption. Identification rate went from 3.1% to 3.7% globally (+19%), and 4.1% for accounts onboarded after launch.',
       metrics: [

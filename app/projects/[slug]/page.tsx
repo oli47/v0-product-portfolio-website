@@ -4,11 +4,13 @@ import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProject, getProjectNavigation } from '@/lib/projects'
+import type { ProcessBlock } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
 import { useScramble } from '@/lib/use-scramble'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-// Lightbox Component
+// ─── Lightbox ────────────────────────────────────────────────────────────────
+
 function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -44,7 +46,8 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
   )
 }
 
-// Clickable image wrapper
+// ─── Clickable image ─────────────────────────────────────────────────────────
+
 function ClickableImage({ src, alt, width, height, className, priority }: {
   src: string; alt: string; width: number; height: number; className?: string; priority?: boolean
 }) {
@@ -65,7 +68,31 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
   )
 }
 
-// Compare Slider Component
+// ─── Placeholder image ───────────────────────────────────────────────────────
+
+function PlaceholderImage({ className }: { className?: string }) {
+  return (
+    <div
+      className={`w-full flex items-center justify-center border border-dashed border-[var(--color-100)] rounded-sm bg-[var(--color-000)] ${className ?? ''}`}
+      style={{ minHeight: '220px' }}
+    >
+      <span className="text-eyebrow text-[var(--color-200)]">Image placeholder</span>
+    </div>
+  )
+}
+
+// ─── Image caption ───────────────────────────────────────────────────────────
+
+function Caption({ text }: { text: string }) {
+  return (
+    <p className="text-[11px] font-mono text-[var(--color-300)] mt-3 text-pretty">
+      {text}
+    </p>
+  )
+}
+
+// ─── Compare Slider ──────────────────────────────────────────────────────────
+
 function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; afterImage: string }) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
@@ -101,7 +128,7 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
   return (
     <div
       ref={containerRef}
-      className="relative w-full rounded-sm overflow-hidden border border-border select-none cursor-ew-resize"
+      className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] select-none cursor-ew-resize"
       style={{ aspectRatio: '16/10' }}
       onMouseDown={() => setIsDragging(true)}
       onTouchStart={() => setIsDragging(true)}
@@ -111,21 +138,117 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
         <Image src={beforeImage} alt="Before" fill className="object-cover" />
       </div>
       <div
-        className="absolute top-0 bottom-0 w-[2px] bg-foreground z-10"
+        className="absolute top-0 bottom-0 w-[2px] bg-[var(--color-500)] z-10"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-background rounded-sm shadow-md flex items-center justify-center border border-border">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-foreground">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-[var(--background)] rounded-sm shadow-md flex items-center justify-center border border-[var(--color-100)]">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-[var(--color-400)]">
             <path d="M7 6L3 10L7 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M13 6L17 10L13 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
-      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">Before</div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-foreground bg-background px-2 py-1 rounded-sm shadow-sm z-20 border border-border">After</div>
+      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">Before</div>
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">After</div>
     </div>
   )
 }
+
+// ─── Process block renderer ───────────────────────────────────────────────────
+
+function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
+  return (
+    <div className="space-y-0">
+      {blocks.map((block, i) => {
+        switch (block.kind) {
+          case 'text':
+            return (
+              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-4">
+                {block.content}
+              </p>
+            )
+
+          case 'heading':
+            return (
+              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-6">
+                {block.content}
+              </p>
+            )
+
+          case 'placeholder':
+            return (
+              <div key={i} className="mt-6 mb-2">
+                <PlaceholderImage />
+                {block.caption && <Caption text={block.caption} />}
+              </div>
+            )
+
+          case 'image':
+            return (
+              <div key={i} className="mt-6 mb-2">
+                <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)]" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <ClickableImage
+                    src={block.src}
+                    alt={block.caption ?? 'Process image'}
+                    width={680}
+                    height={425}
+                    className="w-full h-auto"
+                  />
+                </div>
+                {block.caption && <Caption text={block.caption} />}
+              </div>
+            )
+
+          case 'compare':
+            return (
+              <div key={i} className="mt-6 mb-2">
+                <CompareSlider beforeImage={block.before} afterImage={block.after} />
+                {block.caption && <Caption text={block.caption} />}
+              </div>
+            )
+
+          case 'steps':
+            return (
+              <div key={i} className="space-y-8 mt-2 mb-6">
+                {block.items.map((step, j) => (
+                  <div key={j} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                    {/* Image or placeholder — narrower on desktop */}
+                    <div className="w-full sm:w-[44%] shrink-0">
+                      {step.imageSrc ? (
+                        <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)]" style={{ backgroundColor: 'var(--color-000)' }}>
+                          <ClickableImage
+                            src={step.imageSrc}
+                            alt={step.title}
+                            width={300}
+                            height={200}
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      ) : (
+                        <PlaceholderImage className="h-full" />
+                      )}
+                    </div>
+
+                    {/* Number + title + description */}
+                    <div className="flex flex-col gap-1.5 justify-center">
+                      <span className="text-eyebrow text-[var(--accent)]">{step.num}</span>
+                      <h4 className="text-[15px] font-medium text-[var(--color-500)] leading-snug">{step.title}</h4>
+                      <p className="text-[13px] text-[var(--color-300)] leading-[1.7] text-pretty">{step.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+
+          default:
+            return null
+        }
+      })}
+    </div>
+  )
+}
+
+// ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function ProjectPage() {
   const params = useParams()
@@ -140,7 +263,6 @@ export default function ProjectPage() {
   const prevLabel = useScramble(prev.title)
   const nextLabel = useScramble(next.title)
 
-  // metrics grid: 3-col if exactly 3 metrics and no northStar, else 2-col
   const metricsGridCols = project.results.metrics.length === 3
     ? 'grid-cols-1 md:grid-cols-3'
     : 'grid-cols-1 md:grid-cols-2'
@@ -159,6 +281,7 @@ export default function ProjectPage() {
           <span>←</span>
           <span ref={backLabel.spanRef}>Back</span>
         </Link>
+
         {/* Header */}
         <section className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-0 mb-8">
@@ -173,7 +296,7 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-sm overflow-hidden border border-border mb-8" style={{ backgroundColor: 'var(--color-000)' }}>
+          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] mb-8" style={{ backgroundColor: 'var(--color-000)' }}>
             <ClickableImage
               src={project.coverImage}
               alt={project.title}
@@ -185,28 +308,28 @@ export default function ProjectPage() {
           </div>
 
           {/* Meta row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-b border-border">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-b border-[var(--color-100)]">
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Role</p>
+              <p className="text-eyebrow text-[var(--color-300)] mb-1">Role</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.role}</p>
             </div>
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Team</p>
+              <p className="text-eyebrow text-[var(--color-300)] mb-1">Team</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.team}</p>
             </div>
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Duration</p>
+              <p className="text-eyebrow text-[var(--color-300)] mb-1">Duration</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.duration}</p>
             </div>
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-wide text-[var(--color-300)] mb-1">Date</p>
+              <p className="text-eyebrow text-[var(--color-300)] mb-1">Date</p>
               <p className="text-[12px] md:text-[14px]">{project.meta.date}</p>
             </div>
           </div>
         </section>
 
-        {/* Opportunity — includes overviewDiagram if present */}
-        <section className="mb-12 pb-12 border-b border-border">
+        {/* Opportunity */}
+        <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
           <SectionBadge>Opportunity</SectionBadge>
 
           <div className="space-y-4">
@@ -218,10 +341,10 @@ export default function ProjectPage() {
           </div>
 
           {project.overviewDiagram && (
-            <div className="mt-8 p-4 md:p-6 bg-card rounded-sm border border-border">
+            <div className="mt-8 p-4 md:p-6 bg-[var(--color-000)] rounded-sm border border-[var(--color-100)]">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-border rounded-sm flex items-center justify-center mb-2 mx-auto">
+                  <div className="w-12 h-12 bg-[var(--color-100)] rounded-sm flex items-center justify-center mb-2 mx-auto">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <circle cx="12" cy="8" r="4" />
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
@@ -230,7 +353,7 @@ export default function ProjectPage() {
                   <p className="text-[12px] text-[var(--color-300)] whitespace-pre-line">{project.overviewDiagram.before}</p>
                 </div>
                 <div className="flex-1 w-full md:flex md:items-center md:gap-2">
-                  <div className="h-px md:flex-1 bg-border border-dashed mb-2 md:mb-0" />
+                  <div className="h-px md:flex-1 bg-[var(--color-100)] mb-2 md:mb-0" />
                   <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded-sm flex items-center gap-2 shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -238,7 +361,7 @@ export default function ProjectPage() {
                     </svg>
                     {project.overviewDiagram.action}
                   </div>
-                  <div className="h-px md:flex-1 bg-border border-dashed mt-2 md:mt-0" />
+                  <div className="h-px md:flex-1 bg-[var(--color-100)] mt-2 md:mt-0" />
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-[var(--accent)]/10 rounded-sm flex items-center justify-center mb-2 mx-auto">
@@ -247,7 +370,7 @@ export default function ProjectPage() {
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
                   </div>
-                  <p className="text-[12px] text-foreground font-medium whitespace-pre-line">{project.overviewDiagram.after}</p>
+                  <p className="text-[12px] text-[var(--color-500)] font-medium whitespace-pre-line">{project.overviewDiagram.after}</p>
                 </div>
               </div>
               <p className="text-[12px] text-[var(--color-300)] text-center italic">
@@ -255,45 +378,61 @@ export default function ProjectPage() {
               </p>
             </div>
           )}
+
+          {project.opportunityExtra && project.opportunityExtra.length > 0 && (
+            <div className="space-y-4 mt-6">
+              {project.opportunityExtra.map((paragraph, index) => (
+                <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Process */}
-        <section className="mb-12 pb-12 border-b border-border">
+        <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
           <SectionBadge>Process</SectionBadge>
 
-          <div className="space-y-4 mb-8">
-            {project.solution.map((paragraph, index) => (
-              <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
-                {paragraph}
-              </p>
-            ))}
-          </div>
+          {project.processContent ? (
+            <ProcessBlocks blocks={project.processContent} />
+          ) : (
+            <>
+              <div className="space-y-4 mb-8">
+                {project.solution.map((paragraph, index) => (
+                  <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
 
-          {project.hasCompareSlider && project.compareSliderImages && (
-            <CompareSlider
-              beforeImage={project.compareSliderImages.before}
-              afterImage={project.compareSliderImages.after}
-            />
+              {project.hasCompareSlider && project.compareSliderImages && (
+                <CompareSlider
+                  beforeImage={project.compareSliderImages.before}
+                  afterImage={project.compareSliderImages.after}
+                />
+              )}
+
+              {project.solutionImages && project.solutionImages.map((img, index) => (
+                <div key={index} className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] mt-6" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <ClickableImage
+                    src={img}
+                    alt={`Process image ${index + 1}`}
+                    width={680}
+                    height={425}
+                    className="w-full h-auto"
+                  />
+                </div>
+              ))}
+            </>
           )}
-
-          {project.solutionImages && project.solutionImages.map((img, index) => (
-            <div key={index} className="relative w-full rounded-sm overflow-hidden border border-border mt-6" style={{ backgroundColor: 'var(--color-000)' }}>
-              <ClickableImage
-                src={img}
-                alt={`Process image ${index + 1}`}
-                width={680}
-                height={425}
-                className="w-full h-auto"
-              />
-            </div>
-          ))}
         </section>
 
         {/* Impact */}
-        <section className="mb-12 pb-12 border-b border-border">
+        <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
           <SectionBadge>Impact</SectionBadge>
 
-          <h2 className="font-display text-[clamp(20px,5vw,28px)] text-foreground leading-[1.25] text-pretty">
+          <h2 className="font-display text-[clamp(20px,5vw,28px)] text-[var(--color-500)] leading-[1.25] text-pretty">
             {project.results.headline}
           </h2>
           {project.results.subheadline && (
@@ -306,11 +445,11 @@ export default function ProjectPage() {
           {project.results.northStar && (
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
               <div className="flex flex-col gap-1">
-                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--color-300)]">
+                <div className="text-eyebrow text-[var(--color-300)]">
                   {project.results.northStar.label}
                 </div>
                 {project.results.northStar.tag && (
-                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--accent)]">
+                  <div className="text-eyebrow text-[var(--accent)]">
                     {project.results.northStar.tag}
                   </div>
                 )}
@@ -320,7 +459,7 @@ export default function ProjectPage() {
                   {project.results.northStar.value}
                 </div>
                 {project.results.northStar.sublabel && (
-                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--color-300)] mt-1">
+                  <div className="text-eyebrow text-[var(--color-300)] mt-1">
                     {project.results.northStar.sublabel}
                   </div>
                 )}
@@ -331,10 +470,10 @@ export default function ProjectPage() {
           <div className={`grid gap-3 ${metricsGridCols}`}>
             {project.results.metrics.map((metric, index) => (
               <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-                <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-foreground'}`}>
+                <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
                   {metric.value}
                 </div>
-                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--color-300)]">
+                <div className="text-eyebrow text-[var(--color-300)]">
                   {metric.label}
                 </div>
               </div>
@@ -344,12 +483,12 @@ export default function ProjectPage() {
 
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
-          <section className="mb-12 pb-12 border-b border-border">
+          <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
             <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <span className="text-[12px] md:text-[14px] font-mono text-[var(--accent)] shrink-0 min-w-fit">
+                  <span className="text-eyebrow text-[var(--accent)] shrink-0 min-w-fit">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>
