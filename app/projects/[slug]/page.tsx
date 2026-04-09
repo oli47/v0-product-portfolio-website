@@ -455,6 +455,11 @@ export default function ProjectPage() {
                 <div className="text-eyebrow text-[var(--color-300)]">
                   {metric.label}
                 </div>
+                {metric.sublabel && (
+                  <div className="text-eyebrow text-[var(--color-200)] mt-0.5">
+                    {metric.sublabel}
+                  </div>
+                )}
               </div>
             ))}
           </div>
