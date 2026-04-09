@@ -158,26 +158,26 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
 
 function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
   return (
-    <div className="space-y-0">
+    <div>
       {blocks.map((block, i) => {
         switch (block.kind) {
           case 'text':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-4">
+              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5">
                 {block.content}
               </p>
             )
 
           case 'heading':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-6">
+              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5">
                 {block.content}
               </p>
             )
 
           case 'placeholder':
             return (
-              <div key={i} className="mt-6 mb-2">
+              <div key={i} className="my-8">
                 <PlaceholderImage />
                 {block.caption && <Caption text={block.caption} />}
               </div>
@@ -185,9 +185,9 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'image':
             return (
-              <div key={i} className="group mt-8 mb-2">
+              <div key={i} className="group my-8">
                 <div
-                  className="relative w-full rounded-sm border border-[var(--color-100)] transition-colors duration-200 group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-200 group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
                   <div className="rounded-[2px] overflow-hidden mb-4">
@@ -210,7 +210,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'compare':
             return (
-              <div key={i} className="mt-6 mb-2">
+              <div key={i} className="my-8">
                 <CompareSlider beforeImage={block.before} afterImage={block.after} />
                 {block.caption && <Caption text={block.caption} />}
               </div>
@@ -218,7 +218,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'steps':
             return (
-              <div key={i} className="space-y-8 mt-2 mb-6">
+              <div key={i} className="space-y-8 my-8">
                 {block.items.map((step, j) => (
                   <div key={j} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                     {/* Image or placeholder — narrower on desktop */}
