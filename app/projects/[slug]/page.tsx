@@ -280,10 +280,11 @@ export default function ProjectPage() {
     <main className="min-h-screen bg-background">
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16">
 
-        {/* Back link */}
+        {/* Back link — fixed, left-aligned outside content column */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-150 mb-10"
+          className="fixed z-30 inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-150"
+          style={{ left: '5rem', top: '10rem' }}
           onMouseEnter={backLabel.scramble}
           onMouseLeave={backLabel.reset}
         >
