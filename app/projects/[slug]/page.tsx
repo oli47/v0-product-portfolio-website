@@ -411,16 +411,6 @@ export default function ProjectPage() {
         <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
           <SectionBadge>Impact</SectionBadge>
 
-          <h2 className="font-display text-[clamp(20px,5vw,28px)] text-[var(--color-500)] leading-[1.25] text-pretty">
-            {project.results.headline}
-          </h2>
-          {project.results.subheadline && (
-            <p className="font-display text-[clamp(20px,5vw,28px)] leading-[1.25] text-[var(--color-300)] mb-8 text-pretty">
-              {project.results.subheadline}
-            </p>
-          )}
-          {!project.results.subheadline && <div className="mb-8" />}
-
           {project.results.northStar && (
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
               <div className="flex flex-col gap-1">
