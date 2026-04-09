@@ -307,25 +307,6 @@ export default function ProjectPage() {
             />
           </div>
 
-          {/* Meta row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-b border-[var(--color-100)]">
-            <div>
-              <p className="text-eyebrow text-[var(--color-300)] mb-1">Role</p>
-              <p className="text-[12px] md:text-[14px]">{project.meta.role}</p>
-            </div>
-            <div>
-              <p className="text-eyebrow text-[var(--color-300)] mb-1">Team</p>
-              <p className="text-[12px] md:text-[14px]">{project.meta.team}</p>
-            </div>
-            <div>
-              <p className="text-eyebrow text-[var(--color-300)] mb-1">Duration</p>
-              <p className="text-[12px] md:text-[14px]">{project.meta.duration}</p>
-            </div>
-            <div>
-              <p className="text-eyebrow text-[var(--color-300)] mb-1">Date</p>
-              <p className="text-[12px] md:text-[14px]">{project.meta.date}</p>
-            </div>
-          </div>
         </section>
 
         {/* Opportunity */}
