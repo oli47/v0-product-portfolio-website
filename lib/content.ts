@@ -23,8 +23,8 @@ export const content = {
     contact: {
       resume: 'Resume',
       email: 'olafotrzasek@gmail.com',
-      phone: '732\u00a0188\u00a0613',
-      phoneRaw: '732188613',
+      phone: '+48\u00a0732\u00a0188\u00a0613',
+      phoneRaw: '+48732188613',
       linkedin: 'LinkedIn',
       copied: '\u2713\u00a0Copied',
     },
