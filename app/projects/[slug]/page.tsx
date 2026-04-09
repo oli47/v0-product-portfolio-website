@@ -284,7 +284,7 @@ export default function ProjectPage() {
         <Link
           href="/"
           className="fixed z-30 inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-150"
-          style={{ left: '5rem', top: '10rem' }}
+          style={{ left: 'calc(50vw - 22.5rem - 5rem)', top: '10rem' }}
           onMouseEnter={backLabel.scramble}
           onMouseLeave={backLabel.reset}
         >
