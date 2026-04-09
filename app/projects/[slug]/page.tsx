@@ -284,13 +284,11 @@ export default function ProjectPage() {
 
         {/* Header */}
         <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-0 mb-8">
+          <div className="flex flex-col gap-3 mb-8">
             <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.1]">
-              {project.title.split(' ').map((word, i) => (
-                <span key={i}>{word}<br /></span>
-              ))}
+              {project.title}
             </h1>
-            <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] md:self-end text-balance">
+            <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-balance">
               {project.tagline}
             </p>
           </div>
