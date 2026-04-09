@@ -185,17 +185,26 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'image':
             return (
-              <div key={i} className="mt-6 mb-2">
-                <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)]" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <ClickableImage
-                    src={block.src}
-                    alt={block.caption ?? 'Process image'}
-                    width={680}
-                    height={425}
-                    className="w-full h-auto"
-                  />
+              <div key={i} className="group mt-8 mb-2">
+                <div
+                  className="relative w-full rounded-sm overflow-hidden border border-transparent transition-colors duration-200 group-hover:border-[var(--color-100)]"
+                  style={{ backgroundColor: 'var(--color-000)', padding: '16px' }}
+                >
+                  <div className="rounded-[2px] overflow-hidden">
+                    <ClickableImage
+                      src={block.src}
+                      alt={block.caption ?? 'Process image'}
+                      width={680}
+                      height={425}
+                      className="w-full h-auto"
+                    />
+                  </div>
                 </div>
-                {block.caption && <Caption text={block.caption} />}
+                {block.caption && (
+                  <p className="text-[13px] text-[var(--color-300)] mt-4 text-center leading-[1.6]">
+                    {block.caption}
+                  </p>
+                )}
               </div>
             )
 
