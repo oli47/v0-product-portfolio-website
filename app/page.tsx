@@ -73,8 +73,8 @@ function ContactBar() {
   }, [])
 
   const baseItem =
-    'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-200 hover:bg-[var(--color-000)] overflow-hidden'
-  const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-150'
+    'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-[320ms] ease-linear hover:bg-[var(--color-000)] overflow-hidden'
+  const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] ease-linear'
   const icon     = 'font-mono text-[0.75rem] leading-[1.25rem] text-[var(--color-200)]'
   const arrow    = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
 
@@ -172,7 +172,7 @@ function ScrollToTop() {
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? 'auto' : 'none',
         transform: visible ? 'translateY(0)' : 'translateY(8px)',
-        transition: 'opacity 200ms, transform 200ms, color 200ms, border-color 200ms',
+        transition: 'opacity 320ms linear, transform 320ms linear, color 320ms linear, border-color 320ms linear',
       }}
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -212,7 +212,7 @@ export default function Home() {
                 href="https://edrone.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2 decoration-[var(--color-100)] hover:text-[var(--accent)] transition-colors duration-200"
+                className="underline underline-offset-2 decoration-[var(--color-100)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear"
               >
                 {t.hero.bodyEdrone}
               </a>
@@ -287,7 +287,7 @@ export default function Home() {
                         href={job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-200 whitespace-nowrap"
+                        className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear whitespace-nowrap"
                       >
                         {job.companySlug}
                       </a>

@@ -30,7 +30,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
       <div className="relative max-w-5xl w-full max-h-full" onClick={e => e.stopPropagation()}>
         <button
           onClick={onClose}
-          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors"
+          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-linear"
         >
           Close ✕
         </button>
@@ -154,7 +154,7 @@ function CompareSlider({
         <div
           key={img.src}
           className="absolute inset-0"
-          style={{ opacity: i === activeIndex ? 1 : 0, transition: 'opacity 600ms ease' }}
+          style={{ opacity: i === activeIndex ? 1 : 0, transition: 'opacity 600ms linear' }}
         >
           <Image src={img.src} alt={img.label} fill className="object-cover" />
         </div>
@@ -180,7 +180,7 @@ function CompareSlider({
 
       {/* Labels */}
       <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">Before</div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 300ms ease' }}>{afterImages[activeIndex].label}</div>
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 320ms linear' }}>{afterImages[activeIndex].label}</div>
     </div>
   )
 }
@@ -218,7 +218,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group my-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-200 group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[320ms] ease-linear group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
                   <div className="rounded-[2px] overflow-hidden mb-4">
@@ -549,7 +549,7 @@ export default function ProjectPage() {
             onMouseLeave={prevLabel.reset}
           >
             <span className="text-eyebrow text-[var(--color-200)] shrink-0">←</span>
-            <span ref={prevLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-150 truncate">
+            <span ref={prevLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate">
               {prev.title}
             </span>
           </Link>
@@ -559,7 +559,7 @@ export default function ProjectPage() {
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
-            <span ref={nextLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-150 truncate text-right">
+            <span ref={nextLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate text-right">
               {next.title}
             </span>
             <span className="text-eyebrow text-[var(--color-200)] shrink-0">→</span>

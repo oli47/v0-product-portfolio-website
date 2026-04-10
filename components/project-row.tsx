@@ -26,15 +26,15 @@ export function ProjectRow({
       onMouseLeave={discover.reset}
     >
       <div
-        className={`flex flex-col sm:flex-row sm:items-end sm:justify-between p-4 sm:p-6 gap-4 sm:gap-10 transition-colors duration-[250ms] ease group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
+        className={`flex flex-col sm:flex-row sm:items-end sm:justify-between p-4 sm:p-6 gap-4 sm:gap-10 transition-colors duration-[320ms] ease-linear ease-linear group-hover:bg-[#EDE7D9] dark:group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
       >
         {/* Content — title + description + metrics */}
         <div className="flex flex-col gap-4 min-w-0">
           <div className="flex flex-col gap-2">
-            <h3 className="text-h4 text-[var(--color-400)] transition-colors duration-[320ms] group-hover:text-[var(--accent)] text-pretty">
+            <h3 className="text-h4 text-[var(--color-400)] transition-colors duration-[320ms] ease-linear group-hover:text-[var(--accent)] text-pretty">
               {project.title}
             </h3>
-            <p className="text-body-2 text-[var(--color-300)] transition-colors duration-[320ms] group-hover:text-[var(--color-400)] text-pretty">
+            <p className="text-body-2 text-[var(--color-300)] transition-colors duration-[320ms] ease-linear group-hover:text-[var(--color-400)] text-pretty">
               {project.description}
             </p>
           </div>
@@ -59,12 +59,12 @@ export function ProjectRow({
                 ))}
               </div>
               {/* Arrow button — mobile only, no "Discover" text */}
-              <div className="sm:hidden relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[320ms] shrink-0">
+              <div className="sm:hidden relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[320ms] ease-linear shrink-0">
                 <div
                   className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
-                  style={{ transition: 'transform 320ms cubic-bezier(.4,0,.2,1)' }}
+                  style={{ transition: 'transform 320ms linear' }}
                 />
-                <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 inline-block">
+                <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-[320ms] ease-linear inline-block">
                   →
                 </span>
               </div>
@@ -76,18 +76,18 @@ export function ProjectRow({
         <div className="hidden sm:flex items-center gap-2 shrink-0">
           <span
             ref={discover.spanRef}
-            className="text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] group-hover:text-[var(--accent)]"
+            className="text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] ease-linear group-hover:text-[var(--accent)]"
           >
             {t.discover}
           </span>
 
           {/* Square button — orange fill sweeps left→right */}
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[320ms]">
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[320ms] ease-linear">
             <div
               className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
-              style={{ transition: 'transform 320ms cubic-bezier(.4,0,.2,1)' }}
+              style={{ transition: 'transform 320ms linear' }}
             />
-            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-300 inline-block">
+            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[#FAF7F2] transition-colors duration-[320ms] ease-linear inline-block">
               →
             </span>
           </div>

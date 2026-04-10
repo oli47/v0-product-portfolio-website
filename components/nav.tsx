@@ -128,13 +128,13 @@ const isDark = resolvedTheme === 'dark'
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const btnClass =
-    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-150 cursor-pointer px-3 py-[0.625rem]'
+    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[320ms] ease-linear cursor-pointer px-3 py-[0.625rem]'
 
   return (
     /* Always constrained to content width — only background animates on scroll */
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem]">
       <div
-        className="pointer-events-auto transition-all duration-300 ease-out"
+        className="pointer-events-auto transition-all duration-[320ms] ease-linear"
         style={{
           width: 'calc(100% - 2.5rem)',
           maxWidth: '45rem',
@@ -159,7 +159,7 @@ const isDark = resolvedTheme === 'dark'
           <div className="flex items-center">
             <Link
               href="/"
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear px-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -174,7 +174,7 @@ const isDark = resolvedTheme === 'dark'
               */}
               {isProjectPage && (
                 <span
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] ease-linear"
                   aria-hidden
                 >←</span>
               )}
