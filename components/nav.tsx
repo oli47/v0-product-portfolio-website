@@ -159,7 +159,7 @@ const isDark = resolvedTheme === 'dark'
           <div className="flex items-center">
             <Link
               href="/"
-              className="group flex items-center gap-1.5 text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -168,19 +168,20 @@ const isDark = resolvedTheme === 'dark'
                 }
               }}
             >
-              {/* Arrow — only on project pages, always in DOM so layout is stable */}
-              {isProjectPage && (
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150" aria-hidden>←</span>
-              )}
               {/*
-                inline-grid: ghost (name) and real text share one cell.
-                shrink-0 prevents flex from squeezing the grid.
-                Ghost has whitespace-nowrap → grid is always name-width.
-                Real text (name or "Back") is left-aligned within that width.
+                Arrow: absolutely positioned — never in flex flow.
+                Name is always at the same X (px-3 from link left edge), on every page.
               */}
+              {isProjectPage && (
+                <span
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                  aria-hidden
+                >←</span>
+              )}
+              {/* inline-grid: ghost fixes width to name; real text left-aligned inside */}
               <span className="inline-grid shrink-0">
                 <span className="col-start-1 row-start-1 invisible whitespace-nowrap select-none" aria-hidden>{t.name}</span>
-                <span ref={nameLabel.spanRef} className="col-start-1 row-start-1 text-left">{t.name}</span>
+                <span ref={nameLabel.spanRef} className="col-start-1 row-start-1">{t.name}</span>
               </span>
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
