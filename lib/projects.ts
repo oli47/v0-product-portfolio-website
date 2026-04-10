@@ -211,51 +211,27 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched its first self-serve freemium tier, but the signup form was still built for the sales-led era. Amplitude funnels showed massive drop-off at the registration form. Mobile conversion sat at 0.05%.',
+        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era: four fields on a single page, broken SSO, a phone number field with no function in the product. Amplitude and a Claude-powered UX agent I had built both flagged signup as the top-priority drop-off. Mobile conversion sat at 0.05%.',
       },
       {
         kind: 'text',
-        content: 'Optimising activation, retention, or any later step in the funnel made little sense while the very first interaction was losing most of its traffic. But the flip side was clear: if the drop-off was this high on a form this fixable, a small change here could unlock the entire funnel.',
+        content: 'The drop-off was high, but the form was fixable. A small change here could unlock the entire funnel.',
       },
       {
         kind: 'image',
         src: '/images/sf-old.png',
-        caption: 'The original signup form. Four fields on a single page. Built for lead qualification, not user activation.',
-      },
-      {
-        kind: 'text',
-        content: 'The form had four fields: email, name, phone number, and store URL. On a single page. For a product trying to feel simple and accessible, the form felt heavy before the user even started. The phone number had no function in the product. And SSO was broken: selecting "Sign up with Google" pulled the user\'s name and email, but the form still had to be completed manually. That is not how SSO works in any modern product.',
+        caption: 'The original form. Four fields, single page, broken SSO.',
       },
     ],
     solution: [],
     processContent: [
       {
         kind: 'text',
-        content: 'The Senior Product Data Analyst on my team ran a full audit of the signup flow. His report confirmed and quantified what I was already seeing in Amplitude. Three issues:',
+        content: 'I removed the phone field and restructured the form into two steps in one go. The data was clear enough that splitting into separate iterations would have just meant weeks of waiting on low traffic.',
       },
       {
         kind: 'text',
-        content: 'The phone number field was the primary drop-off point. Sales confirmed they had not used it for qualification in months.',
-      },
-      {
-        kind: 'text',
-        content: 'Four fields on a single page made the form feel like a commitment. The product only needed three: email for the account, name for personalisation, store URL to pull branding and generate content.',
-      },
-      {
-        kind: 'text',
-        content: 'SSO did not create an account. It pre-filled two fields on the same form. Users who expected one-click signup still had to fill out the rest manually.',
-      },
-      {
-        kind: 'text',
-        content: 'A Claude-powered UX agent I had built to walk through flows and flag issues also surfaced signup as a top priority, confirming the Amplitude data.',
-      },
-      {
-        kind: 'text',
-        content: 'I shipped both changes at once: removed the phone field and restructured into two steps. Splitting these into separate iterations would have meant waiting weeks for enough traffic to validate each change individually. The data was clear.',
-      },
-      {
-        kind: 'text',
-        content: 'Step 1: enter email or sign up with Google or Shopify. The account is created immediately. SSO now works as expected because the first step only handles authentication. Step 2: name and store URL.',
+        content: 'Step 1: email or Google/Shopify SSO. Account created immediately. SSO now actually creates the account instead of pre-filling two fields on the same form. Step 2: name and store URL.',
       },
       {
         kind: 'compare',
@@ -264,16 +240,16 @@ export const projects: Project[] = [
           { src: '/images/sf-signup1.png', label: 'After' },
           { src: '/images/sf-signup2.png', label: 'After' },
         ],
-        caption: 'The redesigned flow. Step 1 creates the account. Step 2 collects what the product needs.',
+        caption: 'Step 1 creates the account. Step 2 collects what the product needs.',
       },
       {
         kind: 'text',
-        content: 'I built the entire frontend directly in Codex. No separate design phase in Figma. The change was straightforward enough to go straight to code. The frontend developer on the project handled the backend changes since the database logic was simple. On production within 5 hours.',
+        content: 'Built directly in Codex, no separate design phase. On production within 5 hours.',
       },
     ],
     results: {
       headline: '+67% total signup conversion. Desktop doubled. Mobile from 0.05% to 3%.',
-      note: 'With prompt engineering and tools like Codex, I can move from identifying a problem to shipping a fix in the same day. Designing, building, and merging pull requests on production code. Not handing off a spec and waiting for a sprint cycle.',
+      note: 'With prompt engineering and Codex I go from identifying a problem to shipping a fix in the same day. Designing, building, and merging pull requests on production code.',
       northStar: {
         label: 'FROM DIAGNOSIS TO PRODUCTION',
         value: '5 hours',
@@ -286,8 +262,8 @@ export const projects: Project[] = [
     },
     nextSteps: [
       {
-        title: 'Signup is the first moment of contact with the product',
-        description: 'After the structural fix, it was functional but not yet doing its job as an introduction. The user gives edrone a store URL and then waits 10–30 seconds while AI generates branded content. That wait is currently dead time. It could be a moment that builds anticipation and trust: showing what edrone is about to create, surfacing social proof, communicating what happens next. Users arriving from Shopify or Shoper could skip the form entirely through platform OAuth, reducing friction for the highest-intent segment to zero.',
+        title: 'Signup works, but does not yet do its job as a first impression',
+        description: 'The user provides a store URL and waits 10–30 seconds while AI generates content. That dead time could build anticipation instead. Users from Shopify or Shoper could skip the form entirely through platform OAuth.',
       },
     ],
   },
