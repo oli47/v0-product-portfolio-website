@@ -211,7 +211,20 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'compare':
             return (
               <div key={i} className="my-8">
-                <CompareSlider beforeImage={block.before} afterImage={block.after} />
+                {block.images.length === 2 ? (
+                  <CompareSlider beforeImage={block.images[0].src} afterImage={block.images[1].src} />
+                ) : (
+                  <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${block.images.length}, 1fr)` }}>
+                    {block.images.map((img, j) => (
+                      <div key={j} className="group flex flex-col gap-2">
+                        <div className="rounded-sm overflow-hidden border border-[var(--color-100)] transition-colors duration-200 group-hover:border-[var(--color-150)]" style={{ backgroundColor: 'var(--color-000)' }}>
+                          <ClickableImage src={img.src} alt={img.label} width={400} height={280} className="w-full h-auto" />
+                        </div>
+                        <p className="text-[11px] font-mono text-[var(--color-300)] text-center uppercase tracking-wide">{img.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {block.caption && <Caption text={block.caption} />}
               </div>
             )
@@ -321,15 +334,19 @@ export default function ProjectPage() {
         <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
           <SectionBadge>Opportunity</SectionBadge>
 
-          <div className="space-y-4">
-            {project.opportunity.map((paragraph, index) => (
-              <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
-                {paragraph}
-              </p>
-            ))}
-          </div>
+          {project.opportunityBlocks ? (
+            <ProcessBlocks blocks={project.opportunityBlocks} />
+          ) : (
+            <div className="space-y-4">
+              {project.opportunity.map((paragraph, index) => (
+                <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          )}
 
-          {project.overviewDiagram && (
+          {!project.opportunityBlocks && project.overviewDiagram && (
             <div className="mt-8 p-4 md:p-6 bg-[var(--color-000)] rounded-sm border border-[var(--color-100)]">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="text-center">
@@ -368,7 +385,7 @@ export default function ProjectPage() {
             </div>
           )}
 
-          {project.opportunityExtra && project.opportunityExtra.length > 0 && (
+          {!project.opportunityBlocks && project.opportunityExtra && project.opportunityExtra.length > 0 && (
             <div className="space-y-4 mt-6">
               {project.opportunityExtra.map((paragraph, index) => (
                 <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
@@ -463,6 +480,12 @@ export default function ProjectPage() {
               </div>
             ))}
           </div>
+
+          {project.results.note && (
+            <div className="mt-3 p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+              <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
+            </div>
+          )}
         </section>
 
         {/* What's Next */}
