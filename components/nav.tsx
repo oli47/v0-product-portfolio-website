@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { useEffect, useState, useRef, useCallback } from 'react'
+import { usePathname } from 'next/navigation'
 import { useScramble } from '@/lib/use-scramble'
 import { content, defaultLang } from '@/lib/content'
 
@@ -14,6 +15,8 @@ export function Nav() {
   const [mounted, setMounted]     = useState(false)
   const [scrolled, setScrolled]   = useState(false)
   const animating                  = useRef(false)
+  const pathname                   = usePathname()
+  const isProjectPage              = pathname.startsWith('/projects/')
 
   useEffect(() => {
     setMounted(true)
@@ -67,14 +70,7 @@ export function Nav() {
       const PIXEL    = 8   // quantization grid in px — larger = chunkier pixels
       const SEGMENTS = 360 // many vertices so quantization creates clear staircase
 
-      // Build pixel-art circle polygon for radius r.
-      // Step 1: sample the circle and snap each point to the PIXEL grid.
-      // Step 2: remove consecutive duplicates.
-      // Step 3: wherever two adjacent unique points differ in BOTH x and y,
-      //         insert a right-angle corner so every edge is axis-aligned —
-      //         this gives the Minecraft/pixel-art staircase look.
       const setRadius = (r: number) => {
-        // Sample
         const raw: [number, number][] = []
         for (let i = 0; i < SEGMENTS; i++) {
           const angle = (i / SEGMENTS) * Math.PI * 2
@@ -84,14 +80,12 @@ export function Nav() {
           if (!last || last[0] !== px || last[1] !== py) raw.push([px, py])
         }
 
-        // Add axis-aligned corners between every diagonal jump
         const pts: string[] = []
         for (let i = 0; i < raw.length; i++) {
           const [px, py]   = raw[i]
           const [npx, npy] = raw[(i + 1) % raw.length]
           pts.push(`${px},${py}`)
           if (px !== npx && py !== npy) {
-            // Insert elbow — go horizontal first, then vertical
             pts.push(`${npx},${py}`)
           }
         }
@@ -99,21 +93,18 @@ export function Nav() {
         polygon.setAttribute('points', pts.join(' '))
       }
 
-      // Start at radius 0 so the clip exists before transition paints
       setRadius(0)
 
       const transition = document.startViewTransition(() => {
         setTheme(newTheme)
       })
 
-      // Animate the polygon growing from button position once pseudo-elements exist
       transition.ready.then(() => {
         const duration  = 600   // ms
         const startTime = performance.now()
 
         const frame = (now: number) => {
           const t = Math.min((now - startTime) / duration, 1)
-          // ease-out cubic
           const eased = 1 - Math.pow(1 - t, 3)
           setRadius(eased * maxR)
           if (t < 1) requestAnimationFrame(frame)
@@ -130,50 +121,52 @@ export function Nav() {
     [isDark, setTheme],
   )
 
-  // ── Scramble on theme button ──────────────────────────────────────────────
-  const themeWord   = mounted ? (isDark ? t.light : t.dark) : t.dark
-  const themeLabel  = useScramble(themeWord)
+  // ── Scramble labels ────────────────────────────────────────────────────────
+  const themeWord  = mounted ? (isDark ? t.light : t.dark) : t.dark
+  const themeLabel = useScramble(themeWord)
+  const nameLabel  = useScramble(t.name)
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const btnClass =
     'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-150 cursor-pointer px-3 py-[0.625rem]'
 
   return (
-    /* py-[2.5rem] = 40px top + bottom — consistent in both states, no jump */
+    /* Always constrained to content width — only background animates on scroll */
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem]">
       <div
-        className="pointer-events-auto w-full transition-all duration-300 ease-out"
-        style={
-          scrolled
+        className="pointer-events-auto transition-all duration-300 ease-out"
+        style={{
+          width: 'calc(100% - 2.5rem)',
+          maxWidth: '45rem',
+          ...(scrolled
             ? {
-                maxWidth: '40rem',
                 background: 'var(--color-000)',
                 border: '1px solid var(--color-100)',
                 borderRadius: '0.125rem',
                 boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
-                margin: '0 1.25rem',
               }
             : {
-                maxWidth: '100%',
-                background:
-                  'color-mix(in srgb, var(--background) 90%, transparent)',
+                background: 'color-mix(in srgb, var(--background) 90%, transparent)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
-              }
-        }
+              }),
+        }}
       >
         {/* h-[2.5rem] = 40px */}
-        <div
-          className="mx-auto px-5 h-[2.5rem] flex items-center justify-between"
-          style={{ maxWidth: scrolled ? '100%' : '45rem' }}
-        >
+        <div className="px-5 h-[2.5rem] flex items-center justify-between">
+
           {/* Left */}
           <div className="flex items-center">
             <Link
               href="/"
-              className="nav-link text-eyebrow text-[var(--color-500)] px-3 py-[0.625rem]"
+              className="group flex items-center gap-1.5 text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              onMouseEnter={nameLabel.scramble}
+              onMouseLeave={nameLabel.reset}
             >
-              {t.name}
+              {isProjectPage && (
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
+              )}
+              <span ref={nameLabel.spanRef}>{t.name}</span>
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Status — hidden on mobile to prevent overflow */}

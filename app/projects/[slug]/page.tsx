@@ -302,7 +302,6 @@ export default function ProjectPage() {
 
   const { prev, next } = getProjectNavigation(slug)
 
-  const backLabel = useScramble('Back')
   const prevLabel = useScramble(prev.title)
   const nextLabel = useScramble(next.title)
 
@@ -313,18 +312,6 @@ export default function ProjectPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16">
-
-        {/* Back link — fixed, left-aligned outside content column */}
-        <Link
-          href="/"
-          className="fixed z-30 inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-150"
-          style={{ left: 'calc(50vw - 22.5rem - 5rem)', top: '10rem' }}
-          onMouseEnter={backLabel.scramble}
-          onMouseLeave={backLabel.reset}
-        >
-          <span>←</span>
-          <span ref={backLabel.spanRef}>Back</span>
-        </Link>
 
         {/* Header */}
         <section className="mb-12">
