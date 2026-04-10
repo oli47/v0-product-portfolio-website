@@ -86,7 +86,7 @@ function ContactBar() {
 
         {/* Resume */}
         <a
-          href="/olaf-resume.html"
+          href="/olaf-resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className={`${baseItem} ${mobileItem} sm:border-l-0 cursor-pointer`}
