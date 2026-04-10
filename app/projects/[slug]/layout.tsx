@@ -12,9 +12,11 @@ export async function generateMetadata({
   return {
     title: `${project.title} — Olaf Otrząsek`,
     description: project.tagline,
+    alternates: { canonical: `/projects/${params.slug}` },
     openGraph: {
       title: `${project.title} — Olaf Otrząsek`,
       description: project.tagline,
+      url: `https://olafotrzasek.com/projects/${params.slug}`,
       images: [{ url: project.coverImage }],
     },
   }

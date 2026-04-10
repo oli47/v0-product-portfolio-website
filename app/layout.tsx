@@ -22,6 +22,16 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   title: 'Olaf Otrząsek • Design',
   description: 'Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed.',
+  metadataBase: new URL('https://olafotrzasek.com'),
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'Olaf Otrząsek • Design',
+    description: 'Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed.',
+    url: 'https://olafotrzasek.com',
+    siteName: 'Olaf Otrząsek',
+    images: [{ url: '/images/avatar.jpg', width: 800, height: 800, alt: 'Olaf Otrząsek' }],
+    type: 'website',
+  },
 }
 
 export const viewport: Viewport = {

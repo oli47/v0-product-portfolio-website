@@ -60,6 +60,7 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
         alt={alt}
         width={width}
         height={height}
+        sizes="(max-width: 768px) 100vw, 680px"
         className={`${className} cursor-zoom-in`}
         priority={priority}
         onClick={() => setOpen(true)}
@@ -150,7 +151,7 @@ function CompareSlider({
   return (
     <div
       ref={containerRef}
-      className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] select-none cursor-ew-resize"
+      className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] select-none cursor-ew-resize focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
       style={{ aspectRatio: '4/3' }}
       role="slider"
       aria-label="Before / After comparison"
@@ -169,13 +170,13 @@ function CompareSlider({
           className="absolute inset-0"
           style={{ opacity: i === activeIndex ? 1 : 0, transition: 'opacity 600ms linear' }}
         >
-          <Image src={img.src} alt={img.label} fill className="object-cover" />
+          <Image src={img.src} alt={img.label} fill sizes="(max-width: 768px) 100vw, 680px" className="object-cover" />
         </div>
       ))}
 
       {/* Before image — clipped to left side */}
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
-        <Image src={beforeImage} alt="Before" fill className="object-cover" />
+        <Image src={beforeImage} alt="Before" fill sizes="(max-width: 768px) 100vw, 680px" className="object-cover" />
       </div>
 
       {/* Drag handle */}
@@ -360,7 +361,7 @@ export default function ProjectPage() {
               width={680}
               height={425}
               className="w-full h-auto"
-              priority
+              priority={true}
             />
           </div>
 
