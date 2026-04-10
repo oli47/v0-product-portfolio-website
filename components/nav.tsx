@@ -159,17 +159,18 @@ export function Nav() {
           <div className="flex items-center">
             <Link
               href="/"
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
-              onMouseEnter={() => { if (isProjectPage) nameLabel.scramble() }}
+              className="group relative whitespace-nowrap text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
-                if (isProjectPage) {
-                  nameLabel.reset()
-                  if (nameLabel.spanRef.current) nameLabel.spanRef.current.textContent = t.name
+                nameLabel.reset()
+                // On project pages scramble target is "Back" — restore name after reset
+                if (isProjectPage && nameLabel.spanRef.current) {
+                  nameLabel.spanRef.current.textContent = t.name
                 }
               }}
             >
-              {/* Invisible spacer always holds the full name width — prevents layout shift */}
-              <span className="invisible select-none whitespace-nowrap" aria-hidden="true">{t.name}</span>
+              {/* Invisible spacer — always holds the name's width, prevents layout shift */}
+              <span className="invisible select-none" aria-hidden="true">{t.name}</span>
               {/* Visible content overlaid */}
               <span className="absolute inset-0 flex items-center gap-1.5 px-3">
                 {isProjectPage && (
