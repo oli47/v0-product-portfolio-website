@@ -83,9 +83,9 @@ function PlaceholderImage({ className }: { className?: string }) {
 
 // ─── Image caption ───────────────────────────────────────────────────────────
 
-function Caption({ text }: { text: string }) {
+function Caption({ text, center }: { text: string; center?: boolean }) {
   return (
-    <p className="text-[11px] font-mono text-[var(--color-300)] mt-3 text-pretty">
+    <p className={`text-[11px] font-mono text-[var(--color-300)] mt-3 text-pretty${center ? ' text-center' : ''}`}>
       {text}
     </p>
   )
@@ -145,7 +145,7 @@ function CompareSlider({
     <div
       ref={containerRef}
       className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] select-none cursor-ew-resize"
-      style={{ aspectRatio: '16/10' }}
+      style={{ aspectRatio: '4/3' }}
       onMouseDown={() => setIsDragging(true)}
       onTouchStart={() => setIsDragging(true)}
     >
@@ -246,7 +246,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                   beforeImage={block.images[0].src}
                   afterImages={block.images.slice(1)}
                 />
-                {block.caption && <Caption text={block.caption} />}
+                {block.caption && <Caption text={block.caption} center />}
               </div>
             )
 
