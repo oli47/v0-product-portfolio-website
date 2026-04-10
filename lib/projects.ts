@@ -261,8 +261,8 @@ export const projects: Project[] = [
         kind: 'compare',
         images: [
           { src: '/images/sf-signupold.png', label: 'Before' },
-          { src: '/images/sf-signup1.png', label: 'Step 1' },
-          { src: '/images/sf-signup2.png', label: 'Step 2' },
+          { src: '/images/sf-signup1.png', label: 'After' },
+          { src: '/images/sf-signup2.png', label: 'After' },
         ],
         caption: 'The redesigned flow. Step 1 creates the account. Step 2 collects what the product needs.',
       },
