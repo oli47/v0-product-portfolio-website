@@ -159,22 +159,24 @@ export function Nav() {
           <div className="flex items-center">
             <Link
               href="/"
-              className="group flex items-center gap-1.5 text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
-              onMouseEnter={() => {
-                if (isProjectPage) nameLabel.scramble()
-              }}
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              onMouseEnter={() => { if (isProjectPage) nameLabel.scramble() }}
               onMouseLeave={() => {
                 if (isProjectPage) {
-                  // reset back to the name visually after leaving
                   nameLabel.reset()
                   if (nameLabel.spanRef.current) nameLabel.spanRef.current.textContent = t.name
                 }
               }}
             >
-              {isProjectPage && (
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
-              )}
-              <span ref={nameLabel.spanRef}>{t.name}</span>
+              {/* Invisible spacer always holds the full name width — prevents layout shift */}
+              <span className="invisible select-none whitespace-nowrap" aria-hidden="true">{t.name}</span>
+              {/* Visible content overlaid */}
+              <span className="absolute inset-0 flex items-center gap-1.5 px-3">
+                {isProjectPage && (
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
+                )}
+                <span ref={nameLabel.spanRef}>{t.name}</span>
+              </span>
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Status — hidden on mobile to prevent overflow */}
