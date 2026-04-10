@@ -124,7 +124,7 @@ export function Nav() {
   // ── Scramble labels ────────────────────────────────────────────────────────
   const themeWord  = mounted ? (isDark ? t.light : t.dark) : t.dark
   const themeLabel = useScramble(themeWord)
-  const nameLabel  = useScramble(t.name)
+  const nameLabel  = useScramble(isProjectPage ? 'Back' : t.name)
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const btnClass =
@@ -160,8 +160,16 @@ export function Nav() {
             <Link
               href="/"
               className="group flex items-center gap-1.5 text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
-              onMouseEnter={nameLabel.scramble}
-              onMouseLeave={nameLabel.reset}
+              onMouseEnter={() => {
+                if (isProjectPage) nameLabel.scramble()
+              }}
+              onMouseLeave={() => {
+                if (isProjectPage) {
+                  // reset back to the name visually after leaving
+                  nameLabel.reset()
+                  if (nameLabel.spanRef.current) nameLabel.spanRef.current.textContent = t.name
+                }
+              }}
             >
               {isProjectPage && (
                 <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
