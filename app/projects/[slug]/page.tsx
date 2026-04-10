@@ -463,7 +463,7 @@ export default function ProjectPage() {
                 ))}
               </div>
               <div className="flex flex-col gap-3">
-                <div className="p-5 rounded-sm flex-1 flex flex-col gap-4" style={{ backgroundColor: 'var(--color-000)' }}>
+                <div className="p-5 rounded-sm flex-1 flex flex-col justify-between gap-4" style={{ backgroundColor: 'var(--color-000)' }}>
                   <div>
                     <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none mb-1">
                       {project.results.northStar.value}
