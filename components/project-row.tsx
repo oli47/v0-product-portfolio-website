@@ -21,6 +21,7 @@ export function ProjectRow({
   return (
     <Link
       href={`/projects/${project.slug}`}
+      aria-label={`View case study: ${project.title}`}
       className="group block"
       onMouseEnter={discover.scramble}
       onMouseLeave={discover.reset}

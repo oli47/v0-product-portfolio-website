@@ -89,17 +89,19 @@ function ContactBar() {
           href="/olaf-resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Download resume (PDF)"
           className={`${baseItem} ${mobileItem} sm:border-l-0 cursor-pointer`}
           onMouseEnter={resume.scramble}
           onMouseLeave={resume.reset}
         >
-          <span ref={resume.spanRef} className={labelCls}>{t.contact.resume}</span>
-          <span className={arrow}>↗</span>
+          <span ref={resume.spanRef} aria-hidden="true" className={labelCls}>{t.contact.resume}</span>
+          <span className={arrow} aria-hidden="true">↗</span>
         </a>
 
         {/* Email — scramble + fixed width when copied */}
         <button
           onClick={() => copy(t.contact.email, 'email')}
+          aria-label={`Copy email: ${t.contact.email}`}
           className={`${baseItem} ${mobileItem} cursor-pointer`}
           onMouseEnter={() => { if (copiedId !== 'email') email.scramble() }}
           onMouseLeave={email.reset}
@@ -119,6 +121,7 @@ function ContactBar() {
         {/* Phone — scramble + fixed width when copied */}
         <button
           onClick={() => copy(t.contact.phoneRaw, 'phone')}
+          aria-label={`Copy phone: ${t.contact.phone}`}
           className={`${baseItem} ${mobileItem} cursor-pointer`}
           onMouseEnter={() => { if (copiedId !== 'phone') phone.scramble() }}
           onMouseLeave={phone.reset}
@@ -140,12 +143,13 @@ function ContactBar() {
           href="https://www.linkedin.com/in/olafotrzasek/"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="LinkedIn profile (opens in new tab)"
           className={`${baseItem} sm:border-l cursor-pointer`}
           onMouseEnter={linkedin.scramble}
           onMouseLeave={linkedin.reset}
         >
-          <span ref={linkedin.spanRef} className={labelCls}>{t.contact.linkedin}</span>
-          <span className={arrow}>↗</span>
+          <span ref={linkedin.spanRef} aria-hidden="true" className={labelCls}>{t.contact.linkedin}</span>
+          <span className={arrow} aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
@@ -186,7 +190,7 @@ function ScrollToTop() {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[var(--background)]">
+    <main id="main-content" className="min-h-screen bg-[var(--background)]">
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-24">
 
         {/* ── Hero ── */}

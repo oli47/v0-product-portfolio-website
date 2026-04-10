@@ -9,19 +9,50 @@ export async function generateMetadata({
   const project = getProject(params.slug)
   if (!project) return {}
 
+  const title = `${project.title} — Olaf Otrząsek`
+  const url = `https://olafotrzasek.com/projects/${params.slug}`
+
   return {
-    title: `${project.title} — Olaf Otrząsek`,
+    title,
     description: project.tagline,
     alternates: { canonical: `/projects/${params.slug}` },
     openGraph: {
-      title: `${project.title} — Olaf Otrząsek`,
+      title,
       description: project.tagline,
-      url: `https://olafotrzasek.com/projects/${params.slug}`,
+      url,
       images: [{ url: project.coverImage }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: project.tagline,
+      images: [project.coverImage],
     },
   }
 }
 
-export default function ProjectLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+export default function ProjectLayout({ children, params }: { children: React.ReactNode; params: { slug: string } }) {
+  const project = getProject(params.slug)
+
+  const jsonLd = project ? {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.tagline,
+    author: { '@type': 'Person', name: 'Olaf Otrząsek', url: 'https://olafotrzasek.com' },
+    url: `https://olafotrzasek.com/projects/${params.slug}`,
+    image: project.coverImage,
+  } : null
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      {children}
+    </>
+  )
 }

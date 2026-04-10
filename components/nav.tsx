@@ -159,6 +159,7 @@ const isDark = resolvedTheme === 'dark'
           <div className="flex items-center">
             <Link
               href="/"
+              aria-label={isProjectPage ? 'Back to home' : t.name}
               className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear px-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
@@ -206,7 +207,7 @@ const isDark = resolvedTheme === 'dark'
               onMouseEnter={themeLabel.scramble}
               onMouseLeave={themeLabel.reset}
             >
-              <span ref={themeLabel.spanRef}>{themeWord}</span>
+              <span ref={themeLabel.spanRef} aria-hidden="true">{themeWord}</span>
             </button>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Language switcher — wire to i18n context when ready */}

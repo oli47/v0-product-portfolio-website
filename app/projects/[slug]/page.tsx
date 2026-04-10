@@ -339,7 +339,7 @@ export default function ProjectPage() {
     : 'grid-cols-1 md:grid-cols-2'
 
   return (
-    <main className="min-h-screen bg-background">
+    <main id="main-content" className="min-h-screen bg-background">
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16">
 
         {/* Header */}
@@ -351,6 +351,21 @@ export default function ProjectPage() {
             <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-balance">
               {project.tagline}
             </p>
+          </div>
+
+          {/* Meta row: role / team / duration / date */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[var(--color-100)] border border-[var(--color-100)] rounded-sm overflow-hidden mb-8">
+            {[
+              { label: 'Role', value: project.meta.role },
+              { label: 'Team', value: project.meta.team },
+              { label: 'Duration', value: project.meta.duration },
+              { label: 'Year', value: project.meta.date },
+            ].map(({ label, value }) => (
+              <div key={label} className="flex flex-col gap-1 p-4" style={{ backgroundColor: 'var(--color-000)' }}>
+                <span className="text-eyebrow text-[var(--color-200)]">{label}</span>
+                <span className="text-body-2 text-[var(--color-400)]">{value}</span>
+              </div>
+            ))}
           </div>
 
           {/* Hero image */}
@@ -573,25 +588,27 @@ export default function ProjectPage() {
         <div className="flex items-center justify-between gap-8 mb-12">
           <Link
             href={`/projects/${prev.slug}`}
+            aria-label={`Previous: ${prev.title}`}
             className="group flex items-center gap-2 min-w-0"
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
-            <span className="text-eyebrow text-[var(--color-200)] shrink-0">←</span>
-            <span ref={prevLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate">
+            <span className="text-eyebrow text-[var(--color-200)] shrink-0" aria-hidden="true">←</span>
+            <span ref={prevLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate">
               {prev.title}
             </span>
           </Link>
           <Link
             href={`/projects/${next.slug}`}
+            aria-label={`Next: ${next.title}`}
             className="group flex items-center gap-2 min-w-0"
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
-            <span ref={nextLabel.spanRef} className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate text-right">
+            <span ref={nextLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate text-right">
               {next.title}
             </span>
-            <span className="text-eyebrow text-[var(--color-200)] shrink-0">→</span>
+            <span className="text-eyebrow text-[var(--color-200)] shrink-0" aria-hidden="true">→</span>
           </Link>
         </div>
 
