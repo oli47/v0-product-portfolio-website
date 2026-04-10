@@ -13,22 +13,21 @@ export async function generateMetadata({
   const project = getProject(params.slug)
   if (!project) return {}
 
-  const title = `${project.title} — Olaf Otrząsek`
   const url = `https://olafotrzasek.com/projects/${params.slug}`
 
   return {
-    title,
+    title: project.title,  // root template adds " — Olaf Otrząsek"
     description: project.tagline,
     alternates: { canonical: `/projects/${params.slug}` },
     openGraph: {
-      title,
+      title: `${project.title} — Olaf Otrząsek`,
       description: project.tagline,
       url,
       images: [{ url: project.coverImage }],
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: `${project.title} — Olaf Otrząsek`,
       description: project.tagline,
       images: [project.coverImage],
     },
