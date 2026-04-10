@@ -14,9 +14,7 @@ export function Nav() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted]     = useState(false)
   const [scrolled, setScrolled]   = useState(false)
-  const [nameMinWidth, setNameMinWidth] = useState<number | undefined>(undefined)
   const animating                  = useRef(false)
-  const nameLinkRef                = useRef<HTMLAnchorElement>(null)
   const pathname                   = usePathname()
   const isProjectPage              = pathname.startsWith('/projects/')
 
@@ -27,12 +25,7 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Lock name link width after first paint so it never shrinks when text changes
-  useEffect(() => {
-    if (nameLinkRef.current) setNameMinWidth(nameLinkRef.current.offsetWidth)
-  }, [])
-
-  const isDark = resolvedTheme === 'dark'
+const isDark = resolvedTheme === 'dark'
 
   // ── Pixel dissolve transition ──────────────────────────────────────────────
   const handleThemeToggle = useCallback(
@@ -165,10 +158,8 @@ export function Nav() {
           {/* Left */}
           <div className="flex items-center">
             <Link
-              ref={nameLinkRef}
               href="/"
-              className="group flex items-center gap-1.5 whitespace-nowrap text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
-              style={{ minWidth: nameMinWidth }}
+              className="group flex items-center gap-1.5 text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -177,10 +168,20 @@ export function Nav() {
                 }
               }}
             >
+              {/* Arrow — only on project pages, always in DOM so layout is stable */}
               {isProjectPage && (
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150" aria-hidden>←</span>
               )}
-              <span ref={nameLabel.spanRef}>{t.name}</span>
+              {/*
+                inline-grid: ghost (name) and real text share one cell.
+                shrink-0 prevents flex from squeezing the grid.
+                Ghost has whitespace-nowrap → grid is always name-width.
+                Real text (name or "Back") is left-aligned within that width.
+              */}
+              <span className="inline-grid shrink-0">
+                <span className="col-start-1 row-start-1 invisible whitespace-nowrap select-none" aria-hidden>{t.name}</span>
+                <span ref={nameLabel.spanRef} className="col-start-1 row-start-1 text-left">{t.name}</span>
+              </span>
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Status — hidden on mobile to prevent overflow */}
