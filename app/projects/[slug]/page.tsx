@@ -85,7 +85,7 @@ function PlaceholderImage({ className }: { className?: string }) {
 
 function Caption({ text, center }: { text: string; center?: boolean }) {
   return (
-    <p className={`text-[11px] font-mono text-[var(--color-300)] mt-3 text-pretty${center ? ' text-center' : ''}`}>
+    <p className={`text-body-2 text-[var(--color-300)] mt-3 text-pretty${center ? ' text-center' : ''}`}>
       {text}
     </p>
   )
@@ -231,7 +231,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     />
                   </div>
                   {block.caption && (
-                    <p className="text-[12px] font-mono text-[var(--color-300)] text-center leading-[1.6] tracking-wide">
+                    <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
                       {block.caption}
                     </p>
                   )}
