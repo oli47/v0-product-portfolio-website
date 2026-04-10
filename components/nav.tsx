@@ -14,7 +14,9 @@ export function Nav() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted]     = useState(false)
   const [scrolled, setScrolled]   = useState(false)
+  const [nameMinWidth, setNameMinWidth] = useState<number | undefined>(undefined)
   const animating                  = useRef(false)
+  const nameLinkRef                = useRef<HTMLAnchorElement>(null)
   const pathname                   = usePathname()
   const isProjectPage              = pathname.startsWith('/projects/')
 
@@ -23,6 +25,11 @@ export function Nav() {
     const onScroll = () => setScrolled(window.scrollY > 80)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Lock name link width after first paint so it never shrinks when text changes
+  useEffect(() => {
+    if (nameLinkRef.current) setNameMinWidth(nameLinkRef.current.offsetWidth)
   }, [])
 
   const isDark = resolvedTheme === 'dark'
@@ -158,8 +165,10 @@ export function Nav() {
           {/* Left */}
           <div className="flex items-center">
             <Link
+              ref={nameLinkRef}
               href="/"
-              className="group flex items-center text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              className="group flex items-center gap-1.5 whitespace-nowrap text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-150 px-3 py-[0.625rem]"
+              style={{ minWidth: nameMinWidth }}
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -168,23 +177,10 @@ export function Nav() {
                 }
               }}
             >
-              {/*
-                inline-grid: ghost and real content share the same cell.
-                Grid width = ghost width (name) — never shrinks when "Back" shows.
-              */}
-              <span className="inline-grid">
-                {/* Ghost — holds the name's width permanently */}
-                <span className="col-start-1 row-start-1 invisible whitespace-nowrap select-none" aria-hidden="true">
-                  {t.name}
-                </span>
-                {/* Real content — same cell, centered */}
-                <span className="col-start-1 row-start-1 flex items-center gap-1.5">
-                  {isProjectPage && (
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
-                  )}
-                  <span ref={nameLabel.spanRef}>{t.name}</span>
-                </span>
-              </span>
+              {isProjectPage && (
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
+              )}
+              <span ref={nameLabel.spanRef}>{t.name}</span>
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Status — hidden on mobile to prevent overflow */}
