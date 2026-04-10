@@ -1,5 +1,9 @@
-import { getProject } from '@/lib/projects'
+import { getProject, projects } from '@/lib/projects'
 import type { Metadata } from 'next'
+
+export function generateStaticParams() {
+  return projects.map((p) => ({ slug: p.slug }))
+}
 
 export async function generateMetadata({
   params,

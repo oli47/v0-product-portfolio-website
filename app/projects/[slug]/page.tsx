@@ -12,10 +12,17 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 // ─── Lightbox ────────────────────────────────────────────────────────────────
 
 function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null)
+
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return }
+      // Simple focus trap: keep focus inside dialog on Tab
+      if (e.key === 'Tab') { e.preventDefault(); closeRef.current?.focus() }
+    }
     document.addEventListener('keydown', handleKey)
     document.body.style.overflow = 'hidden'
+    closeRef.current?.focus()
     return () => {
       document.removeEventListener('keydown', handleKey)
       document.body.style.overflow = ''
@@ -24,14 +31,18 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 cursor-zoom-out"
       onClick={onClose}
     >
       <div className="relative max-w-5xl w-full max-h-full" onClick={e => e.stopPropagation()}>
         <button
+          ref={closeRef}
           onClick={onClose}
           aria-label="Close lightbox"
-          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-linear"
+          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-linear focus:outline-none focus-visible:text-white"
         >
           Close ✕
         </button>
@@ -40,6 +51,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
           alt={alt}
           width={1200}
           height={750}
+          sizes="(max-width: 768px) 100vw, 1200px"
           className="w-full h-auto rounded-sm"
         />
       </div>

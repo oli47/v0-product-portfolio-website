@@ -171,6 +171,7 @@ function ScrollToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
+      aria-hidden={!visible}
       className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-9 h-9 rounded-[0.125rem] border border-[var(--color-100)] bg-[var(--background)] text-[var(--color-300)] hover:text-[var(--accent)] hover:border-[var(--accent)]"
       style={{
         opacity: visible ? 1 : 0,
@@ -277,6 +278,7 @@ export default function Home() {
                       alt={job.company}
                       width={28}
                       height={28}
+                      sizes="28px"
                       className="object-contain rounded-[0.125rem]"
                     />
                   </div>
