@@ -96,27 +96,3 @@ export function ProjectRow({
     </Link>
   )
 }
-
-// ─── Soon (disabled) row ─────────────────────────────────────────────────────
-
-export function ProjectRowSoon({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <div className="flex items-end justify-between p-6 gap-10">
-      <div className="flex flex-col gap-2 min-w-0 opacity-50">
-        <h3 className="text-h4 text-[var(--color-400)] text-pretty">{title}</h3>
-        <p className="text-body-2 text-[var(--color-300)] text-pretty">{description}</p>
-      </div>
-      <div className="shrink-0 px-2 py-1 bg-[var(--color-000)] rounded-[0.125rem] opacity-50">
-        <span className="text-eyebrow text-[var(--color-300)]">
-          {t.soon}
-        </span>
-      </div>
-    </div>
-  )
-}

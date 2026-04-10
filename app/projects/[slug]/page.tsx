@@ -30,6 +30,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
       <div className="relative max-w-5xl w-full max-h-full" onClick={e => e.stopPropagation()}>
         <button
           onClick={onClose}
+          aria-label="Close lightbox"
           className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-linear"
         >
           Close ✕
@@ -113,6 +114,11 @@ function CompareSlider({
     setSliderPosition(percentage)
   }, [])
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') setSliderPosition(p => Math.max(p - 5, 0))
+    if (e.key === 'ArrowRight') setSliderPosition(p => Math.min(p + 5, 100))
+  }, [])
+
   useEffect(() => {
     const handleMouseUp = () => setIsDragging(false)
     const handleTouchEnd = () => setIsDragging(false)
@@ -146,8 +152,15 @@ function CompareSlider({
       ref={containerRef}
       className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] select-none cursor-ew-resize"
       style={{ aspectRatio: '4/3' }}
+      role="slider"
+      aria-label="Before / After comparison"
+      aria-valuenow={Math.round(sliderPosition)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      tabIndex={0}
       onMouseDown={() => setIsDragging(true)}
       onTouchStart={() => setIsDragging(true)}
+      onKeyDown={handleKeyDown}
     >
       {/* After images — stacked, crossfading */}
       {afterImages.map((img, i) => (
