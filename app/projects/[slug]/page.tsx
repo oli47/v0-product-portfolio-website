@@ -366,14 +366,14 @@ export default function ProjectPage() {
           </div>
 
           {/* Meta row: role / team / duration / date */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[var(--color-100)] border border-[var(--color-100)] rounded-sm overflow-hidden mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
             {[
               { label: 'Role', value: project.meta.role },
               { label: 'Team', value: project.meta.team },
               { label: 'Duration', value: project.meta.duration },
               { label: 'Year', value: project.meta.date },
             ].map(({ label, value }) => (
-              <div key={label} className="flex flex-col gap-1 p-4" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div key={label} className="flex flex-col gap-1">
                 <span className="text-eyebrow text-[var(--color-200)]">{label}</span>
                 <span className="text-body-2 text-[var(--color-400)]">{value}</span>
               </div>
