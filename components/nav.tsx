@@ -168,10 +168,17 @@ export function Nav() {
                 }
               }}
             >
-              {/* Inner relative container — ghost sets width, real content overlays it */}
-              <span className="relative flex items-center">
-                <span className="invisible whitespace-nowrap select-none" aria-hidden="true">{t.name}</span>
-                <span className="absolute inset-0 flex items-center gap-1.5">
+              {/*
+                inline-grid: ghost and real content share the same cell.
+                Grid width = ghost width (name) — never shrinks when "Back" shows.
+              */}
+              <span className="inline-grid">
+                {/* Ghost — holds the name's width permanently */}
+                <span className="col-start-1 row-start-1 invisible whitespace-nowrap select-none" aria-hidden="true">
+                  {t.name}
+                </span>
+                {/* Real content — same cell, centered */}
+                <span className="col-start-1 row-start-1 flex items-center gap-1.5">
                   {isProjectPage && (
                     <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150">←</span>
                   )}
