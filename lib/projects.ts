@@ -274,9 +274,12 @@ export const projects: Project[] = [
     results: {
       headline: '+67% total signup conversion. Desktop doubled. Mobile from 0.05% to 3%.',
       note: 'With prompt engineering and tools like Codex, I can move from identifying a problem to shipping a fix in the same day. Designing, building, and merging pull requests on production code. Not handing off a spec and waiting for a sprint cycle.',
+      northStar: {
+        label: 'FROM DIAGNOSIS TO PRODUCTION',
+        value: '5 hours',
+      },
       metrics: [
         { value: '+67%', label: 'TOTAL SIGNUP CONVERSION', color: 'accent' },
-        { value: '5 hours', label: 'FROM DIAGNOSIS TO PRODUCTION', color: 'accent' },
         { value: '+100%', label: 'DESKTOP SIGNUPS', color: 'accent' },
         { value: '+5,900%', label: 'MOBILE SIGNUPS', sublabel: '0.05% → 3%', color: 'accent' },
       ],

@@ -93,9 +93,16 @@ function Caption({ text }: { text: string }) {
 
 // ─── Compare Slider ──────────────────────────────────────────────────────────
 
-function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; afterImage: string }) {
+function CompareSlider({
+  beforeImage,
+  afterImages,
+}: {
+  beforeImage: string
+  afterImages: { src: string; label: string }[]
+}) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleMove = useCallback((clientX: number) => {
@@ -125,6 +132,15 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
     }
   }, [isDragging, handleMove])
 
+  // Cycle through after images every 2 s
+  useEffect(() => {
+    if (afterImages.length <= 1) return
+    const interval = setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % afterImages.length)
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [afterImages.length])
+
   return (
     <div
       ref={containerRef}
@@ -133,10 +149,23 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
       onMouseDown={() => setIsDragging(true)}
       onTouchStart={() => setIsDragging(true)}
     >
-      <Image src={afterImage} alt="After" fill className="object-cover" />
+      {/* After images — stacked, crossfading */}
+      {afterImages.map((img, i) => (
+        <div
+          key={img.src}
+          className="absolute inset-0"
+          style={{ opacity: i === activeIndex ? 1 : 0, transition: 'opacity 600ms ease' }}
+        >
+          <Image src={img.src} alt={img.label} fill className="object-cover" />
+        </div>
+      ))}
+
+      {/* Before image — clipped to left side */}
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}>
         <Image src={beforeImage} alt="Before" fill className="object-cover" />
       </div>
+
+      {/* Drag handle */}
       <div
         className="absolute top-0 bottom-0 w-[2px] bg-[var(--color-500)] z-10"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
@@ -148,8 +177,10 @@ function CompareSlider({ beforeImage, afterImage }: { beforeImage: string; after
           </svg>
         </div>
       </div>
+
+      {/* Labels */}
       <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">Before</div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">After</div>
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 300ms ease' }}>{afterImages[activeIndex].label}</div>
     </div>
   )
 }
@@ -211,20 +242,10 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'compare':
             return (
               <div key={i} className="my-8">
-                {block.images.length === 2 ? (
-                  <CompareSlider beforeImage={block.images[0].src} afterImage={block.images[1].src} />
-                ) : (
-                  <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${block.images.length}, 1fr)` }}>
-                    {block.images.map((img, j) => (
-                      <div key={j} className="group flex flex-col gap-2">
-                        <div className="rounded-sm overflow-hidden border border-[var(--color-100)] transition-colors duration-200 group-hover:border-[var(--color-150)]" style={{ backgroundColor: 'var(--color-000)' }}>
-                          <ClickableImage src={img.src} alt={img.label} width={400} height={280} className="w-full h-auto" />
-                        </div>
-                        <p className="text-[11px] font-mono text-[var(--color-300)] text-center uppercase tracking-wide">{img.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <CompareSlider
+                  beforeImage={block.images[0].src}
+                  afterImages={block.images.slice(1)}
+                />
                 {block.caption && <Caption text={block.caption} />}
               </div>
             )
@@ -415,7 +436,7 @@ export default function ProjectPage() {
               {project.hasCompareSlider && project.compareSliderImages && (
                 <CompareSlider
                   beforeImage={project.compareSliderImages.before}
-                  afterImage={project.compareSliderImages.after}
+                  afterImages={[{ src: project.compareSliderImages.after, label: 'After' }]}
                 />
               )}
 
@@ -438,53 +459,77 @@ export default function ProjectPage() {
         <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
           <SectionBadge>Impact</SectionBadge>
 
-          {project.results.northStar && (
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
-              <div className="flex flex-col gap-1">
-                <div className="text-eyebrow text-[var(--color-300)]">
-                  {project.results.northStar.label}
-                </div>
-                {project.results.northStar.tag && (
-                  <div className="text-eyebrow text-[var(--accent)]">
-                    {project.results.northStar.tag}
+          {project.results.northStar && project.results.note ? (
+            /* Special layout: left = stacked metrics, right = northStar + note */
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-3">
+                {project.results.metrics.map((metric, index) => (
+                  <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                    <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                      {metric.value}
+                    </div>
+                    <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
+                    {metric.sublabel && (
+                      <div className="text-eyebrow text-[var(--color-200)] mt-0.5">{metric.sublabel}</div>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
-              <div className="md:text-right">
-                <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none">
-                  {project.results.northStar.value}
-                </div>
-                {project.results.northStar.sublabel && (
-                  <div className="text-eyebrow text-[var(--color-300)] mt-1">
-                    {project.results.northStar.sublabel}
+              <div className="flex flex-col gap-3">
+                <div className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none mb-1">
+                    {project.results.northStar.value}
                   </div>
-                )}
+                  <div className="text-eyebrow text-[var(--color-300)]">{project.results.northStar.label}</div>
+                  {project.results.northStar.sublabel && (
+                    <div className="text-eyebrow text-[var(--color-200)] mt-0.5">{project.results.northStar.sublabel}</div>
+                  )}
+                </div>
+                <div className="p-5 rounded-sm flex-1" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
+                </div>
               </div>
             </div>
-          )}
-
-          <div className={`grid gap-3 ${metricsGridCols}`}>
-            {project.results.metrics.map((metric, index) => (
-              <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-                <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
-                  {metric.value}
-                </div>
-                <div className="text-eyebrow text-[var(--color-300)]">
-                  {metric.label}
-                </div>
-                {metric.sublabel && (
-                  <div className="text-eyebrow text-[var(--color-200)] mt-0.5">
-                    {metric.sublabel}
+          ) : (
+            /* Default layout */
+            <>
+              {project.results.northStar && (
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <div className="flex flex-col gap-1">
+                    <div className="text-eyebrow text-[var(--color-300)]">{project.results.northStar.label}</div>
+                    {project.results.northStar.tag && (
+                      <div className="text-eyebrow text-[var(--accent)]">{project.results.northStar.tag}</div>
+                    )}
                   </div>
-                )}
+                  <div className="md:text-right">
+                    <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none">
+                      {project.results.northStar.value}
+                    </div>
+                    {project.results.northStar.sublabel && (
+                      <div className="text-eyebrow text-[var(--color-300)] mt-1">{project.results.northStar.sublabel}</div>
+                    )}
+                  </div>
+                </div>
+              )}
+              <div className={`grid gap-3 ${metricsGridCols}`}>
+                {project.results.metrics.map((metric, index) => (
+                  <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                    <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                      {metric.value}
+                    </div>
+                    <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
+                    {metric.sublabel && (
+                      <div className="text-eyebrow text-[var(--color-200)] mt-0.5">{metric.sublabel}</div>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-
-          {project.results.note && (
-            <div className="mt-3 p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-              <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
-            </div>
+              {project.results.note && (
+                <div className="mt-3 p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
+                </div>
+              )}
+            </>
           )}
         </section>
 
