@@ -185,6 +185,21 @@ function CompareSlider({
   )
 }
 
+// ─── Bold renderer ────────────────────────────────────────────────────────────
+
+function Bold({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/)
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.startsWith('**') && part.endsWith('**')
+          ? <strong key={i} className="font-semibold text-[var(--color-500)]">{part.slice(2, -2)}</strong>
+          : part
+      )}
+    </>
+  )
+}
+
 // ─── Process block renderer ───────────────────────────────────────────────────
 
 function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
@@ -195,14 +210,14 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'text':
             return (
               <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5">
-                {block.content}
+                <Bold text={block.content} />
               </p>
             )
 
           case 'heading':
             return (
               <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5">
-                {block.content}
+                <Bold text={block.content} />
               </p>
             )
 
