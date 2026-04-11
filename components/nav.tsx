@@ -132,11 +132,10 @@ const isDark = resolvedTheme === 'dark'
 
   return (
     /* Always constrained to content width — only background animates on scroll */
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem]">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem] px-5">
       <div
-        className="pointer-events-auto transition-all duration-[320ms] ease-out"
+        className="pointer-events-auto transition-all duration-[320ms] ease-out w-full"
         style={{
-          width: 'calc(100% - 2.5rem)',
           maxWidth: scrolled ? '42rem' : '45rem',
           ...(scrolled
             ? {
