@@ -132,9 +132,11 @@ const isDark = resolvedTheme === 'dark'
 
   return (
     /* Always constrained to content width — only background animates on scroll */
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem]">
+    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none py-[2.5rem]">
+      {/* matches content container — same max-width and px-5 */}
+      <div className="w-full max-w-[45rem] mx-auto px-5">
       <div
-        className={`pointer-events-auto transition-all duration-[320ms] ease-out ${scrolled ? 'w-[93%] max-w-[42rem] mx-auto' : 'w-full max-w-[45rem]'}`}
+        className={`pointer-events-auto transition-all duration-[320ms] ease-out ${scrolled ? 'w-[93%] mx-auto' : 'w-full'}`}
         style={{
           ...(scrolled
             ? {
@@ -209,6 +211,7 @@ const isDark = resolvedTheme === 'dark'
             </button>
           </div>
         </div>
+      </div>
       </div>
     </header>
   )
