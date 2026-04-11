@@ -136,8 +136,9 @@ const isDark = resolvedTheme === 'dark'
       {/* matches content container — same max-width and px-5 */}
       <div className="w-full max-w-[45rem] mx-auto px-5">
       <div
-        className={`pointer-events-auto transition-all duration-[320ms] ease-out ${scrolled ? 'w-[93%] mx-auto' : 'w-full'}`}
+        className="pointer-events-auto mx-auto transition-all duration-[320ms] ease-out"
         style={{
+          width: scrolled ? '93%' : '100%',
           ...(scrolled
             ? {
                 background: 'var(--color-000)',
