@@ -161,7 +161,7 @@ const isDark = resolvedTheme === 'dark'
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
-              className={`group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out py-[0.625rem] ${isProjectPage ? 'pl-4 pr-3' : 'pr-3'}`}
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pr-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -176,7 +176,7 @@ const isDark = resolvedTheme === 'dark'
               */}
               {isProjectPage && (
                 <span
-                  className="font-neubit text-[1.25rem] leading-[1] absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
+                  className="font-neubit text-[1.25rem] leading-[1] absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
                   aria-hidden
                 >←</span>
               )}
