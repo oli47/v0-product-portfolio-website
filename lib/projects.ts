@@ -286,18 +286,18 @@ export const projects: Project[] = [
       before: 'Unidentified\ncontact',
       action: 'Opens email',
       after: 'John Doe\nj.doe@mail.com',
-      caption: 'Contacts are anonymous until they open an email. That action links them to their browsing activity and unlocks the full automation suite.',
+      caption: 'Contacts are unidentified until they open an email. That action links them to their browsing activity and unlocks the full automation suite.',
     },
     opportunity: [],
     opportunityBlocks: [
       {
         kind: 'text',
-        content: "edrone is a marketing automation CRM for ecommerce. When a user integrates their store, their contact base gets imported. edrone can see anonymous activity on the website but cannot connect it to contacts in the base. Identification links the two: when a contact opens an email, a tracking pixel connects their browsing to their profile.",
+        content: "edrone is a marketing automation CRM for ecommerce. When a user integrates their store, their contact base gets imported. edrone can see unidentified activity on the website but cannot connect it to contacts in the base. Identification links the two: when a contact opens an email, a tracking pixel connects their browsing to their profile.",
       },
       {
         kind: 'image',
         src: '/images/ci-module.png',
-        caption: 'Contacts are anonymous until they open an email. That action connects them to their browsing activity.',
+        caption: 'Contacts are unidentified until they open an email. That action connects them to their browsing activity.',
       },
       {
         kind: 'text',
