@@ -161,7 +161,7 @@ const isDark = resolvedTheme === 'dark'
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pl-4 pr-3 py-[0.625rem]"
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out px-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
