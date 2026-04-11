@@ -42,7 +42,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
           ref={closeRef}
           onClick={onClose}
           aria-label="Close lightbox"
-          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-linear focus:outline-none focus-visible:text-white"
+          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-out focus:outline-none focus-visible:text-white"
         >
           Close ✕
         </button>
@@ -73,7 +73,7 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
         width={width}
         height={height}
         sizes="(max-width: 768px) 100vw, 680px"
-        className={`${className} cursor-zoom-in transition-opacity duration-[320ms] ease-linear hover:opacity-80`}
+        className={`${className} cursor-zoom-in transition-opacity duration-[320ms] ease-out hover:opacity-80`}
         priority={priority}
         onClick={() => setOpen(true)}
       />
@@ -259,7 +259,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group my-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[320ms] ease-linear group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[320ms] ease-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
                   <div className="rounded-[2px] overflow-hidden mb-4">
@@ -282,12 +282,23 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'compare':
             return (
-              <div key={i} className="my-8">
-                <CompareSlider
-                  beforeImage={block.images[0].src}
-                  afterImages={block.images.slice(1)}
-                />
-                {block.caption && <Caption text={block.caption} center />}
+              <div key={i} className="group my-8">
+                <div
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[320ms] ease-out group-hover:border-[var(--color-150)]"
+                  style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
+                >
+                  <div className="rounded-[2px] overflow-hidden mb-4">
+                    <CompareSlider
+                      beforeImage={block.images[0].src}
+                      afterImages={block.images.slice(1)}
+                    />
+                  </div>
+                  {block.caption && (
+                    <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
+                      {block.caption}
+                    </p>
+                  )}
+                </div>
               </div>
             )
 
@@ -568,8 +579,8 @@ export default function ProjectPage() {
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex gap-4">
-                  <span className="text-eyebrow text-[var(--accent)] shrink-0 min-w-fit">
-                    {String(index + 1).padStart(2, '0')}
+                  <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0">
+                    ▨
                   </span>
                   <div>
                     <h4 className="text-[14px] md:text-[16px] font-medium mb-1 text-pretty">{step.title}</h4>
@@ -590,8 +601,8 @@ export default function ProjectPage() {
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
-            <span className="text-eyebrow text-[var(--color-200)] shrink-0" aria-hidden="true">←</span>
-            <span ref={prevLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate">
+            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] shrink-0" aria-hidden="true">←</span>
+            <span ref={prevLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out truncate">
               {prev.title}
             </span>
           </Link>
@@ -602,10 +613,10 @@ export default function ProjectPage() {
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
-            <span ref={nextLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear truncate text-right">
+            <span ref={nextLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out truncate text-right">
               {next.title}
             </span>
-            <span className="text-eyebrow text-[var(--color-200)] shrink-0" aria-hidden="true">→</span>
+            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] shrink-0" aria-hidden="true">→</span>
           </Link>
         </div>
 

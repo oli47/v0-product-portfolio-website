@@ -73,9 +73,9 @@ function ContactBar() {
   }, [])
 
   const baseItem =
-    'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-[320ms] ease-linear hover:bg-[var(--color-000)] overflow-hidden'
-  const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] ease-linear'
-  const icon     = 'font-mono text-[0.75rem] leading-[1.25rem] text-[var(--color-200)]'
+    'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-[320ms] ease-out hover:bg-[var(--color-000)] overflow-hidden'
+  const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-[320ms] ease-out'
+  const icon     = 'font-neubit text-[1rem] leading-[1.25rem] text-[var(--color-200)]'
   const arrow    = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
 
   // Mobile: full-width stacked column. Desktop: hug-content horizontal row.
@@ -217,7 +217,7 @@ export default function Home() {
                 href="https://edrone.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2 decoration-[var(--color-100)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear"
+                className="underline underline-offset-2 decoration-[var(--color-100)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out"
               >
                 {t.hero.bodyEdrone}
               </a>
@@ -293,7 +293,7 @@ export default function Home() {
                         href={job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-linear whitespace-nowrap"
+                        className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out whitespace-nowrap"
                       >
                         {job.companySlug}
                       </a>
