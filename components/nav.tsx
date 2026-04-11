@@ -128,7 +128,7 @@ const isDark = resolvedTheme === 'dark'
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const btnClass =
-    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out cursor-pointer px-3 py-[0.625rem]'
+    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out cursor-pointer px-3'
 
   return (
     /* Always constrained to content width — only background animates on scroll */
@@ -161,7 +161,7 @@ const isDark = resolvedTheme === 'dark'
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pr-3 py-[0.625rem]"
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pr-3"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -188,7 +188,7 @@ const isDark = resolvedTheme === 'dark'
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Status — hidden on mobile to prevent overflow */}
-            <div className="hidden sm:flex items-center gap-2 pl-3 py-[0.625rem]">
+            <div className="hidden sm:flex items-center gap-2 pl-3">
               <span
                 className="w-1.5 h-1.5 rounded-[0.125rem] bg-[var(--accent-green)] animate-pulse-slow shrink-0"
                 aria-hidden="true"
