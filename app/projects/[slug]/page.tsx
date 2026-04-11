@@ -219,7 +219,7 @@ function Bold({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         part.startsWith('**') && part.endsWith('**')
-          ? <strong key={i} className="font-semibold text-[var(--color-500)]">{part.slice(2, -2)}</strong>
+          ? <strong key={i} className="font-semibold text-[var(--color-400)]">{part.slice(2, -2)}</strong>
           : part
       )}
     </>
@@ -363,21 +363,6 @@ export default function ProjectPage() {
             <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-balance">
               {project.tagline}
             </p>
-          </div>
-
-          {/* Meta row: role / team / duration / date */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
-            {[
-              { label: 'Role', value: project.meta.role },
-              { label: 'Team', value: project.meta.team },
-              { label: 'Duration', value: project.meta.duration },
-              { label: 'Year', value: project.meta.date },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex flex-col gap-1">
-                <span className="text-eyebrow text-[var(--color-200)]">{label}</span>
-                <span className="text-body-2 text-[var(--color-400)]">{value}</span>
-              </div>
-            ))}
           </div>
 
           {/* Hero image */}
@@ -588,7 +573,7 @@ export default function ProjectPage() {
                   </span>
                   <div>
                     <h4 className="text-[14px] md:text-[16px] font-medium mb-1 text-pretty">{step.title}</h4>
-                    <p className="text-[12px] md:text-[14px] text-[var(--color-300)] leading-[1.75] text-pretty">{step.description}</p>
+                    <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
                   </div>
                 </div>
               ))}
