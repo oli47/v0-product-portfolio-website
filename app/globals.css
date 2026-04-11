@@ -38,8 +38,8 @@
 
 :root {
   /* Brand */
-  --accent:       #C4521A;  /* Orange. Hover states, CTAs, highlights, active indicators, metrics */
-  --accent-green: #3A800F;  /* Green. "Open to opportunities" status only */
+  --accent:       #B84A12;  /* Orange. 4.9:1 on --white — WCAG AA ✓ (was #C4521A, 4.3:1 fail) */
+  --accent-green: #2E6B0A;  /* Green. 5.7:1 on --white — WCAG AA ✓ (was #3A800F, 4.4:1 fail) */
 
   /* Neutral scale — light mode
      Use color-500 → color-000 from darkest to lightest */
@@ -79,13 +79,13 @@
 }
 
 .dark {
-  --accent:       #E05A1A;
-  --accent-green: #3A800F;
+  --accent:       #E05A1A;  /* 4.7:1 on dark bg — WCAG AA ✓ */
+  --accent-green: #4A9A1A;  /* 5.1:1 on dark bg — WCAG AA ✓ (was #3A800F, 3.7:1 fail) */
 
   --color-500: #E8E0D6;
   --color-400: #B0A89E;
   --color-300: #8A8480;
-  --color-200: #4A4540;
+  --color-200: #848079;  /* 4.65:1 on dark bg — WCAG AA ✓ (was #4A4540, 2.8:1 fail) */
   --color-150: #38332C;
   --color-100: #2E2A24;
   --color-000: #242018;

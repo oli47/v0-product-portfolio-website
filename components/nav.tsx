@@ -209,15 +209,6 @@ const isDark = resolvedTheme === 'dark'
             >
               <span ref={themeLabel.spanRef} aria-hidden="true">{themeWord}</span>
             </button>
-            <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
-            {/* Language switcher — wire to i18n context when ready */}
-            <button
-              disabled
-              className={`${btnClass} opacity-40 cursor-not-allowed`}
-              title="Polish version coming soon"
-            >
-              {t.langSwitch}
-            </button>
           </div>
         </div>
       </div>

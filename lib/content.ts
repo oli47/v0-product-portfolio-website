@@ -9,7 +9,6 @@ export const content = {
       status: 'Open to opportunities',
       dark: 'Dark',
       light: 'Light',
-      langSwitch: 'PL',
     },
     hero: {
       headlinePre: 'I design the moments where products\u00a0',

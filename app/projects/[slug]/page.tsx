@@ -73,7 +73,7 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
         width={width}
         height={height}
         sizes="(max-width: 768px) 100vw, 680px"
-        className={`${className} cursor-zoom-in`}
+        className={`${className} cursor-zoom-in transition-opacity duration-[320ms] ease-linear hover:opacity-80`}
         priority={priority}
         onClick={() => setOpen(true)}
       />
@@ -360,7 +360,7 @@ export default function ProjectPage() {
             <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.1]">
               {project.title}
             </h1>
-            <p className="text-[14px] md:text-[16px] text-[var(--color-300)] leading-[1.75] text-balance">
+            <p className="text-body-1 text-[var(--color-300)] text-balance">
               {project.tagline}
             </p>
           </div>
