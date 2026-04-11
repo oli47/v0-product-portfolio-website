@@ -136,7 +136,7 @@ const isDark = resolvedTheme === 'dark'
       {/* matches content container — same max-width and px-5 */}
       <div className="w-full max-w-[45rem] mx-auto px-5">
       <div
-        className="pointer-events-auto mx-auto transition-all duration-[400ms] ease-in-out"
+        className={`pointer-events-auto mx-auto transition-all duration-[400ms] ease-in-out ${scrolled ? 'px-2' : ''}`}
         style={{
           width: scrolled ? '93%' : '100%',
           ...(scrolled
@@ -154,10 +154,10 @@ const isDark = resolvedTheme === 'dark'
         }}
       >
         {/* h-[2.5rem] = 40px */}
-        <div className="px-2 h-[2.5rem] flex items-center justify-between">
+        <div className="h-[2.5rem] flex items-center justify-between">
 
           {/* Left */}
-          <div className="flex items-center">
+          <div className="flex items-center pl-2">
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
@@ -200,7 +200,7 @@ const isDark = resolvedTheme === 'dark'
           </div>
 
           {/* Right */}
-          <div className="flex items-center">
+          <div className="flex items-center pr-2">
             <button
               onClick={handleThemeToggle}
               aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
