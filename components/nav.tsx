@@ -132,27 +132,30 @@ const isDark = resolvedTheme === 'dark'
 
   return (
     /* Always constrained to content width — only background animates on scroll */
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none py-[2.5rem] px-5">
-      <div
-        className="pointer-events-auto transition-all duration-[320ms] ease-out w-full"
-        style={{
-          maxWidth: scrolled ? '42rem' : '45rem',
-          ...(scrolled
-            ? {
-                background: 'var(--color-000)',
-                border: '1px solid var(--color-100)',
-                borderRadius: '0.125rem',
-                boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
-              }
-            : {
-                background: 'color-mix(in srgb, var(--background) 90%, transparent)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }),
-        }}
-      >
+    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none py-[2.5rem]">
+      {/* centering layer — matches content column exactly */}
+      <div className="max-w-[45rem] mx-auto w-full px-5">
+        {/* visual nav bar — 0.5rem inset from content text edges; shrinks to 42rem on scroll */}
+        <div
+          className={`pointer-events-auto transition-all duration-[320ms] ease-out ${scrolled ? 'mx-auto' : 'mx-2'}`}
+          style={{
+            ...(scrolled
+              ? {
+                  maxWidth: '42rem',
+                  background: 'var(--color-000)',
+                  border: '1px solid var(--color-100)',
+                  borderRadius: '0.125rem',
+                  boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
+                }
+              : {
+                  background: 'color-mix(in srgb, var(--background) 90%, transparent)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }),
+          }}
+        >
         {/* h-[2.5rem] = 40px */}
-        <div className="px-5 h-[2.5rem] flex items-center justify-between">
+        <div className="px-2 h-[2.5rem] flex items-center justify-between">
 
           {/* Left */}
           <div className="flex items-center">
@@ -209,6 +212,7 @@ const isDark = resolvedTheme === 'dark'
               <span ref={themeLabel.spanRef} aria-hidden="true">{themeWord}</span>
             </button>
           </div>
+        </div>
         </div>
       </div>
     </header>
