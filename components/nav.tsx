@@ -161,7 +161,7 @@ const isDark = resolvedTheme === 'dark'
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pr-3 py-[0.625rem]"
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pl-4 pr-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -171,12 +171,12 @@ const isDark = resolvedTheme === 'dark'
               }}
             >
               {/*
-                Arrow: absolutely positioned — never in flex flow.
-                Name is always at the same X (px-3 from link left edge), on every page.
+                Arrow: inside link at left-0, pl-4 reserves space on both pages
+                so text position is identical on home and project pages.
               */}
               {isProjectPage && (
                 <span
-                  className="font-neubit text-[1.25rem] leading-[1] absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
+                  className="font-neubit text-[1.25rem] leading-[1] absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
                   aria-hidden
                 >←</span>
               )}
