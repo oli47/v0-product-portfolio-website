@@ -170,20 +170,18 @@ const isDark = resolvedTheme === 'dark'
                 }
               }}
             >
-              {/*
-                Arrow: inside link at left-0, pl-4 reserves space on both pages
-                so text position is identical on home and project pages.
-              */}
-              {isProjectPage && (
-                <span
-                  className="font-neubit text-[1.25rem] leading-[1] absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
-                  aria-hidden
-                >←</span>
-              )}
-              {/* inline-grid: ghost fixes width to name; real text left-aligned inside */}
+              {/* inline-grid: ghost fixes width to name; arrow inline, never leaves nav */}
               <span className="inline-grid shrink-0">
                 <span className="col-start-1 row-start-1 invisible whitespace-nowrap select-none" aria-hidden>{t.name}</span>
-                <span ref={nameLabel.spanRef} className="col-start-1 row-start-1">{t.name}</span>
+                <span className="col-start-1 row-start-1 flex items-center">
+                  {isProjectPage && (
+                    <span
+                      className="font-neubit text-[1.25rem] leading-[1] mr-1 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
+                      aria-hidden
+                    >←</span>
+                  )}
+                  <span ref={nameLabel.spanRef}>{t.name}</span>
+                </span>
               </span>
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
