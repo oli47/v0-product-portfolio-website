@@ -137,7 +137,7 @@ const isDark = resolvedTheme === 'dark'
         className="pointer-events-auto transition-all duration-[320ms] ease-out"
         style={{
           width: 'calc(100% - 2.5rem)',
-          maxWidth: '45rem',
+          maxWidth: scrolled ? '42rem' : '45rem',
           ...(scrolled
             ? {
                 background: 'var(--color-000)',
@@ -153,14 +153,14 @@ const isDark = resolvedTheme === 'dark'
         }}
       >
         {/* h-[2.5rem] = 40px */}
-        <div className="px-5 h-[2.5rem] flex items-center justify-between">
+        <div className="px-2 h-[2.5rem] flex items-center justify-between">
 
           {/* Left */}
           <div className="flex items-center">
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out px-3 py-[0.625rem]"
+              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out pr-3 py-[0.625rem]"
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -187,7 +187,7 @@ const isDark = resolvedTheme === 'dark'
             </Link>
             <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
             {/* Status — hidden on mobile to prevent overflow */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-[0.625rem]">
+            <div className="hidden sm:flex items-center gap-2 pl-3 py-[0.625rem]">
               <span
                 className="w-1.5 h-1.5 rounded-full bg-[var(--accent-green)] animate-pulse-slow shrink-0"
                 aria-hidden="true"
