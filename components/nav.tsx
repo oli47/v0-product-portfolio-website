@@ -152,7 +152,7 @@ const isDark = resolvedTheme === 'dark'
         }}
       >
         {/* h-[2.5rem] = 40px */}
-        <div className="px-2 h-[2.5rem] flex items-center justify-between">
+        <div className="px-5 h-[2.5rem] flex items-center justify-between">
 
           {/* Left */}
           <div className="flex items-center">
