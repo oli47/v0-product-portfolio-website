@@ -128,7 +128,7 @@ const isDark = resolvedTheme === 'dark'
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const btnClass =
-    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[320ms] ease-out cursor-pointer px-3 py-[0.625rem]'
+    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out cursor-pointer px-3 py-[0.625rem]'
 
   return (
     /* Always constrained to content width — only background animates on scroll */
@@ -136,7 +136,7 @@ const isDark = resolvedTheme === 'dark'
       {/* matches content container — same max-width and px-5 */}
       <div className="w-full max-w-[45rem] mx-auto px-5">
       <div
-        className="pointer-events-auto mx-auto transition-all duration-[320ms] ease-out"
+        className="pointer-events-auto mx-auto transition-all duration-[400ms] ease-in-out"
         style={{
           width: scrolled ? '93%' : '100%',
           ...(scrolled
@@ -161,7 +161,7 @@ const isDark = resolvedTheme === 'dark'
             <Link
               href="/"
               aria-label={isProjectPage ? 'Back to home' : t.name}
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out pr-3 py-[0.625rem]"
+              className={`group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out py-[0.625rem] ${isProjectPage ? 'pl-4 pr-3' : 'pr-3'}`}
               onMouseEnter={() => nameLabel.scramble()}
               onMouseLeave={() => {
                 nameLabel.reset()
@@ -176,7 +176,7 @@ const isDark = resolvedTheme === 'dark'
               */}
               {isProjectPage && (
                 <span
-                  className="font-neubit text-[1.25rem] leading-[1] absolute top-1/2 -translate-y-1/2 -translate-x-full -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] ease-out"
+                  className="font-neubit text-[1.25rem] leading-[1] absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
                   aria-hidden
                 >←</span>
               )}
@@ -190,7 +190,7 @@ const isDark = resolvedTheme === 'dark'
             {/* Status — hidden on mobile to prevent overflow */}
             <div className="hidden sm:flex items-center gap-2 pl-3 py-[0.625rem]">
               <span
-                className="w-1.5 h-1.5 rounded-full bg-[var(--accent-green)] animate-pulse-slow shrink-0"
+                className="w-1.5 h-1.5 rounded-[0.125rem] bg-[var(--accent-green)] animate-pulse-slow shrink-0"
                 aria-hidden="true"
               />
               <span className="text-eyebrow text-[var(--accent-green)]">

@@ -230,7 +230,7 @@
   background-color: currentColor;
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 320ms linear;
+  transition: transform 400ms ease-in-out;
 }
 .nav-link:hover::after { transform: scaleX(1); }
 

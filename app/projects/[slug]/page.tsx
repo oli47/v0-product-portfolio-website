@@ -9,6 +9,35 @@ import { SectionBadge } from '@/components/section-badge'
 import { useScramble } from '@/lib/use-scramble'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
+// ─── Scroll To Top ───────────────────────────────────────────────────────────
+
+function ScrollToTop() {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Back to top"
+      aria-hidden={!visible}
+      className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-9 h-9 rounded-[0.125rem] border border-[var(--color-100)] bg-[var(--background)] text-[var(--color-300)] hover:text-[var(--accent)] hover:border-[var(--accent)]"
+      style={{
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? 'auto' : 'none',
+        transform: visible ? 'translateY(0)' : 'translateY(8px)',
+        transition: 'opacity 400ms ease-in-out, transform 400ms ease-in-out, color 400ms ease-in-out, border-color 400ms ease-in-out',
+      }}
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  )
+}
+
 // ─── Lightbox ────────────────────────────────────────────────────────────────
 
 function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
@@ -37,12 +66,12 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 cursor-zoom-out"
       onClick={onClose}
     >
-      <div className="relative max-w-5xl w-full max-h-full" onClick={e => e.stopPropagation()}>
+      <div className="relative max-w-5xl w-full max-h-full">
         <button
           ref={closeRef}
           onClick={onClose}
           aria-label="Close lightbox"
-          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[320ms] ease-out focus:outline-none focus-visible:text-white"
+          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-white"
         >
           Close ✕
         </button>
@@ -73,7 +102,7 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
         width={width}
         height={height}
         sizes="(max-width: 768px) 100vw, 680px"
-        className={`${className} cursor-zoom-in transition-opacity duration-[320ms] ease-out hover:opacity-80`}
+        className={`${className} cursor-zoom-in transition-opacity duration-[400ms] ease-in-out hover:opacity-80`}
         priority={priority}
         onClick={() => setOpen(true)}
       />
@@ -206,7 +235,7 @@ function CompareSlider({
 
       {/* Labels */}
       <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">Before</div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 320ms linear' }}>{afterImages[activeIndex].label}</div>
+      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 400ms ease-in-out' }}>{afterImages[activeIndex].label}</div>
     </div>
   )
 }
@@ -259,7 +288,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group my-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[320ms] ease-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
                   <div className="rounded-[2px] overflow-hidden mb-4">
@@ -284,7 +313,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group my-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[320ms] ease-out group-hover:border-[var(--color-150)]"
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
                   <div className="rounded-[2px] overflow-hidden mb-4">
@@ -578,8 +607,8 @@ export default function ProjectPage() {
             <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
-                <div key={index} className="flex gap-4">
-                  <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0">
+                <div key={index} className="flex items-baseline gap-4">
+                  <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0 translate-y-[0.1em]">
                     ▨
                   </span>
                   <div>
@@ -601,8 +630,8 @@ export default function ProjectPage() {
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
-            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] shrink-0" aria-hidden="true">←</span>
-            <span ref={prevLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out truncate">
+            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" aria-hidden="true">←</span>
+            <span ref={prevLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out truncate">
               {prev.title}
             </span>
           </Link>
@@ -613,14 +642,15 @@ export default function ProjectPage() {
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
-            <span ref={nextLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[320ms] ease-out truncate text-right">
+            <span ref={nextLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out truncate text-right">
               {next.title}
             </span>
-            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] shrink-0" aria-hidden="true">→</span>
+            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" aria-hidden="true">→</span>
           </Link>
         </div>
 
       </div>
+      <ScrollToTop />
     </main>
   )
 }
