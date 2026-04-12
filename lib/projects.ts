@@ -18,7 +18,7 @@ export type ProcessBlock =
   | { kind: 'compare'; images: CompareImage[]; caption?: string }
   | { kind: 'contact-flow'; caption?: string }
   | { kind: 'before-after-flow'; before: string[]; after: string[]; caption?: string }
-  | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string }[]; caption?: string }
+  | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]; arc?: { fromStep: number; toStep: number; label: string }; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -135,9 +135,10 @@ export const projects: Project[] = [
           { title: 'Signup', subtitle: 'User creates an account' },
           { title: 'AI content', subtitle: "User sees their store's branded content ready to go" },
           { title: 'Activation', subtitle: 'User reviews what is already on. No setup needed.', labelAfter: 'USER HAS SEEN THE VALUE' },
-          { title: 'Integration', subtitle: 'User decides to connect their store' },
+          { title: 'Integration', subtitle: 'User decides to connect their store', mobileAnnotation: 'INITIALLY AFTER SIGNUP' },
           { title: 'AHA moment', subtitle: 'User sees their first order driven by edrone' },
         ],
+        arc: { fromStep: 1, toStep: 3, label: 'INITIAL PROCESS' },
         caption: 'The full activation path. Value demonstrated before any commitment.',
       },
       {

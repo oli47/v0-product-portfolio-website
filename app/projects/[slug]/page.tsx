@@ -317,21 +317,72 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
 
 // ─── Vertical Flow Diagram ───────────────────────────────────────────────────
 
-function VerticalFlow({ steps, caption }: {
-  steps: { title: string; subtitle?: string; labelAfter?: string }[]
+function VerticalFlow({ steps, arc, caption }: {
+  steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]
+  arc?: { fromStep: number; toStep: number; label: string }
   caption?: string
 }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [arcGeo, setArcGeo] = useState<{ x: number; y1: number; y2: number; midX: number; midY: number } | null>(null)
+
+  useEffect(() => {
+    if (!arc) return
+    const measure = () => {
+      const container = containerRef.current
+      const fromEl = stepRefs.current[arc.fromStep]
+      const toEl   = stepRefs.current[arc.toStep]
+      if (!container || !fromEl || !toEl) return
+      const cr = container.getBoundingClientRect()
+      const fr = fromEl.getBoundingClientRect()
+      const tr = toEl.getBoundingClientRect()
+      const x  = fr.right - cr.left + 12
+      const y1 = fr.top   - cr.top
+      const y2 = tr.bottom - cr.top
+      setArcGeo({
+        x,
+        y1,
+        y2,
+        // cubic bezier midpoint at t=0.5: x+48, (y1+y2)/2
+        midX: x + 48,
+        midY: (y1 + y2) / 2,
+      })
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    if (containerRef.current) ro.observe(containerRef.current)
+    return () => ro.disconnect()
+  }, [arc])
+
   return (
     <div className="my-8">
-      <div className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10" style={{ backgroundColor: 'var(--color-000)' }}>
+      <div
+        ref={containerRef}
+        className="relative rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
+        style={{ backgroundColor: 'var(--color-000)' }}
+      >
         <div className="flex flex-col items-center max-w-xs mx-auto">
           {steps.map((step, i) => (
             <div key={i} className="flex flex-col items-center w-full">
               {/* Step box */}
-              <div className="w-full px-5 py-4 rounded-[0.125rem] border border-[var(--color-100)] text-center" style={{ backgroundColor: 'var(--background)' }}>
-                <p className="text-body-1 font-semibold text-[var(--color-500)]">{step.title}</p>
+              <div
+                ref={el => { stepRefs.current[i] = el }}
+                className="w-full rounded-[0.125rem] border border-[var(--color-100)] overflow-hidden text-center"
+                style={{ backgroundColor: 'var(--background)' }}
+              >
+                <div className="px-5 py-3">
+                  <p className="text-body-1 font-semibold text-[var(--color-500)]">{step.title}</p>
+                </div>
                 {step.subtitle && (
-                  <p className="text-body-2 text-[var(--color-300)] mt-1">{step.subtitle}</p>
+                  <div className="px-5 py-3 border-t border-[var(--color-100)]">
+                    <p className="text-body-2 text-[var(--color-300)]">{step.subtitle}</p>
+                  </div>
+                )}
+                {/* Mobile annotation — replaces arc on small screens */}
+                {step.mobileAnnotation && (
+                  <div className="sm:hidden px-5 py-2 border-t border-[var(--color-100)]">
+                    <span className="text-eyebrow text-[var(--accent)]">{step.mobileAnnotation}</span>
+                  </div>
                 )}
               </div>
 
@@ -355,6 +406,51 @@ function VerticalFlow({ steps, caption }: {
             </div>
           ))}
         </div>
+
+        {/* Arc annotation — desktop only, measured via refs */}
+        {arc && arcGeo && (
+          <svg
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none hidden sm:block"
+            style={{ width: '100%', height: '100%', overflow: 'visible' }}
+          >
+            <defs>
+              <marker id="vf-arc-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </marker>
+            </defs>
+            {/* Path from toStep bottom → curves right → fromStep top (arrowhead at top) */}
+            <path
+              d={`M ${arcGeo.x},${arcGeo.y2} C ${arcGeo.x + 64},${arcGeo.y2} ${arcGeo.x + 64},${arcGeo.y1} ${arcGeo.x},${arcGeo.y1}`}
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="1.5"
+              strokeDasharray="6 6"
+              markerEnd="url(#vf-arc-arr)"
+            />
+          </svg>
+        )}
+        {/* Arc label — HTML div with background so it sits on top of the arc line */}
+        {arc && arcGeo && (
+          <div
+            aria-hidden="true"
+            className="absolute hidden sm:flex items-center pointer-events-none px-1.5 py-0.5 rounded-[0.125rem]"
+            style={{
+              left: arcGeo.midX,
+              top: arcGeo.midY,
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: 'var(--color-000)',
+              fontSize: '10px',
+              fontFamily: 'ui-monospace, monospace',
+              letterSpacing: '0.12em',
+              color: 'var(--accent)',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {arc.label}
+          </div>
+        )}
       </div>
       {caption && <Caption text={caption} />}
     </div>
@@ -439,8 +535,8 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
             <div className="flex sm:hidden">
               <svg width="12" height="30" style={{ display: 'block', overflow: 'visible' }}>
                 <defs>
-                  <marker id="cf-arr-v2" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto">
-                    <path d="M0.5 0 L3 5 L5.5 0" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <marker id="cf-arr-v2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </marker>
                 </defs>
                 <line x1="6" y1="0" x2="6" y2="30" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd="url(#cf-arr-v2)"/>
@@ -564,7 +660,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             )
 
           case 'vertical-flow':
-            return <VerticalFlow key={i} steps={block.steps} caption={block.caption} />
+            return <VerticalFlow key={i} steps={block.steps} arc={block.arc} caption={block.caption} />
 
           case 'before-after-flow':
             return <BeforeAfterFlow key={i} before={block.before} after={block.after} caption={block.caption} />
