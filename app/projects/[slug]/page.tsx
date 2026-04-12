@@ -982,10 +982,10 @@ export default function ProjectPage() {
             onMouseLeave={prevLabel.reset}
           >
             <div className="flex items-center gap-1.5">
-              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">←</span>
-              <span className="text-eyebrow text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
+              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">←</span>
+              <span className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
             </div>
-            <span ref={prevLabel.spanRef} className="font-display text-[clamp(1.125rem,3.5vw,1.5rem)] leading-[1.2] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
+            <span ref={prevLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {prev.title}
             </span>
           </Link>
@@ -999,10 +999,10 @@ export default function ProjectPage() {
             onMouseLeave={nextLabel.reset}
           >
             <div className="flex items-center gap-1.5">
-              <span className="text-eyebrow text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
-              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">→</span>
+              <span className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
+              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">→</span>
             </div>
-            <span ref={nextLabel.spanRef} className="font-display text-[clamp(1.125rem,3.5vw,1.5rem)] leading-[1.2] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
+            <span ref={nextLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {next.title}
             </span>
           </Link>
