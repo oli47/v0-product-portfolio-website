@@ -233,11 +233,11 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era: four fields on a single page, broken SSO, a phone number field with no function in the product. Amplitude and a Claude-powered UX agent I had built both flagged signup as the top-priority drop-off. Mobile conversion sat at 0.05%.',
+        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era: four fields on a single page, including a phone number that had no function in the product. Amplitude showed massive drop-off at the form. I identified the phone field as the likely cause, and **a Claude-powered UX agent I had built confirmed it** as the top-priority issue. Mobile conversion sat at 0.05%.',
       },
       {
         kind: 'text',
-        content: 'The drop-off was high, but the form was fixable. A small change here could unlock the entire funnel.',
+        content: 'If the drop-off was this high on a form this fixable, a small change could unlock the entire funnel.',
       },
       {
         kind: 'image',
@@ -249,11 +249,26 @@ export const projects: Project[] = [
     processContent: [
       {
         kind: 'text',
-        content: 'I removed the phone field and restructured the form into two steps in one go. The data was clear enough that splitting into separate iterations would have just meant weeks of waiting on low traffic.',
+        content: 'Three problems: the phone field was the primary drop-off point — Sales confirmed they no longer used it. Four fields on one page made signup feel heavy for a product trying to be simple. And SSO did not actually create an account: it pre-filled two fields, leaving the user to complete the rest manually.',
       },
       {
         kind: 'text',
-        content: 'Step 1: email or Google/Shopify SSO. Account created immediately. SSO now actually creates the account instead of pre-filling two fields on the same form. Step 2: name and store URL.',
+        content: '**I shipped two fixes at once.** The traffic was too low for meaningful split testing, and the drop-off data pointed clearly at the phone field.',
+      },
+      {
+        kind: 'decisions',
+        items: [
+          {
+            num: 'FIX 1',
+            title: 'Removed the phone field',
+            description: 'Eliminated the primary drop-off point. The product only needed three fields: email, name, and store URL.',
+          },
+          {
+            num: 'FIX 2',
+            title: 'Restructured into two steps',
+            description: 'Step 1 creates the account (email or Google/Shopify SSO). Step 2 collects name and store URL. SSO now actually creates the account instead of pre-filling fields.',
+          },
+        ],
       },
       {
         kind: 'compare',
@@ -271,7 +286,7 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '+67% total signup conversion. Desktop doubled. Mobile from 0.05% to 3%.',
-      note: 'With prompt engineering and Codex I go from identifying a problem to shipping a fix in the same day. Designing, building, and merging pull requests on production code.',
+      note: 'With prompt engineering and tools like Codex, I can move from identifying a problem to shipping a fix in the same day. Designing, building, and merging pull requests on production code.',
       northStar: {
         label: 'FROM DIAGNOSIS TO PRODUCTION',
         value: '5 hours',
@@ -284,8 +299,12 @@ export const projects: Project[] = [
     },
     nextSteps: [
       {
-        title: 'Signup works, but does not yet do its job as a first impression',
-        description: 'The user provides a store URL and waits 10–30 seconds while AI generates content. That dead time could build anticipation instead. Users from Shopify or Shoper could skip the form entirely through platform OAuth.',
+        title: 'Signup as a first impression',
+        description: 'The user provides a store URL and waits 10–30 seconds while AI generates content. That dead time could build anticipation instead.',
+      },
+      {
+        title: 'Platform OAuth',
+        description: 'Users from Shopify or Shoper could skip the form entirely.',
       },
     ],
   },
