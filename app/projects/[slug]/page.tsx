@@ -6,37 +6,9 @@ import Image from 'next/image'
 import { getProject, getProjectNavigation } from '@/lib/projects'
 import type { ProcessBlock } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import { useScramble } from '@/lib/use-scramble'
 import { useState, useEffect, useRef, useCallback } from 'react'
-
-// ─── Scroll To Top ───────────────────────────────────────────────────────────
-
-function ScrollToTop() {
-  const [visible, setVisible] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 400)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  return (
-    <button
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Back to top"
-      aria-hidden={!visible}
-      className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-9 h-9 rounded-[0.125rem] border border-[var(--color-100)] bg-[var(--background)] text-[var(--color-300)] hover:text-[var(--accent)] hover:border-[var(--accent)]"
-      style={{
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? 'auto' : 'none',
-        transform: visible ? 'translateY(0)' : 'translateY(8px)',
-        transition: 'opacity 400ms ease-in-out, transform 400ms ease-in-out, color 400ms ease-in-out, border-color 400ms ease-in-out',
-      }}
-    >
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </button>
-  )
-}
 
 // ─── Lightbox ────────────────────────────────────────────────────────────────
 
@@ -44,9 +16,9 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { onClose(); return }
-      // Simple focus trap: keep focus inside dialog on Tab
       if (e.key === 'Tab') { e.preventDefault(); closeRef.current?.focus() }
     }
     document.addEventListener('keydown', handleKey)
@@ -55,6 +27,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
     return () => {
       document.removeEventListener('keydown', handleKey)
       document.body.style.overflow = ''
+      previouslyFocused?.focus()
     }
   }, [onClose])
 
@@ -161,20 +134,25 @@ function CompareSlider({
     if (e.key === 'ArrowRight') setSliderPosition(p => Math.min(p + 5, 100))
   }, [])
 
+  // Always listen for mouseup/touchend to stop dragging
   useEffect(() => {
-    const handleMouseUp = () => setIsDragging(false)
-    const handleTouchEnd = () => setIsDragging(false)
-    const handleMouseMove = (e: MouseEvent) => { if (isDragging) handleMove(e.clientX) }
-    const handleTouchMove = (e: TouchEvent) => { if (isDragging && e.touches[0]) handleMove(e.touches[0].clientX) }
-
-    document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('touchend', handleTouchEnd)
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('touchmove', handleTouchMove)
-
+    const stop = () => setIsDragging(false)
+    document.addEventListener('mouseup', stop)
+    document.addEventListener('touchend', stop, { passive: true })
     return () => {
-      document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('touchend', handleTouchEnd)
+      document.removeEventListener('mouseup', stop)
+      document.removeEventListener('touchend', stop)
+    }
+  }, [])
+
+  // Only attach move listeners while dragging
+  useEffect(() => {
+    if (!isDragging) return
+    const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX)
+    const handleTouchMove = (e: TouchEvent) => { if (e.touches[0]) handleMove(e.touches[0].clientX) }
+    document.addEventListener('mousemove', handleMouseMove, { passive: true })
+    document.addEventListener('touchmove', handleTouchMove, { passive: true })
+    return () => {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('touchmove', handleTouchMove)
     }
