@@ -90,7 +90,7 @@ function PlaceholderImage({ className }: { className?: string }) {
   return (
     <div
       className={`w-full flex items-center justify-center border border-dashed border-[var(--color-100)] rounded-sm bg-[var(--color-000)] ${className ?? ''}`}
-      style={{ minHeight: '220px' }}
+      style={{ minHeight: '13.75rem' }}
     >
       <span className="text-eyebrow text-[var(--color-200)]">Image placeholder</span>
     </div>
@@ -310,18 +310,22 @@ function VerticalFlow({ steps, arc, caption }: {
       const container = containerRef.current
       const fromEl = stepRefs.current[arc.fromStep]
       const toEl   = stepRefs.current[arc.toStep]
+      const prevEl = arc.fromStep > 0 ? stepRefs.current[arc.fromStep - 1] : null
       if (!container || !fromEl || !toEl) return
       const cr = container.getBoundingClientRect()
       const fr = fromEl.getBoundingClientRect()
       const tr = toEl.getBoundingClientRect()
       const x  = fr.right - cr.left + 12
-      const y1 = fr.top   - cr.top
-      const y2 = tr.bottom - cr.top
+      // y1 = midpoint of the gap/arrow between Signup (step before fromStep) and AI content
+      const y1 = prevEl
+        ? (prevEl.getBoundingClientRect().bottom + fr.top) / 2 - cr.top
+        : fr.top - cr.top
+      // y2 = center of Integration
+      const y2 = (tr.top + tr.bottom) / 2 - cr.top
       setArcGeo({
         x,
         y1,
         y2,
-        // cubic bezier midpoint at t=0.5: x+48, (y1+y2)/2
         midX: x + 48,
         midY: (y1 + y2) / 2,
       })
@@ -348,17 +352,17 @@ function VerticalFlow({ steps, arc, caption }: {
                 className="w-full rounded-[0.125rem] border border-[var(--color-100)] overflow-hidden text-center"
                 style={{ backgroundColor: 'var(--background)' }}
               >
-                <div className="px-5 py-3">
-                  <p className="text-body-1 font-semibold text-[var(--color-500)]">{step.title}</p>
+                <div className="px-5 pt-3">
+                  <p className="text-body-1 font-semibold text-[var(--color-500)] text-balance">{step.title}</p>
                 </div>
                 {step.subtitle && (
-                  <div className="px-5 py-3 border-t border-[var(--color-100)]">
-                    <p className="text-body-2 text-[var(--color-300)]">{step.subtitle}</p>
+                  <div className="px-5 pb-3">
+                    <p className="text-body-2 text-[var(--color-300)] text-pretty">{step.subtitle}</p>
                   </div>
                 )}
                 {/* Mobile annotation — replaces arc on small screens */}
                 {step.mobileAnnotation && (
-                  <div className="sm:hidden px-5 py-2 border-t border-[var(--color-100)]">
+                  <div className="sm:hidden px-5 pb-3">
                     <span className="text-eyebrow text-[var(--accent)]">{step.mobileAnnotation}</span>
                   </div>
                 )}
@@ -418,7 +422,7 @@ function VerticalFlow({ steps, arc, caption }: {
               top: arcGeo.midY,
               transform: 'translate(-50%, -50%)',
               backgroundColor: 'var(--color-000)',
-              fontSize: '10px',
+              fontSize: '0.625rem',
               fontFamily: 'ui-monospace, monospace',
               letterSpacing: '0.12em',
               color: 'var(--accent)',
@@ -595,7 +599,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
               <div key={i} className="group my-8">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
+                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <ClickableImage
@@ -620,7 +624,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
               <div key={i} className="group my-8">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
+                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <CompareSlider
@@ -712,7 +716,7 @@ export default function ProjectPage() {
         {/* Header */}
         <section className="mb-12">
           <div className="flex flex-col gap-3 mb-8">
-            <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.2]">
+            <h1 className="font-display text-[clamp(1.5rem,7vw,2.625rem)] leading-[1.2] text-balance">
               {project.title}
             </h1>
             <p className="text-body-1 text-[var(--color-300)] text-balance">
@@ -848,7 +852,7 @@ export default function ProjectPage() {
               {/* Left — large north star cell */}
               <div
                 className="p-5 rounded-sm flex flex-col justify-between"
-                style={{ backgroundColor: 'var(--color-000)', minHeight: '220px' }}
+                style={{ backgroundColor: 'var(--color-000)', minHeight: '13.75rem' }}
               >
                 <div className="flex flex-col gap-4">
                   <div className="text-eyebrow text-[var(--color-300)]">
@@ -867,7 +871,7 @@ export default function ProjectPage() {
               <div className="flex flex-col gap-3">
                 {project.results.metrics.map((metric, index) => (
                   <div key={index} className="p-5 rounded-sm flex flex-col gap-1 flex-1" style={{ backgroundColor: 'var(--color-000)' }}>
-                    <div className={`font-display text-[clamp(28px,7vw,40px)] leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                    <div className={`font-display text-[clamp(1.75rem,7vw,2.5rem)] leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
                       {metric.value}
                     </div>
                     <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
@@ -887,7 +891,7 @@ export default function ProjectPage() {
                     )}
                   </div>
                   <div className="md:text-right">
-                    <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none">
+                    <div className="font-display text-[clamp(1.75rem,7vw,3rem)] text-[var(--accent)] leading-none">
                       {project.results.northStar.value}
                     </div>
                     {project.results.northStar.sublabel && (
@@ -899,7 +903,7 @@ export default function ProjectPage() {
               <div className={`grid gap-3 ${metricsGridCols}`}>
                 {project.results.metrics.map((metric, index) => (
                   <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-                    <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                    <div className={`font-display text-[clamp(1.75rem,7vw,3rem)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
                       {metric.value}
                     </div>
                     <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>

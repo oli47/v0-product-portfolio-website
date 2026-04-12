@@ -168,7 +168,7 @@ export default function Home() {
         <section className="mb-16">
           <FadeUp delay={0}>
             <h1
-              className="font-display font-normal tracking-[0.025rem] text-[var(--color-500)] mb-5 text-pretty"
+              className="font-display font-normal tracking-[0.025rem] text-[var(--color-500)] mb-5 text-balance"
               style={{
                 fontSize: 'clamp(2.5rem, 5vw, 3.25rem)',
                 lineHeight: 'clamp(3rem, 6vw, 3.5rem)',
