@@ -212,8 +212,8 @@ function CompareSlider({
       </div>
 
       {/* Labels */}
-      <div className="absolute top-4 left-4 text-eyebrow text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-[0.125rem] shadow-sm z-20 border border-[var(--color-100)]">Before</div>
-      <div className="absolute top-4 right-4 text-eyebrow text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-[0.125rem] shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 400ms ease-in-out' }}>{afterImages[activeIndex].label}</div>
+      <div className="absolute top-4 left-4 text-eyebrow text-[var(--color-300)] bg-[var(--color-step-bg)] px-2 py-1 rounded-[0.125rem] shadow-sm z-20 border border-[var(--color-150)]">Before</div>
+      <div className="absolute top-4 right-4 text-eyebrow text-white bg-[var(--accent)] px-2 py-1 rounded-[0.125rem] shadow-sm z-20" style={{ transition: 'opacity 400ms ease-in-out' }}>{afterImages[activeIndex].label}</div>
     </div>
   )
 }
@@ -224,7 +224,7 @@ function FlowStep({ label }: { label: string }) {
   return (
     <div
       className="px-4 py-2.5 rounded-[0.125rem] border border-[var(--color-100)] text-body-2 text-[var(--color-400)] text-center"
-      style={{ backgroundColor: 'var(--background)', minWidth: '8rem' }}
+      style={{ backgroundColor: 'var(--color-step-bg)', minWidth: '8rem' }}
     >
       {label}
     </div>
@@ -255,7 +255,7 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
           {/* BEFORE */}
           <div className="p-5 flex flex-col">
             <div className="mb-5">
-              <span className="text-eyebrow text-[var(--color-300)] px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--color-100)' }}>
+              <span className="text-eyebrow text-[var(--color-300)] px-2 py-1 rounded-[0.125rem] border border-[var(--color-150)]" style={{ backgroundColor: 'var(--color-step-bg)' }}>
                 BEFORE
               </span>
             </div>
@@ -272,7 +272,7 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
           {/* AFTER */}
           <div className="p-5 flex flex-col">
             <div className="mb-5 flex justify-end">
-              <span className="text-eyebrow text-[var(--background)] px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--color-500)' }}>
+              <span className="text-eyebrow text-white px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--accent)' }}>
                 AFTER
               </span>
             </div>
@@ -350,7 +350,7 @@ function VerticalFlow({ steps, arc, caption }: {
               <div
                 ref={el => { stepRefs.current[i] = el }}
                 className="w-full rounded-[0.125rem] border border-[var(--color-100)] overflow-hidden text-center"
-                style={{ backgroundColor: 'var(--background)' }}
+                style={{ backgroundColor: 'var(--color-step-bg)' }}
               >
                 <div className="px-5 pt-3">
                   <p className="text-body-1 font-semibold text-[var(--color-500)] text-balance">{step.title}</p>
@@ -453,7 +453,7 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
           {/* Card: Unidentified contact */}
           <div
             className="flex flex-col items-center gap-3 p-5 rounded-sm border border-[var(--color-100)] w-full sm:w-36 shrink-0"
-            style={{ backgroundColor: 'var(--background)' }}
+            style={{ backgroundColor: 'var(--color-step-bg)' }}
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-300)]">
               <circle cx="10" cy="7" r="3.5" stroke="currentColor" />
@@ -530,7 +530,7 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
           {/* Card: Identified contact */}
           <div
             className="flex flex-col items-center gap-3 p-5 rounded-sm border border-[var(--color-100)] w-full sm:w-36 shrink-0"
-            style={{ backgroundColor: 'var(--background)' }}
+            style={{ backgroundColor: 'var(--color-step-bg)' }}
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="10" cy="7" r="3.5" stroke="var(--accent-green)" />

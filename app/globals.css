@@ -53,11 +53,12 @@
   --white:     #FAF7F2;  /* Page background only */
 
   /* Semantic aliases — use these in components for dark-mode compatibility */
-  --background: var(--white);       /* Page/layout background */
-  --foreground: var(--color-500);   /* Default text color */
-  --border:     var(--color-100);   /* Default border color */
-  --border-md:  var(--color-150);   /* Medium border (discover button etc.) */
-  --bg-card:    var(--color-000);   /* Card / hover background */
+  --background:    var(--white);       /* Page/layout background */
+  --foreground:    var(--color-500);   /* Default text color */
+  --border:        var(--color-100);   /* Default border color */
+  --border-md:     var(--color-150);   /* Medium border (discover button etc.) */
+  --bg-card:       var(--color-000);   /* Card / hover background */
+  --color-step-bg: var(--white);       /* Step box bg: 1 level lighter than --color-000 */
 
   /* Next.js / Tailwind internals — do not use directly in components */
   --card:                 var(--bg-card);
@@ -91,11 +92,12 @@
   --color-000: #242018;
   --white:     #1C1A17;
 
-  --background: var(--white);
-  --foreground: var(--color-500);
-  --border:     var(--color-100);
-  --border-md:  var(--color-150);
-  --bg-card:    var(--color-000);
+  --background:    var(--white);
+  --foreground:    var(--color-500);
+  --border:        var(--color-100);
+  --border-md:     var(--color-150);
+  --bg-card:       var(--color-000);
+  --color-step-bg: var(--color-100);  /* Step box bg: 1 level lighter than --color-000 in dark */
 
   --card:               var(--bg-card);
   --card-foreground:    var(--foreground);
