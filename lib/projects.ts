@@ -92,7 +92,7 @@ export const projects: Project[] = [
     tagline: 'From sales-gated to self-serve. 4,657 accounts in 10 months.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
     metrics: [
-      { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
+      { value: '8.4%', label: 'PAID CONVERSION (INDUSTRY AVG: 2-5%)', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -295,6 +295,7 @@ export const projects: Project[] = [
     tagline: 'Turned a manual Support task into a zero-touch feature. 95% adoption.',
     description: 'Contact identification was the single biggest bottleneck to user ROI. Support was handling it manually, one customer at a time.',
     metrics: [
+      { value: '95%', label: 'ADOPTION', color: 'accent' },
       { value: '+19%', label: 'IDENTIFICATION RATE', color: 'accent' },
     ],
     meta: {
