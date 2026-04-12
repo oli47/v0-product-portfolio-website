@@ -376,12 +376,12 @@ export const projects: Project[] = [
       headline: '95% feature adoption. +19% identification rate globally.',
       note: "Opt-out by default. Users can turn it off but don't need to do anything to turn it on.",
       northStar: {
-        label: 'NEW USERS IDENTIFICATION',
-        value: '+32%',
+        label: 'FEATURE ADOPTION RATE',
+        value: '95%',
       },
       metrics: [
+        { value: '+32%', label: 'NEW USERS IDENTIFICATION', color: 'accent' },
         { value: '+19%', label: 'TOTAL IDENTIFICATION', color: 'accent' },
-        { value: '95%', label: 'FEATURE ADOPTION RATE', color: 'accent' },
       ],
     },
     nextSteps: [

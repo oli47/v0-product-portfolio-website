@@ -544,8 +544,12 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
           </div>
 
         </div>
+        {caption && (
+          <p className="text-body-2 text-[var(--color-300)] text-center mt-6">
+            {caption}
+          </p>
+        )}
       </div>
-      {caption && <Caption text={caption} />}
     </div>
   )
 }
