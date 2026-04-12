@@ -71,7 +71,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
           ref={closeRef}
           onClick={onClose}
           aria-label="Close lightbox"
-          className="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-[12px] uppercase tracking-wide transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-white"
+          className="absolute -top-10 right-0 text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--color-500)]"
         >
           Close ✕
         </button>
@@ -209,7 +209,7 @@ function CompareSlider({
         <div
           key={img.src}
           className="absolute inset-0"
-          style={{ opacity: i === activeIndex ? 1 : 0, transition: 'opacity 600ms linear' }}
+          style={{ opacity: i === activeIndex ? 1 : 0, transition: 'opacity 600ms ease-in-out' }}
         >
           <Image src={img.src} alt={img.label} fill sizes="(max-width: 768px) 100vw, 680px" className="object-cover" />
         </div>
@@ -234,8 +234,240 @@ function CompareSlider({
       </div>
 
       {/* Labels */}
-      <div className="absolute top-4 left-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]">Before</div>
-      <div className="absolute top-4 right-4 text-[11px] font-mono uppercase tracking-wide text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-sm shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 400ms ease-in-out' }}>{afterImages[activeIndex].label}</div>
+      <div className="absolute top-4 left-4 text-eyebrow text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-[0.125rem] shadow-sm z-20 border border-[var(--color-100)]">Before</div>
+      <div className="absolute top-4 right-4 text-eyebrow text-[var(--color-400)] bg-[var(--background)] px-2 py-1 rounded-[0.125rem] shadow-sm z-20 border border-[var(--color-100)]" style={{ transition: 'opacity 400ms ease-in-out' }}>{afterImages[activeIndex].label}</div>
+    </div>
+  )
+}
+
+// ─── Before / After Flow Diagram ─────────────────────────────────────────────
+
+function FlowStep({ label }: { label: string }) {
+  return (
+    <div
+      className="px-4 py-2.5 rounded-[0.125rem] border border-[var(--color-100)] text-body-2 text-[var(--color-400)] text-center"
+      style={{ backgroundColor: 'var(--background)', minWidth: '8rem' }}
+    >
+      {label}
+    </div>
+  )
+}
+
+function FlowArrow({ id }: { id: string }) {
+  return (
+    <div className="flex justify-center py-3">
+      <svg width="12" height="20" style={{ display: 'block', overflow: 'visible' }}>
+        <defs>
+          <marker id={id} markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </marker>
+        </defs>
+        <line x1="6" y1="0" x2="6" y2="20" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd={`url(#${id})`} />
+      </svg>
+    </div>
+  )
+}
+
+function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: string[]; caption?: string }) {
+  return (
+    <div className="my-8">
+      <div className="rounded-sm border border-[var(--color-100)] overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
+        <div className="grid grid-cols-2 divide-x divide-[var(--color-100)]">
+
+          {/* BEFORE */}
+          <div className="p-5 flex flex-col">
+            <div className="mb-5">
+              <span className="text-eyebrow text-[var(--color-300)] px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--color-100)' }}>
+                BEFORE
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              {before.map((step, i) => (
+                <div key={i} className="flex flex-col items-center w-full">
+                  <FlowStep label={step} />
+                  {i < before.length - 1 && <FlowArrow id={`ba-b-${i}`} />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* AFTER */}
+          <div className="p-5 flex flex-col">
+            <div className="mb-5 flex justify-end">
+              <span className="text-eyebrow text-[var(--background)] px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--color-500)' }}>
+                AFTER
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              {after.map((step, i) => (
+                <div key={i} className="flex flex-col items-center w-full">
+                  <FlowStep label={step} />
+                  {i < after.length - 1 && <FlowArrow id={`ba-a-${i}`} />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {caption && <Caption text={caption} />}
+    </div>
+  )
+}
+
+// ─── Vertical Flow Diagram ───────────────────────────────────────────────────
+
+function VerticalFlow({ steps, caption }: {
+  steps: { title: string; subtitle?: string; labelAfter?: string }[]
+  caption?: string
+}) {
+  return (
+    <div className="my-8">
+      <div className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10" style={{ backgroundColor: 'var(--color-000)' }}>
+        <div className="flex flex-col items-center max-w-xs mx-auto">
+          {steps.map((step, i) => (
+            <div key={i} className="flex flex-col items-center w-full">
+              {/* Step box */}
+              <div className="w-full px-5 py-4 rounded-[0.125rem] border border-[var(--color-100)] text-center" style={{ backgroundColor: 'var(--background)' }}>
+                <p className="text-body-1 font-semibold text-[var(--color-500)]">{step.title}</p>
+                {step.subtitle && (
+                  <p className="text-body-2 text-[var(--color-300)] mt-1">{step.subtitle}</p>
+                )}
+              </div>
+
+              {i < steps.length - 1 && (
+                step.labelAfter ? (
+                  <div className="flex flex-col items-center py-2 gap-1">
+                    <span className="text-eyebrow text-[var(--accent)]">{step.labelAfter}</span>
+                    <svg width="12" height="20" style={{ display: 'block', overflow: 'visible' }}>
+                      <defs>
+                        <marker id={`vf-l-${i}`} markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                          <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </marker>
+                      </defs>
+                      <line x1="6" y1="0" x2="6" y2="20" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd={`url(#vf-l-${i})`} />
+                    </svg>
+                  </div>
+                ) : (
+                  <FlowArrow id={`vf-${i}`} />
+                )
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      {caption && <Caption text={caption} />}
+    </div>
+  )
+}
+
+// ─── Contact Flow Diagram ─────────────────────────────────────────────────────
+
+function ContactFlowDiagram({ caption }: { caption?: string }) {
+  return (
+    <div className="my-8">
+      <div
+        className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
+        style={{ backgroundColor: 'var(--color-000)' }}
+      >
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+
+          {/* Card: Unidentified contact */}
+          <div
+            className="flex flex-col items-center gap-3 p-5 rounded-sm border border-[var(--color-100)] w-full sm:w-36 shrink-0"
+            style={{ backgroundColor: 'var(--background)' }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-300)]">
+              <circle cx="10" cy="7" r="3.5" stroke="currentColor" />
+              <path d="M3 20v-1.5C3 15.5 5.5 13.5 10 13.5H12" stroke="currentColor" />
+              <circle cx="19" cy="17" r="3.5" stroke="currentColor" />
+              <line x1="16.5" y1="19.5" x2="21.5" y2="14.5" stroke="currentColor" />
+            </svg>
+            <div className="text-center">
+              <p className="text-body-2 text-[var(--color-400)] font-medium">Unidentified</p>
+              <p className="text-body-2 text-[var(--color-400)] font-medium">contact</p>
+            </div>
+          </div>
+
+          {/* Connector: dashed → email icon → dashed */}
+          <div className="flex flex-col sm:flex-row items-center flex-1 w-full sm:w-auto gap-3">
+
+            {/* Dashed line with arrowhead — horizontal desktop */}
+            <div className="hidden sm:flex flex-1 min-w-0">
+              <svg width="100%" height="12" style={{ display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <marker id="cf-arr-1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </marker>
+                </defs>
+                <line x1="0" y1="6" x2="100%" y2="6" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd="url(#cf-arr-1)"/>
+              </svg>
+            </div>
+            {/* Dashed line with arrowhead — vertical mobile */}
+            <div className="flex sm:hidden">
+              <svg width="12" height="30" style={{ display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <marker id="cf-arr-v1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </marker>
+                </defs>
+                <line x1="6" y1="0" x2="6" y2="30" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd="url(#cf-arr-v1)"/>
+              </svg>
+            </div>
+
+            {/* Email action label */}
+            <div className="flex items-center gap-2 shrink-0">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                <rect x="2" y="5" width="20" height="15" rx="2" fill="var(--accent)" />
+                <path d="M2 9l10 6 10-6" stroke="var(--color-000)" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+              <span className="text-body-2 text-[var(--color-400)] font-medium whitespace-nowrap">Opens an email</span>
+            </div>
+
+            {/* Dashed line with arrowhead — horizontal desktop */}
+            <div className="hidden sm:flex flex-1 min-w-0">
+              <svg width="100%" height="12" style={{ display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <marker id="cf-arr-2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </marker>
+                </defs>
+                <line x1="0" y1="6" x2="100%" y2="6" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd="url(#cf-arr-2)"/>
+              </svg>
+            </div>
+            {/* Dashed line with arrowhead — vertical mobile */}
+            <div className="flex sm:hidden">
+              <svg width="12" height="30" style={{ display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <marker id="cf-arr-v2" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto">
+                    <path d="M0.5 0 L3 5 L5.5 0" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </marker>
+                </defs>
+                <line x1="6" y1="0" x2="6" y2="30" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd="url(#cf-arr-v2)"/>
+              </svg>
+            </div>
+
+          </div>
+
+          {/* Card: Identified contact */}
+          <div
+            className="flex flex-col items-center gap-3 p-5 rounded-sm border border-[var(--color-100)] w-full sm:w-36 shrink-0"
+            style={{ backgroundColor: 'var(--background)' }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="10" cy="7" r="3.5" stroke="var(--accent-green)" />
+              <path d="M3 20v-1.5C3 15.5 5.5 13.5 10 13.5H12" stroke="var(--accent-green)" />
+              <path d="M15 17l2 2 4.5-4.5" stroke="var(--accent-green)" />
+            </svg>
+            <div className="text-center">
+              <p className="text-body-2 text-[var(--color-400)] font-medium">John Doe</p>
+              <p className="text-body-2 text-[var(--color-300)]">j.doe@mail.com</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {caption && <Caption text={caption} />}
     </div>
   )
 }
@@ -291,7 +523,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
-                  <div className="rounded-[2px] overflow-hidden mb-4">
+                  <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <ClickableImage
                       src={block.src}
                       alt={block.caption ?? 'Process image'}
@@ -316,7 +548,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '16px 16px 20px' }}
                 >
-                  <div className="rounded-[2px] overflow-hidden mb-4">
+                  <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <CompareSlider
                       beforeImage={block.images[0].src}
                       afterImages={block.images.slice(1)}
@@ -330,6 +562,15 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                 </div>
               </div>
             )
+
+          case 'vertical-flow':
+            return <VerticalFlow key={i} steps={block.steps} caption={block.caption} />
+
+          case 'before-after-flow':
+            return <BeforeAfterFlow key={i} before={block.before} after={block.after} caption={block.caption} />
+
+          case 'contact-flow':
+            return <ContactFlowDiagram key={i} caption={block.caption} />
 
           case 'steps':
             return (
@@ -356,8 +597,8 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     {/* Number + title + description */}
                     <div className="flex flex-col gap-1.5 justify-center">
                       <span className="text-eyebrow text-[var(--accent)]">{step.num}</span>
-                      <h4 className="text-[15px] font-medium text-[var(--color-500)] leading-snug">{step.title}</h4>
-                      <p className="text-[13px] text-[var(--color-300)] leading-[1.7] text-pretty">{step.description}</p>
+                      <h4 className="text-body-1 font-medium text-[var(--color-500)]">{step.title}</h4>
+                      <p className="text-body-2 text-[var(--color-300)] text-pretty">{step.description}</p>
                     </div>
                   </div>
                 ))}
@@ -397,7 +638,7 @@ export default function ProjectPage() {
         {/* Header */}
         <section className="mb-12">
           <div className="flex flex-col gap-3 mb-8">
-            <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.1]">
+            <h1 className="font-display text-[clamp(24px,7vw,42px)] leading-[1.2]">
               {project.title}
             </h1>
             <p className="text-body-1 text-[var(--color-300)] text-balance">
@@ -445,11 +686,11 @@ export default function ProjectPage() {
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
                   </div>
-                  <p className="text-[12px] text-[var(--color-300)] whitespace-pre-line">{project.overviewDiagram.before}</p>
+                  <p className="text-body-2 text-[var(--color-300)] whitespace-pre-line">{project.overviewDiagram.before}</p>
                 </div>
                 <div className="flex-1 w-full md:flex md:items-center md:gap-2">
                   <div className="h-px md:flex-1 bg-[var(--color-100)] mb-2 md:mb-0" />
-                  <div className="px-3 py-1.5 bg-blue-600 text-white text-[12px] rounded-sm flex items-center gap-2 shrink-0">
+                  <div className="px-3 py-1.5 bg-[var(--accent)] text-[var(--background)] text-eyebrow rounded-[0.125rem] flex items-center gap-2 shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                       <polyline points="22,6 12,13 2,6" />
@@ -465,10 +706,10 @@ export default function ProjectPage() {
                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                     </svg>
                   </div>
-                  <p className="text-[12px] text-[var(--color-500)] font-medium whitespace-pre-line">{project.overviewDiagram.after}</p>
+                  <p className="text-body-2 text-[var(--color-500)] font-medium whitespace-pre-line">{project.overviewDiagram.after}</p>
                 </div>
               </div>
-              <p className="text-[12px] text-[var(--color-300)] text-center italic">
+              <p className="text-body-2 text-[var(--color-300)] text-center italic">
                 {project.overviewDiagram.caption}
               </p>
             </div>
@@ -528,34 +769,36 @@ export default function ProjectPage() {
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note ? (
-            /* Special layout: left = stacked metrics, right = northStar + note */
+            /* Layout: left = northStar (label top, value middle, note bottom), right = stacked metrics */
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Left — large north star cell */}
+              <div
+                className="p-5 rounded-sm flex flex-col justify-between"
+                style={{ backgroundColor: 'var(--color-000)', minHeight: '220px' }}
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="text-eyebrow text-[var(--color-300)]">
+                    {project.results.northStar.label}
+                  </div>
+                  <div className="font-display text-[var(--accent)] leading-none"
+                    style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
+                    {project.results.northStar.value}
+                  </div>
+                </div>
+                <p className="text-body-1 text-[var(--color-300)] text-pretty mt-4">
+                  {project.results.note}
+                </p>
+              </div>
+              {/* Right — stacked metric cells, stretch to match left height */}
               <div className="flex flex-col gap-3">
                 {project.results.metrics.map((metric, index) => (
-                  <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-                    <div className={`font-display text-[clamp(28px,7vw,48px)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                  <div key={index} className="p-5 rounded-sm flex flex-col gap-1 flex-1" style={{ backgroundColor: 'var(--color-000)' }}>
+                    <div className={`font-display text-[clamp(28px,7vw,40px)] leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
                       {metric.value}
                     </div>
                     <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
-                    {metric.sublabel && (
-                      <div className="text-eyebrow text-[var(--color-200)] mt-0.5">{metric.sublabel}</div>
-                    )}
                   </div>
                 ))}
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="p-5 rounded-sm flex-1 flex flex-col justify-between gap-4" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <div>
-                    <div className="font-display text-[clamp(28px,7vw,48px)] text-[var(--accent)] leading-none mb-1">
-                      {project.results.northStar.value}
-                    </div>
-                    <div className="text-eyebrow text-[var(--color-300)]">{project.results.northStar.label}</div>
-                    {project.results.northStar.sublabel && (
-                      <div className="text-eyebrow text-[var(--color-200)] mt-0.5">{project.results.northStar.sublabel}</div>
-                    )}
-                  </div>
-                  <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
-                </div>
               </div>
             </div>
           ) : (
@@ -607,14 +850,12 @@ export default function ProjectPage() {
             <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
-                <div key={index} className="flex items-baseline gap-4">
-                  <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0 translate-y-[0.1em]">
-                    ▨
-                  </span>
-                  <div>
-                    <h4 className="text-[14px] md:text-[16px] font-medium mb-1 text-pretty">{step.title}</h4>
-                    <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
+                <div key={index} className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-3">
+                    <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0">▨</span>
+                    <h4 className="text-body-1 font-bold text-[var(--color-500)] text-pretty">{step.title}</h4>
                   </div>
+                  <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
                 </div>
               ))}
             </div>

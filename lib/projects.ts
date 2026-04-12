@@ -16,6 +16,9 @@ export type ProcessBlock =
   | { kind: 'placeholder'; caption?: string }
   | { kind: 'steps'; items: ProcessStep[] }
   | { kind: 'compare'; images: CompareImage[]; caption?: string }
+  | { kind: 'contact-flow'; caption?: string }
+  | { kind: 'before-after-flow'; before: string[]; after: string[]; caption?: string }
+  | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string }[]; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -110,7 +113,9 @@ export const projects: Project[] = [
         content: 'The previous model was entirely sales-led. Customers signed without ever seeing the product, then waited for Support to onboard them.',
       },
       {
-        kind: 'placeholder',
+        kind: 'before-after-flow',
+        before: ['SDR call', 'AE presentation', 'Contract', 'Support onboarding', 'Product'],
+        after: ['Signup', 'Product', 'Support onboarding on demand'],
         caption: 'Before: weeks from first contact to active account. After: minutes.',
       },
       {
@@ -125,7 +130,14 @@ export const projects: Project[] = [
         content: 'The core decision was the sequence. The initial freemium version still started with integration: connect your store, then see the product. Users had to trust edrone before edrone gave them a reason to. I reversed it. Show value first, ask for commitment last.',
       },
       {
-        kind: 'placeholder',
+        kind: 'vertical-flow',
+        steps: [
+          { title: 'Signup', subtitle: 'User creates an account' },
+          { title: 'AI content', subtitle: "User sees their store's branded content ready to go" },
+          { title: 'Activation', subtitle: 'User reviews what is already on. No setup needed.', labelAfter: 'USER HAS SEEN THE VALUE' },
+          { title: 'Integration', subtitle: 'User decides to connect their store' },
+          { title: 'AHA moment', subtitle: 'User sees their first order driven by edrone' },
+        ],
         caption: 'The full activation path. Value demonstrated before any commitment.',
       },
       {
@@ -159,18 +171,15 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '4,657 freemium accounts in 10 months. 78% activation rate.',
+      note: "The team's north star metric for freemium.",
       northStar: {
-        label: 'MEDIAN DAYS TO FIRST ATTRIBUTED ORDER',
-        tag: 'NORTH STAR',
-        value: '9x faster',
-        sublabel: 'FROM 44 TO 5 DAYS',
+        label: 'TIME TO FIRST ATTRIBUTED ORDER',
+        value: '44 → 5 days',
       },
       metrics: [
-        { value: '4,657', label: 'FREEMIUM ACCOUNTS', color: 'accent' },
+        { value: '4,657', label: 'FREEMIUM ACCOUNTS IN 10 MONTHS', color: 'accent' },
+        { value: '8.4%', label: 'CONVERTED TO PAID', color: 'accent' },
         { value: '78%', label: 'ACTIVATION RATE', color: 'accent' },
-        { value: '8.4%', label: 'FREE-TO-PAID CONVERSION', color: 'accent' },
-        { value: '20x lower', label: 'CAC VS SALES-LED', color: 'ink' },
-        { value: '13 → 1 day', label: 'MEDIAN DAYS TO FIRST NEWSLETTER', color: 'ink' },
       ],
     },
     nextSteps: [
@@ -295,8 +304,7 @@ export const projects: Project[] = [
         content: "edrone is a marketing automation CRM for ecommerce. When a user integrates their store, their contact base gets imported. edrone can see unidentified activity on the website but cannot connect it to contacts in the base. Identification links the two: when a contact opens an email, a tracking pixel connects their browsing to their profile.",
       },
       {
-        kind: 'image',
-        src: '/images/ci-module.png',
+        kind: 'contact-flow',
         caption: 'Contacts are unidentified until they open an email. That action connects them to their browsing activity.',
       },
       {
@@ -351,10 +359,14 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '95% feature adoption. +19% identification rate globally.',
+      note: "Opt-out by default. Users can turn it off but don't need to do anything to turn it on.",
+      northStar: {
+        label: 'NEW USERS IDENTIFICATION',
+        value: '+32%',
+      },
       metrics: [
-        { value: '95%', label: 'FEATURE ADOPTION RATE', sublabel: 'OPT-OUT DESIGN', color: 'accent' },
-        { value: '+19%', label: 'TOTAL IDENTIFICATION', sublabel: '3.1% → 3.7%', color: 'accent' },
-        { value: '4.1%', label: 'NEW ACCOUNT IDENTIFICATION', sublabel: 'UP FROM 3.1%', color: 'accent' },
+        { value: '+19%', label: 'TOTAL IDENTIFICATION', color: 'accent' },
+        { value: '95%', label: 'FEATURE ADOPTION RATE', color: 'accent' },
       ],
     },
     nextSteps: [

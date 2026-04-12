@@ -9,11 +9,11 @@ import { content, defaultLang } from '@/lib/content'
 
 const t = content[defaultLang].nav
 
-
 export function Nav() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted]     = useState(false)
   const [scrolled, setScrolled]   = useState(false)
+  const [hovering, setHovering]   = useState(false)
   const animating                  = useRef(false)
   const pathname                   = usePathname()
   const isProjectPage              = pathname.startsWith('/projects/')
@@ -25,7 +25,7 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme === 'dark'
 
   // ── Pixel dissolve transition ──────────────────────────────────────────────
   const handleThemeToggle = useCallback(
@@ -38,14 +38,11 @@ const isDark = resolvedTheme === 'dark'
       const y        = rect.top  + rect.height / 2
       const newTheme = isDark ? 'light' : 'dark'
 
-      // View Transitions API: browser freezes old theme as screenshot,
-      // new theme reveals from button position via pixelated SVG clip-path
       if (!document.startViewTransition) {
         setTheme(newTheme)
         return
       }
 
-      // Build SVG clipPath with polygon — points will be updated each rAF frame
       const svgNS   = 'http://www.w3.org/2000/svg'
       const svg     = document.createElementNS(svgNS, 'svg')
       const defs    = document.createElementNS(svgNS, 'defs')
@@ -66,9 +63,9 @@ const isDark = resolvedTheme === 'dark'
       const maxR    = Math.hypot(
         Math.max(x, window.innerWidth  - x),
         Math.max(y, window.innerHeight - y),
-      ) + 12         // slightly overshoot
-      const PIXEL    = 8   // quantization grid in px — larger = chunkier pixels
-      const SEGMENTS = 360 // many vertices so quantization creates clear staircase
+      ) + 12
+      const PIXEL    = 8
+      const SEGMENTS = 360
 
       const setRadius = (r: number) => {
         const raw: [number, number][] = []
@@ -100,7 +97,7 @@ const isDark = resolvedTheme === 'dark'
       })
 
       transition.ready.then(() => {
-        const duration  = 600   // ms
+        const duration  = 600
         const startTime = performance.now()
 
         const frame = (now: number) => {
@@ -124,93 +121,121 @@ const isDark = resolvedTheme === 'dark'
   // ── Scramble labels ────────────────────────────────────────────────────────
   const themeWord  = mounted ? (isDark ? t.light : t.dark) : t.dark
   const themeLabel = useScramble(themeWord)
-  const nameLabel  = useScramble(isProjectPage ? 'Back' : t.name)
+  const nameLabel  = useScramble(t.name)
+  const backLabel  = useScramble('Back')
 
-  // ── Styles ────────────────────────────────────────────────────────────────
-  const btnClass =
-    'text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out cursor-pointer px-3'
+  const showBack = isProjectPage && scrolled && hovering
+
+  const handleLinkEnter = useCallback(() => {
+    setHovering(true)
+    if (isProjectPage && scrolled) backLabel.scramble()
+    else nameLabel.scramble()
+  }, [isProjectPage, scrolled, backLabel, nameLabel])
+
+  const handleLinkLeave = useCallback(() => {
+    setHovering(false)
+    if (isProjectPage && scrolled) backLabel.reset()
+    else nameLabel.reset()
+  }, [isProjectPage, scrolled, backLabel, nameLabel])
 
   return (
-    /* Always constrained to content width — only background animates on scroll */
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none py-[2.5rem]">
-      {/* matches content container — same max-width and px-5 */}
       <div className="w-full max-w-[45rem] mx-auto px-5">
-      <div
-        className={`pointer-events-auto mx-auto transition-all duration-[400ms] ease-in-out ${scrolled ? 'px-2' : ''}`}
-        style={{
-          width: scrolled ? '93%' : '100%',
-          ...(scrolled
-            ? {
-                background: 'var(--color-000)',
-                border: '1px solid var(--color-100)',
-                borderRadius: '0.125rem',
-                boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
-              }
-            : {
-                background: 'color-mix(in srgb, var(--background) 90%, transparent)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }),
-        }}
-      >
-        {/* h-[2.5rem] = 40px */}
-        <div className="h-[2.5rem] flex items-center justify-between">
-
-          {/* Left */}
-          <div className="flex items-center pl-2">
-            <Link
-              href="/"
-              aria-label={isProjectPage ? 'Back to home' : t.name}
-              className="group relative text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out pr-3"
-              onMouseEnter={() => nameLabel.scramble()}
-              onMouseLeave={() => {
-                nameLabel.reset()
-                if (isProjectPage && nameLabel.spanRef.current) {
-                  nameLabel.spanRef.current.textContent = t.name
+        <div
+          className="pointer-events-auto mx-auto transition-all duration-[400ms] ease-in-out"
+          style={{
+            width: scrolled ? '93%' : '100%',
+            ...(scrolled
+              ? {
+                  background: 'var(--color-000)',
+                  border: '1px solid var(--color-100)',
+                  borderRadius: '0.125rem',
+                  boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
                 }
-              }}
-            >
-              {/* inline-grid: ghost fixes width to name; arrow inline, never leaves nav */}
-              <span className="inline-grid shrink-0">
-                <span className="col-start-1 row-start-1 invisible whitespace-nowrap select-none" aria-hidden>{t.name}</span>
-                <span className="col-start-1 row-start-1 flex items-center">
-                  {isProjectPage && (
-                    <span
-                      className="font-neubit text-[1.25rem] leading-[1] mr-1 opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] ease-in-out"
-                      aria-hidden
-                    >←</span>
-                  )}
-                  <span ref={nameLabel.spanRef}>{t.name}</span>
-                </span>
-              </span>
-            </Link>
-            <div className="w-px h-[1.125rem] bg-[var(--color-100)]" />
-            {/* Status — hidden on mobile to prevent overflow */}
-            <div className="hidden sm:flex items-center gap-2 pl-3">
-              <span
-                className="w-1.5 h-1.5 rounded-[0.125rem] bg-[var(--accent-green)] animate-pulse-slow shrink-0"
-                aria-hidden="true"
-              />
-              <span className="text-eyebrow text-[var(--accent-green)]">
-                {t.status}
-              </span>
-            </div>
-          </div>
+              : {
+                  background: 'color-mix(in srgb, var(--background) 90%, transparent)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }),
+          }}
+        >
+          {/* Single padding source: px-3 (8px) always on this container */}
+          <div className="h-[2.5rem] flex items-center justify-between px-3">
 
-          {/* Right */}
-          <div className="flex items-center pr-2">
+            {/* Left */}
+            <div className="flex items-center">
+              <Link
+                href="/"
+                aria-label={showBack ? 'Back to home' : t.name}
+                className="group text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+                onMouseEnter={handleLinkEnter}
+                onMouseLeave={handleLinkLeave}
+              >
+                {/*
+                  inline-grid: ghost (always t.name) fixes the element width.
+                  OLAF and BACK layers sit on top, cross-fading via opacity.
+                  Width never changes → separator and status never move.
+                */}
+                <span className="inline-grid shrink-0">
+
+                  {/* Ghost — invisible, always t.name, fixes width */}
+                  <span
+                    className="col-start-1 row-start-1 invisible whitespace-nowrap select-none"
+                    aria-hidden
+                  >
+                    {t.name}
+                  </span>
+
+                  {/* OLAF layer — visible by default, fades out on project+scrolled */}
+                  <span
+                    className="col-start-1 row-start-1 flex items-center whitespace-nowrap"
+                    style={{ opacity: showBack ? 0 : 1, transition: 'opacity 400ms ease-in-out' }}
+                    aria-hidden={showBack}
+                  >
+                    <span ref={nameLabel.spanRef}>{t.name}</span>
+                  </span>
+
+                  {/* BACK layer — fades in on project+scrolled */}
+                  <span
+                    className="col-start-1 row-start-1 flex items-center whitespace-nowrap"
+                    style={{ opacity: showBack ? 1 : 0, transition: 'opacity 400ms ease-in-out' }}
+                    aria-hidden={!showBack}
+                  >
+                    <span className="font-neubit text-[1.25rem] leading-[1] mr-1" aria-hidden>←</span>
+                    <span ref={backLabel.spanRef}>Back</span>
+                  </span>
+
+                </span>
+              </Link>
+
+              {/* Separator */}
+              <div className="w-px h-[1.125rem] bg-[var(--color-100)] mx-3" />
+
+              {/* Status — hidden on mobile */}
+              <div className="hidden sm:flex items-center gap-2">
+                <span
+                  className="w-1.5 h-1.5 rounded-[0.125rem] bg-[var(--accent-green)] animate-pulse-slow shrink-0"
+                  aria-hidden="true"
+                />
+                <span className="text-eyebrow text-[var(--accent-green)]">
+                  {t.status}
+                </span>
+              </div>
+            </div>
+
+            {/* Right */}
             <button
               onClick={handleThemeToggle}
               aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-              className={btnClass}
+              className="text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out cursor-pointer"
               onMouseEnter={themeLabel.scramble}
               onMouseLeave={themeLabel.reset}
             >
               <span ref={themeLabel.spanRef} aria-hidden="true">{themeWord}</span>
             </button>
+
           </div>
         </div>
-      </div>
       </div>
     </header>
   )
