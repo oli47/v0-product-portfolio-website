@@ -253,7 +253,7 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
         <div className="grid grid-cols-2 divide-x divide-[var(--color-100)]">
 
           {/* BEFORE */}
-          <div className="p-5 flex flex-col">
+          <div className="px-5 pt-5 pb-10 flex flex-col">
             <div className="mb-5">
               <span className="text-eyebrow text-[var(--color-300)] px-2 py-1 rounded-[0.125rem] border border-[var(--color-150)]" style={{ backgroundColor: 'var(--color-step-bg)' }}>
                 BEFORE
@@ -686,7 +686,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'decisions': {
             const count = block.items.length
             return (
-              <div key={i} className="my-8 grid grid-cols-1 sm:grid-cols-2 border border-[var(--color-100)] rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div key={i} className="my-8 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
                 {block.items.map((item, j) => {
                   const isLeftCol   = j % 2 === 0
                   const isLastRow   = j >= count - 2  // bottom row on desktop
@@ -971,31 +971,42 @@ export default function ProjectPage() {
         )}
 
         {/* Project navigation */}
-        <div className="flex items-center justify-between gap-8 mb-12">
+        <div className="flex items-start justify-between gap-8 mb-12">
+
+          {/* PREV */}
           <Link
             href={`/projects/${prev.slug}`}
             aria-label={`Previous: ${prev.title}`}
-            className="group flex items-center gap-2 min-w-0"
+            className="group flex flex-col gap-1.5"
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
-            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" aria-hidden="true">←</span>
-            <span ref={prevLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out truncate">
+            <div className="flex items-center gap-1.5">
+              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">←</span>
+              <span className="text-eyebrow text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
+            </div>
+            <span ref={prevLabel.spanRef} className="font-display text-[clamp(1.125rem,3.5vw,1.5rem)] leading-[1.2] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {prev.title}
             </span>
           </Link>
+
+          {/* NEXT */}
           <Link
             href={`/projects/${next.slug}`}
             aria-label={`Next: ${next.title}`}
-            className="group flex items-center gap-2 min-w-0"
+            className="group flex flex-col gap-1.5 items-end text-right"
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
-            <span ref={nextLabel.spanRef} aria-hidden="true" className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out truncate text-right">
+            <div className="flex items-center gap-1.5">
+              <span className="text-eyebrow text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
+              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">→</span>
+            </div>
+            <span ref={nextLabel.spanRef} className="font-display text-[clamp(1.125rem,3.5vw,1.5rem)] leading-[1.2] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {next.title}
             </span>
-            <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-200)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" aria-hidden="true">→</span>
           </Link>
+
         </div>
 
       </div>
