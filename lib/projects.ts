@@ -19,6 +19,7 @@ export type ProcessBlock =
   | { kind: 'contact-flow'; caption?: string }
   | { kind: 'before-after-flow'; before: string[]; after: string[]; caption?: string }
   | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]; arc?: { fromStep: number; toStep: number; label: string }; caption?: string }
+  | { kind: 'decisions'; items: { num: string; title: string; description: string }[] }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -147,19 +148,32 @@ export const projects: Project[] = [
       },
       {
         kind: 'text',
-        content: 'Three decisions shaped the model:',
+        content: 'Four decisions shaped the model:',
       },
       {
-        kind: 'text',
-        content: '**Free tier at 500 messages.** The business wanted 200. I calculated that users send roughly 7–8% of messages through automations in the first 30 days. Combined with the first AI-generated newsletter (free of limits) and identification sequences, 500 messages gave even the smallest stores enough volume to reach at least one attributed order. That order is the aha moment: real revenue, driven by edrone. Not a promise of value, but proof of it.',
-      },
-      {
-        kind: 'text',
-        content: '**AI-generated content instead of templates.** Every competing tool gives users empty templates to customise. I wanted zero fatigue: user arrives, sees ready-to-go content personalised to their store, and activates with a click. No learning curve, no building, no decisions about what to create.',
-      },
-      {
-        kind: 'text',
-        content: '**Integration last.** Connecting a store to a third-party tool means sharing contacts, products, and store data. That is a trust decision. By the time users reach integration, they already know what edrone does and what it will do with their data.',
+        kind: 'decisions',
+        items: [
+          {
+            num: '/01',
+            title: 'Free tier at 500 messages',
+            description: 'The business wanted 200. I calculated that 500 was the minimum for a user to reach their first real revenue from edrone.',
+          },
+          {
+            num: '/02',
+            title: 'AI-generated content on signup',
+            description: 'User arrives, store is already read, branded content is ready to send. Zero setup.',
+          },
+          {
+            num: '/03',
+            title: 'Everything on by default',
+            description: '7 automations, popup, and identification sequence active from day one. Started with nothing enabled, tested increments, landed on full activation.',
+          },
+          {
+            num: '/04',
+            title: 'Integration last',
+            description: 'Connecting a store means sharing contacts and product data. Users make that decision after seeing what edrone does, not before.',
+          },
+        ],
       },
       {
         kind: 'text',
