@@ -708,7 +708,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                       <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
                       <div className="flex flex-col gap-2">
                         <p className="text-body-1 font-bold text-[var(--color-500)] text-pretty">{item.title}</p>
-                        <p className="text-body-2 text-[var(--color-300)] text-pretty">{item.description}</p>
+                        <p className="text-body-2 text-[var(--color-300)] text-pretty"><Bold text={item.description} /></p>
                       </div>
                     </div>
                   )
