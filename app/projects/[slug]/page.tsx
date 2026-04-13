@@ -929,7 +929,7 @@ export default function ProjectPage() {
                     <div className="flex flex-col gap-4">
                       <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
                       <div className={`font-display leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
-                        style={{ fontSize: 'clamp(1.75rem, 6vw, 2.5rem)' }}>
+                        style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
                         {metric.value}
                       </div>
                     </div>
@@ -993,7 +993,7 @@ export default function ProjectPage() {
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-16">
             <SectionBadge className="sm:ml-8">{"What's Next"}</SectionBadge>
-            <div className="space-y-6">
+            <div className="space-y-6 sm:px-8">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-3">
