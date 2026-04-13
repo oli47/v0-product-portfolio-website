@@ -33,7 +33,7 @@ function SlideshowLightbox({ src, onClose }: { src: string; onClose: () => void 
       role="dialog"
       aria-modal="true"
       aria-label="Image"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 cursor-zoom-out"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-4 pb-8 sm:p-8 cursor-zoom-out"
       onClick={onClose}
     >
       <div className="relative max-w-5xl w-full max-h-full">
@@ -41,7 +41,7 @@ function SlideshowLightbox({ src, onClose }: { src: string; onClose: () => void 
           ref={closeRef}
           onClick={onClose}
           aria-label="Close lightbox"
-          className="absolute -top-10 right-0 text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--color-500)]"
+          className="absolute -top-9 right-0 min-h-[2.75rem] px-2 flex items-center text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--color-500)]"
         >
           Close ✕
         </button>

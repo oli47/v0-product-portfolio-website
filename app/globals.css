@@ -62,6 +62,7 @@
   --border-md:     var(--color-150);   /* Medium border (discover button etc.) */
   --bg-card:       var(--color-000);   /* Card / hover background */
   --color-step-bg: var(--white);       /* Step box bg: 1 level lighter than --color-000 */
+  --nav-bg-blur: rgba(250, 247, 242, 0.92);
 
   /* Next.js / Tailwind internals — do not use directly in components */
   --card:                 var(--bg-card);
@@ -101,6 +102,7 @@
   --border-md:     var(--color-150);
   --bg-card:       var(--color-000);
   --color-step-bg: var(--color-100);  /* Step box bg: 1 level lighter than --color-000 in dark */
+  --nav-bg-blur: rgba(28, 26, 23, 0.92);
 
   --card:               var(--bg-card);
   --card-foreground:    var(--foreground);
@@ -167,8 +169,8 @@
 /* h2 — Section headline in project detail pages (Overview, Results…) */
 .text-h2 {
   font-family: 'PPMondwest', serif;
-  font-size: 2.5rem;       /* 40px */
-  line-height: 3rem;       /* 48px */
+  font-size: clamp(1.75rem, 6vw, 2.5rem);   /* 28px → 40px */
+  line-height: clamp(2.25rem, 7vw, 3rem);
   font-weight: 400;
   letter-spacing: 0.025rem;
 }
@@ -176,8 +178,8 @@
 /* h3 — Sub-section headings inside project pages */
 .text-h3 {
   font-family: 'PPMondwest', serif;
-  font-size: 2rem;         /* 32px */
-  line-height: 2.5rem;     /* 40px */
+  font-size: clamp(1.5rem, 5vw, 2rem);      /* 24px → 32px */
+  line-height: clamp(2rem, 6vw, 2.5rem);
   font-weight: 400;
   letter-spacing: 0.025rem;
 }
@@ -185,8 +187,8 @@
 /* h4 — Project card titles, list item headings, result metric values */
 .text-h4 {
   font-family: 'PPMondwest', serif;
-  font-size: 1.5rem;       /* 24px */
-  line-height: 2rem;       /* 32px */
+  font-size: clamp(1.25rem, 4vw, 1.5rem);   /* 20px → 24px */
+  line-height: clamp(1.75rem, 5vw, 2rem);
   font-weight: 400;
   letter-spacing: 0.025rem;
 }

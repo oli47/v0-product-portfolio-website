@@ -37,7 +37,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
       role="dialog"
       aria-modal="true"
       aria-label={alt}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 cursor-zoom-out"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-4 pb-8 sm:p-8 cursor-zoom-out"
       onClick={onClose}
     >
       <div className="relative max-w-5xl w-full max-h-full">
@@ -45,7 +45,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
           ref={closeRef}
           onClick={onClose}
           aria-label="Close lightbox"
-          className="absolute -top-10 right-0 text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--color-500)]"
+          className="absolute -top-9 right-0 min-h-[2.75rem] px-2 flex items-center text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--color-500)]"
         >
           Close ✕
         </button>
@@ -253,7 +253,7 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
   return (
     <div className="my-8">
       <div className="rounded-sm border border-[var(--color-100)] overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
-        <div className="grid grid-cols-2 divide-x divide-[var(--color-100)]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-100)]">
 
           {/* BEFORE */}
           <div className="px-5 pt-5 pb-10 flex flex-col">
@@ -274,7 +274,7 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
 
           {/* AFTER */}
           <div className="p-5 flex flex-col">
-            <div className="mb-5 flex justify-end">
+            <div className="mb-5 flex sm:justify-end">
               <span className="text-eyebrow text-white px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--accent)' }}>
                 AFTER
               </span>
@@ -928,7 +928,8 @@ export default function ProjectPage() {
                   <div key={index} className="p-5 rounded-sm flex flex-col flex-1" style={{ backgroundColor: 'var(--color-000)', justifyContent: metric.description ? 'space-between' : 'flex-start' }}>
                     <div className="flex flex-col gap-4">
                       <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
-                      <div className={`text-h2 leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                      <div className={`font-display leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
+                        style={{ fontSize: 'clamp(1.75rem, 6vw, 2.5rem)' }}>
                         {metric.value}
                       </div>
                     </div>

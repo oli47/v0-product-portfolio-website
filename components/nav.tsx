@@ -153,7 +153,7 @@ export function Nav() {
                   boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
                 }
               : {
-                  background: 'color-mix(in srgb, var(--background) 90%, transparent)',
+                  background: 'var(--nav-bg-blur)',
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }),

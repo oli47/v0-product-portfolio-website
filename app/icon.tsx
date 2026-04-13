@@ -18,7 +18,7 @@ export default function Icon() {
           fontFamily: 'serif',
           fontSize: 13,
           fontWeight: 400,
-          color: '#C4521A',
+          color: '#B84A12',
           letterSpacing: 1,
         }}
       >
