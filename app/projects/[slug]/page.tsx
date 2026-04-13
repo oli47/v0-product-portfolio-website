@@ -899,7 +899,7 @@ export default function ProjectPage() {
                   </div>
                 </div>
                 <p className="text-body-1 text-[var(--color-300)] text-pretty mt-4">
-                  {project.results.note}
+                  <Bold text={project.results.note!} />
                 </p>
               </div>
               {/* Right — stacked metric cells, stretch to match left height */}
