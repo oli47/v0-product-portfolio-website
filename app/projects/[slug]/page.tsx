@@ -794,7 +794,7 @@ export default function ProjectPage() {
 
         {/* Opportunity */}
         <section className="mb-16">
-          <SectionBadge>Opportunity</SectionBadge>
+          <SectionBadge className="ml-8">Opportunity</SectionBadge>
 
           {project.opportunityBlocks ? (
             <ProcessBlocks blocks={project.opportunityBlocks} />
@@ -860,7 +860,7 @@ export default function ProjectPage() {
 
         {/* Process */}
         <section className="mb-16">
-          <SectionBadge>Process</SectionBadge>
+          <SectionBadge className="ml-8">Process</SectionBadge>
 
           {project.processContent ? (
             <ProcessBlocks blocks={project.processContent} />
@@ -898,7 +898,7 @@ export default function ProjectPage() {
 
         {/* Impact */}
         <section className="mb-16">
-          <SectionBadge>Impact</SectionBadge>
+          <SectionBadge className="ml-8">Impact</SectionBadge>
 
           {project.results.northStar && project.results.note ? (
             /* Layout: left = northStar (label top, value middle, note bottom), right = stacked metrics */
@@ -992,7 +992,7 @@ export default function ProjectPage() {
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-16">
-            <SectionBadge>{"What's Next"}</SectionBadge>
+            <SectionBadge className="ml-8">{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex flex-col gap-1.5">
