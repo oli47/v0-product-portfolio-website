@@ -918,14 +918,14 @@ export default function ProjectPage() {
                     {project.results.northStar.value}
                   </div>
                 </div>
-                <p className="text-body-1 text-[var(--color-300)] text-pretty mt-4">
+                <p className="text-body-1 text-[var(--color-300)] text-pretty mt-6">
                   <Bold text={project.results.note!} />
                 </p>
               </div>
               {/* Right — stacked metric cells, stretch to match left height */}
               <div className="flex flex-col gap-3">
                 {project.results.metrics.map((metric, index) => (
-                  <div key={index} className="p-5 rounded-sm flex flex-col flex-1" style={{ backgroundColor: 'var(--color-000)', justifyContent: metric.description ? 'space-between' : 'flex-start' }}>
+                  <div key={index} className="p-5 rounded-sm flex flex-col flex-1 justify-between" style={{ backgroundColor: 'var(--color-000)' }}>
                     <div className="flex flex-col gap-4">
                       <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
                       <div className={`font-display leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
@@ -934,7 +934,7 @@ export default function ProjectPage() {
                       </div>
                     </div>
                     {metric.description && (
-                      <p className="text-body-2 text-[var(--color-300)] text-pretty mt-4"><Bold text={metric.description} /></p>
+                      <p className="text-body-1 text-[var(--color-300)] text-pretty mt-6"><Bold text={metric.description} /></p>
                     )}
                   </div>
                 ))}
