@@ -562,7 +562,7 @@ function Bold({ text }: { text: string }) {
     <>
       {parts.map((part, i) =>
         part.startsWith('**') && part.endsWith('**')
-          ? <strong key={i} style={{ fontWeight: 'var(--font-weight-bold)' }} className="text-[var(--color-400)]">{part.slice(2, -2)}</strong>
+          ? <strong key={i} style={{ fontWeight: 'var(--font-weight-bold)' }}>{part.slice(2, -2)}</strong>
           : part
       )}
     </>
