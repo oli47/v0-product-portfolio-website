@@ -90,7 +90,7 @@ export const projects: Project[] = [
   {
     slug: 'freemium-activation',
     title: 'Freemium launch',
-    tagline: 'From sales-gated to self-serve. 4,657 accounts in 10 months.',
+    tagline: 'From sales-gated to self-serve. 4657 accounts in 10 months.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
     metrics: [
       { value: '8.4%', label: 'PAID CONVERSION (INDUSTRY AVG: 2-5%)', color: 'accent' },
@@ -108,28 +108,61 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. When I joined, the product was built to be operated by Support. There was no path for a user to sign up or activate it independently. Over 2.5 years I redesigned the product toward self-serve. That made a freemium model possible.',
-      },
-      {
-        kind: 'text',
-        content: 'The previous model was entirely sales-led. Customers signed without ever seeing the product, then waited for Support to onboard them.',
+        content: 'edrone is a marketing automation CRM for ecommerce. The acquisition model was entirely sales-led: customers signed without ever seeing the product, then waited for Support to onboard them. **Self-serve was already a standard in the category,** and GA showed consistent inbound traffic that never reached Sales. A freemium path would open a new acquisition channel alongside the existing one.',
       },
       {
         kind: 'before-after-flow',
         before: ['SDR call', 'AE presentation', 'Contract', 'Support onboarding', 'Product'],
-        after: ['Signup', 'Product', 'Support onboarding on demand'],
+        after: ['Signup', 'Product', 'Support on demand'],
         caption: 'Before: weeks from first contact to active account. After: minutes.',
-      },
-      {
-        kind: 'text',
-        content: 'Self-serve was already a standard in the category. Sales-led acquisition does not scale the same way, and a freemium path would open a new channel alongside the existing one.',
       },
     ],
     solution: [],
     processContent: [
       {
         kind: 'text',
-        content: 'The core decision was the sequence. The initial freemium version still started with integration: connect your store, then see the product. Users had to trust edrone before edrone gave them a reason to. I reversed it. Show value first, ask for commitment last.',
+        content: 'Freemium launched May 2025 and went through many iterations. This is the final form.',
+      },
+      {
+        kind: 'text',
+        content: 'I needed to understand what prevented users from activating edrone independently. I ran research with two Support team members I brought into my sub-team as researchers, combined with dozens of user interviews and Amplitude data.',
+      },
+      {
+        kind: 'text',
+        content: '**The primary target were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
+      },
+      {
+        kind: 'placeholder',
+        caption: 'Early version. The onboarding went through many shipped iterations before reaching its final form.',
+      },
+      {
+        kind: 'text',
+        content: 'Four decisions shaped the final model:',
+      },
+      {
+        kind: 'decisions',
+        items: [
+          {
+            num: '/01',
+            title: 'AI-generated content on signup',
+            description: 'User arrives, store is already read, branded content is ready to send. Zero setup. This also enabled integration last: content no longer depended on importing store data first.',
+          },
+          {
+            num: '/02',
+            title: 'Everything on by default',
+            description: '7 automations, popup, and identification sequence active from day one. Started with nothing enabled, tested increments, landed on full activation.',
+          },
+          {
+            num: '/03',
+            title: 'Integration last',
+            description: 'The business was afraid users would not integrate if it was not the first step. **Data showed the opposite: users who saw value first integrated more, not less.**',
+          },
+          {
+            num: '/04',
+            title: 'Free tier at 500 messages',
+            description: 'The business wanted 200. I calculated that 500 was the minimum for a user to reach their first real revenue from edrone.',
+          },
+        ],
       },
       {
         kind: 'vertical-flow',
@@ -141,71 +174,37 @@ export const projects: Project[] = [
           { title: 'AHA moment', subtitle: 'User sees their first order driven by edrone' },
         ],
         arc: { fromStep: 1, toStep: 3, label: 'INITIAL PROCESS' },
-        caption: 'The full activation path. Value demonstrated before any commitment.',
+        caption: 'The final activation path. Value demonstrated before any commitment.',
+      },
+      {
+        kind: 'placeholder',
+        caption: 'The shipped onboarding. Compare with the early version above.',
       },
       {
         kind: 'text',
-        content: 'Users create an account, AI generates branded content from their store URL (newsletters, automations, pop-ups), the activation widget walks them through what is pre-configured, and integration comes last. Everything is on by default. The user reviews what is ready, not builds from scratch.',
-      },
-      {
-        kind: 'text',
-        content: 'Four decisions shaped the model:',
-      },
-      {
-        kind: 'decisions',
-        items: [
-          {
-            num: '/01',
-            title: 'Free tier at 500 messages',
-            description: 'The business wanted 200. I calculated that 500 was the minimum for a user to reach their first real revenue from edrone.',
-          },
-          {
-            num: '/02',
-            title: 'AI-generated content on signup',
-            description: 'User arrives, store is already read, branded content is ready to send. Zero setup.',
-          },
-          {
-            num: '/03',
-            title: 'Everything on by default',
-            description: '7 automations, popup, and identification sequence active from day one. Started with nothing enabled, tested increments, landed on full activation.',
-          },
-          {
-            num: '/04',
-            title: 'Integration last',
-            description: 'Connecting a store means sharing contacts and product data. Users make that decision after seeing what edrone does, not before.',
-          },
-        ],
-      },
-      {
-        kind: 'text',
-        content: 'The signup flow and contacts identification later became their own projects as the funnel matured.',
-      },
-      {
-        kind: 'text',
-        content: 'Built end-to-end over six months with 1–5 engineers (the team scaled during the project). No prior self-serve infrastructure existed.',
+        content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer. I set the NSM as **time to first attributed order** because that is when users see real revenue and the upgrade decision forms.',
       },
     ],
     results: {
-      headline: '4,657 freemium accounts in 10 months. 78% activation rate.',
-      note: "The team's north star metric for freemium.",
+      headline: '4600 freemium accounts in 10 months. 78% activation rate.',
+      note: "The freemium's north star metric. Shortening newsletter delivery from 13 to 1 day was a major contributor: newsletters generate orders, and the earlier they go out, the faster users see ROI.",
       northStar: {
         label: 'TIME TO FIRST ATTRIBUTED ORDER',
         value: '44 → 5 days',
       },
       metrics: [
-        { value: '4,657', label: 'FREEMIUM ACCOUNTS IN 10 MONTHS', color: 'accent' },
-        { value: '8.4%', label: 'CONVERTED TO PAID', color: 'accent' },
-        { value: '78%', label: 'ACTIVATION RATE', color: 'accent' },
+        { value: '+4,600', label: 'NEW FREEMIUM ACCOUNTS', description: '78% were active accounts (integrated, 5+ automations running, 10+ orders per month). The rest were test or micro stores too small for marketing automation.', color: 'accent' },
+        { value: '8.4%', label: 'PAID CONVERSION', description: '~400 paying customers from a channel that did not exist, adding **16% to edrone\'s paid base** built over 10 years. Industry average for freemium SaaS is **2-5%**.', color: 'accent' },
       ],
     },
     nextSteps: [
       {
         title: 'Personalised onboarding',
-        description: 'The current flow runs the same sequence for every store. A context-aware AI assistant reading store type, industry, and account history could generate different activation paths for different businesses.',
+        description: 'The current flow runs the same sequence for every store. A context-aware AI assistant could generate different activation paths for different businesses.',
       },
       {
         title: 'Platform OAuth',
-        description: 'Users from Shopify or Shoper could skip signup entirely, reducing friction for the highest-intent segment to zero.',
+        description: 'Users from Shopify or Shoper could skip signup entirely.',
       },
       {
         title: 'Value-based upgrade',
