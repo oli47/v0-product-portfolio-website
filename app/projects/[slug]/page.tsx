@@ -768,7 +768,7 @@ export default function ProjectPage() {
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16">
 
         {/* Header */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="flex flex-col gap-3 mb-8">
             <h1 className="font-display text-[clamp(1.5rem,7vw,2.625rem)] leading-[1.2] text-balance">
               {project.title}
@@ -793,7 +793,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Opportunity */}
-        <section className="mb-12 pb-12">
+        <section className="mb-16">
           <SectionBadge>Opportunity</SectionBadge>
 
           {project.opportunityBlocks ? (
@@ -859,7 +859,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Process */}
-        <section className="mb-12 pb-12">
+        <section className="mb-16">
           <SectionBadge>Process</SectionBadge>
 
           {project.processContent ? (
@@ -897,7 +897,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Impact */}
-        <section className="mb-12 pb-12">
+        <section className="mb-16">
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note ? (
@@ -991,7 +991,7 @@ export default function ProjectPage() {
 
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
-          <section className="mb-12 pb-12">
+          <section className="mb-16">
             <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
