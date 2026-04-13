@@ -234,7 +234,7 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era. Amplitude showed massive drop-off at the form. **A Claude-powered UX agent I had built confirmed two issues:** the phone field was the primary drop-off point, and SSO did not actually create an account. Mobile conversion sat at 0.05%.',
+        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era. Amplitude showed massive drop-off at the form. **A Claude-powered UX agent I had built confirmed two issues by auditing the full signup flow:** the phone field was the primary drop-off point, and SSO did not actually create an account. Mobile conversion sat at 0.05%.',
       },
       {
         kind: 'text',
@@ -374,13 +374,13 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '95% feature adoption. +32% identification rate for new users.',
-      note: "Enabled automatically after integration. Users can turn it off but don't need to do anything to turn it on. Almost no one did.",
+      note: "Enabled automatically after integration. Users can turn it off but don't need to do anything to turn it on. Almost **no one** did.",
       northStar: {
         label: 'FEATURE ADOPTION',
         value: '95%',
       },
       metrics: [
-        { value: '+32%', label: 'IDENTIFICATION RATE', description: 'Compared to all users before the module. More identified contacts, more automations, higher ROI.', color: 'accent' },
+        { value: '+32%', label: 'IDENTIFICATION RATE', description: 'Compared to all users before the module. More identified contacts, **more automations** firing, higher ROI.', color: 'accent' },
       ],
     },
     nextSteps: [
