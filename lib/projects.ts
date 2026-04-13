@@ -310,7 +310,7 @@ export const projects: Project[] = [
     slug: 'contacts-activation',
     title: 'Contacts identification',
     tagline: 'Turned a manual Support task into a zero-touch feature. 95% adoption.',
-    description: 'Turned a manual Support task into a zero-touch feature.',
+    description: 'Automations drive ~45% of edrone\'s revenue but only fire for identified contacts. I designed a module that handles identification automatically.',
     metrics: [
       { value: '95%', label: 'ADOPTION', color: 'accent' },
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },

@@ -14,10 +14,10 @@ export const content = {
       headlinePre: 'I design the moments where products\u00a0',
       headlineAccent: 'start working',
       headlinePost: '\u00a0for people.',
-      body: 'Senior Product Designer, 7+ years in B2B SaaS. I use product data to find the places where users don\u2019t get through, then design the experience that gets them there. At\u00a0',
+      body: 'I use product data to find where users don\u2019t get through, then design the experience that gets them there. At\u00a0',
       bodyEdrone: 'edrone',
       bodyPost:
-        '\u00a0I rebuilt the platform from sales-gated to self-serve freemium, redesigned most of the product, and grew the design team from one to three. AI tools are part of how I work every day.',
+        '\u00a0I rebuilt the platform from sales-gated to self-serve freemium, redesigned most of the product, and grew the design team from one to three. 7+ years in B2B SaaS. AI tools are part of how I work every day.',
     },
     contact: {
       resume: 'Resume',
