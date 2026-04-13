@@ -132,7 +132,8 @@ export const projects: Project[] = [
         content: '**The primary target were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
       },
       {
-        kind: 'placeholder',
+        kind: 'image',
+        src: '/images/freemium-old.gif',
         caption: 'Early version. The onboarding went through many shipped iterations before reaching its final form.',
       },
       {

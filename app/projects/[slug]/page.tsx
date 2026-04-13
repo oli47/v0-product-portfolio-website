@@ -72,6 +72,7 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
       <Image
         src={src}
         alt={alt}
+        unoptimized={src.endsWith('.gif')}
         width={width}
         height={height}
         sizes="(max-width: 768px) 100vw, 680px"
