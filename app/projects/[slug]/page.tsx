@@ -7,6 +7,7 @@ import { getProject, getProjectNavigation } from '@/lib/projects'
 import type { ProcessBlock } from '@/lib/projects'
 import { SectionBadge } from '@/components/section-badge'
 import { ScrollToTop } from '@/components/scroll-to-top'
+import { Slideshow } from '@/components/slideshow'
 import { useScramble } from '@/lib/use-scramble'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
@@ -618,6 +619,23 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                   </div>
                   {block.caption && (
                     <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
+                      {block.caption}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
+
+          case 'slideshow':
+            return (
+              <div key={i} className="group my-8">
+                <div
+                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+                >
+                  <Slideshow images={block.images} />
+                  {block.caption && (
+                    <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
                       {block.caption}
                     </p>
                   )}

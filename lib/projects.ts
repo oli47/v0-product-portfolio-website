@@ -20,6 +20,7 @@ export type ProcessBlock =
   | { kind: 'before-after-flow'; before: string[]; after: string[]; caption?: string }
   | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]; arc?: { fromStep: number; toStep: number; label: string }; caption?: string }
   | { kind: 'decisions'; items: { num: string; title: string; description: string }[] }
+  | { kind: 'slideshow'; images: string[]; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -132,8 +133,8 @@ export const projects: Project[] = [
         content: '**The primary target were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
       },
       {
-        kind: 'image',
-        src: '/images/freemium-old.gif',
+        kind: 'slideshow',
+        images: ['/images/freeold1.png', '/images/freeold2.png', '/images/freeold3.png', '/images/freeold4.png', '/images/freeold5.png'],
         caption: 'Early version. The onboarding went through many shipped iterations before reaching its final form.',
       },
       {
@@ -178,8 +179,8 @@ export const projects: Project[] = [
         caption: 'The final activation path. Value demonstrated before any commitment.',
       },
       {
-        kind: 'image',
-        src: '/images/freemium-new.gif',
+        kind: 'slideshow',
+        images: ['/images/freemiumgif1.png', '/images/freemiumgif2.png', '/images/freemiumgif3.png', '/images/freemiumgif4.png'],
         caption: 'The shipped onboarding. Compare with the early version above.',
       },
       {
