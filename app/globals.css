@@ -52,6 +52,9 @@
   --color-000: #F2EDE3;  /* Card / hover bg: project row hover, logo box fill, floating nav */
   --white:     #FAF7F2;  /* Page background only */
 
+  /* Typography */
+  --font-weight-bold: 500;
+
   /* Semantic aliases — use these in components for dark-mode compatibility */
   --background:    var(--white);       /* Page/layout background */
   --foreground:    var(--color-500);   /* Default text color */
