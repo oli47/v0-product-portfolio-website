@@ -282,7 +282,6 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '+67% total signup conversion. Desktop doubled. Mobile from 0.05% to 3%.',
-      note: 'With prompt engineering and tools like Codex, I can move from identifying a problem to shipping a fix in the same day. Designing, building, and merging pull requests on production code.',
       northStar: {
         label: 'FROM DIAGNOSIS TO PRODUCTION',
         value: '5 hours',
@@ -374,6 +373,7 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '95% feature adoption. +19% identification rate globally.',
+      subheadline: "Increased by **19%**, **32%** for new users. More identified contacts means more automations firing and higher ROI.",
       note: "On by default. Users can turn it off but don't need to do anything to turn it on.",
       northStar: {
         label: 'NEW USERS FEATURE ADOPTION',

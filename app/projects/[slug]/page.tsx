@@ -882,6 +882,7 @@ export default function ProjectPage() {
 
           {project.results.northStar && project.results.note ? (
             /* Layout: left = northStar (label top, value middle, note bottom), right = stacked metrics */
+            <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Left — large north star cell */}
               <div
@@ -913,6 +914,12 @@ export default function ProjectPage() {
                 ))}
               </div>
             </div>
+            {project.results.subheadline && (
+              <div className="mt-3 p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.subheadline} /></p>
+              </div>
+            )}
+            </>
           ) : (
             /* Default layout */
             <>
