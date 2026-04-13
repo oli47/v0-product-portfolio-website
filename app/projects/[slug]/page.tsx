@@ -581,14 +581,14 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
         switch (block.kind) {
           case 'text':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5 px-8">
+              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5 sm:px-8">
                 <Bold text={block.content} />
               </p>
             )
 
           case 'heading':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5 px-8">
+              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5 sm:px-8">
                 <Bold text={block.content} />
               </p>
             )
@@ -794,7 +794,7 @@ export default function ProjectPage() {
 
         {/* Opportunity */}
         <section className="mb-16">
-          <SectionBadge className="ml-8">Opportunity</SectionBadge>
+          <SectionBadge className="sm:ml-8">Opportunity</SectionBadge>
 
           {project.opportunityBlocks ? (
             <ProcessBlocks blocks={project.opportunityBlocks} />
@@ -860,7 +860,7 @@ export default function ProjectPage() {
 
         {/* Process */}
         <section className="mb-16">
-          <SectionBadge className="ml-8">Process</SectionBadge>
+          <SectionBadge className="sm:ml-8">Process</SectionBadge>
 
           {project.processContent ? (
             <ProcessBlocks blocks={project.processContent} />
@@ -898,7 +898,7 @@ export default function ProjectPage() {
 
         {/* Impact */}
         <section className="mb-16">
-          <SectionBadge className="ml-8">Impact</SectionBadge>
+          <SectionBadge className="sm:ml-8">Impact</SectionBadge>
 
           {project.results.northStar && project.results.note ? (
             /* Layout: left = northStar (label top, value middle, note bottom), right = stacked metrics */
@@ -992,7 +992,7 @@ export default function ProjectPage() {
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-16">
-            <SectionBadge className="ml-8">{"What's Next"}</SectionBadge>
+            <SectionBadge className="sm:ml-8">{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex flex-col gap-1.5">
