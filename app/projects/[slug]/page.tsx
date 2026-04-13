@@ -541,8 +541,8 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
               <path d="M15 17l2 2 4.5-4.5" stroke="var(--accent-green)" />
             </svg>
             <div className="text-center">
-              <p className="text-body-2 text-[var(--color-400)] font-medium">John Doe</p>
-              <p className="text-body-2 text-[var(--color-300)]">j.doe@mail.com</p>
+              <p className="text-body-2 text-[var(--color-400)] font-medium">Anna Kowalska</p>
+              <p className="text-body-2 text-[var(--color-300)]">anna@shop.com</p>
             </div>
           </div>
 
@@ -860,7 +860,7 @@ export default function ProjectPage() {
 
         {/* Process */}
         <section className="mb-16">
-          <SectionBadge className="sm:ml-8">Process</SectionBadge>
+          <SectionBadge className="sm:ml-8">Approach</SectionBadge>
 
           {project.processContent ? (
             <ProcessBlocks blocks={project.processContent} />

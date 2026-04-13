@@ -310,7 +310,7 @@ export const projects: Project[] = [
     slug: 'contacts-activation',
     title: 'Contacts identification',
     tagline: 'Turned a manual Support task into a zero-touch feature. 95% adoption.',
-    description: 'Contact identification was the single biggest bottleneck to user ROI. Support was handling it manually, one customer at a time.',
+    description: 'Turned a manual Support task into a zero-touch feature.',
     metrics: [
       { value: '95%', label: 'ADOPTION', color: 'accent' },
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
@@ -327,7 +327,7 @@ export const projects: Project[] = [
     overviewDiagram: {
       before: 'Unidentified\ncontact',
       action: 'Opens email',
-      after: 'John Doe\nj.doe@mail.com',
+      after: 'Anna Kowalska\nanna@shop.com',
       caption: 'When a contact opens an email, a tracking pixel assigns a cookie and connects their browsing to their profile.',
     },
     opportunity: [],
