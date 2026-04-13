@@ -19,7 +19,7 @@ const dmMono = DM_Mono({
   weight: ['400', '500'],
 })
 
-const META_DESCRIPTION = 'Senior Product Designer with 7+ years in B2B SaaS. I read the data, find the leverage point, ship fast, and measure what actually changed.'
+const META_DESCRIPTION = 'I design the moments where products start working for people.'
 
 export const metadata: Metadata = {
   title: { default: 'Olaf Otrząsek • Design', template: '%s — Olaf Otrząsek' },
