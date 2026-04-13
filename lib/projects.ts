@@ -233,40 +233,36 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era: four fields on a single page, including a phone number that had no function in the product. Amplitude showed massive drop-off at the form. I identified the phone field as the likely cause, and **a Claude-powered UX agent I had built confirmed it** as the top-priority issue. Mobile conversion sat at 0.05%.',
+        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era. Amplitude showed massive drop-off at the form. **A Claude-powered UX agent I had built confirmed two issues:** the phone field was the primary drop-off point, and SSO did not actually create an account. Mobile conversion sat at 0.05%.',
       },
       {
         kind: 'text',
-        content: 'If the drop-off was this high on a form this fixable, a small change could unlock the entire funnel.',
+        content: 'The drop-off was on the very first step of the freemium funnel. Fixing it would compound through every step downstream.',
       },
       {
         kind: 'image',
         src: '/images/sf-old.png',
-        caption: 'The original form. Four fields, single page, broken SSO.',
+        caption: 'The original form. Four fields on a single page, including a phone number with no function in the product.',
       },
     ],
     solution: [],
     processContent: [
       {
         kind: 'text',
-        content: 'Three problems: the phone field was the primary drop-off point — Sales confirmed they no longer used it. Four fields on one page made signup feel heavy for a product trying to be simple. And SSO did not actually create an account: it pre-filled two fields, leaving the user to complete the rest manually.',
-      },
-      {
-        kind: 'text',
-        content: '**I shipped two fixes at once.** The traffic was too low for meaningful split testing, and the drop-off data pointed clearly at the phone field.',
+        content: 'Two problems, two fixes, shipped at once. Splitting them would have meant **waiting at least 3 weeks per change** to collect meaningful data on low traffic.',
       },
       {
         kind: 'decisions',
         items: [
           {
             num: 'FIX 1',
-            title: 'Removed the phone field',
-            description: 'Eliminated the primary drop-off point. The product only needed three fields: email, name, and store URL.',
+            title: 'Phone field was the primary drop-off',
+            description: 'Sales confirmed they no longer used it. I removed it. The product only needed three fields: email, name, and store URL.',
           },
           {
             num: 'FIX 2',
-            title: 'Restructured into two steps',
-            description: 'Step 1 creates the account (email or Google/Shopify SSO). Step 2 collects name and store URL. SSO now actually creates the account instead of pre-filling fields.',
+            title: 'SSO did not create an account',
+            description: 'I restructured into two steps: **step 1 creates the account** (email or SSO), **step 2 collects name and store URL.** SSO now works as expected.',
           },
         ],
       },
@@ -281,7 +277,7 @@ export const projects: Project[] = [
       },
       {
         kind: 'text',
-        content: 'Built directly in Codex, no separate design phase. On production within 5 hours.',
+        content: 'I built the entire frontend directly in Codex, no separate design phase in Figma. The frontend developer handled the backend changes. **On production within 5 hours.**',
       },
     ],
     results: {
