@@ -31,14 +31,14 @@ export const metadata: Metadata = {
     description: META_DESCRIPTION,
     url: 'https://olafotrzasek.com',
     siteName: 'Olaf Otrząsek',
-    images: [{ url: '/images/avatar.jpg', width: 800, height: 800, alt: 'Olaf Otrząsek' }],
+    images: [{ url: '/images/og-thumbnail.png', width: 1200, height: 630, alt: 'Olaf Otrząsek — Senior Product Designer' }],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Olaf Otrząsek • Design',
     description: META_DESCRIPTION,
-    images: ['/images/avatar.jpg'],
+    images: ['/images/og-thumbnail.png'],
   },
 }
 
