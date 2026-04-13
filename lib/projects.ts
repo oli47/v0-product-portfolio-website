@@ -178,7 +178,8 @@ export const projects: Project[] = [
         caption: 'The final activation path. Value demonstrated before any commitment.',
       },
       {
-        kind: 'placeholder',
+        kind: 'image',
+        src: '/images/freemium-new.gif',
         caption: 'The shipped onboarding. Compare with the early version above.',
       },
       {
