@@ -581,14 +581,14 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
         switch (block.kind) {
           case 'text':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5">
+              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5 px-8">
                 <Bold text={block.content} />
               </p>
             )
 
           case 'heading':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5">
+              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5 px-8">
                 <Bold text={block.content} />
               </p>
             )
