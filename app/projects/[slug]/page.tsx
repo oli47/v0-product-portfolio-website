@@ -699,7 +699,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     {/* Number + title + description */}
                     <div className="flex flex-col gap-1.5 justify-center">
                       <span className="text-eyebrow text-[var(--accent)]">{step.num}</span>
-                      <h4 className="text-body-1 font-medium text-[var(--color-500)]">{step.title}</h4>
+                      <p className="text-body-1 font-medium text-[var(--color-500)]">{step.title}</p>
                       <p className="text-body-2 text-[var(--color-300)] text-pretty">{step.description}</p>
                     </div>
                   </div>
@@ -998,7 +998,7 @@ export default function ProjectPage() {
                 <div key={index} className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-3">
                     <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0">▨</span>
-                    <h4 className="text-body-1 font-bold text-[var(--color-500)] text-pretty">{step.title}</h4>
+                    <p className="text-body-1 font-bold text-[var(--color-500)] text-pretty">{step.title}</p>
                   </div>
                   <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
                 </div>

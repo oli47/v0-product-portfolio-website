@@ -160,8 +160,8 @@
 /* h1 — Hero headline. One per page. Clamps 40→52px for responsive. */
 .text-h1 {
   font-family: 'PPMondwest', serif;
-  font-size: clamp(2.5rem, 5vw, 3.25rem);
-  line-height: clamp(3rem, 6vw, 3.5rem);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: clamp(2.5rem, 6vw, 3.5rem);
   font-weight: 400;
   letter-spacing: 0.025rem;
 }
