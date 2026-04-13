@@ -775,7 +775,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Opportunity */}
-        <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
+        <section className="mb-12 pb-12">
           <SectionBadge>Opportunity</SectionBadge>
 
           {project.opportunityBlocks ? (
@@ -841,7 +841,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Process */}
-        <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
+        <section className="mb-12 pb-12">
           <SectionBadge>Process</SectionBadge>
 
           {project.processContent ? (
@@ -879,7 +879,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Impact */}
-        <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
+        <section className="mb-12 pb-12">
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note ? (
@@ -972,7 +972,7 @@ export default function ProjectPage() {
 
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
-          <section className="mb-12 pb-12 border-b border-[var(--color-100)]">
+          <section className="mb-12 pb-12">
             <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
