@@ -898,7 +898,7 @@ export default function ProjectPage() {
                     {project.results.northStar.value}
                   </div>
                 </div>
-                <p className="text-body-2 text-[var(--color-300)] text-pretty mt-4">
+                <p className="text-body-1 text-[var(--color-300)] text-pretty mt-4">
                   <Bold text={project.results.note!} />
                 </p>
               </div>
@@ -913,7 +913,7 @@ export default function ProjectPage() {
                       </div>
                     </div>
                     {metric.description && (
-                      <p className="text-body-2 text-[var(--color-300)] text-pretty mt-4"><Bold text={metric.description} /></p>
+                      <p className="text-body-1 text-[var(--color-300)] text-pretty mt-4"><Bold text={metric.description} /></p>
                     )}
                   </div>
                 ))}
