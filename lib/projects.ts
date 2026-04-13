@@ -273,7 +273,7 @@ export const projects: Project[] = [
           { src: '/images/sf-signup1.png', label: 'After' },
           { src: '/images/sf-signup2.png', label: 'After' },
         ],
-        caption: 'Step 1 creates the account. Step 2 collects what the product needs.',
+        caption: 'After changes, step 1. Creates the account. step 2. Collects what the product needs.',
       },
       {
         kind: 'text',
