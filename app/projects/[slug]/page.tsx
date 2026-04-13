@@ -53,6 +53,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
           alt={alt}
           width={1200}
           height={750}
+          unoptimized={src.endsWith('.gif')}
           sizes="(max-width: 768px) 100vw, 1200px"
           className="w-full h-auto rounded-sm"
         />
