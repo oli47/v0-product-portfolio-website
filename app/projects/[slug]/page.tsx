@@ -905,11 +905,16 @@ export default function ProjectPage() {
               {/* Right — stacked metric cells, stretch to match left height */}
               <div className="flex flex-col gap-3">
                 {project.results.metrics.map((metric, index) => (
-                  <div key={index} className="p-5 rounded-sm flex flex-col gap-1 flex-1" style={{ backgroundColor: 'var(--color-000)' }}>
-                    <div className={`font-display text-[clamp(1.75rem,7vw,2.5rem)] leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
-                      {metric.value}
+                  <div key={index} className="p-5 rounded-sm flex flex-col flex-1" style={{ backgroundColor: 'var(--color-000)', justifyContent: metric.description ? 'space-between' : 'flex-start' }}>
+                    <div className="flex flex-col gap-4">
+                      <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
+                      <div className={`font-display text-[clamp(2.5rem,8vw,3.5rem)] leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
+                        {metric.value}
+                      </div>
                     </div>
-                    <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
+                    {metric.description && (
+                      <p className="text-body-1 text-[var(--color-300)] text-pretty mt-4">{metric.description}</p>
+                    )}
                   </div>
                 ))}
               </div>

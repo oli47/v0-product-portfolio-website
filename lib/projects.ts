@@ -74,6 +74,7 @@ export interface Project {
       value: string
       label: string
       sublabel?: string
+      description?: string
       color?: 'accent' | 'ink'
     }[]
   }
@@ -310,7 +311,7 @@ export const projects: Project[] = [
     description: 'Contact identification was the single biggest bottleneck to user ROI. Support was handling it manually, one customer at a time.',
     metrics: [
       { value: '95%', label: 'ADOPTION', color: 'accent' },
-      { value: '+19%', label: 'IDENTIFICATION RATE', color: 'accent' },
+      { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -372,16 +373,14 @@ export const projects: Project[] = [
       },
     ],
     results: {
-      headline: '95% feature adoption. +19% identification rate globally.',
-      subheadline: "Increased by **19%**, **32%** for new users. More identified contacts means more automations firing and higher ROI.",
-      note: "On by default. Users can turn it off but don't need to do anything to turn it on.",
+      headline: '95% feature adoption. +32% identification rate for new users.',
+      note: "Enabled automatically after integration. Users can turn it off but don't need to do anything to turn it on. Almost no one did.",
       northStar: {
-        label: 'NEW USERS FEATURE ADOPTION',
+        label: 'FEATURE ADOPTION',
         value: '95%',
       },
       metrics: [
-        { value: '+19%', label: 'TOTAL IDENTIFICATION RATE', color: 'accent' },
-        { value: '+32%', label: 'NEW USERS IDENTIFICATION RATE', color: 'accent' },
+        { value: '+32%', label: 'IDENTIFICATION RATE', description: 'Compared to all users before the module. More identified contacts, more automations, higher ROI.', color: 'accent' },
       ],
     },
     nextSteps: [
