@@ -7,7 +7,7 @@ import { FadeUp } from '@/components/fade-up'
 import { ProjectRow } from '@/components/project-row'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { content, defaultLang } from '@/lib/content'
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useScramble } from '@/lib/use-scramble'
 
 const t = content[defaultLang]

@@ -13,10 +13,10 @@ const dmSans = DM_Sans({
   weight: ['400', '500', '600'],
 })
 
-const dmMono = DM_Mono({ 
+const dmMono = DM_Mono({
   subsets: ['latin'],
   variable: '--font-dm-mono',
-  weight: ['400', '500', '600'],
+  weight: ['400', '500'],
 })
 
 const META_DESCRIPTION = 'I design the moments where products start working for people.'
