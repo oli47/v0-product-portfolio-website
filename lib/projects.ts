@@ -66,6 +66,7 @@ export interface Project {
     headline: string
     subheadline?: string
     note?: string
+    metricsAsMain?: boolean   // use MetricMain (not Supporting) for right-column metrics
     northStar?: {
       label: string
       tag?: string
@@ -380,6 +381,7 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '95% feature adoption. +32% identification rate for new users.',
+      metricsAsMain: true,
       note: "Enabled automatically after integration. Users can turn it off but don't need to do anything to turn it on. Almost **no one** did.",
       northStar: {
         label: 'FEATURE ADOPTION',

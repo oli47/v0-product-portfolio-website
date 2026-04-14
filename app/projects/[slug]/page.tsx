@@ -113,8 +113,8 @@ function PlaceholderImage({ className }: { className?: string }) {
 // MetricSupporting — h2-size value / body-2 description pinned to bottom
 // Both always use accent orange. 24px (1.5rem) gap between value and text.
 
-function MetricMain({ label, value, note, className }: {
-  label: string; value: string; note?: string; className?: string
+function MetricMain({ label, value, note, description, className }: {
+  label: string; value: string; note?: string; description?: string; className?: string
 }) {
   return (
     <div className={`p-5 rounded-sm flex flex-col h-full ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
@@ -126,6 +126,7 @@ function MetricMain({ label, value, note, className }: {
         </div>
       </div>
       {note && <p className="text-body-1 text-[var(--color-300)] text-pretty mt-auto pt-6"><Bold text={note} /></p>}
+      {description && <p className="text-body-2 text-[var(--color-300)] text-pretty mt-auto pt-6"><Bold text={description} /></p>}
     </div>
   )
 }
@@ -1004,12 +1005,9 @@ export default function ProjectPage() {
                 />
                 <div className="flex flex-col gap-3">
                   {project.results.metrics.map((metric, index) => (
-                    <MetricSupporting
-                      key={index}
-                      label={metric.label}
-                      value={metric.value}
-                      description={metric.description}
-                    />
+                    project.results.metricsAsMain
+                      ? <MetricMain key={index} label={metric.label} value={metric.value} description={metric.description} />
+                      : <MetricSupporting key={index} label={metric.label} value={metric.value} description={metric.description} />
                   ))}
                 </div>
               </div>
