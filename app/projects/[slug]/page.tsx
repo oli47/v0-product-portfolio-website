@@ -251,7 +251,7 @@ function FlowArrow({ id }: { id: string }) {
 
 function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: string[]; caption?: string }) {
   return (
-    <div className="my-8">
+    <div className="my-8 sm:-mx-6">
       <div className="rounded-sm border border-[var(--color-100)] overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-100)]">
 
@@ -290,8 +290,12 @@ function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: 
           </div>
 
         </div>
+        {caption && (
+          <div className="px-5 pt-3 pb-5">
+            <p className="text-body-2 text-[var(--color-300)] text-center">{caption}</p>
+          </div>
+        )}
       </div>
-      {caption && <Caption text={caption} />}
     </div>
   )
 }
@@ -340,7 +344,7 @@ function VerticalFlow({ steps, arc, caption }: {
   }, [arc])
 
   return (
-    <div className="my-8">
+    <div className="my-8 sm:-mx-6">
       <div
         ref={containerRef}
         className="relative rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
@@ -436,8 +440,10 @@ function VerticalFlow({ steps, arc, caption }: {
             {arc.label}
           </div>
         )}
+        {caption && (
+          <p className="text-body-2 text-[var(--color-300)] text-center mt-6">{caption}</p>
+        )}
       </div>
-      {caption && <Caption text={caption} />}
     </div>
   )
 }
@@ -446,7 +452,7 @@ function VerticalFlow({ steps, arc, caption }: {
 
 function ContactFlowDiagram({ caption }: { caption?: string }) {
   return (
-    <div className="my-8">
+    <div className="my-8 sm:-mx-6">
       <div
         className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
         style={{ backgroundColor: 'var(--color-000)' }}
@@ -581,21 +587,21 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
         switch (block.kind) {
           case 'text':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-5 sm:px-8">
+              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-8">
                 <Bold text={block.content} />
               </p>
             )
 
           case 'heading':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-5 sm:px-8">
+              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-8">
                 <Bold text={block.content} />
               </p>
             )
 
           case 'placeholder':
             return (
-              <div key={i} className="my-8">
+              <div key={i} className="my-8 sm:-mx-6">
                 <PlaceholderImage />
                 {block.caption && <Caption text={block.caption} />}
               </div>
@@ -603,7 +609,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'image':
             return (
-              <div key={i} className="group my-8">
+              <div key={i} className="group my-8 sm:-mx-6">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -628,7 +634,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'slideshow':
             return (
-              <div key={i} className="group my-8">
+              <div key={i} className="group my-8 sm:-mx-6">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -645,7 +651,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'compare':
             return (
-              <div key={i} className="group my-8">
+              <div key={i} className="group my-8 sm:-mx-6">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -676,7 +682,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'steps':
             return (
-              <div key={i} className="space-y-8 my-8">
+              <div key={i} className="space-y-8 my-8 sm:-mx-6">
                 {block.items.map((step, j) => (
                   <div key={j} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                     {/* Image or placeholder — narrower on desktop */}
@@ -710,7 +716,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'decisions': {
             const count = block.items.length
             return (
-              <div key={i} className="my-8 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div key={i} className="my-8 sm:-mx-6 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
                 {block.items.map((item, j) => {
                   const isLeftCol   = j % 2 === 0
                   const isLastRow   = j >= count - 2  // bottom row on desktop
@@ -779,7 +785,7 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] mb-8" style={{ backgroundColor: 'var(--color-000)' }}>
+          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] mb-8 sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
             <ClickableImage
               src={project.coverImage}
               alt={project.title}
@@ -794,7 +800,7 @@ export default function ProjectPage() {
 
         {/* Opportunity */}
         <section className="mb-16">
-          <SectionBadge className="sm:ml-8">Opportunity</SectionBadge>
+          <SectionBadge>Opportunity</SectionBadge>
 
           {project.opportunityBlocks ? (
             <ProcessBlocks blocks={project.opportunityBlocks} />
@@ -809,7 +815,7 @@ export default function ProjectPage() {
           )}
 
           {!project.opportunityBlocks && project.overviewDiagram && (
-            <div className="mt-8 p-4 md:p-6 bg-[var(--color-000)] rounded-sm border border-[var(--color-100)]">
+            <div className="mt-8 p-4 md:p-6 bg-[var(--color-000)] rounded-sm border border-[var(--color-100)] sm:-mx-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-[var(--color-100)] rounded-sm flex items-center justify-center mb-2 mx-auto">
@@ -860,7 +866,7 @@ export default function ProjectPage() {
 
         {/* Process */}
         <section className="mb-16">
-          <SectionBadge className="sm:ml-8">Approach</SectionBadge>
+          <SectionBadge>Approach</SectionBadge>
 
           {project.processContent ? (
             <ProcessBlocks blocks={project.processContent} />
@@ -898,12 +904,12 @@ export default function ProjectPage() {
 
         {/* Impact */}
         <section className="mb-16">
-          <SectionBadge className="sm:ml-8">Impact</SectionBadge>
+          <SectionBadge>Impact</SectionBadge>
 
-          {project.results.northStar && project.results.note ? (
-            /* Layout: left = northStar (label top, value middle, note bottom), right = stacked metrics */
+          {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
+            /* 2-col layout: left = northStar + note, right = stacked metrics */
             <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-6">
               {/* Left — large north star cell */}
               <div
                 className="p-5 rounded-sm flex flex-col justify-between"
@@ -922,7 +928,7 @@ export default function ProjectPage() {
                   <Bold text={project.results.note!} />
                 </p>
               </div>
-              {/* Right — stacked metric cells, stretch to match left height */}
+              {/* Right — stacked metric cells */}
               <div className="flex flex-col gap-3">
                 {project.results.metrics.map((metric, index) => (
                   <div key={index} className="p-5 rounded-sm flex flex-col flex-1 justify-between" style={{ backgroundColor: 'var(--color-000)' }}>
@@ -941,16 +947,35 @@ export default function ProjectPage() {
               </div>
             </div>
             {project.results.subheadline && (
-              <div className="mt-3 p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div className="mt-3 p-5 rounded-sm sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
                 <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.subheadline} /></p>
               </div>
             )}
             </>
+          ) : project.results.northStar && project.results.note && project.results.metrics.length === 0 ? (
+            /* Single-wide layout: northStar label + value + note in one full-width card */
+            <div
+              className="p-5 rounded-sm flex flex-col justify-between sm:-mx-6"
+              style={{ backgroundColor: 'var(--color-000)', minHeight: '13.75rem' }}
+            >
+              <div className="flex flex-col gap-4">
+                <div className="text-eyebrow text-[var(--color-300)]">
+                  {project.results.northStar.label}
+                </div>
+                <div className="font-display text-[var(--accent)] leading-none"
+                  style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
+                  {project.results.northStar.value}
+                </div>
+              </div>
+              <p className="text-body-1 text-[var(--color-300)] text-pretty mt-6">
+                <Bold text={project.results.note} />
+              </p>
+            </div>
           ) : (
             /* Default layout */
             <>
               {project.results.northStar && (
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3" style={{ backgroundColor: 'var(--color-000)' }}>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3 sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
                   <div className="flex flex-col gap-1">
                     <div className="text-eyebrow text-[var(--color-300)]">{project.results.northStar.label}</div>
                     {project.results.northStar.tag && (
@@ -967,7 +992,7 @@ export default function ProjectPage() {
                   </div>
                 </div>
               )}
-              <div className={`grid gap-3 ${metricsGridCols}`}>
+              <div className={`grid gap-3 sm:-mx-6 ${metricsGridCols}`}>
                 {project.results.metrics.map((metric, index) => (
                   <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
                     <div className={`font-display text-[clamp(1.75rem,7vw,3rem)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
@@ -981,7 +1006,7 @@ export default function ProjectPage() {
                 ))}
               </div>
               {project.results.note && (
-                <div className="mt-3 p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                <div className="mt-3 p-5 rounded-sm sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
                   <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
                 </div>
               )}
@@ -992,8 +1017,8 @@ export default function ProjectPage() {
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
           <section className="mb-16">
-            <SectionBadge className="sm:ml-8">{"What's Next"}</SectionBadge>
-            <div className="space-y-6 sm:px-8">
+            <SectionBadge>{"What's Next"}</SectionBadge>
+            <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-3">

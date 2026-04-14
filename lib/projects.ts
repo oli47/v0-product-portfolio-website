@@ -94,7 +94,7 @@ export const projects: Project[] = [
     tagline: 'From sales-gated to self-serve. 4657 accounts in 10 months.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
     metrics: [
-      { value: '8.4%', label: 'PAID CONVERSION (INDUSTRY AVG: 2-5%)', color: 'accent' },
+      { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
@@ -190,15 +190,12 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '4600 freemium accounts in 10 months. 78% activation rate.',
-      note: "Freemium's north star metric. Shortening newsletter delivery from **13 to 1 day** was a major contributor. Newsletters generate orders, and the earlier they go out, the faster users see ROI.",
+      note: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2–5%**.',
       northStar: {
-        label: 'TIME TO FIRST ATTRIBUTED ORDER',
-        value: '44 → 5 days',
+        label: 'PAID CONVERSION',
+        value: '8.4%',
       },
-      metrics: [
-        { value: '+4600', label: 'TOTAL NEW USERS', description: '78% were active users, integrated with 5+ automations running.', color: 'accent' },
-        { value: '8.4%', label: 'PAID CONVERSION', description: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2-5%**.', color: 'accent' },
-      ],
+      metrics: [],
     },
     nextSteps: [
       {

@@ -33,7 +33,7 @@ export const content = {
       experience: 'Experience',
     },
     currently:
-      'Looking for a Senior Product Designer or Design Lead role at a B2B SaaS scale-up in the EU. End-to-end product thinking, sharp UI, and experience leading small teams people enjoy being part of. Based in Warsaw.',
+      'Looking for a Senior Product Designer or Design Lead role at a B2B SaaS scale-up in the EU. End-to-end product thinking, sharp UI, and experience leading small teams people enjoy being part of.',
     projects: {
       soon: 'Soon',
       discover: 'Discover',
