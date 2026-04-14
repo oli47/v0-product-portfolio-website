@@ -212,7 +212,7 @@ export function Nav() {
               {/* Status — hidden on mobile */}
               <div className="hidden sm:flex items-center gap-2">
                 <span
-                  className="w-1.5 h-1.5 rounded-[0.125rem] bg-[var(--accent-green)] animate-pulse-slow shrink-0"
+                  className="w-1.5 h-1.5 bg-[var(--accent-green)] animate-pulse-slow shrink-0"
                   aria-hidden="true"
                 />
                 <span className="text-eyebrow text-[var(--accent-green)]">
