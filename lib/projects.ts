@@ -258,7 +258,7 @@ export const projects: Project[] = [
       },
       {
         kind: 'text',
-        content: "Support had a validated approach: sending non-marketing emails to the full base **drastically reduced churn** and raised identification to as high as 15%. But they were doing it manually, while cookies clear over time and are per device, so identification needs to happen continuously and at full scale. No competing product offered anything like it.",
+        content: "Support had a validated approach: sending non-marketing emails to the full base **drastically reduced churn** and raised identification to as high as 15%. But they were doing it manually, while cookies clear over time and are per device, so identification needs to happen continuously and at full scale.",
       },
       {
         kind: 'contact-flow',
@@ -302,15 +302,10 @@ export const projects: Project[] = [
         value: '95%',
       },
       metrics: [
-        { value: '+32%', label: 'IDENTIFICATION RATE', description: 'Compared to all users before the module. More identified contacts, **more automations** firing, higher ROI.', color: 'accent' },
+        { value: '+32%', label: 'IDENTIFICATION RATE', description: 'Share of identified contacts among new freemium users after the sequence runs.', color: 'accent' },
       ],
     },
-    nextSteps: [
-      {
-        title: 'Reactivation module',
-        description: 'Contacts who stop opening emails enter a sequence and eventually get removed, reducing costs and protecting deliverability. I designed the screen and built the frontend in Codex.',
-      },
-    ],
+    nextSteps: [],
   },
 ]
 
