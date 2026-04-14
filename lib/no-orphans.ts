@@ -5,7 +5,7 @@
  */
 export function noOrphans(text: string): string {
   return text.replace(
-    /\b(a|I|in|at|to|of|by|is|it|or|on|an|no|do|if|as|so|we|be|he|vs)\s/g,
+    /\b(a|I|in|at|to|of|by|is|it|or|on|an|no|do|if|as|so|we|be|he|me|my|she|her|him|us|our|you|they|them|its|vs)\s/g,
     '$1\u00A0',
   )
 }

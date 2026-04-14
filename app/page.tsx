@@ -8,6 +8,7 @@ import { ProjectRow } from '@/components/project-row'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { content, defaultLang } from '@/lib/content'
 import { useState, useCallback } from 'react'
+import { noOrphans } from '@/lib/no-orphans'
 import { useScramble } from '@/lib/use-scramble'
 
 const t = content[defaultLang]
@@ -168,9 +169,9 @@ export default function Home() {
         <section className="mb-16">
           <FadeUp delay={0}>
             <h1
-              className="font-display font-normal tracking-[0.025rem] text-[var(--color-500)] mb-5 text-balance"
+              className="font-display font-normal tracking-[0.025rem] text-[var(--color-500)] mb-5"
               style={{
-                fontSize: 'clamp(2.5rem, 5vw, 3.25rem)',
+                fontSize: 'clamp(2.5rem, 5vw, 3rem)',
                 lineHeight: 'clamp(3rem, 6vw, 3.5rem)',
               }}
             >
@@ -182,7 +183,7 @@ export default function Home() {
 
           <FadeUp delay={0.08}>
             <p className="text-body-1 text-[var(--color-300)] mb-8 text-pretty">
-              {t.hero.body}
+              {noOrphans(t.hero.body)}
               <a
                 href="https://edrone.me/"
                 target="_blank"
@@ -191,7 +192,7 @@ export default function Home() {
               >
                 {t.hero.bodyEdrone}
               </a>
-              {t.hero.bodyPost}
+              {noOrphans(t.hero.bodyPost)}
             </p>
           </FadeUp>
 

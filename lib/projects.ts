@@ -43,25 +43,8 @@ export interface Project {
   coverImage: string
   coverImagePosition?: 'bottom-right' | 'center-bottom'
   thumbnailImage: string
-  overview: string
-  overviewDiagram?: {
-    before: string
-    action: string
-    after: string
-    caption: string
-  }
-  opportunity: string[]
-  opportunityExtra?: string[]       // shown after overviewDiagram
-  opportunityBlocks?: ProcessBlock[] // rich opportunity content (replaces above when set)
-  processContent?: ProcessBlock[]
-  // legacy fields (fallback if processContent not set)
-  solution: string[]
-  hasCompareSlider?: boolean
-  compareSliderImages?: {
-    before: string
-    after: string
-  }
-  solutionImages?: string[]
+  opportunityBlocks: ProcessBlock[]
+  processContent: ProcessBlock[]
   results: {
     headline: string
     subheadline?: string
@@ -107,8 +90,6 @@ export const projects: Project[] = [
     coverImage: '/thumbnails/freemium-activation.png',
     coverImagePosition: 'bottom-right',
     thumbnailImage: '/thumbnails/freemium-activation.png',
-    overview: '',
-    opportunity: [],
     opportunityBlocks: [
       {
         kind: 'text',
@@ -125,7 +106,6 @@ export const projects: Project[] = [
         caption: 'Before: weeks from first contact to active account. After: minutes.',
       },
     ],
-    solution: [],
     processContent: [
       {
         kind: 'text',
@@ -243,8 +223,6 @@ export const projects: Project[] = [
     coverImage: '/images/sf-cover.png',
     coverImagePosition: 'center-bottom',
     thumbnailImage: '/images/sf-cover.png',
-    overview: '',
-    opportunity: [],
     opportunityBlocks: [
       {
         kind: 'text',
@@ -255,7 +233,6 @@ export const projects: Project[] = [
         content: 'The drop-off was on the very first step of the freemium funnel. Fixing it would compound through every step downstream.',
       },
     ],
-    solution: [],
     processContent: [
       {
         kind: 'text',
@@ -328,14 +305,6 @@ export const projects: Project[] = [
     coverImage: '/images/ci-cover.png',
     coverImagePosition: 'bottom-right',
     thumbnailImage: '/images/ci-cover.png',
-    overview: '',
-    overviewDiagram: {
-      before: 'Unidentified\ncontact',
-      action: 'Opens email',
-      after: 'Sarah Miller\nmiller@email.com',
-      caption: 'When a contact opens an email, a tracking pixel assigns a cookie and connects their browsing to their profile.',
-    },
-    opportunity: [],
     opportunityBlocks: [
       {
         kind: 'text',
@@ -350,7 +319,6 @@ export const projects: Project[] = [
         caption: 'When a contact opens an email, a tracking pixel assigns a cookie and connects their browsing to their profile.',
       },
     ],
-    solution: [],
     processContent: [
       {
         kind: 'text',

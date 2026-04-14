@@ -15,6 +15,7 @@ export function Nav() {
   const [scrolled, setScrolled]   = useState(false)
   const [hovering, setHovering]   = useState(false)
   const animating                  = useRef(false)
+  const cleanupTimerRef            = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pathname                   = usePathname()
   const isProjectPage              = pathname.startsWith('/projects/')
 
@@ -30,6 +31,7 @@ export function Nav() {
   // ── Pixel dissolve transition ──────────────────────────────────────────────
   const handleThemeToggle = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (cleanupTimerRef.current) { clearTimeout(cleanupTimerRef.current); cleanupTimerRef.current = null }
       if (animating.current) return
 
       const button   = e.currentTarget
@@ -110,10 +112,10 @@ export function Nav() {
         requestAnimationFrame(frame)
       })
 
-      const cleanup = () => { svg.remove(); animating.current = false }
+      const cleanup = () => { svg.remove(); animating.current = false; cleanupTimerRef.current = null }
       transition.finished.then(cleanup).catch(cleanup)
       // Safety: always reset after 800ms in case finished never resolves (Safari)
-      setTimeout(cleanup, 800)
+      cleanupTimerRef.current = setTimeout(cleanup, 800)
     },
     [isDark, setTheme],
   )
