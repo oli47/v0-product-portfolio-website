@@ -93,7 +93,7 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce.',
+        content: 'edrone is a marketing automation CRM for ecommerce. **Self-serve was already a standard in the category,** and GA showed consistent inbound traffic that never reached Sales.',
       },
     ],
     processContent: [
