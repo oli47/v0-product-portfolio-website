@@ -755,7 +755,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     >
                       <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
                       <div className="flex flex-col gap-2">
-                        <p className="text-body-1 font-bold text-[var(--color-500)] text-pretty">{item.title}</p>
+                        <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
                         <p className="text-body-2 text-[var(--color-300)] text-pretty"><Bold text={item.description} /></p>
                       </div>
                     </div>
@@ -970,7 +970,7 @@ export default function ProjectPage() {
                       </div>
                     </div>
                     {metric.description && (
-                      <p className="text-body-1 text-[var(--color-300)] text-pretty mt-6"><Bold text={metric.description} /></p>
+                      <p className="text-body-2 text-[var(--color-300)] text-pretty mt-6"><Bold text={metric.description} /></p>
                     )}
                   </div>
                 ))}
@@ -1053,7 +1053,7 @@ export default function ProjectPage() {
                 <div key={index} className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-3">
                     <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0">▨</span>
-                    <p className="text-body-1 font-bold text-[var(--color-500)] text-pretty">{step.title}</p>
+                    <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{step.title}</p>
                   </div>
                   <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
                 </div>

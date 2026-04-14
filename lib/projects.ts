@@ -143,7 +143,7 @@ export const projects: Project[] = [
       },
       {
         kind: 'text',
-        content: 'Four decisions shaped the final model:',
+        content: '**Four decisions** shaped the final model:',
       },
       {
         kind: 'decisions',
@@ -189,11 +189,11 @@ export const projects: Project[] = [
       },
       {
         kind: 'text',
-        content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
+        content: 'I set the NSM as **time to first attributed order.** That is when users see real revenue and the upgrade decision forms.',
       },
       {
         kind: 'text',
-        content: 'I set the NSM as **time to first attributed order.** That is when users see real revenue and the upgrade decision forms.',
+        content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
       },
     ],
     results: {
