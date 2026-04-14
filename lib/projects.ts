@@ -327,7 +327,7 @@ export const projects: Project[] = [
     overviewDiagram: {
       before: 'Unidentified\ncontact',
       action: 'Opens email',
-      after: 'Anna Kowalska\nanna@shop.com',
+      after: 'Sarah Miller\nmiller@email.com',
       caption: 'When a contact opens an email, a tracking pixel assigns a cookie and connects their browsing to their profile.',
     },
     opportunity: [],

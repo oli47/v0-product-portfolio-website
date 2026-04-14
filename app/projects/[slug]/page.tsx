@@ -588,8 +588,8 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
               <path d="M15 17l2 2 4.5-4.5" stroke="var(--accent-green)" />
             </svg>
             <div className="text-center">
-              <p className="text-body-2 text-[var(--color-400)] font-medium">Anna Kowalska</p>
-              <p className="text-body-2 text-[var(--color-300)]">anna@shop.com</p>
+              <p className="text-body-2 text-[var(--color-400)] font-medium">Sarah Miller</p>
+              <p className="text-body-2 text-[var(--color-300)]">miller@email.com</p>
             </div>
           </div>
 
