@@ -10,6 +10,7 @@ import { ScrollToTop } from '@/components/scroll-to-top'
 import { Slideshow } from '@/components/slideshow'
 import { useScramble } from '@/lib/use-scramble'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { noOrphans } from '@/lib/no-orphans'
 
 // ─── Lightbox ────────────────────────────────────────────────────────────────
 
@@ -102,6 +103,40 @@ function PlaceholderImage({ className }: { className?: string }) {
       style={{ minHeight: '13.75rem' }}
     >
       <span className="text-eyebrow text-[var(--color-200)]">Image placeholder</span>
+    </div>
+  )
+}
+
+// ─── Metric cards ─────────────────────────────────────────────────────────────
+// MetricMain   — primary metric: label / large value / body-1 description
+// MetricSupporting — secondary metric: label / large value / body-2 description
+
+function MetricMain({ label, value, accent = true, note, className }: {
+  label: string; value: string; accent?: boolean; note?: string; className?: string
+}) {
+  return (
+    <div className={`p-5 rounded-sm flex flex-col gap-3 ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
+      <div className="text-eyebrow text-[var(--color-300)]">{label}</div>
+      <div className={`font-display leading-none ${accent ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
+        style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
+        {value}
+      </div>
+      {note && <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={note} /></p>}
+    </div>
+  )
+}
+
+function MetricSupporting({ label, value, accent = true, description, className }: {
+  label: string; value: string; accent?: boolean; description?: string; className?: string
+}) {
+  return (
+    <div className={`p-5 rounded-sm flex flex-col gap-3 flex-1 ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
+      <div className="text-eyebrow text-[var(--color-300)]">{label}</div>
+      <div className={`font-display leading-none ${accent ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
+        style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
+        {value}
+      </div>
+      {description && <p className="text-body-2 text-[var(--color-300)] text-pretty"><Bold text={description} /></p>}
     </div>
   )
 }
@@ -572,7 +607,7 @@ function ContactFlowDiagram({ caption }: { caption?: string }) {
 // ─── Bold renderer ────────────────────────────────────────────────────────────
 
 function Bold({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/)
+  const parts = noOrphans(text).split(/(\*\*[^*]+\*\*)/)
   return (
     <>
       {parts.map((part, i) =>
@@ -943,107 +978,66 @@ export default function ProjectPage() {
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
-            /* 2-col layout: left = northStar + note, right = stacked metrics */
+            /* 2-col layout: left = MetricMain (northStar), right = stacked MetricSupporting */
             <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
-              {/* Left — large north star cell */}
-              <div
-                className="p-5 rounded-sm flex flex-col justify-between"
-                style={{ backgroundColor: 'var(--color-000)', minHeight: '13.75rem' }}
-              >
-                <div className="flex flex-col gap-4">
-                  <div className="text-eyebrow text-[var(--color-300)]">
-                    {project.results.northStar.label}
-                  </div>
-                  <div className="font-display text-[var(--accent)] leading-none"
-                    style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
-                    {project.results.northStar.value}
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
+                <MetricMain
+                  label={project.results.northStar.label}
+                  value={project.results.northStar.value}
+                  accent={true}
+                  note={project.results.note!}
+                />
+                <div className="flex flex-col gap-3">
+                  {project.results.metrics.map((metric, index) => (
+                    <MetricSupporting
+                      key={index}
+                      label={metric.label}
+                      value={metric.value}
+                      accent={metric.color === 'accent'}
+                      description={metric.description}
+                    />
+                  ))}
                 </div>
-                <p className="text-body-1 text-[var(--color-300)] text-pretty mt-6">
-                  <Bold text={project.results.note!} />
-                </p>
               </div>
-              {/* Right — stacked metric cells */}
-              <div className="flex flex-col gap-3">
-                {project.results.metrics.map((metric, index) => (
-                  <div key={index} className="p-5 rounded-sm flex flex-col flex-1 justify-between" style={{ backgroundColor: 'var(--color-000)' }}>
-                    <div className="flex flex-col gap-4">
-                      <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
-                      <div className={`font-display leading-none ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
-                        style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
-                        {metric.value}
-                      </div>
-                    </div>
-                    {metric.description && (
-                      <p className="text-body-2 text-[var(--color-300)] text-pretty mt-6"><Bold text={metric.description} /></p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-            {project.results.subheadline && (
-              <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-                <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.subheadline} /></p>
-              </div>
-            )}
+              {project.results.subheadline && (
+                <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
+                  <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.subheadline} /></p>
+                </div>
+              )}
             </>
           ) : project.results.northStar && project.results.note && project.results.metrics.length === 0 ? (
-            /* Single-wide layout: northStar label + value + note in one full-width card */
-            <div
-              className="p-5 rounded-sm flex flex-col justify-between sm:-mx-8"
-              style={{ backgroundColor: 'var(--color-000)', minHeight: '13.75rem' }}
-            >
-              <div className="flex flex-col gap-4">
-                <div className="text-eyebrow text-[var(--color-300)]">
-                  {project.results.northStar.label}
-                </div>
-                <div className="font-display text-[var(--accent)] leading-none"
-                  style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
-                  {project.results.northStar.value}
-                </div>
-              </div>
-              <p className="text-body-1 text-[var(--color-300)] text-pretty mt-6">
-                <Bold text={project.results.note} />
-              </p>
-            </div>
+            /* Single-wide: one MetricMain full-width */
+            <MetricMain
+              label={project.results.northStar.label}
+              value={project.results.northStar.value}
+              accent={true}
+              note={project.results.note}
+              className="sm:-mx-8"
+            />
           ) : (
-            /* Default layout */
+            /* Default layout: grid of MetricMain cards */
             <>
               {project.results.northStar && (
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3 sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <div className="flex flex-col gap-1">
-                    <div className="text-eyebrow text-[var(--color-300)]">{project.results.northStar.label}</div>
-                    {project.results.northStar.tag && (
-                      <div className="text-eyebrow text-[var(--accent)]">{project.results.northStar.tag}</div>
-                    )}
-                  </div>
-                  <div className="md:text-right">
-                    <div className="font-display text-[clamp(1.75rem,7vw,3rem)] text-[var(--accent)] leading-none">
-                      {project.results.northStar.value}
-                    </div>
-                    {project.results.northStar.sublabel && (
-                      <div className="text-eyebrow text-[var(--color-300)] mt-1">{project.results.northStar.sublabel}</div>
-                    )}
-                  </div>
-                </div>
+                <MetricMain
+                  label={project.results.northStar.label}
+                  value={project.results.northStar.value}
+                  accent={true}
+                  className="mb-3 sm:-mx-8"
+                />
               )}
               <div className={`grid gap-3 sm:-mx-8 ${metricsGridCols}`}>
                 {project.results.metrics.map((metric, index) => (
-                  <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
-                    <div className={`font-display text-[clamp(1.75rem,7vw,3rem)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
-                      {metric.value}
-                    </div>
-                    <div className="text-eyebrow text-[var(--color-300)]">{metric.label}</div>
-                    {metric.sublabel && (
-                      <div className="text-eyebrow text-[var(--color-200)] mt-0.5">{metric.sublabel}</div>
-                    )}
-                  </div>
+                  <MetricMain
+                    key={index}
+                    label={metric.label}
+                    value={metric.value}
+                    accent={metric.color === 'accent'}
+                  />
                 ))}
               </div>
               {project.results.note && (
                 <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
+                  <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.note} /></p>
                 </div>
               )}
             </>
