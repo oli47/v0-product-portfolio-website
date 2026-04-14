@@ -85,12 +85,12 @@
 
 .dark {
   --accent:       #E36020;  /* 4.60:1 on card bg, 4.93:1 on page bg — WCAG AA ✓ (was #E05A1A, 4.36:1 fail on cards) */
-  --accent-green: #4A9A1A;  /* 4.58:1 on card bg, 4.91:1 on page bg — WCAG AA ✓ */
+  --accent-green: #5BB820;
 
-  --color-500: #E8E0D6;
+  --color-500: #EDE6DD;
   --color-400: #B0A89E;
-  --color-300: #8F8985;  /* 4.70:1 on card bg, 5.03:1 on page bg — WCAG AA ✓ (was #8A8480, 4.40:1 fail on cards) */
-  --color-200: #848079;  /* 4.65:1 on dark bg — WCAG AA ✓ (was #4A4540, 2.8:1 fail) */
+  --color-300: #A8A29B;
+  --color-200: #9E9890;
   --color-150: #38332C;
   --color-100: #2E2A24;
   --color-000: #242018;
