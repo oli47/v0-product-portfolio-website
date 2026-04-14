@@ -91,10 +91,10 @@
   --color-400: #DED8D0;
   --color-300: #CEC8C0;
   --color-200: #7A7470;
-  --color-150: #2E2E2E;
-  --color-100: #242424;
-  --color-000: #1A1A1A;
-  --white:     #141414;
+  --color-150: #403830;
+  --color-100: #362F24;
+  --color-000: #2C271E;
+  --white:     #252118;
 
   --background:    var(--white);
   --foreground:    var(--color-500);
