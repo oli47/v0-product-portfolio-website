@@ -84,17 +84,17 @@
 }
 
 .dark {
-  --accent:       #E36020;  /* 4.60:1 on card bg, 4.93:1 on page bg — WCAG AA ✓ (was #E05A1A, 4.36:1 fail on cards) */
+  --accent:       #E36020;
   --accent-green: #5BB820;
 
-  --color-500: #EDE6DD;
-  --color-400: #B0A89E;
-  --color-300: #A8A29B;
-  --color-200: #9E9890;
-  --color-150: #38332C;
-  --color-100: #2E2A24;
-  --color-000: #242018;
-  --white:     #1C1A17;
+  --color-500: #F0EBE4;
+  --color-400: #DED8D0;
+  --color-300: #CEC8C0;
+  --color-200: #7A7470;
+  --color-150: #2E2E2E;
+  --color-100: #242424;
+  --color-000: #1A1A1A;
+  --white:     #141414;
 
   --background:    var(--white);
   --foreground:    var(--color-500);
