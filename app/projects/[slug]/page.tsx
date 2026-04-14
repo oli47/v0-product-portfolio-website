@@ -251,7 +251,7 @@ function FlowArrow({ id }: { id: string }) {
 
 function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: string[]; caption?: string }) {
   return (
-    <div className="sm:-mx-6">
+    <div className="sm:-mx-8">
       <div className="rounded-sm border border-[var(--color-100)] overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-100)]">
 
@@ -344,7 +344,7 @@ function VerticalFlow({ steps, arc, caption }: {
   }, [arc])
 
   return (
-    <div className="sm:-mx-6">
+    <div className="sm:-mx-8">
       <div
         ref={containerRef}
         className="relative rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
@@ -452,7 +452,7 @@ function VerticalFlow({ steps, arc, caption }: {
 
 function ContactFlowDiagram({ caption }: { caption?: string }) {
   return (
-    <div className="sm:-mx-6">
+    <div className="sm:-mx-8">
       <div
         className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
         style={{ backgroundColor: 'var(--color-000)' }}
@@ -623,7 +623,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
         switch (block.kind) {
           case 'placeholder':
             return (
-              <div key={i} className="sm:-mx-6">
+              <div key={i} className="sm:-mx-8">
                 <PlaceholderImage />
                 {block.caption && <Caption text={block.caption} />}
               </div>
@@ -631,7 +631,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'image':
             return (
-              <div key={i} className="group sm:-mx-6">
+              <div key={i} className="group sm:-mx-8">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -656,7 +656,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'slideshow':
             return (
-              <div key={i} className="group sm:-mx-6">
+              <div key={i} className="group sm:-mx-8">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -673,7 +673,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'compare':
             return (
-              <div key={i} className="group sm:-mx-6">
+              <div key={i} className="group sm:-mx-8">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -704,7 +704,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'steps':
             return (
-              <div key={i} className="space-y-8 sm:-mx-6">
+              <div key={i} className="space-y-8 sm:-mx-8">
                 {block.items.map((step, j) => (
                   <div key={j} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                     {/* Image or placeholder — narrower on desktop */}
@@ -738,7 +738,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'decisions': {
             const count = block.items.length
             return (
-              <div key={i} className="sm:-mx-6 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div key={i} className="sm:-mx-8 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
                 {block.items.map((item, j) => {
                   const isLeftCol   = j % 2 === 0
                   const isLastRow   = j >= count - 2  // bottom row on desktop
@@ -808,7 +808,7 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
+          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
             <ClickableImage
               src={project.coverImage}
               alt={project.title}
@@ -838,7 +838,7 @@ export default function ProjectPage() {
           )}
 
           {!project.opportunityBlocks && project.overviewDiagram && (
-            <div className="mt-8 p-4 md:p-6 bg-[var(--color-000)] rounded-sm border border-[var(--color-100)] sm:-mx-6">
+            <div className="mt-8 p-4 md:p-6 bg-[var(--color-000)] rounded-sm border border-[var(--color-100)] sm:-mx-8">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-[var(--color-100)] rounded-sm flex items-center justify-center mb-2 mx-auto">
@@ -932,7 +932,7 @@ export default function ProjectPage() {
           {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
             /* 2-col layout: left = northStar + note, right = stacked metrics */
             <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
               {/* Left — large north star cell */}
               <div
                 className="p-5 rounded-sm flex flex-col justify-between"
@@ -970,7 +970,7 @@ export default function ProjectPage() {
               </div>
             </div>
             {project.results.subheadline && (
-              <div className="mt-3 p-5 rounded-sm sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
                 <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.subheadline} /></p>
               </div>
             )}
@@ -978,7 +978,7 @@ export default function ProjectPage() {
           ) : project.results.northStar && project.results.note && project.results.metrics.length === 0 ? (
             /* Single-wide layout: northStar label + value + note in one full-width card */
             <div
-              className="p-5 rounded-sm flex flex-col justify-between sm:-mx-6"
+              className="p-5 rounded-sm flex flex-col justify-between sm:-mx-8"
               style={{ backgroundColor: 'var(--color-000)', minHeight: '13.75rem' }}
             >
               <div className="flex flex-col gap-4">
@@ -998,7 +998,7 @@ export default function ProjectPage() {
             /* Default layout */
             <>
               {project.results.northStar && (
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3 sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 rounded-sm mb-3 sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
                   <div className="flex flex-col gap-1">
                     <div className="text-eyebrow text-[var(--color-300)]">{project.results.northStar.label}</div>
                     {project.results.northStar.tag && (
@@ -1015,7 +1015,7 @@ export default function ProjectPage() {
                   </div>
                 </div>
               )}
-              <div className={`grid gap-3 sm:-mx-6 ${metricsGridCols}`}>
+              <div className={`grid gap-3 sm:-mx-8 ${metricsGridCols}`}>
                 {project.results.metrics.map((metric, index) => (
                   <div key={index} className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
                     <div className={`font-display text-[clamp(1.75rem,7vw,3rem)] leading-none mb-1 ${metric.color === 'accent' ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}>
@@ -1029,7 +1029,7 @@ export default function ProjectPage() {
                 ))}
               </div>
               {project.results.note && (
-                <div className="mt-3 p-5 rounded-sm sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
+                <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
                   <p className="text-body-1 text-[var(--color-300)] text-pretty">{project.results.note}</p>
                 </div>
               )}
