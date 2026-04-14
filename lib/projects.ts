@@ -95,6 +95,10 @@ export const projects: Project[] = [
         kind: 'text',
         content: 'edrone is a marketing automation CRM for ecommerce. **Self-serve was already a standard in the category,** and GA showed consistent inbound traffic that never reached Sales.',
       },
+      {
+        kind: 'text',
+        content: 'A freemium path would open a new acquisition channel alongside the existing one.',
+      },
     ],
     processContent: [
       {
