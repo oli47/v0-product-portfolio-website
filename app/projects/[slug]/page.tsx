@@ -582,7 +582,7 @@ function Bold({ text }: { text: string }) {
 
 function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-16">
       {blocks.map((block, i) => {
         switch (block.kind) {
           case 'text':
