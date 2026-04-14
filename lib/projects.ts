@@ -275,7 +275,7 @@ export const projects: Project[] = [
       {
         kind: 'compare',
         images: [
-          { src: '/images/sf-old.png', label: 'Before' },
+          { src: '/images/sf-signupold.png', label: 'Before' },
           { src: '/images/sf-signup1.png', label: 'After' },
           { src: '/images/sf-signup2.png', label: 'After' },
         ],
