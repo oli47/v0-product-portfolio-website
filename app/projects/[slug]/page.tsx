@@ -1056,7 +1056,7 @@ export default function ProjectPage() {
         )}
 
         {/* Project navigation */}
-        <div className="flex items-start justify-between gap-8 mb-12">
+        <div className="flex items-start justify-between gap-8 mt-12">
 
           {/* PREV */}
           <Link

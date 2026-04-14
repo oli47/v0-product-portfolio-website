@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="max-w-[45rem] mx-auto px-5 py-10 flex items-center justify-between border-t border-[var(--color-100)] mt-16">
+    <footer className="max-w-[45rem] mx-auto px-5 py-10 flex items-center justify-between border-t border-[var(--color-100)]">
       <p className="font-mono text-[0.75rem] font-medium uppercase leading-[1.25rem] text-[var(--color-300)]">
         <span className="font-display text-[1.25rem] leading-[1.25rem] align-middle text-[var(--accent)]">©</span> 2026 Olaf Otrząsek
       </p>
