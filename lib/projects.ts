@@ -99,8 +99,8 @@ export const projects: Project[] = [
     meta: {
       role: 'Sr Product Designer',
       team: '1–5 Engineers',
-      duration: '6 months',
-      date: '2024–2025',
+      duration: '10 months',
+      date: '2025–2026',
     },
     coverImage: '/thumbnails/freemium-activation.png',
     thumbnailImage: '/thumbnails/freemium-activation.png',
@@ -109,7 +109,11 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The acquisition model was entirely sales-led: customers signed without ever seeing the product, then waited for Support to onboard them. **Self-serve was already a standard in the category,** and GA showed consistent inbound traffic that never reached Sales. A freemium path would open a new acquisition channel alongside the existing one.',
+        content: 'edrone is a marketing automation CRM for ecommerce. The acquisition model was entirely sales-led: customers signed without ever seeing the product, then waited for Support to onboard them. **Self-serve was already a standard in the category,** and GA showed consistent inbound traffic that never reached Sales.',
+      },
+      {
+        kind: 'text',
+        content: 'A freemium path would open a new acquisition channel alongside the existing one.',
       },
       {
         kind: 'before-after-flow',
@@ -122,20 +126,20 @@ export const projects: Project[] = [
     processContent: [
       {
         kind: 'text',
-        content: 'Freemium launched May 2025 and went through many iterations. This is the final form.',
+        content: 'Freemium launched May 2025. Over 10 months I iterated on the onboarding through continuous user research and production testing.',
       },
       {
         kind: 'text',
-        content: 'I needed to understand what prevented users from activating edrone independently. I ran research with two Support team members I brought into my sub-team as researchers, combined with dozens of user interviews and Amplitude data.',
+        content: 'Together with two Support team members I brought in as my freemium sub-team, we ran dozens of interviews with fresh signups throughout the project and internal sessions with Support\'s onboarding and success teams. With each shipped iteration we analysed how users behaved and what could make the experience more seamless.',
       },
       {
         kind: 'text',
-        content: '**The primary target were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
+        content: '**The vast majority of users reaching edrone were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
       },
       {
         kind: 'slideshow',
         images: ['/images/freeold1.png', '/images/freeold2.png', '/images/freeold3.png', '/images/freeold4.png', '/images/freeold5.png'],
-        caption: 'Early version. The onboarding went through many shipped iterations before reaching its final form.',
+        caption: 'Early version, May 2025.',
       },
       {
         kind: 'text',
@@ -147,22 +151,22 @@ export const projects: Project[] = [
           {
             num: '/01',
             title: 'AI-generated content on signup',
-            description: 'User arrives, store is already read, branded content is ready to send. Zero setup. This also enabled integration last: content no longer depended on importing store data first.',
+            description: 'Branded newsletters, automations, and pop-ups generated from the store URL. Ready to send on arrival, no setup required.',
           },
           {
             num: '/02',
             title: 'Everything on by default',
-            description: '7 automations, popup, and identification sequence active from day one. Started with nothing enabled, tested increments, landed on full activation.',
+            description: '7 automations, popup, and identification sequence active from day one. I tested how many features to enable, starting from none and increasing until activation stopped improving.',
           },
           {
             num: '/03',
             title: 'Integration last',
-            description: 'The business was afraid users would not integrate if it was not the first step. **Data showed the opposite: users who saw value first integrated more, not less.**',
+            description: 'The business feared users would not integrate if it was not the first step. **Data showed the opposite: users who saw value first integrated more, not less.** AI-generated content made this possible by removing the dependency on store data.',
           },
           {
             num: '/04',
             title: 'Free tier at 500 messages',
-            description: 'The business wanted 200. I calculated that 500 was the minimum for a user to reach their first real revenue from edrone.',
+            description: 'The business wanted 200. I calculated that 500 was the minimum for a user to reach their first attributed order, the moment edrone proves its value.',
           },
         ],
       },
@@ -181,21 +185,27 @@ export const projects: Project[] = [
       {
         kind: 'slideshow',
         images: ['/images/freemiumgif1.png', '/images/freemiumgif2.png', '/images/freemiumgif3.png', '/images/freemiumgif4.png'],
-        caption: 'The shipped onboarding. Compare with the early version above.',
+        caption: 'The shipped onboarding.',
       },
       {
         kind: 'text',
-        content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer. I set the NSM as **time to first attributed order** because that is when users see real revenue and the upgrade decision forms.',
+        content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
+      },
+      {
+        kind: 'text',
+        content: 'I set the NSM as **time to first attributed order.** That is when users see real revenue and the upgrade decision forms.',
       },
     ],
     results: {
       headline: '4600 freemium accounts in 10 months. 78% activation rate.',
-      note: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2–5%**.',
+      note: 'Shortening newsletter delivery from **13 to 1 day** was the key contributor. ~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years.',
       northStar: {
-        label: 'PAID CONVERSION',
-        value: '8.4%',
+        label: 'DAYS TO FIRST ORDER',
+        value: '44→5',
       },
-      metrics: [],
+      metrics: [
+        { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
+      ],
     },
     nextSteps: [
       {
