@@ -771,7 +771,7 @@ export default function ProjectPage() {
 
   return (
     <main id="main-content" className="min-h-screen bg-background">
-      <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-8">
+      <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-16">
 
         {/* Header */}
         <section>
