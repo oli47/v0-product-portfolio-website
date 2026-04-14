@@ -226,18 +226,12 @@ export const projects: Project[] = [
         label: 'TOTAL SIGNUP CONVERSION',
         value: '+67%',
       },
-      metrics: [],
+      metricsAsMain: true,
+      metrics: [
+        { value: '5 hours', label: 'FROM DIAGNOSIS TO PRODUCTION', color: 'accent', description: 'From identifying the drop-off to shipping the fix on production. One designer, no separate design phase.' },
+      ],
     },
-    nextSteps: [
-      {
-        title: 'Signup as a first impression',
-        description: 'The user provides a store URL and waits 10–30 seconds while AI generates content. That dead time could build anticipation instead.',
-      },
-      {
-        title: 'Platform OAuth',
-        description: 'Users from Shopify or Shoper could skip the form entirely.',
-      },
-    ],
+    nextSteps: [],
   },
   {
     slug: 'contacts-activation',
