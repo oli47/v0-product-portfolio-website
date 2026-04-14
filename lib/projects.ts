@@ -198,12 +198,15 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '4600 freemium accounts in 10 months. 78% activation rate.',
-      note: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2–5%**.',
+      note: "Freemium's north star metric. Shortening newsletter delivery from **13 to 1 day** was a major contributor. Newsletters generate orders, and the earlier they go out, the faster users see ROI.",
       northStar: {
-        label: 'PAID CONVERSION',
-        value: '8.4%',
+        label: 'TIME TO FIRST ATTRIBUTED ORDER',
+        value: '44 → 5 days',
       },
-      metrics: [],
+      metrics: [
+        { value: '+4600', label: 'TOTAL NEW USERS', color: 'accent', description: '78% were active users, integrated with 5+ automations running.' },
+        { value: '8.4%', label: 'PAID CONVERSION', color: 'accent', description: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2–5%**.' },
+      ],
     },
     nextSteps: [
       {
