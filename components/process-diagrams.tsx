@@ -194,18 +194,12 @@ export function VerticalFlow({ steps, arc, caption }: {
         {arc && arcGeo && (
           <div
             aria-hidden="true"
-            className="absolute hidden sm:flex items-center pointer-events-none px-1.5 py-0.5 rounded-[0.125rem]"
+            className="absolute hidden sm:flex items-center pointer-events-none px-1.5 py-0.5 rounded-[0.125rem] text-eyebrow text-[var(--accent)] whitespace-nowrap"
             style={{
               left: arcGeo.midX,
               top: arcGeo.midY,
               transform: 'translate(-50%, -50%)',
               backgroundColor: 'var(--color-000)',
-              fontSize: '0.625rem',
-              fontFamily: 'ui-monospace, monospace',
-              letterSpacing: '0.12em',
-              color: 'var(--accent)',
-              textTransform: 'uppercase',
-              whiteSpace: 'nowrap',
             }}
           >
             {arc.label}

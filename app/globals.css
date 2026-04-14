@@ -137,6 +137,8 @@
   /* Prevent orphaned words — no single word left alone on a line */
   p, li, blockquote { text-wrap: pretty; }
   h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+  /* Prevent breaking at hyphens (e.g. sales-led, AI-generated) */
+  * { hyphens: none; }
 }
 
 /* ─────────────────────────────────────────────
