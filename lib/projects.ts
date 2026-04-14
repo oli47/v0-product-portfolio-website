@@ -239,11 +239,6 @@ export const projects: Project[] = [
         kind: 'text',
         content: 'The drop-off was on the very first step of the freemium funnel. Fixing it would compound through every step downstream.',
       },
-      {
-        kind: 'image',
-        src: '/images/sf-old.png',
-        caption: 'The original form. Four fields on a single page, including a phone number with no function in the product.',
-      },
     ],
     solution: [],
     processContent: [
@@ -269,7 +264,7 @@ export const projects: Project[] = [
       {
         kind: 'compare',
         images: [
-          { src: '/images/sf-signupold.png', label: 'Before' },
+          { src: '/images/sf-old.png', label: 'Before' },
           { src: '/images/sf-signup1.png', label: 'After' },
           { src: '/images/sf-signup2.png', label: 'After' },
         ],
