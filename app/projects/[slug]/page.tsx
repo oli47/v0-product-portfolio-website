@@ -251,7 +251,7 @@ function FlowArrow({ id }: { id: string }) {
 
 function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: string[]; caption?: string }) {
   return (
-    <div className="my-8 sm:-mx-6">
+    <div className="sm:-mx-6">
       <div className="rounded-sm border border-[var(--color-100)] overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-100)]">
 
@@ -344,7 +344,7 @@ function VerticalFlow({ steps, arc, caption }: {
   }, [arc])
 
   return (
-    <div className="my-8 sm:-mx-6">
+    <div className="sm:-mx-6">
       <div
         ref={containerRef}
         className="relative rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
@@ -452,7 +452,7 @@ function VerticalFlow({ steps, arc, caption }: {
 
 function ContactFlowDiagram({ caption }: { caption?: string }) {
   return (
-    <div className="my-8 sm:-mx-6">
+    <div className="sm:-mx-6">
       <div
         className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
         style={{ backgroundColor: 'var(--color-000)' }}
@@ -582,26 +582,26 @@ function Bold({ text }: { text: string }) {
 
 function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       {blocks.map((block, i) => {
         switch (block.kind) {
           case 'text':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty mb-8">
+              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty">
                 <Bold text={block.content} />
               </p>
             )
 
           case 'heading':
             return (
-              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty mt-8 mb-8">
+              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty">
                 <Bold text={block.content} />
               </p>
             )
 
           case 'placeholder':
             return (
-              <div key={i} className="my-8 sm:-mx-6">
+              <div key={i} className="sm:-mx-6">
                 <PlaceholderImage />
                 {block.caption && <Caption text={block.caption} />}
               </div>
@@ -609,7 +609,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'image':
             return (
-              <div key={i} className="group my-8 sm:-mx-6">
+              <div key={i} className="group sm:-mx-6">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -634,7 +634,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'slideshow':
             return (
-              <div key={i} className="group my-8 sm:-mx-6">
+              <div key={i} className="group sm:-mx-6">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -651,7 +651,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'compare':
             return (
-              <div key={i} className="group my-8 sm:-mx-6">
+              <div key={i} className="group sm:-mx-6">
                 <div
                   className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
@@ -682,7 +682,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'steps':
             return (
-              <div key={i} className="space-y-8 my-8 sm:-mx-6">
+              <div key={i} className="space-y-8 sm:-mx-6">
                 {block.items.map((step, j) => (
                   <div key={j} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                     {/* Image or placeholder — narrower on desktop */}
@@ -716,7 +716,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'decisions': {
             const count = block.items.length
             return (
-              <div key={i} className="my-8 sm:-mx-6 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div key={i} className="sm:-mx-6 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
                 {block.items.map((item, j) => {
                   const isLeftCol   = j % 2 === 0
                   const isLastRow   = j >= count - 2  // bottom row on desktop
