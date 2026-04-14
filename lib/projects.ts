@@ -288,15 +288,12 @@ export const projects: Project[] = [
     ],
     results: {
       headline: '+67% total signup conversion. Desktop doubled. Mobile from 0.05% to 3%.',
-      note: '**Mobile** rose from 0.05% to 3% **(+5900%)**. While **desktop** signups doubled **(+100%)**.',
+      note: '**Desktop** signups doubled **(+100%)**. **Mobile** went from 0.05% to 3%, a **5900%** increase.',
       northStar: {
         label: 'TOTAL SIGNUP CONVERSION',
         value: '+67%',
       },
-      metrics: [
-        { value: '+100%', label: 'DESKTOP CONVERSION', color: 'accent' },
-        { value: '+5900%', label: 'MOBILE CONVERSION', color: 'accent' },
-      ],
+      metrics: [],
     },
     nextSteps: [
       {

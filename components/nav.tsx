@@ -199,7 +199,7 @@ export function Nav() {
                     style={{ opacity: showBack ? 1 : 0, transition: 'opacity 400ms ease-in-out' }}
                     aria-hidden={!showBack}
                   >
-                    <span className="font-neubit text-[1.25rem] leading-[1] mr-1" aria-hidden>←</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="mr-1 shrink-0" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
                     <span ref={backLabel.spanRef}>Back</span>
                   </span>
 

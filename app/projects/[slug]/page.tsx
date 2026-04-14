@@ -1052,7 +1052,7 @@ export default function ProjectPage() {
               {project.nextSteps.map((step, index) => (
                 <div key={index} className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-3">
-                    <span className="font-neubit text-[1.25rem] leading-none text-[var(--accent)] shrink-0">▨</span>
+                    <span className="w-3 h-3 bg-[var(--accent)] shrink-0 rounded-[1px]" aria-hidden="true" />
                     <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{step.title}</p>
                   </div>
                   <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
@@ -1074,7 +1074,7 @@ export default function ProjectPage() {
             onMouseLeave={prevLabel.reset}
           >
             <div className="flex items-center gap-1.5">
-              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">←</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
               <span className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
             </div>
             <span ref={prevLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
@@ -1092,7 +1092,7 @@ export default function ProjectPage() {
           >
             <div className="flex items-center gap-1.5">
               <span className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
-              <span className="font-neubit text-[1.25rem] leading-[1] text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out" aria-hidden="true">→</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M2 8h12M9 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
             </div>
             <span ref={nextLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {next.title}

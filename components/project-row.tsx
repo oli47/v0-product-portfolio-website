@@ -65,9 +65,9 @@ export function ProjectRow({
                   className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
                   style={{ transition: 'transform 400ms ease-in-out' }}
                 />
-                <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[var(--background)] transition-colors duration-[400ms] ease-in-out inline-block">
-                  →
-                </span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="relative z-10 text-[var(--color-300)] group-hover:text-[var(--background)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}>
+                  <path d="M2 8h12M9 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/>
+                </svg>
               </div>
             </div>
           )}

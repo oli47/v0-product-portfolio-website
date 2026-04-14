@@ -77,7 +77,7 @@ function ContactBar() {
     'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out hover:bg-[var(--color-000)] overflow-hidden'
   const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-[400ms] ease-in-out'
   const icon     = 'font-neubit text-[1rem] leading-[1.25rem] text-[var(--color-200)]'
-  const arrow    = 'font-neubit text-[1.25rem] leading-[1.25rem] text-[var(--color-200)]'
+  const arrowCls = 'text-[var(--color-200)] shrink-0'
 
   // Mobile: full-width stacked column. Desktop: hug-content horizontal row.
   const mobileItem = 'border-b border-[var(--color-100)] sm:border-b-0 sm:border-l'
@@ -96,7 +96,7 @@ function ContactBar() {
           onMouseLeave={resume.reset}
         >
           <span ref={resume.spanRef} aria-hidden="true" className={labelCls}>{t.contact.resume}</span>
-          <span className={arrow} aria-hidden="true">↗</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
         </a>
 
         {/* Email — scramble + fixed width when copied */}
@@ -150,7 +150,7 @@ function ContactBar() {
           onMouseLeave={linkedin.reset}
         >
           <span ref={linkedin.spanRef} aria-hidden="true" className={labelCls}>{t.contact.linkedin}</span>
-          <span className={arrow} aria-hidden="true">↗</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
         </a>
       </div>
     </div>

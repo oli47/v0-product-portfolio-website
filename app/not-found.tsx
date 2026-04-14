@@ -19,7 +19,7 @@ export default function NotFound() {
           href="/"
           className="inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
         >
-          <span className="font-neubit text-[1.25rem] leading-[1]">←</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
           <span>Back to home</span>
         </Link>
       </div>
