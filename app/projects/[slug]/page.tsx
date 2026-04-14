@@ -581,24 +581,46 @@ function Bold({ text }: { text: string }) {
 // ─── Process block renderer ───────────────────────────────────────────────────
 
 function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
+  // Group consecutive text/heading blocks so they share gap-4,
+  // while all other blocks are separated by gap-16.
+  type TextBlock = Extract<ProcessBlock, { kind: 'text' | 'heading' }>
+  type NonTextBlock = Exclude<ProcessBlock, { kind: 'text' | 'heading' }>
+  type GroupedItem = TextBlock[] | NonTextBlock
+
+  const grouped: GroupedItem[] = []
+  let run: TextBlock[] = []
+  for (const block of blocks) {
+    if (block.kind === 'text' || block.kind === 'heading') {
+      run.push(block as TextBlock)
+    } else {
+      if (run.length) { grouped.push(run); run = [] }
+      grouped.push(block as NonTextBlock)
+    }
+  }
+  if (run.length) grouped.push(run)
+
   return (
     <div className="flex flex-col gap-16">
-      {blocks.map((block, i) => {
+      {grouped.map((item, i) => {
+        if (Array.isArray(item)) {
+          return (
+            <div key={i} className="flex flex-col gap-4">
+              {item.map((block, j) =>
+                block.kind === 'text' ? (
+                  <p key={j} className="text-body-1 text-[var(--color-300)] text-pretty">
+                    <Bold text={block.content} />
+                  </p>
+                ) : (
+                  <p key={j} className="text-body-1 text-[var(--color-500)] font-medium text-pretty">
+                    <Bold text={block.content} />
+                  </p>
+                )
+              )}
+            </div>
+          )
+        }
+        const block = item
         switch (block.kind) {
-          case 'text':
-            return (
-              <p key={i} className="text-body-1 text-[var(--color-300)] text-pretty">
-                <Bold text={block.content} />
-              </p>
-            )
-
-          case 'heading':
-            return (
-              <p key={i} className="text-body-1 text-[var(--color-500)] font-medium text-pretty">
-                <Bold text={block.content} />
-              </p>
-            )
-
           case 'placeholder':
             return (
               <div key={i} className="sm:-mx-6">
@@ -750,6 +772,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
     </div>
   )
 }
+
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
