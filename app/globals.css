@@ -102,7 +102,7 @@
   --border-md:     var(--color-150);
   --bg-card:       var(--color-000);
   --color-step-bg: var(--color-100);  /* Step box bg: 1 level lighter than --color-000 in dark */
-  --nav-bg-blur: rgba(28, 26, 23, 0.92);
+  --nav-bg-blur: rgba(37, 33, 24, 0.92);
 
   --card:               var(--bg-card);
   --card-foreground:    var(--foreground);
