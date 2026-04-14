@@ -10,13 +10,13 @@ import './globals.css'
 const dmSans = DM_Sans({ 
   subsets: ['latin'],
   variable: '--font-dm-sans',
-  weight: ['400', '500', '700'],
+  weight: ['400', '500', '600'],
 })
 
 const dmMono = DM_Mono({ 
   subsets: ['latin'],
   variable: '--font-dm-mono',
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
 })
 
 const META_DESCRIPTION = 'I design the moments where products start working for people.'

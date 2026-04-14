@@ -360,7 +360,7 @@ function VerticalFlow({ steps, arc, caption }: {
                 style={{ backgroundColor: 'var(--color-step-bg)' }}
               >
                 <div className="px-5 pt-3">
-                  <p className="text-body-1 font-semibold text-[var(--color-500)] text-balance">{step.title}</p>
+                  <p className="text-body-1 font-bold text-[var(--color-500)] text-balance">{step.title}</p>
                 </div>
                 {step.subtitle && (
                   <div className="px-5 pb-3">

@@ -53,7 +53,7 @@
   --white:     #FAF7F2;  /* Page background only */
 
   /* Typography */
-  --font-weight-bold: 500;
+  --font-weight-bold: 600;
 
   /* Semantic aliases — use these in components for dark-mode compatibility */
   --background:    var(--white);       /* Page/layout background */
