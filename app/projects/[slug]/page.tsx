@@ -771,10 +771,10 @@ export default function ProjectPage() {
 
   return (
     <main id="main-content" className="min-h-screen bg-background">
-      <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16">
+      <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-8">
 
         {/* Header */}
-        <section className="mb-16">
+        <section>
           <div className="flex flex-col gap-3 mb-8">
             <h1 className="font-display text-[clamp(1.5rem,7vw,2.625rem)] leading-[1.2] text-balance">
               {project.title}
@@ -785,7 +785,7 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] mb-8 sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
+          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] sm:-mx-6" style={{ backgroundColor: 'var(--color-000)' }}>
             <ClickableImage
               src={project.coverImage}
               alt={project.title}
@@ -799,7 +799,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Opportunity */}
-        <section className="mb-16">
+        <section>
           <SectionBadge>Opportunity</SectionBadge>
 
           {project.opportunityBlocks ? (
@@ -865,7 +865,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Process */}
-        <section className="mb-16">
+        <section>
           <SectionBadge>Approach</SectionBadge>
 
           {project.processContent ? (
@@ -903,7 +903,7 @@ export default function ProjectPage() {
         </section>
 
         {/* Impact */}
-        <section className="mb-16">
+        <section>
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
@@ -1016,7 +1016,7 @@ export default function ProjectPage() {
 
         {/* What's Next */}
         {project.nextSteps && project.nextSteps.length > 0 && (
-          <section className="mb-16">
+          <section>
             <SectionBadge>{"What's Next"}</SectionBadge>
             <div className="space-y-6">
               {project.nextSteps.map((step, index) => (
