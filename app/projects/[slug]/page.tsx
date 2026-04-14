@@ -808,15 +808,22 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero image */}
-          <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)] sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-            <ClickableImage
-              src={project.coverImage}
-              alt={project.title}
-              width={680}
-              height={425}
-              className="w-full h-auto"
-              priority={true}
-            />
+          <div className="group sm:-mx-8">
+            <div
+              className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+              style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+            >
+              <div className="rounded-[0.125rem] overflow-hidden">
+                <ClickableImage
+                  src={project.coverImage}
+                  alt={project.title}
+                  width={680}
+                  height={425}
+                  className="w-full h-auto"
+                  priority={true}
+                />
+              </div>
+            </div>
           </div>
 
         </section>
