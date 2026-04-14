@@ -41,6 +41,7 @@ export interface Project {
     date: string
   }
   coverImage: string
+  coverImagePosition?: 'bottom-right' | 'center-bottom'
   thumbnailImage: string
   overview: string
   overviewDiagram?: {
@@ -103,6 +104,7 @@ export const projects: Project[] = [
       date: '2025–2026',
     },
     coverImage: '/thumbnails/freemium-activation.png',
+    coverImagePosition: 'bottom-right',
     thumbnailImage: '/thumbnails/freemium-activation.png',
     overview: '',
     opportunity: [],
@@ -238,6 +240,7 @@ export const projects: Project[] = [
       date: '2026',
     },
     coverImage: '/images/sf-cover.png',
+    coverImagePosition: 'center-bottom',
     thumbnailImage: '/images/sf-cover.png',
     overview: '',
     opportunity: [],
@@ -322,6 +325,7 @@ export const projects: Project[] = [
       date: '2026',
     },
     coverImage: '/images/ci-cover.png',
+    coverImagePosition: 'bottom-right',
     thumbnailImage: '/images/ci-cover.png',
     overview: '',
     overviewDiagram: {

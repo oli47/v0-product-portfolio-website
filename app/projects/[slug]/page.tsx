@@ -66,8 +66,8 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
 
 // ─── Clickable image ─────────────────────────────────────────────────────────
 
-function ClickableImage({ src, alt, width, height, className, priority }: {
-  src: string; alt: string; width: number; height: number; className?: string; priority?: boolean
+function ClickableImage({ src, alt, width, height, className, priority, objectPosition }: {
+  src: string; alt: string; width: number; height: number; className?: string; priority?: boolean; objectPosition?: string
 }) {
   const [open, setOpen] = useState(false)
   return (
@@ -86,6 +86,7 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
           height={height}
           sizes="(max-width: 768px) 100vw, 680px"
           className={`${className} transition-opacity duration-[400ms] ease-in-out hover:opacity-80`}
+          style={objectPosition ? { objectPosition } : undefined}
           priority={priority}
         />
       </button>
@@ -108,35 +109,40 @@ function PlaceholderImage({ className }: { className?: string }) {
 }
 
 // ─── Metric cards ─────────────────────────────────────────────────────────────
-// MetricMain   — primary metric: label / large value / body-1 description
-// MetricSupporting — secondary metric: label / large value / body-2 description
+// MetricMain      — h1-size value / body-1 note pinned to bottom
+// MetricSupporting — h2-size value / body-2 description pinned to bottom
+// Both always use accent orange. 24px (1.5rem) gap between value and text.
 
-function MetricMain({ label, value, accent = true, note, className }: {
-  label: string; value: string; accent?: boolean; note?: string; className?: string
+function MetricMain({ label, value, note, className }: {
+  label: string; value: string; note?: string; className?: string
 }) {
   return (
-    <div className={`p-5 rounded-sm flex flex-col gap-3 ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
-      <div className="text-eyebrow text-[var(--color-300)]">{label}</div>
-      <div className={`font-display leading-none ${accent ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
-        style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
-        {value}
+    <div className={`p-5 rounded-sm flex flex-col h-full ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
+      <div className="flex flex-col gap-3">
+        <div className="text-eyebrow text-[var(--color-300)]">{label}</div>
+        <div className="font-display leading-none text-[var(--accent)]"
+          style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
+          {value}
+        </div>
       </div>
-      {note && <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={note} /></p>}
+      {note && <p className="text-body-1 text-[var(--color-300)] text-pretty mt-auto pt-6"><Bold text={note} /></p>}
     </div>
   )
 }
 
-function MetricSupporting({ label, value, accent = true, description, className }: {
-  label: string; value: string; accent?: boolean; description?: string; className?: string
+function MetricSupporting({ label, value, description, className }: {
+  label: string; value: string; description?: string; className?: string
 }) {
   return (
-    <div className={`p-5 rounded-sm flex flex-col gap-3 flex-1 ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
-      <div className="text-eyebrow text-[var(--color-300)]">{label}</div>
-      <div className={`font-display leading-none ${accent ? 'text-[var(--accent)]' : 'text-[var(--color-500)]'}`}
-        style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)' }}>
-        {value}
+    <div className={`p-5 rounded-sm flex flex-col flex-1 h-full ${className ?? ''}`} style={{ backgroundColor: 'var(--color-000)' }}>
+      <div className="flex flex-col gap-3">
+        <div className="text-eyebrow text-[var(--color-300)]">{label}</div>
+        <div className="font-display leading-none text-[var(--accent)]"
+          style={{ fontSize: 'clamp(1.75rem, 6vw, 2.5rem)' }}>
+          {value}
+        </div>
       </div>
-      {description && <p className="text-body-2 text-[var(--color-300)] text-pretty"><Bold text={description} /></p>}
+      {description && <p className="text-body-2 text-[var(--color-300)] text-pretty mt-auto pt-6"><Bold text={description} /></p>}
     </div>
   )
 }
@@ -854,13 +860,23 @@ export default function ProjectPage() {
               className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
               style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
             >
-              <div className="rounded-[0.125rem] overflow-hidden">
+              <div
+                className="rounded-[0.125rem] overflow-hidden"
+                style={project.coverImagePosition ? { height: '16rem' } : undefined}
+              >
                 <ClickableImage
                   src={project.coverImage}
                   alt={project.title}
                   width={680}
                   height={425}
-                  className="w-full h-auto"
+                  className={project.coverImagePosition
+                    ? 'w-full h-full object-cover'
+                    : 'w-full h-auto'}
+                  objectPosition={
+                    project.coverImagePosition === 'bottom-right' ? 'right bottom'
+                    : project.coverImagePosition === 'center-bottom' ? 'center bottom'
+                    : undefined
+                  }
                   priority={true}
                 />
               </div>
@@ -984,7 +1000,6 @@ export default function ProjectPage() {
                 <MetricMain
                   label={project.results.northStar.label}
                   value={project.results.northStar.value}
-                  accent={true}
                   note={project.results.note!}
                 />
                 <div className="flex flex-col gap-3">
@@ -993,7 +1008,6 @@ export default function ProjectPage() {
                       key={index}
                       label={metric.label}
                       value={metric.value}
-                      accent={metric.color === 'accent'}
                       description={metric.description}
                     />
                   ))}
@@ -1010,7 +1024,6 @@ export default function ProjectPage() {
             <MetricMain
               label={project.results.northStar.label}
               value={project.results.northStar.value}
-              accent={true}
               note={project.results.note}
               className="sm:-mx-8"
             />
@@ -1021,7 +1034,6 @@ export default function ProjectPage() {
                 <MetricMain
                   label={project.results.northStar.label}
                   value={project.results.northStar.value}
-                  accent={true}
                   className="mb-3 sm:-mx-8"
                 />
               )}
@@ -1031,7 +1043,6 @@ export default function ProjectPage() {
                     key={index}
                     label={metric.label}
                     value={metric.value}
-                    accent={metric.color === 'accent'}
                   />
                 ))}
               </div>
