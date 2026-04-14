@@ -81,8 +81,10 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 600 }: Slidesh
 
   return (
     <>
-      <div
-        className="relative w-full rounded-[0.125rem] overflow-hidden cursor-zoom-in"
+      <button
+        type="button"
+        aria-label="Enlarge image"
+        className="relative block w-full rounded-[0.125rem] overflow-hidden cursor-zoom-in"
         style={{ aspectRatio: '16 / 9' }}
         onClick={() => setLightboxSrc(images[current])}
       >
@@ -106,7 +108,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 600 }: Slidesh
             sizes="(max-width: 768px) 100vw, 680px"
           />
         )}
-      </div>
+      </button>
       {lightboxSrc && (
         <SlideshowLightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
       )}

@@ -110,10 +110,10 @@ export function Nav() {
         requestAnimationFrame(frame)
       })
 
-      transition.finished.then(() => {
-        svg.remove()
-        animating.current = false
-      })
+      const cleanup = () => { svg.remove(); animating.current = false }
+      transition.finished.then(cleanup).catch(cleanup)
+      // Safety: always reset after 800ms in case finished never resolves (Safari)
+      setTimeout(cleanup, 800)
     },
     [isDark, setTheme],
   )

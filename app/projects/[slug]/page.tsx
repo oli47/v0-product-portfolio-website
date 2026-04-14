@@ -71,17 +71,23 @@ function ClickableImage({ src, alt, width, height, className, priority }: {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Image
-        src={src}
-        alt={alt}
-        unoptimized={src.endsWith('.gif')}
-        width={width}
-        height={height}
-        sizes="(max-width: 768px) 100vw, 680px"
-        className={`${className} cursor-zoom-in transition-opacity duration-[400ms] ease-in-out hover:opacity-80`}
-        priority={priority}
+      <button
+        type="button"
         onClick={() => setOpen(true)}
-      />
+        className="block w-full cursor-zoom-in"
+        aria-label={`Enlarge image: ${alt}`}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          unoptimized={src.endsWith('.gif')}
+          width={width}
+          height={height}
+          sizes="(max-width: 768px) 100vw, 680px"
+          className={`${className} transition-opacity duration-[400ms] ease-in-out hover:opacity-80`}
+          priority={priority}
+        />
+      </button>
       {open && <Lightbox src={src} alt={alt} onClose={() => setOpen(false)} />}
     </>
   )
