@@ -93,17 +93,7 @@ export const projects: Project[] = [
     opportunityBlocks: [
       {
         kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The acquisition model was entirely sales-led: customers signed without ever seeing the product, then waited for Support to onboard them. **Self-serve was already a standard in the category,** and GA showed consistent inbound traffic that never reached Sales.',
-      },
-      {
-        kind: 'text',
-        content: 'A freemium path would open a new acquisition channel alongside the existing one.',
-      },
-      {
-        kind: 'before-after-flow',
-        before: ['SDR call', 'AE presentation', 'Contract', 'Support onboarding', 'Product'],
-        after: ['Signup', 'Product', 'Support on demand'],
-        caption: 'Before: weeks from first contact to active account. After: minutes.',
+        content: 'edrone is a marketing automation CRM for ecommerce.',
       },
     ],
     processContent: [
@@ -125,35 +115,6 @@ export const projects: Project[] = [
         caption: 'Early version, May 2025.',
       },
       {
-        kind: 'text',
-        content: '**Four decisions** shaped the final model:',
-      },
-      {
-        kind: 'decisions',
-        items: [
-          {
-            num: '/01',
-            title: 'AI-generated content on signup',
-            description: 'Branded newsletters, automations, and pop-ups generated from the store URL. Ready to send on arrival, no setup required.',
-          },
-          {
-            num: '/02',
-            title: 'Everything on by default',
-            description: '7 automations, popup, and identification sequence active from day one. I tested how many features to enable, starting from none and increasing until activation stopped improving.',
-          },
-          {
-            num: '/03',
-            title: 'Integration last',
-            description: 'The business feared users would not integrate if it was not the first step. **Data showed the opposite: users who saw value first integrated more, not less.** AI-generated content made this possible by removing the dependency on store data.',
-          },
-          {
-            num: '/04',
-            title: 'Free tier at 500 messages',
-            description: 'The business wanted 200. I calculated that 500 was the minimum for a user to reach their first attributed order, the moment edrone proves its value.',
-          },
-        ],
-      },
-      {
         kind: 'vertical-flow',
         steps: [
           { title: 'Signup', subtitle: 'User creates an account' },
@@ -164,6 +125,10 @@ export const projects: Project[] = [
         ],
         arc: { fromStep: 1, toStep: 3, label: 'INITIAL PROCESS' },
         caption: 'The final activation path. Value demonstrated before any commitment.',
+      },
+      {
+        kind: 'text',
+        content: 'Users create an account, AI generates branded content from their store URL: newsletters, automations, pop-ups ready to send on arrival. Everything is on by default: 7 automations, popup, and identification sequence active from day one. I started with nothing enabled and tested increments until activation stopped improving. The free tier is capped at 500 messages: the minimum for a user to reach their first attributed order. Integration comes last because connecting a store means sharing contacts and product data. Users make that decision after seeing what edrone does.',
       },
       {
         kind: 'slideshow',
@@ -191,20 +156,7 @@ export const projects: Project[] = [
         { value: '8.4%', label: 'PAID CONVERSION', color: 'accent', description: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2–5%**.' },
       ],
     },
-    nextSteps: [
-      {
-        title: 'Personalised onboarding',
-        description: 'The current flow runs the same sequence for every store. A context-aware AI assistant could generate different activation paths for different businesses.',
-      },
-      {
-        title: 'Platform OAuth',
-        description: 'Users from Shopify or Shoper could skip signup entirely.',
-      },
-      {
-        title: 'Value-based upgrade',
-        description: 'The upgrade currently triggers at the message limit. Surfacing it when a user first sees revenue attributed to edrone would feel like a next step, not a gate.',
-      },
-    ],
+    nextSteps: [],
   },
   {
     slug: 'signup-redesign',
