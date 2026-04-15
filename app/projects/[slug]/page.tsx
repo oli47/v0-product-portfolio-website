@@ -308,7 +308,7 @@ export default function ProjectPage() {
               style={{
                 backgroundColor: 'var(--color-000)',
                 padding: project.coverImagePosition === 'bottom-right'
-                  ? '1rem 0 0 1rem'
+                  ? '1rem 0 0 0'
                   : project.coverImagePosition === 'center-bottom'
                   ? '1rem 1rem 0'
                   : '1rem 1rem 1.25rem',
