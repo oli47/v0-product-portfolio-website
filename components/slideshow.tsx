@@ -14,7 +14,6 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
   const [current, setCurrent] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const lockRef = useRef(false)
-  const trackRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const touchStartX = useRef(0)
 
@@ -63,7 +62,6 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
       >
         {/* Slide track */}
         <div
-          ref={trackRef}
           className="absolute inset-0 flex"
           style={{
             width: `${count * 100}%`,
