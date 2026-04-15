@@ -16,8 +16,8 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
   const lockRef = useRef(false)
   const trackRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const touchStartX = useRef(0)
 
-  // Slides laid out side by side in a track; we translateX the track
   const count = images.length
 
   const slideTo = useCallback((to: number) => {
@@ -41,11 +41,25 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
   }, [current, holdMs, transitionMs, goNext])
 
+  // Swipe on mobile
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) goNext()
+      else goPrev()
+    }
+  }
+
   return (
     <>
       <div
         className="relative rounded-[0.125rem] overflow-hidden cursor-zoom-in group/slideshow"
         style={{ aspectRatio: '16 / 9' }}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
         {/* Slide track */}
         <div
@@ -57,7 +71,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
             transition: `transform ${transitionMs}ms ease-in-out`,
           }}
         >
-          {images.map((src, i) => (
+          {images.map((src) => (
             <div key={src} className="relative shrink-0" style={{ width: `${100 / count}%`, height: '100%' }}>
               <Image
                 src={src}
@@ -78,12 +92,12 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           onClick={() => setLightboxOpen(true)}
         />
 
-        {/* Nav arrows — visible on hover */}
+        {/* Nav arrows — desktop only, on hover */}
         <button
           type="button"
           aria-label="Previous slide"
           onClick={(e) => { e.stopPropagation(); goPrev() }}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] sm:opacity-0 sm:group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
+          className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] opacity-0 group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
             <path d="M10 3L5 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
@@ -93,7 +107,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           type="button"
           aria-label="Next slide"
           onClick={(e) => { e.stopPropagation(); goNext() }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] sm:opacity-0 sm:group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
+          className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] opacity-0 group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
             <path d="M6 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
