@@ -83,7 +83,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           type="button"
           aria-label="Previous slide"
           onClick={(e) => { e.stopPropagation(); goPrev() }}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-black/40 text-white opacity-0 group-hover/slideshow:opacity-100 transition-opacity duration-300 hover:bg-black/60"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] opacity-0 group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
             <path d="M10 3L5 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
@@ -93,7 +93,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           type="button"
           aria-label="Next slide"
           onClick={(e) => { e.stopPropagation(); goNext() }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-black/40 text-white opacity-0 group-hover/slideshow:opacity-100 transition-opacity duration-300 hover:bg-black/60"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] opacity-0 group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
             <path d="M6 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
@@ -101,7 +101,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
         </button>
 
         {/* Square indicators */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-2 py-1 rounded-[2px] bg-black/30">
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
           {images.map((_, i) => (
             <button
               key={i}
