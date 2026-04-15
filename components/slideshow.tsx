@@ -12,7 +12,7 @@ interface SlideshowProps {
 
 export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: SlideshowProps) {
   const [current, setCurrent] = useState(0)
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const lockRef = useRef(false)
   const trackRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -75,7 +75,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           type="button"
           aria-label="Enlarge image"
           className="absolute inset-0 z-10"
-          onClick={() => setLightboxSrc(images[current])}
+          onClick={() => setLightboxOpen(true)}
         />
 
         {/* Nav arrows — visible on hover */}
@@ -83,7 +83,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           type="button"
           aria-label="Previous slide"
           onClick={(e) => { e.stopPropagation(); goPrev() }}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] opacity-0 group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] sm:opacity-0 sm:group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
             <path d="M10 3L5 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
@@ -93,7 +93,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
           type="button"
           aria-label="Next slide"
           onClick={(e) => { e.stopPropagation(); goNext() }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] opacity-0 group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] sm:opacity-0 sm:group-hover/slideshow:opacity-100 transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
             <path d="M6 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
@@ -120,8 +120,13 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
         </div>
       </div>
 
-      {lightboxSrc && (
-        <Lightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />
+      {lightboxOpen && (
+        <Lightbox
+          src={images[current]}
+          images={images}
+          startIndex={current}
+          onClose={() => setLightboxOpen(false)}
+        />
       )}
     </>
   )

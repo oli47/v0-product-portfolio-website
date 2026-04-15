@@ -5,14 +5,37 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 
 const ZOOM_SCALE = 2.5
 
-export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string; onClose: () => void }) {
+interface LightboxProps {
+  src: string
+  alt?: string
+  onClose: () => void
+  /** Pass all images + startIndex to enable gallery navigation */
+  images?: string[]
+  startIndex?: number
+}
+
+export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: LightboxProps) {
   const closeRef = useRef<HTMLButtonElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [current, setCurrent] = useState(startIndex)
   const [zoomed, setZoomed] = useState(false)
   const [origin, setOrigin] = useState({ x: 50, y: 50 })
   const dragging = useRef(false)
   const didDrag = useRef(false)
   const lastPos = useRef({ x: 0, y: 0 })
+
+  const gallery = images && images.length > 1
+  const activeSrc = gallery ? images[current] : src
+
+  const goNext = useCallback(() => {
+    if (!gallery || zoomed) return
+    setCurrent((current + 1) % images.length)
+  }, [gallery, images, current, zoomed])
+
+  const goPrev = useCallback(() => {
+    if (!gallery || zoomed) return
+    setCurrent((current - 1 + images.length) % images.length)
+  }, [gallery, images, current, zoomed])
 
   const handleImageClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
@@ -81,6 +104,8 @@ export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string
         onClose()
         return
       }
+      if (e.key === 'ArrowRight') { goNext(); return }
+      if (e.key === 'ArrowLeft') { goPrev(); return }
       if (e.key === 'Tab') { e.preventDefault(); closeRef.current?.focus() }
     }
     document.addEventListener('keydown', handleKey)
@@ -91,7 +116,12 @@ export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string
       document.body.style.overflow = ''
       previouslyFocused?.focus()
     }
-  }, [onClose, zoomed])
+  }, [onClose, zoomed, goNext, goPrev])
+
+  // Reset zoom when switching slides
+  useEffect(() => {
+    setZoomed(false)
+  }, [current])
 
   return (
     <div
@@ -116,12 +146,13 @@ export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string
           className={`overflow-hidden rounded-sm select-none ${zoomed ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'}`}
         >
           <Image
-            src={src}
+            key={activeSrc}
+            src={activeSrc}
             alt={alt}
             width={1920}
             height={1080}
             draggable={false}
-            unoptimized={src.endsWith('.gif') || src.endsWith('.png')}
+            unoptimized={activeSrc.endsWith('.gif') || activeSrc.endsWith('.png')}
             sizes="(max-width: 768px) 100vw, 1200px"
             className="w-full h-auto pointer-events-none"
             style={{
@@ -131,6 +162,49 @@ export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string
             }}
           />
         </div>
+
+        {/* Gallery navigation */}
+        {gallery && !zoomed && (
+          <>
+            {/* Nav arrows */}
+            <button
+              type="button"
+              aria-label="Previous image"
+              onClick={(e) => { e.stopPropagation(); goPrev() }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
+                <path d="M10 3L5 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Next image"
+              onClick={(e) => { e.stopPropagation(); goNext() }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-[2px] bg-[var(--color-000)]/80 text-[var(--color-400)] transition-all duration-300 hover:bg-[var(--color-000)] hover:text-[var(--color-500)]"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ stroke: 'currentColor' }}>
+                <path d="M6 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
+              </svg>
+            </button>
+
+            {/* Square indicators */}
+            <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Go to image ${i + 1}`}
+                  onClick={(e) => { e.stopPropagation(); setCurrent(i) }}
+                  className="w-[6px] h-[6px] rounded-[1px] transition-colors duration-300"
+                  style={{
+                    backgroundColor: i === current ? 'var(--accent)' : 'var(--color-200)',
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
