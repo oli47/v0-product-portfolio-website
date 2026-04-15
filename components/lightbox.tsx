@@ -96,7 +96,7 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
     }
   }, [zoomed])
 
-  // Swipe on mobile (lightbox)
+  // Swipe on mobile
   const onTouchStart = (e: React.TouchEvent) => {
     if (zoomed) return
     touchStartX.current = e.touches[0].clientX
@@ -137,7 +137,6 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
     setZoomed(false)
   }, [current])
 
-  // Arrow button component
   const ArrowBtn = ({ direction, onClick }: { direction: 'prev' | 'next'; onClick: () => void }) => (
     <button
       type="button"
@@ -152,6 +151,32 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
         }
       </svg>
     </button>
+  )
+
+  // Shared image element
+  const imageEl = (
+    <div
+      ref={containerRef}
+      onClick={handleImageClick}
+      className={`overflow-hidden rounded-sm select-none ${zoomed ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'}`}
+    >
+      <Image
+        key={activeSrc}
+        src={activeSrc}
+        alt={alt}
+        width={1920}
+        height={1080}
+        draggable={false}
+        unoptimized={activeSrc.endsWith('.gif') || activeSrc.endsWith('.png')}
+        sizes="(max-width: 768px) 100vw, 1200px"
+        className="w-full h-auto pointer-events-none"
+        style={{
+          transform: zoomed ? `scale(${ZOOM_SCALE})` : 'scale(1)',
+          transformOrigin: `${origin.x}% ${origin.y}%`,
+          transition: dragging.current ? 'none' : 'transform 300ms ease-out',
+        }}
+      />
+    </div>
   )
 
   return (
@@ -174,108 +199,53 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
         Close ✕
       </button>
 
-      {/* Main layout: arrows outside image on desktop, below on mobile */}
       <div className="flex flex-col items-center gap-4 w-full max-w-5xl sm:max-w-7xl px-4 sm:px-8 max-h-full">
-        {/* Desktop: arrows flanking the image */}
-        <div className="hidden sm:flex items-center gap-4 w-full">
-          {/* Left arrow */}
-          <div className="shrink-0">
+        {/* Image row: on desktop arrows flank the image, on mobile just the image */}
+        <div className="flex items-center gap-4 w-full">
+          {/* Left arrow — desktop only */}
+          <div className="hidden sm:block shrink-0">
             {gallery && !zoomed ? <ArrowBtn direction="prev" onClick={goPrev} /> : <div className="w-8" />}
           </div>
 
-          {/* Image */}
-          <div
-            ref={containerRef}
-            onClick={handleImageClick}
-            className={`flex-1 overflow-hidden rounded-sm select-none ${zoomed ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'}`}
-          >
-            <Image
-              key={activeSrc}
-              src={activeSrc}
-              alt={alt}
-              width={1920}
-              height={1080}
-              draggable={false}
-              unoptimized={activeSrc.endsWith('.gif') || activeSrc.endsWith('.png')}
-              sizes="(max-width: 768px) 100vw, 1200px"
-              className="w-full h-auto pointer-events-none"
-              style={{
-                transform: zoomed ? `scale(${ZOOM_SCALE})` : 'scale(1)',
-                transformOrigin: `${origin.x}% ${origin.y}%`,
-                transition: dragging.current ? 'none' : 'transform 300ms ease-out',
-              }}
-            />
+          {/* Image — single element shared by both layouts */}
+          <div className="flex-1 min-w-0">
+            {imageEl}
           </div>
 
-          {/* Right arrow */}
-          <div className="shrink-0">
+          {/* Right arrow — desktop only */}
+          <div className="hidden sm:block shrink-0">
             {gallery && !zoomed ? <ArrowBtn direction="next" onClick={goNext} /> : <div className="w-8" />}
           </div>
         </div>
 
-        {/* Mobile: image centered, arrows + dots below */}
-        <div className="sm:hidden flex flex-col items-center gap-4 w-full">
-          <div
-            ref={containerRef}
-            onClick={handleImageClick}
-            className={`w-full overflow-hidden rounded-sm select-none ${zoomed ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'}`}
-          >
-            <Image
-              key={`mobile-${activeSrc}`}
-              src={activeSrc}
-              alt={alt}
-              width={1920}
-              height={1080}
-              draggable={false}
-              unoptimized={activeSrc.endsWith('.gif') || activeSrc.endsWith('.png')}
-              sizes="100vw"
-              className="w-full h-auto pointer-events-none"
-              style={{
-                transform: zoomed ? `scale(${ZOOM_SCALE})` : 'scale(1)',
-                transformOrigin: `${origin.x}% ${origin.y}%`,
-                transition: 'transform 300ms ease-out',
-              }}
-            />
-          </div>
-
-          {/* Arrows + dots below image on mobile */}
-          {gallery && !zoomed && (
-            <div className="flex items-center gap-4">
+        {/* Navigation below image */}
+        {gallery && !zoomed && (
+          <div className="flex items-center gap-4">
+            {/* Arrows — mobile only */}
+            <div className="sm:hidden">
               <ArrowBtn direction="prev" onClick={goPrev} />
-              <div className="flex items-center gap-1.5">
-                {images.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    aria-label={`Go to image ${i + 1}`}
-                    onClick={(e) => { e.stopPropagation(); setCurrent(i) }}
-                    className="w-[6px] h-[6px] rounded-[1px] transition-colors duration-300"
-                    style={{
-                      backgroundColor: i === current ? 'var(--accent)' : 'var(--color-200)',
-                    }}
-                  />
-                ))}
-              </div>
+            </div>
+
+            {/* Square indicators — both */}
+            <div className="flex items-center gap-1.5">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Go to image ${i + 1}`}
+                  onClick={(e) => { e.stopPropagation(); setCurrent(i) }}
+                  className="w-[6px] h-[6px] rounded-[1px] transition-colors duration-300"
+                  style={{
+                    backgroundColor: i === current ? 'var(--accent)' : 'var(--color-200)',
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Arrows — mobile only */}
+            <div className="sm:hidden">
               <ArrowBtn direction="next" onClick={goNext} />
             </div>
-          )}
-        </div>
-
-        {/* Desktop dots — below image */}
-        {gallery && !zoomed && (
-          <div className="hidden sm:flex items-center gap-1.5">
-            {images.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={`Go to image ${i + 1}`}
-                onClick={(e) => { e.stopPropagation(); setCurrent(i) }}
-                className="w-[6px] h-[6px] rounded-[1px] transition-colors duration-300"
-                style={{
-                  backgroundColor: i === current ? 'var(--accent)' : 'var(--color-200)',
-                }}
-              />
-            ))}
           </div>
         )}
       </div>
