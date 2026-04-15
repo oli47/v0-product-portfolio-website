@@ -30,7 +30,7 @@ export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-4 pb-8 sm:p-8 cursor-zoom-out"
       onClick={onClose}
     >
-      <div className="relative max-w-5xl w-full max-h-full">
+      <div className="relative max-w-5xl sm:max-w-7xl w-full max-h-full">
         <button
           ref={closeRef}
           onClick={onClose}
@@ -44,7 +44,7 @@ export function Lightbox({ src, alt = '', onClose }: { src: string; alt?: string
           alt={alt}
           width={1920}
           height={1080}
-          unoptimized={src.endsWith('.gif')}
+          unoptimized={src.endsWith('.gif') || src.endsWith('.png')}
           sizes="(max-width: 768px) 100vw, 1200px"
           className="w-full h-auto rounded-sm"
         />
