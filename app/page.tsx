@@ -97,7 +97,7 @@ function ContactBar() {
           onMouseLeave={resume.reset}
         >
           <span ref={resume.spanRef} aria-hidden="true" className={labelCls}>{t.contact.resume}</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/></svg>
         </a>
 
         {/* Email — scramble + fixed width when copied */}
@@ -151,7 +151,7 @@ function ContactBar() {
           onMouseLeave={linkedin.reset}
         >
           <span ref={linkedin.spanRef} aria-hidden="true" className={labelCls}>{t.contact.linkedin}</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/></svg>
         </a>
       </div>
     </div>

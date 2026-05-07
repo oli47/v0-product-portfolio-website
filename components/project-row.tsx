@@ -88,7 +88,7 @@ export function ProjectRow({
               className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
               style={{ transition: 'transform 400ms ease-in-out' }}
             />
-            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-300)] group-hover:text-[var(--background)] transition-colors duration-[400ms] ease-in-out inline-block">
+            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-200)] group-hover:text-[var(--background)] transition-colors duration-[400ms] ease-in-out inline-block">
               →
             </span>
           </div>
