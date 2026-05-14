@@ -392,6 +392,7 @@ export default function ProjectPage() {
                     key={index}
                     label={metric.label}
                     value={metric.value}
+                    note={metric.description}
                   />
                 ))}
               </div>

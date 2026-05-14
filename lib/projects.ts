@@ -307,6 +307,72 @@ export const projects: Project[] = [
     },
     nextSteps: [],
   },
+  {
+    slug: 'plo-genius',
+    title: 'PLO Genius',
+    tagline: 'A cloud-based PLO solver and trainer. Designed from zero as sole designer.',
+    description: "Cloud-based poker solver and trainer. Designed from zero for a game I didn't play.",
+    metrics: [
+      { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },
+    ],
+    meta: {
+      role: 'Sole Designer',
+      team: '1 Front-end developer',
+      duration: '2 years',
+      date: '2022–2024',
+    },
+    coverImage: '/images/plo-cover.png',
+    coverImagePosition: 'center-bottom',
+    thumbnailImage: '/images/plo-cover.png',
+    opportunityBlocks: [
+      {
+        kind: 'text',
+        content: 'PLO Genius is a cloud-based Pot-Limit Omaha solver and GTO trainer. Before it existed, learning PLO with solvers meant buying a $5,000+ PC to run MonkerSolver and waiting minutes per calculation. There was no affordable, browser-based alternative for PLO players.',
+      },
+      {
+        kind: 'text',
+        content: 'Deepsolver (NLH) had already proven that a neural-net cloud solver could work. PLO Genius brought the same approach to Omaha: a more complex game with far fewer learning tools.',
+      },
+      {
+        kind: 'text',
+        content: "I was the sole designer. The team was small: the CEO as PM, two professional poker players who were also investors, a frontend developer, and a 3-5 person engine team building the neural-net solver. I owned research, UX, UI, the marketing website, and built a standalone design system to give PLO Genius its own brand identity separate from Deepsolver.",
+      },
+    ],
+    processContent: [
+      {
+        kind: 'text',
+        content: "I was designing a learning tool for a game I didn't play. That created a real gap in research. Beginners couldn't articulate what they needed because they didn't understand the game well enough yet. Pro players operated on intuition and methods that were hard to translate into interface decisions.",
+      },
+      {
+        kind: 'text',
+        content: 'The bridge turned out to be poker stables: organizations where a knowledgeable lead managed groups of players at different levels. Those leads understood both the theory and the learning process, which made them the most useful collaborators for validating design decisions. The product launched, found paying users, and is still live four years later.',
+      },
+      {
+        kind: 'image',
+        src: '/images/plo-preflop.png',
+        caption: 'Preflop solver. Range charts and matrices showing optimal plays across stack sizes, positions, and rake structures.',
+      },
+      {
+        kind: 'image',
+        src: '/images/plo-postflop.png',
+        caption: 'Postflop solver. Hand breakdown with equity visualizations showing how a hand performs against opponent ranges on a specific board.',
+      },
+      {
+        kind: 'image',
+        src: '/images/plo-trainer.png',
+        caption: 'GTO Trainer. Up to 4 tables simultaneously, designed to feel like a real session. Players practice strategy and track accuracy without custom bets, keeping focus on learning correct play.',
+      },
+    ],
+    results: {
+      headline: '10+ B2B API clients. 120+ paying subscribers.',
+      metricsAsMain: true,
+      metrics: [
+        { value: '10+', label: 'B2B API CLIENTS', color: 'accent', description: 'Platforms licensing the neural-net engine. Primary revenue channel.' },
+        { value: '120+', label: 'PAYING SUBSCRIBERS', color: 'accent', description: 'Players using the app I designed. Three tiers: $0 / $59 / $125.' },
+      ],
+    },
+    nextSteps: [],
+  },
 ]
 
 export function getProject(slug: string): Project | undefined {
