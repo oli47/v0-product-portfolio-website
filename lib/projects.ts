@@ -240,7 +240,6 @@ export const projects: Project[] = [
     description: 'Automations drive ~45% of edrone\'s revenue but only fire for identified contacts. I designed a module that handles identification automatically.',
     metrics: [
       { value: '95%', label: 'ADOPTION', color: 'accent' },
-      { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',

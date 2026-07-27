@@ -21,7 +21,7 @@ const EXPERIENCE = [
     company: 'edrone',
     companySlug: '/edrone',
     url: 'https://edrone.me',
-    role: 'Senior Product Designer & Team Lead',
+    role: 'Sr Product Designer & Team Lead',
     from: 'Nov 2022',
     to: 'Mar 2026',
   },
@@ -217,18 +217,6 @@ export default function Home() {
                 />
               ))}
             </div>
-          </FadeUp>
-        </section>
-
-        {/* ── Currently ── */}
-        <section className="mb-16">
-          <FadeUp delay={0}>
-            <SectionBadge>{t.sections.currently}</SectionBadge>
-          </FadeUp>
-          <FadeUp delay={0.08}>
-            <p className="text-body-1 text-[var(--color-300)] text-pretty">
-              {t.currently}
-            </p>
           </FadeUp>
         </section>
 
