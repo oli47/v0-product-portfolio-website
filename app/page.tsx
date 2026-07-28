@@ -208,13 +208,9 @@ export default function Home() {
           </FadeUp>
 
           <FadeUp delay={0.06}>
-            <div className="border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden">
-              {projects.map((project, i) => (
-                <ProjectRow
-                  key={project.slug}
-                  project={project}
-                  isLast={i === projects.length - 1}
-                />
+            <div className="flex flex-col gap-10 sm:gap-16">
+              {projects.map((project) => (
+                <ProjectRow key={project.slug} project={project} />
               ))}
             </div>
           </FadeUp>

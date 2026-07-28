@@ -37,6 +37,7 @@ export const content = {
     projects: {
       soon: 'Soon',
       discover: 'Discover',
+      viewCaseStudy: 'View case study',
     },
   },
   // pl: { ... } — TODO: Polish translations

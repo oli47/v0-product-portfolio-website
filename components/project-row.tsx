@@ -1,7 +1,8 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
-import { useScramble } from '@/lib/use-scramble'
+import { useCursorFollow } from '@/components/cursor-follow'
 import { content, defaultLang } from '@/lib/content'
 import type { Project } from '@/lib/projects'
 
@@ -9,90 +10,81 @@ const t = content[defaultLang].projects
 
 // ─── Active project row ──────────────────────────────────────────────────────
 
-export function ProjectRow({
-  project,
-  isLast = false,
-}: {
-  project: Project
-  isLast?: boolean
-}) {
-  const discover = useScramble(t.discover)
+export function ProjectRow({ project }: { project: Project }) {
+  const { areaRef, followRef, handlers } = useCursorFollow<HTMLAnchorElement, HTMLDivElement>()
 
   return (
     <Link
+      ref={areaRef}
+      {...handlers}
       href={`/projects/${project.slug}`}
       aria-label={`View case study: ${project.title}`}
-      className="group block"
-      onMouseEnter={discover.scramble}
-      onMouseLeave={discover.reset}
+      className="group relative block"
     >
+      {/* Thumbnail — full-bleed on mobile, inset on a card fill on desktop */}
+      <div className="flex w-full items-end justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/235] sm:aspect-[680/320] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
+        <Image
+          src={project.thumbnailImage}
+          alt=""
+          width={680}
+          height={423}
+          sizes="(max-width: 640px) 100vw, 514px"
+          className="h-full w-full object-cover sm:w-[75.6%]"
+        />
+      </div>
+
+      {/* Hover CTA — trails the pointer across the whole card; desktop only,
+          decorative (the card itself is the link) */}
       <div
-        className={`flex flex-col sm:flex-row sm:items-end sm:justify-between p-4 sm:p-6 gap-4 sm:gap-10 transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-000)] ${!isLast ? 'border-b border-[var(--color-100)]' : ''}`}
+        ref={followRef}
+        aria-hidden="true"
+        style={{ willChange: 'transform' }}
+        className="pointer-events-none absolute left-0 top-0 z-10 hidden items-center gap-2 rounded-[0.125rem] bg-[var(--accent)] px-3 py-2 opacity-0 shadow-[0_4px_20px_8px_rgba(0,0,0,0.16)] transition-opacity duration-[400ms] ease-in-out group-hover:opacity-100 sm:flex"
       >
-        {/* Content — title + description + metrics */}
-        <div className="flex flex-col gap-4 min-w-0">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-h4 text-[var(--color-400)] transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--accent)] text-pretty">
-              {project.title}
-            </h3>
-            <p className="text-body-2 text-[var(--color-300)] transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--color-400)] text-pretty">
-              {project.description}
-            </p>
-          </div>
+        <span className="text-eyebrow whitespace-nowrap text-[var(--background)]">
+          {t.viewCaseStudy}
+        </span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 text-[var(--background)]">
+          <path
+            d="M10.6667 8.66667V7.33333H9.33333V8.66667H10.6667ZM9.33333 7.33333V6H8V7.33333H9.33333ZM9.33333 10V8.66667H8V10H9.33333ZM8 6V4.66667H6.66667V6H8ZM8 11.3333V10H6.66667V11.3333H8ZM6.66667 4.66667V3.33333H5.33333V4.66667H6.66667ZM6.66667 12.6667V11.3333H5.33333V12.6667H6.66667Z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
 
-          {project.metrics.length > 0 && (
-            <div className="flex items-center justify-between sm:block">
-              <div className="flex flex-wrap gap-6 py-2">
-                {project.metrics.slice(0, 2).map((metric, i) => (
-                  <div key={i} className="flex items-center gap-1.5">
-                    <span
-                      className="text-eyebrow"
-                      style={{
-                        color: metric.color === 'accent' ? 'var(--accent)' : 'var(--color-400)',
-                      }}
-                    >
-                      {metric.value}
-                    </span>
-                    <span className="text-eyebrow text-[var(--color-300)]">
-                      {metric.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              {/* Arrow button — mobile only, no "Discover" text */}
-              <div className="sm:hidden relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0">
-                <div
-                  className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
-                  style={{ transition: 'transform 400ms ease-in-out' }}
-                />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="relative z-10 text-[var(--color-300)] group-hover:text-[var(--background)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}>
-                  <path d="M2 8h12M9 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/>
-                </svg>
-              </div>
-            </div>
-          )}
+      {/* Title + description, metrics chip — chip sits above the title on mobile */}
+      <div className="flex flex-col-reverse gap-3 py-3 sm:flex-row sm:items-start sm:gap-10 sm:py-4">
+        <div className="flex min-w-0 flex-col gap-1 sm:flex-1">
+          <h3 className="text-h4 text-[var(--color-400)] text-pretty">
+            {project.title}
+          </h3>
+          <p className="text-body-2 text-[var(--color-300)] text-pretty">
+            {project.description}
+          </p>
         </div>
 
-        {/* Discover — hidden on mobile (whole card is tappable anyway) */}
-        <div className="hidden sm:flex items-center gap-2 shrink-0">
-          <span
-            ref={discover.spanRef}
-            className="text-eyebrow text-[var(--color-300)] transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--accent)]"
-          >
-            {t.discover}
-          </span>
-
-          {/* Square button — orange fill sweeps left→right */}
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-[0.125rem] overflow-hidden border border-[var(--color-150)] group-hover:border-[var(--accent)] transition-colors duration-[400ms] ease-in-out">
-            <div
-              className="absolute inset-0 bg-[var(--accent)] origin-left scale-x-0 group-hover:scale-x-100"
-              style={{ transition: 'transform 400ms ease-in-out' }}
-            />
-            <span className="font-neubit text-[1.25rem] leading-[1] relative z-10 text-[var(--color-200)] group-hover:text-[var(--background)] transition-colors duration-[400ms] ease-in-out inline-block">
-              →
-            </span>
+        {project.metrics.length > 0 && (
+          <div className="flex shrink-0 flex-wrap gap-2 self-start">
+            {project.metrics.map((metric, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-1.5 rounded-[0.125rem] bg-[var(--color-000)] px-2 py-0.5"
+              >
+                <span
+                  className="text-eyebrow whitespace-nowrap"
+                  style={{
+                    color: metric.color === 'accent' ? 'var(--accent)' : 'var(--color-400)',
+                  }}
+                >
+                  {metric.value}
+                </span>
+                <span className="text-eyebrow whitespace-nowrap text-[var(--color-300)]">
+                  {metric.label}
+                </span>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </Link>
   )
