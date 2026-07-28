@@ -127,7 +127,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group sm:-mx-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
@@ -152,7 +152,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group sm:-mx-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
                 >
                   <Slideshow images={block.images} />
@@ -169,7 +169,7 @@ function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             return (
               <div key={i} className="group sm:-mx-8">
                 <div
-                  className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)]"
+                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
@@ -304,7 +304,7 @@ export default function ProjectPage() {
           {/* Hero image */}
           <div className="group sm:-mx-8">
             <div
-              className="w-full rounded-sm border border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out group-hover:border-[var(--color-150)] group-hover:bg-[var(--color-100)]"
+              className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
               style={{
                 backgroundColor: 'var(--color-000)',
                 padding: project.coverImagePosition === 'bottom-right'
