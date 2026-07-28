@@ -1,23 +1,13 @@
 // ─── Process content block types ────────────────────────────────────────────
 
-export interface ProcessStep {
-  num: string
-  title: string
-  description: string
-  imageSrc?: string   // undefined = placeholder
-}
-
 export type CompareImage = { src: string; label: string }
 
 export type ProcessBlock =
   | { kind: 'text'; content: string }
   | { kind: 'heading'; content: string }
   | { kind: 'image'; src: string; caption?: string }
-  | { kind: 'placeholder'; caption?: string }
-  | { kind: 'steps'; items: ProcessStep[] }
   | { kind: 'compare'; images: CompareImage[]; caption?: string }
   | { kind: 'contact-flow'; caption?: string }
-  | { kind: 'before-after-flow'; before: string[]; after: string[]; caption?: string }
   | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]; arc?: { fromStep: number; toStep: number; label: string }; caption?: string }
   | { kind: 'decisions'; items: { num: string; title: string; description: string }[] }
   | { kind: 'slideshow'; images: string[]; caption?: string }
@@ -47,7 +37,6 @@ export interface Project {
   processContent: ProcessBlock[]
   results: {
     headline: string
-    subheadline?: string
     note?: string
     metricsAsMain?: boolean   // use MetricMain (not Supporting) for right-column metrics
     northStar?: {

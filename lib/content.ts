@@ -35,8 +35,6 @@ export const content = {
     currently:
       'Looking for a Senior Product Designer or Design Lead role at a B2B SaaS scale-up in the EU. End-to-end product thinking, sharp UI, and experience leading small teams people enjoy being part of.',
     projects: {
-      soon: 'Soon',
-      discover: 'Discover',
       viewCaseStudy: 'View case study',
     },
   },

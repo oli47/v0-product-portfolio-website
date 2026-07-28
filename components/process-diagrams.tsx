@@ -4,18 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
 
-export function FlowStep({ label }: { label: string }) {
-  return (
-    <div
-      className="px-4 py-2.5 rounded-[0.125rem] border border-[var(--color-100)] text-body-2 text-[var(--color-400)] text-center"
-      style={{ backgroundColor: 'var(--color-step-bg)', minWidth: '8rem' }}
-    >
-      {label}
-    </div>
-  )
-}
-
-export function FlowArrow({ id }: { id: string }) {
+function FlowArrow({ id }: { id: string }) {
   return (
     <div className="flex justify-center py-3">
       <svg width="12" height="20" style={{ display: 'block', overflow: 'visible' }}>
@@ -26,59 +15,6 @@ export function FlowArrow({ id }: { id: string }) {
         </defs>
         <line x1="6" y1="0" x2="6" y2="20" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd={`url(#${id})`} />
       </svg>
-    </div>
-  )
-}
-
-// ─── Before / After Flow ──────────────────────────────────────────────────────
-
-export function BeforeAfterFlow({ before, after, caption }: { before: string[]; after: string[]; caption?: string }) {
-  return (
-    <div className="sm:-mx-8">
-      <div className="rounded-sm border border-[var(--color-100)] overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-100)]">
-
-          {/* BEFORE */}
-          <div className="px-5 pt-5 pb-10 flex flex-col">
-            <div className="mb-5">
-              <span className="text-eyebrow text-[var(--color-300)] px-2 py-1 rounded-[0.125rem] border border-[var(--color-150)]" style={{ backgroundColor: 'var(--color-step-bg)' }}>
-                BEFORE
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              {before.map((step, i) => (
-                <div key={i} className="flex flex-col items-center w-full">
-                  <FlowStep label={step} />
-                  {i < before.length - 1 && <FlowArrow id={`ba-b-${i}`} />}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* AFTER */}
-          <div className="p-5 flex flex-col">
-            <div className="mb-5 flex sm:justify-end">
-              <span className="text-eyebrow text-white px-2 py-1 rounded-[0.125rem]" style={{ backgroundColor: 'var(--accent)' }}>
-                AFTER
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              {after.map((step, i) => (
-                <div key={i} className="flex flex-col items-center w-full">
-                  <FlowStep label={step} />
-                  {i < after.length - 1 && <FlowArrow id={`ba-a-${i}`} />}
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-        {caption && (
-          <div className="px-5 pt-3 pb-5">
-            <p className="text-body-2 text-[var(--color-300)] text-center">{caption}</p>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

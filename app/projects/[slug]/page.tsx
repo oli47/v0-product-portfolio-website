@@ -2,271 +2,14 @@
 
 import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getProject, getProjectNavigation } from '@/lib/projects'
-import type { ProcessBlock } from '@/lib/projects'
-import { SectionBadge } from '@/components/section-badge'
-import { ScrollToTop } from '@/components/scroll-to-top'
-import { Slideshow } from '@/components/slideshow'
-import { Lightbox } from '@/components/lightbox'
 import { Bold } from '@/components/bold'
+import { ClickableImage } from '@/components/clickable-image'
 import { MetricMain, MetricSupporting } from '@/components/metric-card'
-import { CompareSlider } from '@/components/compare-slider'
-import { BeforeAfterFlow, VerticalFlow, ContactFlowDiagram } from '@/components/process-diagrams'
+import { ProcessBlocks } from '@/components/process-blocks'
+import { ScrollToTop } from '@/components/scroll-to-top'
+import { SectionBadge } from '@/components/section-badge'
 import { useScramble } from '@/lib/use-scramble'
-import { useState, useRef } from 'react'
-
-// ─── Clickable image ─────────────────────────────────────────────────────────
-
-function ClickableImage({ src, alt, width, height, className, priority, objectPosition }: {
-  src: string; alt: string; width: number; height: number; className?: string; priority?: boolean; objectPosition?: string
-}) {
-  const [open, setOpen] = useState(false)
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="block w-full cursor-zoom-in"
-        aria-label={`Enlarge image: ${alt}`}
-      >
-        <Image
-          src={src}
-          alt={alt}
-          unoptimized={src.endsWith('.gif')}
-          width={width}
-          height={height}
-          sizes="(max-width: 768px) 100vw, 680px"
-          className={`${className} pointer-events-none transition-opacity duration-[400ms] ease-in-out hover:opacity-80`}
-          style={objectPosition ? { objectPosition } : undefined}
-          priority={priority}
-        />
-      </button>
-      {open && <Lightbox src={src} alt={alt} onClose={() => setOpen(false)} />}
-    </>
-  )
-}
-
-// ─── Placeholder image ───────────────────────────────────────────────────────
-
-function PlaceholderImage({ className }: { className?: string }) {
-  return (
-    <div
-      className={`w-full flex items-center justify-center border border-dashed border-[var(--color-100)] rounded-sm bg-[var(--color-000)] ${className ?? ''}`}
-      style={{ minHeight: '13.75rem' }}
-    >
-      <span className="text-eyebrow text-[var(--color-200)]">Image placeholder</span>
-    </div>
-  )
-}
-
-// ─── Image caption ───────────────────────────────────────────────────────────
-
-function Caption({ text }: { text: string }) {
-  return (
-    <p className="text-body-2 text-[var(--color-300)] mt-3 text-pretty text-center">
-      {text}
-    </p>
-  )
-}
-
-// ─── Process block renderer ──────────────────────────────────────────────────
-// (CompareSlider, flow diagrams, MetricMain/Supporting, Bold now in components/)
-
-
-function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
-  // Group consecutive text/heading blocks so they share gap-4,
-  // while all other blocks are separated by gap-16.
-  type TextBlock = Extract<ProcessBlock, { kind: 'text' | 'heading' }>
-  type NonTextBlock = Exclude<ProcessBlock, { kind: 'text' | 'heading' }>
-  type GroupedItem = TextBlock[] | NonTextBlock
-
-  const grouped: GroupedItem[] = []
-  let run: TextBlock[] = []
-  for (const block of blocks) {
-    if (block.kind === 'text' || block.kind === 'heading') {
-      run.push(block as TextBlock)
-    } else {
-      if (run.length) { grouped.push(run); run = [] }
-      grouped.push(block as NonTextBlock)
-    }
-  }
-  if (run.length) grouped.push(run)
-
-  return (
-    <div className="flex flex-col gap-16">
-      {grouped.map((item, i) => {
-        if (Array.isArray(item)) {
-          return (
-            <div key={i} className="flex flex-col gap-4">
-              {item.map((block, j) =>
-                block.kind === 'text' ? (
-                  <p key={j} className="text-body-1 text-[var(--color-300)] text-pretty">
-                    <Bold text={block.content} />
-                  </p>
-                ) : (
-                  <p key={j} className="text-body-1 text-[var(--color-500)] font-medium text-pretty">
-                    <Bold text={block.content} />
-                  </p>
-                )
-              )}
-            </div>
-          )
-        }
-        const block = item
-        switch (block.kind) {
-          case 'placeholder':
-            return (
-              <div key={i} className="sm:-mx-8">
-                <PlaceholderImage />
-                {block.caption && <Caption text={block.caption} />}
-              </div>
-            )
-
-          case 'image':
-            return (
-              <div key={i} className="group sm:-mx-8">
-                <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
-                >
-                  <div className="rounded-[0.125rem] overflow-hidden mb-4">
-                    <ClickableImage
-                      src={block.src}
-                      alt={block.caption ?? 'Process image'}
-                      width={680}
-                      height={425}
-                      className="w-full h-auto"
-                    />
-                  </div>
-                  {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
-                      {block.caption}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )
-
-          case 'slideshow':
-            return (
-              <div key={i} className="group sm:-mx-8">
-                <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
-                >
-                  <Slideshow images={block.images} />
-                  {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
-                      {block.caption}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )
-
-          case 'compare':
-            return (
-              <div key={i} className="group sm:-mx-8">
-                <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
-                >
-                  <div className="rounded-[0.125rem] overflow-hidden mb-4">
-                    <CompareSlider
-                      beforeImage={block.images[0].src}
-                      afterImages={block.images.slice(1)}
-                    />
-                  </div>
-                  {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
-                      {block.caption}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )
-
-          case 'vertical-flow':
-            return <VerticalFlow key={i} steps={block.steps} arc={block.arc} caption={block.caption} />
-
-          case 'before-after-flow':
-            return <BeforeAfterFlow key={i} before={block.before} after={block.after} caption={block.caption} />
-
-          case 'contact-flow':
-            return <ContactFlowDiagram key={i} caption={block.caption} />
-
-          case 'steps':
-            return (
-              <div key={i} className="space-y-8 sm:-mx-8">
-                {block.items.map((step, j) => (
-                  <div key={j} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                    {/* Image or placeholder — narrower on desktop */}
-                    <div className="w-full sm:w-[44%] shrink-0">
-                      {step.imageSrc ? (
-                        <div className="relative w-full rounded-sm overflow-hidden border border-[var(--color-100)]" style={{ backgroundColor: 'var(--color-000)' }}>
-                          <ClickableImage
-                            src={step.imageSrc}
-                            alt={step.title}
-                            width={300}
-                            height={200}
-                            className="w-full h-auto"
-                          />
-                        </div>
-                      ) : (
-                        <PlaceholderImage className="h-full" />
-                      )}
-                    </div>
-
-                    {/* Number + title + description */}
-                    <div className="flex flex-col gap-1.5 justify-center">
-                      <span className="text-eyebrow text-[var(--accent)]">{step.num}</span>
-                      <p className="text-body-1 font-medium text-[var(--color-500)]">{step.title}</p>
-                      <p className="text-body-2 text-[var(--color-300)] text-pretty">{step.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-
-          case 'decisions': {
-            const count = block.items.length
-            return (
-              <div key={i} className="sm:-mx-8 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
-                {block.items.map((item, j) => {
-                  const isLeftCol   = j % 2 === 0
-                  const isLastRow   = j >= count - 2  // bottom row on desktop
-                  const isLast      = j === count - 1
-                  return (
-                    <div
-                      key={j}
-                      className={[
-                        'p-5 flex flex-col gap-3',
-                        isLeftCol ? 'sm:border-r border-[var(--color-100)]' : '',
-                        !isLast ? 'border-b border-[var(--color-100)]' : '',
-                        isLastRow && !isLast ? 'sm:border-b-0' : '',
-                      ].join(' ')}
-                    >
-                      <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
-                      <div className="flex flex-col gap-2">
-                        <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
-                        <p className="text-body-2 text-[var(--color-300)] text-pretty"><Bold text={item.description} /></p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          }
-
-          default:
-            return null
-        }
-      })}
-    </div>
-  )
-}
-
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -347,27 +90,20 @@ export default function ProjectPage() {
 
           {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
             /* 2-col layout: left = MetricMain (northStar), right = stacked MetricSupporting */
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
-                <MetricMain
-                  label={project.results.northStar.label}
-                  value={project.results.northStar.value}
-                  note={project.results.note!}
-                />
-                <div className="flex flex-col gap-3">
-                  {project.results.metrics.map((metric, index) => (
-                    project.results.metricsAsMain
-                      ? <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
-                      : <MetricSupporting key={index} label={metric.label} value={metric.value} description={metric.description} />
-                  ))}
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
+              <MetricMain
+                label={project.results.northStar.label}
+                value={project.results.northStar.value}
+                note={project.results.note}
+              />
+              <div className="flex flex-col gap-3">
+                {project.results.metrics.map((metric, index) => (
+                  project.results.metricsAsMain
+                    ? <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
+                    : <MetricSupporting key={index} label={metric.label} value={metric.value} description={metric.description} />
+                ))}
               </div>
-              {project.results.subheadline && (
-                <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.subheadline} /></p>
-                </div>
-              )}
-            </>
+            </div>
           ) : project.results.northStar && project.results.note && project.results.metrics.length === 0 ? (
             /* Single-wide: one MetricMain full-width */
             <MetricMain
