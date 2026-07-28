@@ -2,7 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import { useCursorFollow } from '@/components/cursor-follow'
+import { ScrambleText } from '@/components/scramble-text'
 import { content, defaultLang } from '@/lib/content'
 import type { Project } from '@/lib/projects'
 
@@ -12,11 +14,14 @@ const t = content[defaultLang].projects
 
 export function ProjectRow({ project }: { project: Project }) {
   const { areaRef, followRef, handlers } = useCursorFollow<HTMLAnchorElement, HTMLDivElement>()
+  const [hovered, setHovered] = useState(false)
 
   return (
     <Link
       ref={areaRef}
-      {...handlers}
+      onMouseEnter={(e) => { handlers.onMouseEnter(e); setHovered(true) }}
+      onMouseMove={handlers.onMouseMove}
+      onMouseLeave={() => { handlers.onMouseLeave(); setHovered(false) }}
       href={`/projects/${project.slug}`}
       aria-label={`View case study: ${project.title}`}
       className="group relative block"
@@ -56,10 +61,10 @@ export function ProjectRow({ project }: { project: Project }) {
       <div className="flex flex-col-reverse gap-3 py-3 sm:flex-row sm:items-start sm:gap-10 sm:py-4">
         <div className="flex min-w-0 flex-col gap-1 sm:flex-1">
           <h3 className="text-h4 text-[var(--color-400)] text-pretty">
-            {project.title}
+            <ScrambleText text={project.title} active={hovered} />
           </h3>
           <p className="text-body-2 text-[var(--color-300)] text-pretty">
-            {project.description}
+            <ScrambleText text={project.description} active={hovered} />
           </p>
         </div>
 
@@ -76,10 +81,10 @@ export function ProjectRow({ project }: { project: Project }) {
                     color: metric.color === 'accent' ? 'var(--accent)' : 'var(--color-400)',
                   }}
                 >
-                  {metric.value}
+                  <ScrambleText text={metric.value} active={hovered} />
                 </span>
                 <span className="text-eyebrow whitespace-nowrap text-[var(--color-300)]">
-                  {metric.label}
+                  <ScrambleText text={metric.label} active={hovered} />
                 </span>
               </div>
             ))}
