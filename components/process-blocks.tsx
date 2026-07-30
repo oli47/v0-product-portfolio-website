@@ -121,29 +121,19 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
           case 'decisions': {
             const count = block.items.length
             return (
-              <div key={i} className="sm:-mx-8 grid grid-cols-1 sm:grid-cols-2 rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
-                {block.items.map((item, j) => {
-                  const isLeftCol   = j % 2 === 0
-                  const isLastRow   = j >= count - 2  // bottom row on desktop
-                  const isLast      = j === count - 1
-                  return (
-                    <div
-                      key={j}
-                      className={[
-                        'p-5 flex flex-col gap-3',
-                        isLeftCol ? 'sm:border-r border-[var(--color-100)]' : '',
-                        !isLast ? 'border-b border-[var(--color-100)]' : '',
-                        isLastRow && !isLast ? 'sm:border-b-0' : '',
-                      ].join(' ')}
-                    >
-                      <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
-                      <div className="flex flex-col gap-2">
-                        <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
-                        <p className="text-body-2 text-[var(--color-300)] text-pretty"><Bold text={item.description} /></p>
-                      </div>
+              <div key={i} className="sm:-mx-8 flex flex-col rounded-sm overflow-hidden" style={{ backgroundColor: 'var(--color-000)' }}>
+                {block.items.map((item, j) => (
+                  <div
+                    key={j}
+                    className={`p-5 flex flex-col gap-3${j < count - 1 ? ' border-b border-[var(--color-100)]' : ''}`}
+                  >
+                    <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
+                    <div className="flex flex-col gap-2">
+                      <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
+                      <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={item.description} /></p>
                     </div>
-                  )
-                })}
+                  </div>
+                ))}
               </div>
             )
           }

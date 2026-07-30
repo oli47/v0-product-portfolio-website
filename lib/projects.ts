@@ -14,6 +14,13 @@ export type ProcessBlock =
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
+/** A badged section rendered between the header and Impact. Add as many as the
+ *  story needs — the badge is the label shown above the blocks. */
+export interface ProjectSection {
+  badge: string
+  blocks: ProcessBlock[]
+}
+
 export interface Project {
   slug: string
   title: string
@@ -33,30 +40,23 @@ export interface Project {
   coverImage: string
   coverImagePosition?: 'bottom-right' | 'center-bottom'
   thumbnailImage: string
-  opportunityBlocks: ProcessBlock[]
-  processContent: ProcessBlock[]
+  sections: ProjectSection[]
   results: {
-    headline: string
     note?: string
     metricsAsMain?: boolean   // use MetricMain (not Supporting) for right-column metrics
     northStar?: {
       label: string
-      tag?: string
       value: string
-      sublabel?: string
     }
     metrics: {
       value: string
       label: string
-      sublabel?: string
       description?: string
       color?: 'accent' | 'ink'
     }[]
   }
-  nextSteps: {
-    title: string
-    description: string
-  }[]
+  /** Rendered as plain paragraphs under a Reflections badge. */
+  reflections: string[]
 }
 
 // ─── Projects ────────────────────────────────────────────────────────────────
@@ -79,62 +79,74 @@ export const projects: Project[] = [
     coverImage: '/thumbnails/freemium-activation.png',
     coverImagePosition: 'bottom-right',
     thumbnailImage: '/thumbnails/freemium-activation.png',
-    opportunityBlocks: [
+    sections: [
       {
-        kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. Every new customer went through Sales: demo, contract, Support-led onboarding. No self-serve path existed. I saw consistent inbound traffic in GA that never reached Sales, and built the case for a freemium channel to capture it.',
-      },
-    ],
-    processContent: [
-      {
-        kind: 'text',
-        content: 'Freemium launched May 2025. Over 10 months I iterated on the onboarding through continuous user research and production testing.',
-      },
-      {
-        kind: 'text',
-        content: 'Together with two Support team members I brought in as my freemium sub-team, we ran dozens of interviews with fresh signups throughout the project and internal sessions with Support\'s onboarding and success teams. With each shipped iteration we analysed how users behaved and what could make the experience more seamless.',
-      },
-      {
-        kind: 'text',
-        content: '**The vast majority of users reaching edrone were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
-      },
-      {
-        kind: 'slideshow',
-        images: ['/images/freeold1.png', '/images/freeold2.png', '/images/freeold3.png', '/images/freeold4.png', '/images/freeold5.png'],
-        caption: 'Early version, May 2025.',
-      },
-      {
-        kind: 'vertical-flow',
-        steps: [
-          { title: 'Signup', subtitle: 'User creates an account' },
-          { title: 'AI content', subtitle: "User sees their store's branded content ready to go" },
-          { title: 'Activation', subtitle: 'User reviews what is already on. No setup needed.', labelAfter: 'USER HAS SEEN THE VALUE' },
-          { title: 'Integration', subtitle: 'User decides to connect their store', mobileAnnotation: 'INITIALLY AFTER SIGNUP' },
-          { title: 'AHA moment', subtitle: 'User sees their first order driven by edrone' },
+        badge: 'Context',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'edrone is a marketing automation CRM for ecommerce. Every new customer went through Sales: demo, contract, Support-led onboarding. No self-serve path existed.',
+          },
         ],
-        arc: { fromStep: 1, toStep: 3, label: 'INITIAL PROCESS' },
-        caption: 'The final activation path. Value demonstrated before any commitment.',
       },
       {
-        kind: 'text',
-        content: 'Users create an account, AI generates branded content from their store URL: newsletters, automations, pop-ups ready to send on arrival. Everything is on by default: 7 automations, popup, and identification sequence active from day one. I started with nothing enabled and tested increments until activation stopped improving. The free tier is capped at 500 messages: the minimum for a user to reach their first attributed order. Integration comes last because connecting a store means sharing contacts and product data. Users make that decision after seeing what edrone does.',
+        badge: 'Approach',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'I saw consistent inbound traffic in GA that never reached Sales, and built the case for a freemium channel to capture it. Freemium launched May 2025, and over 10 months I iterated on the onboarding through continuous user research and production testing.',
+          },
+          {
+            kind: 'text',
+            content: 'Together with two Support team members I brought in as my freemium sub-team, we ran dozens of interviews with fresh signups throughout the project and internal sessions with Support\'s onboarding and success teams. With each shipped iteration we analysed how users behaved and what could make the experience more seamless.',
+          },
+          {
+            kind: 'text',
+            content: '**The vast majority of users reaching edrone were small, one-person stores.** No time, no MA experience, no idea whether it would pay off. They could not invest hours into understanding, configuring, or learning a tool. **Everything had to work without asking them to build anything.**',
+          },
+          {
+            kind: 'slideshow',
+            images: ['/images/freeold1.png', '/images/freeold2.png', '/images/freeold3.png', '/images/freeold4.png', '/images/freeold5.png'],
+            caption: 'Early version, May 2025.',
+          },
+        ],
       },
       {
-        kind: 'slideshow',
-        images: ['/images/freemiumgif1.png', '/images/freemiumgif2.png', '/images/freemiumgif3.png', '/images/freemiumgif4.png'],
-        caption: 'The shipped onboarding.',
-      },
-      {
-        kind: 'text',
-        content: 'I set the NSM as **time to first attributed order.** That is when users see real revenue and the upgrade decision forms.',
-      },
-      {
-        kind: 'text',
-        content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
+        badge: 'Solution',
+        blocks: [
+          {
+            kind: 'vertical-flow',
+            steps: [
+              { title: 'Signup', subtitle: 'User creates an account' },
+              { title: 'AI content', subtitle: "User sees their store's branded content ready to go" },
+              { title: 'Activation', subtitle: 'User reviews what is already on. No setup needed.', labelAfter: 'USER HAS SEEN THE VALUE' },
+              { title: 'Integration', subtitle: 'User decides to connect their store', mobileAnnotation: 'INITIALLY AFTER SIGNUP' },
+              { title: 'AHA moment', subtitle: 'User sees their first order driven by edrone' },
+            ],
+            arc: { fromStep: 1, toStep: 3, label: 'INITIAL PROCESS' },
+            caption: 'The final activation path. Value demonstrated before any commitment.',
+          },
+          {
+            kind: 'text',
+            content: 'Users create an account, AI generates branded content from their store URL: newsletters, automations, pop-ups ready to send on arrival. Everything is on by default: 7 automations, popup, and identification sequence active from day one. I started with nothing enabled and tested increments until activation stopped improving. The free tier is capped at 500 messages: the minimum for a user to reach their first attributed order. Integration comes last because connecting a store means sharing contacts and product data. Users make that decision after seeing what edrone does.',
+          },
+          {
+            kind: 'slideshow',
+            images: ['/images/freemiumgif1.png', '/images/freemiumgif2.png', '/images/freemiumgif3.png', '/images/freemiumgif4.png'],
+            caption: 'The shipped onboarding.',
+          },
+          {
+            kind: 'text',
+            content: 'I set the NSM as **time to first attributed order.** That is when users see real revenue and the upgrade decision forms.',
+          },
+          {
+            kind: 'text',
+            content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
+          },
+        ],
       },
     ],
     results: {
-      headline: '4600 freemium accounts in 10 months. 78% activation rate.',
       note: "Freemium's north star metric. Shortening newsletter delivery from **13 to 1 day** was a major contributor. Newsletters generate orders, and the earlier they go out, the faster users see ROI.",
       northStar: {
         label: 'TIME TO FIRST ATTRIBUTED ORDER',
@@ -145,82 +157,133 @@ export const projects: Project[] = [
         { value: '8.4%', label: 'PAID CONVERSION', color: 'accent', description: '~400 paying customers, adding **16%** to edrone\'s paid base built over 10 years. Industry average for freemium SaaS is **2–5%**.' },
       ],
     },
-    nextSteps: [],
+    reflections: [],
   },
   {
     slug: 'signup-redesign',
     title: 'Signup flow',
-    tagline: 'One field removed. Two steps. Five hours from diagnosis to production.',
-    description: 'One field removed. Two steps. Five hours from diagnosis to production.',
+    tagline: 'Tripled signup conversion in five hours, with Codex.',
+    description: 'Tripled signup conversion in five hours, with Codex.',
     metrics: [
-      { value: '+67%', label: 'SIGNUP CONVERSION', color: 'accent' },
+      { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
-      team: '1 Front-end',
-      duration: '5h',
+      team: '1 Developer',
+      duration: '5 hours',
       date: '2026',
     },
     coverImage: '/images/sf-cover.png',
     coverImagePosition: 'center-bottom',
     thumbnailImage: '/images/sf-cover.png',
-    opportunityBlocks: [
+    sections: [
       {
-        kind: 'text',
-        content: 'edrone is a marketing automation CRM for ecommerce. The platform had just launched a self-serve freemium tier, but the signup form was still built for the sales-led era. Amplitude showed massive drop-off at the form. **A Claude-powered UX agent I had built confirmed two issues by auditing the full signup flow:** the phone field was the primary drop-off point, and SSO did not actually create an account. Mobile conversion sat at 0.05%.',
-      },
-      {
-        kind: 'text',
-        content: 'The drop-off was on the very first step of the freemium funnel. Fixing it would compound through every step downstream.',
-      },
-    ],
-    processContent: [
-      {
-        kind: 'text',
-        content: 'Two problems, two fixes, shipped at once. Splitting them would have meant **waiting at least 3 weeks per change** to collect meaningful data on low traffic.',
-      },
-      {
-        kind: 'decisions',
-        items: [
+        badge: 'Context',
+        blocks: [
           {
-            num: 'FIX 1',
-            title: 'Phone field was the primary drop-off',
-            description: 'Sales confirmed they no longer used it. I removed it. The product only needed three fields: email, name, and store URL.',
+            kind: 'text',
+            content: 'edrone is a marketing automation CRM for ecommerce. It exists to keep customers coming back. Automated messages and newsletters bring shoppers back to the store to finish orders they had abandoned, and the rest of the product feeds the same loop.',
           },
           {
-            num: 'FIX 2',
-            title: 'SSO did not create an account',
-            description: 'I restructured into two steps: **step 1 creates the account** (email or SSO), **step 2 collects name and store URL.** SSO now works as expected.',
+            kind: 'text',
+            content: 'For ten years edrone sold one way only, through Sales. Freemium was the company\'s first product-led channel, and this work landed four months into it.',
           },
         ],
       },
       {
-        kind: 'compare',
-        images: [
-          { src: '/images/sf-signupold.png', label: 'Before' },
-          { src: '/images/sf-signup1.png', label: 'After' },
-          { src: '/images/sf-signup2.png', label: 'After' },
+        badge: 'Goal',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'Acquisition was freemium\'s goal at that stage, so the activation funnel was the priority for the Freemium Team I led. Signup was its first step, which meant everything lost there was lost again at every step below it.',
+          },
+          {
+            kind: 'text',
+            content: 'In Amplitude the largest drop across the four-step funnel sat between clicking "Sign up free" on the website and creating an account. **0.75% of unique visitors made it through, against a 2–3% market standard.** I led the freemium project, so I took this one on myself. It was the highest-leverage number on the board.',
+          },
         ],
-        caption: 'After changes, step 1. Creates the account. step 2. Collects what the product needs.',
       },
       {
-        kind: 'text',
-        content: 'I built the entire frontend directly in Codex, no separate design phase in Figma. The frontend developer handled the backend changes. **On production within 5 hours.**',
+        badge: 'Approach',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'I started in Amplitude. I checked the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a short list of what I thought was wrong.',
+          },
+          {
+            kind: 'text',
+            content: 'Alongside it I ran a UX agent I had built on Claude across the flow. It walks the screens in a browser, clicks through them the way a user would, and returns a report with problem, description and severity.',
+          },
+          {
+            kind: 'text',
+            content: 'I used the agent to test my own hypotheses rather than to produce them. It confirmed most of what I had already found, added candidates I had not considered, and ranked them. I picked the ones worth the time and cost of building.',
+          },
+          {
+            kind: 'decisions',
+            items: [
+              {
+                num: 'PROBLEM 1',
+                title: 'A mandatory phone number almost nobody used',
+                description: 'A leftover from the sales-led funnel. One salesperson was responsible for calling accounts that signed up and then went quiet. **Every user paid for that, at the most expensive moment in the funnel.**',
+              },
+              {
+                num: 'PROBLEM 2',
+                title: 'SSO promised one click and delivered a form',
+                description: '"Sign up with Google" did not create an account. It took an address from the Google dialog and dropped the user back on the same four fields, now partly filled. **The button looked like a shortcut and behaved like autofill.**',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        badge: 'Solution',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'The obvious fix was removing the phone number. The COO pushed back at first, because his concern was Sales losing the ability to qualify leads, which is fair. So I went to Sales and talked to the one person who actually made those calls. He admitted there was no value in them and confirmed the field could go. It stayed removed.',
+          },
+          {
+            kind: 'text',
+            content: 'The second was making SSO real. We had just added Shopify alongside Google, so it had to actually create the account across both providers.',
+          },
+          {
+            kind: 'text',
+            content: 'Then I went further and split the form to make signing up feel lighter and to capture the account earlier. **Step 1 now creates the account from an email address or SSO. Step 2 collects name and store URL.**',
+          },
+          {
+            kind: 'compare',
+            images: [
+              { src: '/images/sf-signupold.png', label: 'Before' },
+              { src: '/images/sf-signup1.png', label: 'After' },
+              { src: '/images/sf-signup2.png', label: 'After' },
+            ],
+            caption: 'Before: four fields and an SSO button that filled them in. After: step 1 creates the account, step 2 collects what the product needs.',
+          },
+          {
+            kind: 'text',
+            content: 'More steps normally means less conversion. My bet was that what people see at the moment of the decision matters more than how many steps follow, and the result says it did. Anyone who drops out of step 2 already has an account, so I set up recovery paths in Intercom to bring them back. The friction moved to after the contact rather than before it.',
+          },
+          {
+            kind: 'text',
+            content: 'I designed the flow in Figma, then built the frontend directly in Codex. That part was quick, because Codex already had the coded design system I had built when I joined edrone. A developer handled the backend, reviewed my code and released it. The whole project, from diagnosis through design, build and test to production, fit into **five hours.**',
+          },
+        ],
       },
     ],
     results: {
-      headline: '+67% total signup conversion. Desktop doubled. Mobile from 0.05% to 3%.',
-      note: '**Desktop** signups doubled **(+100%)**. **Mobile** went from 0.05% to 3%, a **5900%** increase.',
+      note: 'Unique visitors who ended up with a created account, from **0.75% to 2.25%**. Conversion on to an integrated store did not move, so the extra signups were no worse than the ones before.',
       northStar: {
         label: 'TOTAL SIGNUP CONVERSION',
-        value: '+67%',
+        value: '+200%',
       },
       metricsAsMain: true,
       metrics: [
-        { value: '5 hours', label: 'FROM DIAGNOSIS TO PRODUCTION', color: 'accent', description: 'From identifying the drop-off to shipping the fix on production. One designer, no separate design phase.' },
+        { value: '+270%', label: 'STEP 1 CONVERSION', color: 'accent', description: 'Share of visitors who began filling the form went from **2.7% to 10%**. Desktop 3% to 10%, mobile 1% to 10%. Splitting the form was the bet, and this is what confirms it.' },
       ],
     },
-    nextSteps: [],
+    reflections: [
+      'I shipped three changes at once and gave up knowing which one worked better. Traffic was low enough that isolating each change would have meant at least three weeks per change to collect anything meaningful, and an A/B test would have taken longer still. With more traffic I would split it, but at that point I had to move quicker and leaner.',
+    ],
   },
   {
     slug: 'contacts-activation',
@@ -238,51 +301,63 @@ export const projects: Project[] = [
     },
     coverImage: '/images/ci-cover.png',
     coverImagePosition: 'bottom-right',
-    thumbnailImage: '/images/ci-cover.png',
-    opportunityBlocks: [
+    thumbnailImage: '/images/ci-thumbnail.png',
+    sections: [
       {
-        kind: 'text',
-        content: "edrone is a marketing automation CRM for ecommerce. Automations account for ~45% of revenue generated by edrone. They convert 9x better than newsletters and can target all contacts regardless of marketing consent (newsletters only reach the ~60% who opted in). **But automations only fire for identified contacts, and identification sat at ~3%.**",
+        badge: 'Context',
+        blocks: [
+          {
+            kind: 'text',
+            content: "edrone is a marketing automation CRM for ecommerce. Automations account for ~45% of revenue generated by edrone. They convert 9x better than newsletters and can target all contacts regardless of marketing consent (newsletters only reach the ~60% who opted in). **But automations only fire for identified contacts, and identification sat at ~3%.**",
+          },
+        ],
       },
       {
-        kind: 'text',
-        content: "Support had a validated approach: sending non-marketing emails to the full base **drastically reduced churn** and raised identification to as high as 15%. But they were doing it manually, while cookies clear over time and are per device, so identification needs to happen continuously and at full scale.",
+        badge: 'Approach',
+        blocks: [
+          {
+            kind: 'text',
+            content: "Support had a validated approach: sending non-marketing emails to the full base **drastically reduced churn** and raised identification to as high as 15%. But they were doing it manually, while cookies clear over time and are per device, so identification needs to happen continuously and at full scale.",
+          },
+          {
+            kind: 'contact-flow',
+            caption: 'When a contact opens an email, a tracking pixel assigns a cookie and connects their browsing to their profile.',
+          },
+        ],
       },
       {
-        kind: 'contact-flow',
-        caption: 'When a contact opens an email, a tracking pixel assigns a cookie and connects their browsing to their profile.',
-      },
-    ],
-    processContent: [
-      {
-        kind: 'text',
-        content: "I designed the contacts activation screen with a dedicated **identification module** and placed it as one of four core onboarding steps, right before integration.",
-      },
-      {
-        kind: 'image',
-        src: '/images/ci-dashboard.png',
-        caption: 'The identification screen. Users can explore the full sequence, but nothing requires action.',
-      },
-      {
-        kind: 'text',
-        content: "The screen contains a sequence of 6 branded, AI-generated emails, sent every 30 days in loop to grow identification. The sequence starts 24 hours after integration to allow the data to sync.",
-      },
-      {
-        kind: 'image',
-        src: '/images/ci-email.png',
-        caption: 'I designed the template structure. AI generates the branded content.',
-      },
-      {
-        kind: 'text',
-        content: "**The sequence is on by default.** It activates automatically after integration for new users only. Existing users had it off, with a plan for Support to enable it gradually. Opt-out, not opt-in.",
-      },
-      {
-        kind: 'text',
-        content: "Built the entire frontend in Codex. Backend dev handled sending. **Shipped in 6 days.**",
+        badge: 'Solution',
+        blocks: [
+          {
+            kind: 'text',
+            content: "I designed the contacts activation screen with a dedicated **identification module** and placed it as one of four core onboarding steps, right before integration.",
+          },
+          {
+            kind: 'image',
+            src: '/images/ci-dashboard.png',
+            caption: 'The identification screen. Users can explore the full sequence, but nothing requires action.',
+          },
+          {
+            kind: 'text',
+            content: "The screen contains a sequence of 6 branded, AI-generated emails, sent every 30 days in loop to grow identification. The sequence starts 24 hours after integration to allow the data to sync.",
+          },
+          {
+            kind: 'image',
+            src: '/images/ci-email.png',
+            caption: 'I designed the template structure. AI generates the branded content.',
+          },
+          {
+            kind: 'text',
+            content: "**The sequence is on by default.** It activates automatically after integration for new users only. Existing users had it off, with a plan for Support to enable it gradually. Opt-out, not opt-in.",
+          },
+          {
+            kind: 'text',
+            content: "Built the entire frontend in Codex. Backend dev handled sending. **Shipped in 6 days.**",
+          },
+        ],
       },
     ],
     results: {
-      headline: '95% feature adoption. +32% identification rate for new users.',
       metricsAsMain: true,
       note: "Enabled automatically after integration. Users can turn it off but don't need to do anything to turn it on. Almost **no one** did.",
       northStar: {
@@ -293,7 +368,7 @@ export const projects: Project[] = [
         { value: '+32%', label: 'IDENTIFICATION RATE', description: 'Share of identified contacts among new freemium users after the sequence runs.', color: 'accent' },
       ],
     },
-    nextSteps: [],
+    reflections: [],
   },
   {
     slug: 'plo-genius',
@@ -312,54 +387,70 @@ export const projects: Project[] = [
     coverImage: '/images/plo-cover.png',
     coverImagePosition: 'center-bottom',
     thumbnailImage: '/images/plo-cover.png',
-    opportunityBlocks: [
+    sections: [
       {
-        kind: 'text',
-        content: 'PLO Genius is a cloud-based Pot-Limit Omaha solver and GTO trainer. Before it existed, learning PLO with solvers meant buying a $5,000+ PC to run MonkerSolver and waiting minutes per calculation. There was no affordable, browser-based alternative for PLO players.',
+        badge: 'Context',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'PLO Genius is a cloud-based Pot-Limit Omaha solver and GTO trainer. Before it existed, learning PLO with solvers meant buying a $5,000+ PC to run MonkerSolver and waiting minutes per calculation. There was no affordable, browser-based alternative for PLO players.',
+          },
+          {
+            kind: 'text',
+            content: 'Deepsolver (NLH) had already proven that a neural-net cloud solver could work. PLO Genius brought the same approach to Omaha: a more complex game with far fewer learning tools.',
+          },
+          {
+            kind: 'text',
+            content: "I was the sole designer. The team was small: the CEO as PM, two professional poker players who were also investors, a frontend developer, and a 3-5 person engine team building the neural-net solver. I owned research, UX, UI, the marketing website, and built a standalone design system to give PLO Genius its own brand identity separate from Deepsolver.",
+          },
+        ],
       },
       {
-        kind: 'text',
-        content: 'Deepsolver (NLH) had already proven that a neural-net cloud solver could work. PLO Genius brought the same approach to Omaha: a more complex game with far fewer learning tools.',
+        badge: 'Approach',
+        blocks: [
+          {
+            kind: 'text',
+            content: "I was designing a learning tool for a game I didn't play. That created a real gap in research. Beginners couldn't articulate what they needed because they didn't understand the game well enough yet. Pro players operated on intuition and methods that were hard to translate into interface decisions.",
+          },
+          {
+            kind: 'text',
+            content: 'The bridge turned out to be poker stables: organizations where a knowledgeable lead managed groups of players at different levels. Those leads understood both the theory and the learning process, which made them the most useful collaborators for validating design decisions.',
+          },
+        ],
       },
       {
-        kind: 'text',
-        content: "I was the sole designer. The team was small: the CEO as PM, two professional poker players who were also investors, a frontend developer, and a 3-5 person engine team building the neural-net solver. I owned research, UX, UI, the marketing website, and built a standalone design system to give PLO Genius its own brand identity separate from Deepsolver.",
-      },
-    ],
-    processContent: [
-      {
-        kind: 'text',
-        content: "I was designing a learning tool for a game I didn't play. That created a real gap in research. Beginners couldn't articulate what they needed because they didn't understand the game well enough yet. Pro players operated on intuition and methods that were hard to translate into interface decisions.",
-      },
-      {
-        kind: 'text',
-        content: 'The bridge turned out to be poker stables: organizations where a knowledgeable lead managed groups of players at different levels. Those leads understood both the theory and the learning process, which made them the most useful collaborators for validating design decisions. The product launched, found paying users, and is still live four years later.',
-      },
-      {
-        kind: 'image',
-        src: '/images/plo-preflop.png',
-        caption: 'Preflop solver. Range charts and matrices showing optimal plays across stack sizes, positions, and rake structures.',
-      },
-      {
-        kind: 'image',
-        src: '/images/plo-postflop.png',
-        caption: 'Postflop solver. Hand breakdown with equity visualizations showing how a hand performs against opponent ranges on a specific board.',
-      },
-      {
-        kind: 'image',
-        src: '/images/plo-trainer.png',
-        caption: 'GTO Trainer. Up to 4 tables simultaneously, designed to feel like a real session. Players practice strategy and track accuracy without custom bets, keeping focus on learning correct play.',
+        badge: 'Solution',
+        blocks: [
+          {
+            kind: 'image',
+            src: '/images/plo-preflop.png',
+            caption: 'Preflop solver. Range charts and matrices showing optimal plays across stack sizes, positions, and rake structures.',
+          },
+          {
+            kind: 'image',
+            src: '/images/plo-postflop.png',
+            caption: 'Postflop solver. Hand breakdown with equity visualizations showing how a hand performs against opponent ranges on a specific board.',
+          },
+          {
+            kind: 'image',
+            src: '/images/plo-trainer.png',
+            caption: 'GTO Trainer. Up to 4 tables simultaneously, designed to feel like a real session. Players practice strategy and track accuracy without custom bets, keeping focus on learning correct play.',
+          },
+          {
+            kind: 'text',
+            content: 'The product launched, found paying users, and is still live four years later.',
+          },
+        ],
       },
     ],
     results: {
-      headline: '10+ B2B API clients. 120+ paying subscribers.',
       metricsAsMain: true,
       metrics: [
         { value: '10+', label: 'B2B API CLIENTS', color: 'accent', description: 'Platforms licensing the neural-net engine. Primary revenue channel.' },
         { value: '120+', label: 'PAYING SUBSCRIBERS', color: 'accent', description: 'Players using the app I designed. Three tiers: $0 / $59 / $125.' },
       ],
     },
-    nextSteps: [],
+    reflections: [],
   },
 ]
 

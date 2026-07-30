@@ -9,6 +9,7 @@ import { MetricMain, MetricSupporting } from '@/components/metric-card'
 import { ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
+import { SectionNav, sectionId } from '@/components/section-nav'
 import { useScramble } from '@/lib/use-scramble'
 
 // ─── Page ────────────────────────────────────────────────────────────────────
@@ -29,6 +30,13 @@ export default function ProjectPage() {
     ? 'grid-cols-1 md:grid-cols-3'
     : 'grid-cols-1 md:grid-cols-2'
 
+  const hasReflections = project.reflections && project.reflections.length > 0
+  const navItems = [
+    ...project.sections.map((section) => section.badge),
+    'Impact',
+    ...(hasReflections ? ['Reflections'] : []),
+  ]
+
   return (
     <main id="main-content" className="min-h-screen bg-background">
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-16">
@@ -43,6 +51,20 @@ export default function ProjectPage() {
               {project.tagline}
             </p>
           </div>
+
+          {/* Project meta — role, team, duration */}
+          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mb-8 pt-6 border-t border-[var(--color-100)]">
+            {([
+              ['Role', project.meta.role],
+              ['Team', project.meta.team],
+              ['Duration', project.meta.duration],
+            ] as const).map(([label, value]) => (
+              <div key={label} className="flex flex-col gap-1.5">
+                <dt className="text-eyebrow text-[var(--color-400)]">{label.toUpperCase()}</dt>
+                <dd className="text-body-2 text-[var(--color-500)] text-pretty">{value}</dd>
+              </div>
+            ))}
+          </dl>
 
           {/* Hero image */}
           <div className="group sm:-mx-8">
@@ -72,20 +94,16 @@ export default function ProjectPage() {
 
         </section>
 
-        {/* Opportunity */}
-        <section>
-          <SectionBadge>Opportunity</SectionBadge>
-          <ProcessBlocks blocks={project.opportunityBlocks} />
-        </section>
-
-        {/* Process */}
-        <section>
-          <SectionBadge>Approach</SectionBadge>
-          <ProcessBlocks blocks={project.processContent} />
-        </section>
+        {/* Narrative sections — badges and order come from the project data */}
+        {project.sections.map((section) => (
+          <section key={section.badge} id={sectionId(section.badge)}>
+            <SectionBadge>{section.badge}</SectionBadge>
+            <ProcessBlocks blocks={section.blocks} />
+          </section>
+        ))}
 
         {/* Impact */}
-        <section>
+        <section id={sectionId('Impact')}>
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
@@ -141,19 +159,15 @@ export default function ProjectPage() {
           )}
         </section>
 
-        {/* What's Next */}
-        {project.nextSteps && project.nextSteps.length > 0 && (
-          <section>
-            <SectionBadge>{"What's Next"}</SectionBadge>
-            <div className="space-y-6">
-              {project.nextSteps.map((step, index) => (
-                <div key={index} className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-3">
-                    <span className="w-3 h-3 bg-[var(--accent)] shrink-0 rounded-[1px]" aria-hidden="true" />
-                    <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{step.title}</p>
-                  </div>
-                  <p className="text-body-1 text-[var(--color-300)] text-pretty">{step.description}</p>
-                </div>
+        {/* Reflections */}
+        {hasReflections && (
+          <section id={sectionId('Reflections')}>
+            <SectionBadge>Reflections</SectionBadge>
+            <div className="flex flex-col gap-4">
+              {project.reflections.map((text, index) => (
+                <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
+                  <Bold text={text} />
+                </p>
               ))}
             </div>
           </section>
@@ -199,6 +213,7 @@ export default function ProjectPage() {
         </div>
 
       </div>
+      <SectionNav items={navItems} />
       <ScrollToTop />
     </main>
   )
