@@ -72,7 +72,7 @@ export const projects: Project[] = [
     ],
     meta: {
       role: 'Sr Product Designer',
-      team: '1–5 Engineers',
+      team: '1–5 Developers',
       duration: '10 months',
       date: '2025–2026',
     },
@@ -141,7 +141,7 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: 'Engineers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
+            content: 'Developers built the foundation from May. From December, I used Codex to build improvements and fixes across the frontend, with partial support from a frontend and backend developer.',
           },
         ],
       },
@@ -296,7 +296,7 @@ export const projects: Project[] = [
     meta: {
       role: 'Sr Product Designer',
       team: '1 Back-end developer',
-      duration: '8 days',
+      duration: '6 days',
       date: '2026',
     },
     coverImage: '/images/ci-cover.png',
