@@ -233,6 +233,7 @@ export default function Home() {
                       alt={job.company}
                       width={28}
                       height={28}
+                      quality={95}
                       sizes="28px"
                       className="object-contain rounded-[0.125rem]"
                     />

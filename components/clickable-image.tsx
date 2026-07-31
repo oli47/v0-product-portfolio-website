@@ -22,6 +22,7 @@ export function ClickableImage({ src, alt, width, height, className, priority, o
           unoptimized={src.endsWith('.gif')}
           width={width}
           height={height}
+          quality={95}
           sizes="(max-width: 768px) 100vw, 680px"
           className={`${className} pointer-events-none transition-opacity duration-[400ms] ease-in-out hover:opacity-80`}
           style={objectPosition ? { objectPosition } : undefined}

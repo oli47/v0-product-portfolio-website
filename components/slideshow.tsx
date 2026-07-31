@@ -75,6 +75,7 @@ export function Slideshow({ images, holdMs = 1800, transitionMs = 450 }: Slidesh
                 src={src}
                 alt=""
                 fill
+                quality={95}
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 680px"
               />
