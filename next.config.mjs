@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: true,
+  // Lets a check build write somewhere other than `.next`, so it cannot pull the
+  // rug out from under a dev server running in the same directory.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   async headers() {
     return [
       {
