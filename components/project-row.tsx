@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useCursorFollow } from '@/components/cursor-follow'
+import { DEMOS } from '@/components/demos/registry'
 import { ScrambleText } from '@/components/scramble-text'
 import { content, defaultLang } from '@/lib/content'
 import type { Project } from '@/lib/projects'
@@ -15,6 +16,7 @@ const t = content[defaultLang].projects
 export function ProjectRow({ project }: { project: Project }) {
   const { areaRef, followRef, handlers } = useCursorFollow<HTMLAnchorElement, HTMLDivElement>()
   const [hovered, setHovered] = useState(false)
+  const Demo = project.demo ? DEMOS[project.demo] : null
 
   return (
     <Link
@@ -26,16 +28,31 @@ export function ProjectRow({ project }: { project: Project }) {
       aria-label={`View case study: ${project.title}`}
       className="group relative block"
     >
-      {/* Thumbnail — full-bleed on mobile, inset on a card fill on desktop */}
+      {/* Thumbnail — full-bleed on mobile, inset on a card fill on desktop.
+          Where the project has a coded demo it takes the same slot, still at
+          rest and playing while the row is hovered. Its compact stage is sized
+          to this card's ratios, so it fills the slot exactly (COMPACT_STAGE_H). */}
       <div className="flex w-full items-end justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/235] sm:aspect-[680/320] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
-        <Image
-          src={project.thumbnailImage}
-          alt=""
-          width={680}
-          height={423}
-          sizes="(max-width: 640px) 100vw, 514px"
-          className="h-full w-full object-cover sm:w-[75.6%]"
-        />
+        {Demo ? (
+          // Inset rather than full-bleed like the PNGs, so the card's beige
+          // shows around the screen on three sides: 6% each side on a phone,
+          // 14% above sm. It still sits flush with the bottom, like the covers
+          // do, and `demo-lift` scales it up from that edge while the row is
+          // hovered (see globals.css).
+          <div className="demo-lift w-[88%] sm:w-[71.8%]" data-lift={hovered}>
+            <Demo variant="card" play={hovered} />
+          </div>
+        ) : (
+          <Image
+            src={project.thumbnailImage}
+            alt=""
+            width={680}
+            height={423}
+            quality={95}
+            sizes="(max-width: 640px) 100vw, 514px"
+            className="h-full w-full object-cover sm:w-[75.6%]"
+          />
+        )}
       </div>
 
       {/* Hover CTA — trails the pointer across the whole card; desktop only,

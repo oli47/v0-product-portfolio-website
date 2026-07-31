@@ -1,11 +1,31 @@
 'use client'
 
-import type { ProcessBlock } from '@/lib/projects'
+import Image from 'next/image'
+import type { CompareSide, ProcessBlock } from '@/lib/projects'
 import { Bold } from '@/components/bold'
 import { ClickableImage } from '@/components/clickable-image'
 import { CompareSlider } from '@/components/compare-slider'
+import { DEMOS } from '@/components/demos/registry'
 import { ContactFlowDiagram, VerticalFlow } from '@/components/process-diagrams'
 import { Slideshow } from '@/components/slideshow'
+
+/** One half of a comparison: a coded demo, or a screenshot filling the slider. */
+function compareSide(side: CompareSide) {
+  if ('demo' in side) {
+    const Demo = DEMOS[side.demo]
+    return <Demo />
+  }
+  return (
+    <Image
+      src={side.src}
+      alt={side.label}
+      fill
+      quality={95}
+      sizes="(max-width: 768px) 100vw, 680px"
+      className="object-cover"
+    />
+  )
+}
 
 export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
   // Group consecutive text/heading blocks so they share gap-4,
@@ -90,7 +110,28 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
               </div>
             )
 
-          case 'compare':
+          case 'demo': {
+            const Demo = DEMOS[block.demo]
+            return (
+              <div key={i} className="group sm:-mx-8">
+                <div
+                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out"
+                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+                >
+                  <Demo />
+                  {block.caption && (
+                    <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
+                      {block.caption}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
+          }
+
+          case 'compare': {
+            // Screenshots need the slider to impose a box; demos bring their own.
+            const framed = 'src' in block.after
             return (
               <div key={i} className="group sm:-mx-8">
                 <div
@@ -99,8 +140,11 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <CompareSlider
-                      beforeImage={block.images[0].src}
-                      afterImages={block.images.slice(1)}
+                      before={compareSide(block.before)}
+                      after={compareSide(block.after)}
+                      beforeLabel={block.before.label}
+                      afterLabel={block.after.label}
+                      aspectRatio={framed ? '4/3' : undefined}
                     />
                   </div>
                   {block.caption && (
@@ -111,6 +155,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                 </div>
               </div>
             )
+          }
 
           case 'vertical-flow':
             return <VerticalFlow key={i} steps={block.steps} arc={block.arc} caption={block.caption} />

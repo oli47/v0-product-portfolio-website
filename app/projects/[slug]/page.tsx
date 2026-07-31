@@ -2,15 +2,26 @@
 
 import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getProject, getProjectNavigation } from '@/lib/projects'
+import { getProject, getProjectNavigation, type DemoId } from '@/lib/projects'
 import { Bold } from '@/components/bold'
 import { ClickableImage } from '@/components/clickable-image'
+import { DEMOS } from '@/components/demos/registry'
 import { MetricMain, MetricSupporting } from '@/components/metric-card'
 import { ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
 import { SectionNav, sectionId } from '@/components/section-nav'
 import { useScramble } from '@/lib/use-scramble'
+
+// ─── Hero demo ───────────────────────────────────────────────────────────────
+
+/** Autoplays on scroll like the in-body demos, so it needs no `play` prop. It
+ *  takes the compact stage: the tall one is only needed further down the page,
+ *  where the old four-field form has to fit next to this one. */
+function HeroDemo({ id }: { id: DemoId }) {
+  const Demo = DEMOS[id]
+  return <Demo variant="compact" />
+}
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -52,8 +63,51 @@ export default function ProjectPage() {
             </p>
           </div>
 
+          {/* Hero — a coded demo where the project has one, the cover PNG otherwise.
+              The demo card skips the hover tint and the lightbox: there is nothing
+              to enlarge, and coded demos do not tint anywhere else either. It sits
+              flush with the card's bottom edge, the way the `center-bottom` covers
+              do, so the screen reads as standing on the card rather than floating. */}
+          {project.demo ? (
+            <div className="sm:-mx-8">
+              <div
+                className="w-full rounded-sm"
+                // Wider inset at the sides than above; flush with the bottom
+                // edge, the way the `center-bottom` covers sit.
+                style={{ backgroundColor: 'var(--color-000)', padding: '2rem 4rem 0' }}
+              >
+                <HeroDemo id={project.demo} />
+              </div>
+            </div>
+          ) : (
+            <div className="group sm:-mx-8">
+              <div
+                className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
+                style={{
+                  backgroundColor: 'var(--color-000)',
+                  padding: project.coverImagePosition === 'bottom-right'
+                    ? '1rem 0 0 0'
+                    : project.coverImagePosition === 'center-bottom'
+                    ? '1rem 1rem 0'
+                    : '1rem 1rem 1.25rem',
+                }}
+              >
+                <div className="rounded-[0.125rem] overflow-hidden">
+                  <ClickableImage
+                    src={project.coverImage}
+                    alt={project.title}
+                    width={680}
+                    height={425}
+                    className="w-full h-auto"
+                    priority={true}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Project meta — role, team, duration */}
-          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mb-8 pt-6 border-t border-[var(--color-100)]">
+          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mt-8 pt-6 border-t border-[var(--color-100)]">
             {([
               ['Role', project.meta.role],
               ['Team', project.meta.team],
@@ -65,32 +119,6 @@ export default function ProjectPage() {
               </div>
             ))}
           </dl>
-
-          {/* Hero image */}
-          <div className="group sm:-mx-8">
-            <div
-              className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
-              style={{
-                backgroundColor: 'var(--color-000)',
-                padding: project.coverImagePosition === 'bottom-right'
-                  ? '1rem 0 0 0'
-                  : project.coverImagePosition === 'center-bottom'
-                  ? '1rem 1rem 0'
-                  : '1rem 1rem 1.25rem',
-              }}
-            >
-              <div className="rounded-[0.125rem] overflow-hidden">
-                <ClickableImage
-                  src={project.coverImage}
-                  alt={project.title}
-                  width={680}
-                  height={425}
-                  className="w-full h-auto"
-                  priority={true}
-                />
-              </div>
-            </div>
-          </div>
 
         </section>
 

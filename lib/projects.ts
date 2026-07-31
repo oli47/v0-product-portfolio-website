@@ -1,16 +1,21 @@
 // ─── Process content block types ────────────────────────────────────────────
 
-export type CompareImage = { src: string; label: string }
+/** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
+export type DemoId = 'signup' | 'signup-old'
+
+/** One side of a comparison: either a screenshot or a coded demo. */
+export type CompareSide = { label: string } & ({ src: string } | { demo: DemoId })
 
 export type ProcessBlock =
   | { kind: 'text'; content: string }
   | { kind: 'heading'; content: string }
   | { kind: 'image'; src: string; caption?: string }
-  | { kind: 'compare'; images: CompareImage[]; caption?: string }
+  | { kind: 'compare'; before: CompareSide; after: CompareSide; caption?: string }
   | { kind: 'contact-flow'; caption?: string }
   | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]; arc?: { fromStep: number; toStep: number; label: string }; caption?: string }
   | { kind: 'decisions'; items: { num: string; title: string; description: string }[] }
   | { kind: 'slideshow'; images: string[]; caption?: string }
+  | { kind: 'demo'; demo: DemoId; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -40,6 +45,10 @@ export interface Project {
   coverImage: string
   coverImagePosition?: 'bottom-right' | 'center-bottom'
   thumbnailImage: string
+  /** When set, a coded demo replaces the cover on the home card and the case
+   *  study hero. `coverImage` and `thumbnailImage` stay: the OG image, Twitter
+   *  card and JSON-LD still need a real file, and a React component is not one. */
+  demo?: DemoId
   sections: ProjectSection[]
   results: {
     note?: string
@@ -174,8 +183,8 @@ export const projects: Project[] = [
       date: '2026',
     },
     coverImage: '/images/sf-cover.png',
-    coverImagePosition: 'center-bottom',
     thumbnailImage: '/images/sf-cover.png',
+    demo: 'signup',
     sections: [
       {
         badge: 'Context',
@@ -252,12 +261,9 @@ export const projects: Project[] = [
           },
           {
             kind: 'compare',
-            images: [
-              { src: '/images/sf-signupold.png', label: 'Before' },
-              { src: '/images/sf-signup1.png', label: 'After' },
-              { src: '/images/sf-signup2.png', label: 'After' },
-            ],
-            caption: 'Before: four fields and an SSO button that filled them in. After: step 1 creates the account, step 2 collects what the product needs.',
+            before: { demo: 'signup-old', label: 'Before' },
+            after: { demo: 'signup', label: 'After' },
+            caption: 'Before: four fields in one pass, with SSO under the form it would have filled in. After: step 1 creates the account, step 2 collects what the product needs.',
           },
           {
             kind: 'text',

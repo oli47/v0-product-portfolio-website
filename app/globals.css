@@ -270,3 +270,42 @@
   50%       { opacity: 0.4; }
 }
 .animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
+
+/* ── Coded product-UI demos (components/demos) ──────────────────────────────
+   These belong to the app being shown inside the case study frame, not to the
+   portfolio, so they intentionally sit outside the token scale above. */
+@keyframes demo-caret {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.demo-caret {
+  display: inline-block;
+  flex: none;
+  width: 2px;
+  height: 1.3em;          /* tracks the field's font size across breakpoints */
+  margin-left: 1px;
+  animation: demo-caret 1.05s steps(1) infinite;
+}
+
+@keyframes demo-screen-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.demo-screen-in { animation: demo-screen-in 220ms ease-out both; }
+
+/* Home card: the screen lifts a little while the row is hovered. Driven by the
+   same React state that starts the walkthrough, so the two cannot desync. It
+   grows from the bottom edge it already sits on, which keeps the beige margin
+   above it open (16px at rest, ~7px lifted) instead of closing it. */
+.demo-lift {
+  transform-origin: bottom center;
+  transition: transform 400ms ease-in-out;
+}
+.demo-lift[data-lift='true'] { transform: scale(1.03); }
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-caret       { animation: none; opacity: 1; }
+  .demo-screen-in   { animation: none; }
+  .demo-lift,
+  .demo-lift[data-lift='true'] { transform: none; transition: none; }
+}
