@@ -1,9 +1,10 @@
 'use client'
 
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
+import { C, Screen } from '@/components/demos/edrone-tokens'
 import {
-  C, Divider, Field, Heading, Label, Legal, OAuthRow, Screen, Subtitle, Underlined, YellowButton,
-} from '@/components/demos/edrone-ui'
+  Divider, Field, Heading, Label, Legal, metricsFor, OAuthRow, Subtitle, Underlined, YellowButton,
+} from '@/components/demos/signup-ui'
 import type { DemoState, Step } from '@/components/demos/use-demo-script'
 
 /**
@@ -39,7 +40,7 @@ export function SignupOldDemo(props: DemoProps) {
     // `variant` is pinned: this form is 883px tall, more than the compact stage
     // (834), so a compact or card caller would clip it top and bottom with no
     // error. Ignoring the request is the safe failure.
-    <DemoFrame script={SCRIPT} restState={REST} {...props} variant="inline">
+    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} {...props} variant="inline">
       {(state, m) => (
         <div
           className="flex h-full w-full items-center justify-center bg-white"

@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import type { CompareSide, ProcessBlock } from '@/lib/projects'
 import { Bold } from '@/components/bold'
+import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
 import { CompareSlider } from '@/components/compare-slider'
 import { DEMOS } from '@/components/demos/registry'
@@ -111,14 +112,13 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             )
 
           case 'demo': {
-            const Demo = DEMOS[block.demo]
             return (
               <div key={i} className="group sm:-mx-8">
                 <div
                   className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out"
                   style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
                 >
-                  <Demo />
+                  <ClickableDemo id={block.demo} label={block.caption ?? 'Product walkthrough'} />
                   {block.caption && (
                     <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
                       {block.caption}

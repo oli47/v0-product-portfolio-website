@@ -6,16 +6,21 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 const ZOOM_SCALE = 2.5
 
 interface LightboxProps {
-  src: string
+  src?: string
   alt?: string
   onClose: () => void
   images?: string[]
   startIndex?: number
+  /** Rendered in place of an image, which is how a coded demo is enlarged. It
+   *  gets the dialog and its chrome but none of the zoom, pan or gallery: those
+   *  exist to get past a bitmap's resolution, and a demo has none to get past. */
+  children?: React.ReactNode
 }
 
-export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: LightboxProps) {
+export function Lightbox({ src, alt = '', onClose, images, startIndex = 0, children }: LightboxProps) {
   const closeRef = useRef<HTMLButtonElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
   const [current, setCurrent] = useState(startIndex)
   const [zoomed, setZoomed] = useState(false)
   const [origin, setOrigin] = useState({ x: 50, y: 50 })
@@ -24,7 +29,7 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
   const lastPos = useRef({ x: 0, y: 0 })
   const touchStartX = useRef(0)
 
-  const gallery = images && images.length > 1
+  const gallery = !children && images && images.length > 1
   const activeSrc = gallery ? images[current] : src
 
   const goNext = useCallback(() => {
@@ -120,7 +125,20 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
       }
       if (e.key === 'ArrowRight') { goNext(); return }
       if (e.key === 'ArrowLeft') { goPrev(); return }
-      if (e.key === 'Tab') { e.preventDefault(); closeRef.current?.focus() }
+
+      // Focus cycles inside the dialog rather than parking on Close: the demo
+      // lightbox puts a layout toggle in here, and a trap that never moves would
+      // leave it unreachable from the keyboard.
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        const items = [...(dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button, [href], [tabindex]:not([tabindex="-1"])'
+        ) ?? [])].filter((el) => el.offsetParent !== null)
+        if (!items.length) return
+        const from = items.indexOf(document.activeElement as HTMLElement)
+        const step = e.shiftKey ? -1 : 1
+        items[(from + step + items.length) % items.length].focus()
+      }
     }
     document.addEventListener('keydown', handleKey)
     document.body.style.overflow = 'hidden'
@@ -153,8 +171,15 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
     </button>
   )
 
-  // Shared image element
-  const imageEl = (
+  // Shared content element: a demo if one was handed in, the image otherwise.
+  const contentEl = children ? (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="overflow-hidden rounded-sm cursor-default"
+    >
+      {children}
+    </div>
+  ) : activeSrc ? (
     <div
       ref={containerRef}
       onClick={handleImageClick}
@@ -177,10 +202,11 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
         }}
       />
     </div>
-  )
+  ) : null
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label={alt || 'Image'}
@@ -194,22 +220,26 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0 }: Lig
         ref={closeRef}
         onClick={(e) => { e.stopPropagation(); onClose() }}
         aria-label="Close lightbox"
-        className="absolute top-4 right-4 sm:top-6 sm:right-8 z-30 min-h-[2.75rem] px-2 flex items-center text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--color-500)]"
+        // The backdrop is the same dark in both themes, so this takes the
+        // overlay tokens rather than the page's, which would go near-black here.
+        className="absolute top-4 right-4 sm:top-6 sm:right-8 z-30 min-h-[2.75rem] px-2 flex items-center text-eyebrow text-[var(--on-overlay-muted)] hover:text-[var(--on-overlay)] transition-colors duration-[400ms] ease-in-out focus:outline-none focus-visible:text-[var(--on-overlay)]"
       >
         Close ✕
       </button>
 
-      <div className="flex flex-col items-center gap-4 w-full max-w-5xl sm:max-w-7xl px-4 sm:px-8 max-h-full">
-        {/* Image row: on desktop arrows flank the image, on mobile just the image */}
+      {/* Scrolls rather than clips: a demo's height comes from its own aspect
+          ratio, so a tall one can outgrow a short viewport. */}
+      <div className="flex flex-col items-center gap-4 w-full max-w-5xl sm:max-w-7xl px-4 sm:px-8 py-4 max-h-full overflow-y-auto">
+        {/* Content row: on desktop arrows flank it, on mobile it stands alone */}
         <div className="flex items-center gap-4 w-full">
           {/* Left arrow — desktop only */}
           <div className="hidden sm:block shrink-0">
             {gallery && !zoomed ? <ArrowBtn direction="prev" onClick={goPrev} /> : <div className="w-8" />}
           </div>
 
-          {/* Image — single element shared by both layouts */}
+          {/* Content — single element shared by both layouts */}
           <div className="flex-1 min-w-0">
-            {imageEl}
+            {contentEl}
           </div>
 
           {/* Right arrow — desktop only */}

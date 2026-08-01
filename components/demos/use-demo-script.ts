@@ -29,9 +29,12 @@ export interface DemoState {
   pressed: string | null
   /** Target key the cursor sits on, or null before the first move. */
   cursor: string | null
+  /** Which pass of the loop is running; 0 while the demo sits at rest. Screens
+   *  watch it to restart anything that should play once per pass. */
+  run: number
 }
 
-const EMPTY: DemoState = { screen: 0, values: {}, focus: null, pressed: null, cursor: null }
+const EMPTY: DemoState = { screen: 0, values: {}, focus: null, pressed: null, cursor: null, run: 0 }
 
 /** Cursor travel time. Matches the CSS transition in demo-cursor.tsx. */
 export const MOVE_MS = 480
@@ -61,6 +64,11 @@ export function useDemoScript(script: Step[], enabled: boolean, rest?: Partial<D
     let cancelled = false
     const pending = timers.current
 
+    // Where the pointer is, tracked alongside the state so a step can tell
+    // whether it still has to travel. The script is deterministic, so this stays
+    // in step with what the cursor is actually doing.
+    let cursorAt: string | null = null
+
     const sleep = (ms: number) =>
       new Promise<void>((resolve) => {
         const id = setTimeout(() => { pending.delete(id); resolve() }, ms)
@@ -74,12 +82,22 @@ export function useDemoScript(script: Step[], enabled: boolean, rest?: Partial<D
           return
 
         case 'move':
+          cursorAt = step.target
           setState((s) => ({ ...s, cursor: step.target }))
           await sleep(MOVE_MS)
           return
 
         case 'click':
-          setState((s) => ({ ...s, cursor: step.target, pressed: step.target }))
+          // Travel first when the pointer is somewhere else. Pressing at the
+          // same moment the cursor is sent means the click lands while it is
+          // still in flight, and the UI appears to act on its own.
+          if (cursorAt !== step.target) {
+            cursorAt = step.target
+            setState((s) => ({ ...s, cursor: step.target }))
+            await sleep(MOVE_MS)
+            if (cancelled) return
+          }
+          setState((s) => ({ ...s, pressed: step.target }))
           await sleep(PRESS_MS)
           setState((s) => ({ ...s, pressed: null }))
           await sleep(AFTER_CLICK_MS)
@@ -101,20 +119,30 @@ export function useDemoScript(script: Step[], enabled: boolean, rest?: Partial<D
           return
 
         case 'screen':
-          setState((s) => ({ ...s, screen: step.index, focus: null, cursor: null, pressed: null }))
+          // The cursor survives a screen change. It has just clicked whatever
+          // opened the new screen, and blinking out of existence there reads as
+          // a glitch rather than as a pointer that stopped moving.
+          setState((s) => ({ ...s, screen: step.index, focus: null, pressed: null }))
           await sleep(220)   // let the cross-fade finish before the next step
           return
       }
     }
 
+    // Every reset keeps the cursor: the pointer is continuous for as long as the
+    // demo is playing, whatever the script does to the screen under it.
+    const reset = (pass: number) =>
+      setState((s) => ({ ...EMPTY, cursor: s.cursor, run: pass }))
+
     const run = async () => {
-      setState(EMPTY)
+      let pass = 0
       while (!cancelled) {
+        pass += 1
+        reset(pass)
         for (const step of script) {
           if (cancelled) return
           await apply(step)
         }
-        setState(EMPTY)
+        reset(pass)
         await sleep(600)
       }
     }

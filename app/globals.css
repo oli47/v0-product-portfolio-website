@@ -52,6 +52,12 @@
   --color-000: #F2EDE3;  /* Card / hover bg: project row hover, logo box fill, floating nav */
   --white:     #FAF7F2;  /* Page background only */
 
+  /* Chrome that sits on the lightbox's own dark backdrop. That backdrop is the
+     same in both themes, so these two are the only colours in the system that
+     must not flip with it: they are declared here and never overridden below. */
+  --on-overlay:       #FAF7F2;  /* beige-50  — hover / active */
+  --on-overlay-muted: #B5A990;  /* beige-300 — at rest */
+
   /* Typography */
   --font-weight-bold: 600;
 
@@ -293,6 +299,31 @@
 }
 .demo-screen-in { animation: demo-screen-in 220ms ease-out both; }
 
+/* The lightbox's desktop/mobile toggle. The two layouts have different aspect
+   ratios, so there is no size to interpolate that does not look broken halfway;
+   the new one fades up in place instead. */
+@keyframes demo-viewport-in {
+  from { opacity: 0; transform: scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+.demo-viewport {
+  max-width: 100%;
+  animation: demo-viewport-in 300ms ease-out both;
+}
+
+/* The newsletter drawer slides in from the edge it is docked to, and slides back
+   out again. Transitions rather than an entry animation, because the panel stays
+   mounted: an element that unmounts on close can only ever animate one way. */
+.demo-drawer { transition: transform var(--demo-drawer-ms, 380ms) cubic-bezier(.32, .72, 0, 1); }
+.demo-scrim  { transition: opacity 280ms ease-out; }
+
+/* The preview scrolling once the cursor has come to rest on it, so the whole
+   email gets read rather than just its hero. A transition rather than an
+   animation: the delay is the beat between the pointer landing and the reader
+   starting, and it runs backwards on its own when the drawer closes. The
+   distance is measured at runtime and applied inline. */
+.demo-email-scroll { transition: transform 1500ms cubic-bezier(.4, 0, .2, 1) 320ms; }
+
 /* Home card: the screen lifts a little while the row is hovered. Driven by the
    same React state that starts the walkthrough, so the two cannot desync. It
    grows from the bottom edge it already sits on, which keeps the beige margin
@@ -305,7 +336,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .demo-caret       { animation: none; opacity: 1; }
-  .demo-screen-in   { animation: none; }
+  .demo-screen-in,
+  .demo-email-scroll { transition: none; }
+  .demo-viewport     { animation: none; }
+  .demo-drawer,
+  .demo-scrim        { transition: none; }
   .demo-lift,
   .demo-lift[data-lift='true'] { transform: none; transition: none; }
 }

@@ -1,7 +1,7 @@
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId = 'signup' | 'signup-old'
+export type DemoId = 'signup' | 'signup-old' | 'contacts'
 
 /** One side of a comparison: either a screenshot or a coded demo. */
 export type CompareSide = { label: string } & ({ src: string } | { demo: DemoId })
@@ -306,8 +306,8 @@ export const projects: Project[] = [
       date: '2026',
     },
     coverImage: '/images/ci-cover.png',
-    coverImagePosition: 'bottom-right',
     thumbnailImage: '/images/ci-thumbnail.png',
+    demo: 'contacts',
     sections: [
       {
         badge: 'Context',
@@ -389,25 +389,20 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: "The third was variety. Six different emails rather than the same one resent, because a base that gets an identical message every month stops opening it, and an unopened email identifies nobody.",
+            content: "The third was variety. Seven different emails rather than the same one resent, because a base that gets an identical message every month stops opening it, and an unopened email identifies nobody.",
           },
           {
             kind: 'text',
             content: "The fourth was the content itself. Each message had to be worth opening and had to look like the store rather than like edrone, so AI generates it from the store's own branding.",
           },
           {
-            kind: 'image',
-            src: '/images/ci-email.png',
-            caption: 'I designed the template structure. AI writes the content.',
-          },
-          {
             kind: 'text',
             content: "The last decision was who turns it on. Leaving it off until the user found the setting would have meant nobody ever did, so **the feature starts on**, shown in the onboarding walkthrough as something already running rather than something to configure, and it comes off in one click. That was how the rest of the onboarding already worked.",
           },
           {
-            kind: 'image',
-            src: '/images/ci-dashboard.png',
-            caption: 'The identification screen in the walkthrough.',
+            kind: 'demo',
+            demo: 'contacts',
+            caption: 'The identification screen in the walkthrough. I designed the template structure; AI writes the content.',
           },
           {
             kind: 'text',

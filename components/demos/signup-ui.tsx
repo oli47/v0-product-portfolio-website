@@ -1,15 +1,15 @@
 'use client'
 
 import { useTarget } from '@/components/demos/demo-cursor'
+import type { DemoVariant, StageMetrics } from '@/components/demos/demo-frame'
+import { C } from '@/components/demos/edrone-tokens'
 import type { DemoState } from '@/components/demos/use-demo-script'
 
 /**
  * The edrone signup UI, shared by the before and after demos.
  *
- * This is the app's design language, not the portfolio's, so it deliberately
- * sits outside the tokens in globals.css. The desktop numbers were sampled from
- * the case-study screenshots, which are 1.5x exports, so they are the originals
- * divided by 1.5.
+ * The desktop numbers were sampled from the case-study screenshots, which are
+ * 1.5x exports, so they are the originals divided by 1.5.
  *
  * The mobile set is not a scaled-down desktop: a shrunken 1340px screen reads as
  * a screenshot of a laptop, not as a phone. It is the same UI re-laid out at
@@ -17,10 +17,7 @@ import type { DemoState } from '@/components/demos/use-demo-script'
  * width the way it does on a real device.
  */
 
-export interface Metrics {
-  mobile: boolean
-  stageW: number
-  stageH: number
+export interface Metrics extends StageMetrics {
   column: number
 
   heading: number
@@ -88,18 +85,6 @@ const MOBILE: Metrics = {
 }
 
 /**
- * Which stage a consumer needs.
- *
- * `inline`  the tall stage the in-body blocks need, because the old signup form
- *           is 883px on its own. Responsive: phone column, phone layout.
- * `compact` the same layouts with much less empty white above and below the
- *           form, for the case study hero. Also responsive.
- * `card`    the home page project card. Always the desktop layout, because a
- *           portrait phone screen cannot fill a 1.6:1 landscape slot.
- */
-export type DemoVariant = 'inline' | 'compact' | 'card'
-
-/**
  * Compact desktop stage height. Derived from the home card, so the stage matches
  * that card's own shape at both breakpoints and never letterboxes:
  *
@@ -153,20 +138,6 @@ export function metricsFor(hostWidth: number, variant: DemoVariant = 'inline'): 
     ...(compact && { stageH: COMPACT_MOBILE_STAGE_H }),
   }
 }
-
-export const C = {
-  ink:         '#050505',
-  body:        '#545454',
-  placeholder: '#A3A3A3',
-  border:      '#E5E5E5',
-  focus:       '#006CFA',
-  yellow:      '#FFFF8C',
-  prefixBg:    '#FAFAFA',
-}
-
-export const Screen = ({ children }: { children: React.ReactNode }) => (
-  <div className="demo-screen-in flex flex-col">{children}</div>
-)
 
 /** A paragraph, not a heading: the demo tree is aria-hidden, so a real heading
  *  here would only pollute the page outline without ever being announced. */
@@ -238,7 +209,7 @@ export function Field({ name, placeholder, prefix, prefixWidth, state, m, style 
         <span
           style={{
             width: prefixWidth ?? m.prefixW,
-            background: C.prefixBg,
+            background: C.surface,
             borderRight: `1px solid ${C.border}`,
             fontSize: m.fieldFont,
             color: C.body,
@@ -252,7 +223,7 @@ export function Field({ name, placeholder, prefix, prefixWidth, state, m, style 
         style={{ fontSize: m.fieldFont, paddingLeft: m.fieldPadX, paddingRight: m.fieldPadX }}
         className="flex min-w-0 flex-1 items-center overflow-hidden whitespace-nowrap"
       >
-        {value ? <span>{value}</span> : !focused && <span style={{ color: C.placeholder }}>{placeholder}</span>}
+        {value ? <span>{value}</span> : !focused && <span style={{ color: C.muted }}>{placeholder}</span>}
         {focused && <span className="demo-caret" style={{ background: C.ink }} />}
       </span>
     </div>

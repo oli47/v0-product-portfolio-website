@@ -1,5 +1,6 @@
 'use client'
 
+import { ContactsDemo } from '@/components/demos/contacts-demo'
 import type { DemoProps } from '@/components/demos/demo-frame'
 import { SignupDemo } from '@/components/demos/signup-demo'
 import { SignupOldDemo } from '@/components/demos/signup-old-demo'
@@ -12,4 +13,5 @@ import type { DemoId } from '@/lib/projects'
 export const DEMOS: Record<DemoId, React.ComponentType<DemoProps>> = {
   'signup': SignupDemo,
   'signup-old': SignupOldDemo,
+  'contacts': ContactsDemo,
 }

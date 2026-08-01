@@ -2,26 +2,16 @@
 
 import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getProject, getProjectNavigation, type DemoId } from '@/lib/projects'
+import { getProject, getProjectNavigation } from '@/lib/projects'
 import { Bold } from '@/components/bold'
+import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
-import { DEMOS } from '@/components/demos/registry'
 import { MetricMain, MetricSupporting } from '@/components/metric-card'
 import { ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
 import { SectionNav, sectionId } from '@/components/section-nav'
 import { useScramble } from '@/lib/use-scramble'
-
-// ─── Hero demo ───────────────────────────────────────────────────────────────
-
-/** Autoplays on scroll like the in-body demos, so it needs no `play` prop. It
- *  takes the compact stage: the tall one is only needed further down the page,
- *  where the old four-field form has to fit next to this one. */
-function HeroDemo({ id }: { id: DemoId }) {
-  const Demo = DEMOS[id]
-  return <Demo variant="compact" />
-}
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -64,10 +54,12 @@ export default function ProjectPage() {
           </div>
 
           {/* Hero — a coded demo where the project has one, the cover PNG otherwise.
-              The demo card skips the hover tint and the lightbox: there is nothing
-              to enlarge, and coded demos do not tint anywhere else either. It sits
+              It enlarges on click like the screenshots do, but skips the hover
+              tint, which coded demos do not take anywhere else either. It sits
               flush with the card's bottom edge, the way the `center-bottom` covers
-              do, so the screen reads as standing on the card rather than floating. */}
+              do, so the screen reads as standing on the card rather than floating.
+              The compact stage: the tall one is only needed further down the page,
+              where the old four-field form has to fit beside this one. */}
           {project.demo ? (
             <div className="sm:-mx-8">
               <div
@@ -76,7 +68,7 @@ export default function ProjectPage() {
                 // edge, the way the `center-bottom` covers sit.
                 style={{ backgroundColor: 'var(--color-000)', padding: '2rem 4rem 0' }}
               >
-                <HeroDemo id={project.demo} />
+                <ClickableDemo id={project.demo} label={project.title} variant="compact" />
               </div>
             </div>
           ) : (
