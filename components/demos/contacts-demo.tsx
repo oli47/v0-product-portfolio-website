@@ -2,9 +2,9 @@
 
 import { useRef } from 'react'
 import {
-  Chip, Connector, CrossMark, Dashboard, Drawer, type EmailPreview, MailMark, type Metrics,
-  metricsFor, PersonMark, RepeatMark, SectionTitle, SequencePanel, ShieldMark, StepCard,
-  type TileData, TileRow, Title,
+  Chip, Connector, CrossMark, Dashboard, Drawer, type EmailPreview, FlowStep,
+  IDENTIFICATION_STEPS, IDENTIFICATION_TILES, IdentificationPanel, MailMark,
+  metricsFor, PersonMark, RepeatMark, SectionTitle, SequencePanel, StepCard, TileRow, Title,
 } from '@/components/demos/dashboard-ui'
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
 import type { DemoState, Step } from '@/components/demos/use-demo-script'
@@ -28,66 +28,47 @@ import type { DemoState, Step } from '@/components/demos/use-demo-script'
  */
 
 /**
- * The identification sequence's first five sends.
+ * The two sends the cursor opens, by their index in `IDENTIFICATION_STEPS`.
  *
- * Every card carries its own subject, because that is the decision the Solution
- * section describes: seven different emails on a 30-day loop, none of them
- * marketing. The two that also carry an `email` are the ones the cursor opens.
+ * The sequence itself — five cards, five subjects — is shared with the freemium
+ * walkthrough, which shows the same screen as step 3 of its onboarding. Only the
+ * newsletters live here, because only this demo opens them.
  */
-const STEPS: { status: string; subject: string; email?: EmailPreview }[] = [
+const EMAILS: (EmailPreview | undefined)[] = [
   {
-    status: 'Sent',
     subject: 'Safe shopping — how we protect your data',
-    email: {
-      subject: 'Safe shopping — how we protect your data',
-      preheader: 'No offers, no discount codes. Just what happens to your details when y…',
-      when: '20 Dec at 2:48 PM',
-      due: 'Sent',
-      heroLines: ['SAFE', 'SHOPPING', 'AT ANIA'],
-      heading: 'What happens to your details when you buy',
-      body: 'Your card never touches our servers, your address is stored only for as long as an order needs it, and the whole thing is checked twice a year by an outside auditor. No offers in this one — we just thought you should know.',
-      footer: {
-        note: 'You are getting this because you have an account at ania.store.',
-        address: 'ANIA, ul. Krupnicza 12, 31-123 Kraków, Poland',
-      },
+    preheader: 'No offers, no discount codes. Just what happens to your details when y…',
+    when: '20 Dec at 2:48 PM',
+    due: 'Sent',
+    heroLines: ['SAFE', 'SHOPPING', 'AT ANIA'],
+    heading: 'What happens to your details when you buy',
+    body: 'Your card never touches our servers, your address is stored only for as long as an order needs it, and the whole thing is checked twice a year by an outside auditor. No offers in this one — we just thought you should know.',
+    footer: {
+      note: 'You are getting this because you have an account at ania.store.',
+      address: 'ANIA, ul. Krupnicza 12, 31-123 Kraków, Poland',
     },
   },
   {
-    status: 'Send in 27 days',
     subject: 'How we keep your account safe',
-    email: {
-      subject: 'How we keep your account safe',
-      preheader: 'The three things we do behind the scenes so you never have to think abo…',
-      when: '16 Jan at 2:48 PM',
-      due: 'In 27 days',
-      heroLines: ['ACCOUNT', 'SECURITY', 'EXPLAINED'],
-      heading: 'Three things we do so you don’t have to',
-      body: 'Every order you place is encrypted end to end, every payment runs through our provider rather than our own servers, and nobody at ANIA can see your card details. We check the whole thing twice a year with an outside auditor, and we publish what they find.',
-      footer: {
-        note: 'You are getting this because you have an account at ania.store.',
-        address: 'ANIA, ul. Krupnicza 12, 31-123 Kraków, Poland',
-      },
+    preheader: 'The three things we do behind the scenes so you never have to think abo…',
+    when: '16 Jan at 2:48 PM',
+    due: 'In 27 days',
+    heroLines: ['ACCOUNT', 'SECURITY', 'EXPLAINED'],
+    heading: 'Three things we do so you don’t have to',
+    body: 'Every order you place is encrypted end to end, every payment runs through our provider rather than our own servers, and nobody at ANIA can see your card details. We check the whole thing twice a year with an outside auditor, and we publish what they find.',
+    footer: {
+      note: 'You are getting this because you have an account at ania.store.',
+      address: 'ANIA, ul. Krupnicza 12, 31-123 Kraków, Poland',
     },
-  },
-  {
-    status: 'Send in 57 days',
-    subject: 'A short note about your privacy',
-  },
-  {
-    status: 'Send in 87 days',
-    subject: 'What we store, and what we never do',
-  },
-  {
-    status: 'Send in 117 days',
-    subject: 'Two minutes on our privacy policy',
   },
 ]
 
 /** The cards that open, in flow order. A card's drawer is `screen` index n + 1,
  *  because index 0 is the dashboard with nothing open. */
-const OPENS = STEPS.flatMap((step, i) =>
-  step.email ? [{ card: `card${i + 1}`, email: step.email }] : []
-)
+const OPENS = IDENTIFICATION_STEPS.flatMap((_, i) => {
+  const email = EMAILS[i]
+  return email ? [{ card: `card${i + 1}`, email }] : []
+})
 
 /** Where the cursor rests over the preview. The email scrolls while it is there
  *  and only while it is there — reading happens under the pointer, so sending
@@ -125,15 +106,6 @@ const SCRIPT: Step[] = [
  * goes on to spell out. Shown at rest, off screen, and under reduced motion.
  */
 const REST: Partial<DemoState> = { screen: 0 }
-
-/** The numbers are the ones on the screenshot, including the two-tone split the
- *  app renders: the fraction is set back in grey, the unit is not. */
-const TILES: TileData[] = [
-  { label: 'Identification',                  value: 16.7,     decimals: 1, suffix: ' %', delta: '9%' },
-  { label: 'Reactivation',                    value: 88.4,     decimals: 1, suffix: ' %', delta: '14%' },
-  { label: 'Revenue from activated contacts', value: 21773.63, decimals: 2, prefix: '$ ', delta: '4%' },
-  { label: 'Savings from reactivation',       value: 50,       decimals: 2, prefix: '$ ', delta: '10%' },
-]
 
 /** The reactivation sequence, which the script never touches: it is there so the
  *  identification one reads as one sequence among several. */
@@ -173,41 +145,11 @@ export function ContactsDemo(props: DemoProps) {
             }
           >
             <Title m={m}>Contacts activation</Title>
-            <TileRow tiles={TILES} run={state.run} m={m} style={{ marginTop: m.gapTitleTiles }} />
+            <TileRow tiles={IDENTIFICATION_TILES} run={state.run} m={m} style={{ marginTop: m.gapTitleTiles }} />
 
             <SectionTitle m={m} style={{ marginTop: m.gapTilesSection }}>Sequences</SectionTitle>
 
-            <SequencePanel
-              m={m}
-              style={{ marginTop: m.gapSectionPanel }}
-              title="Identification"
-              body="Sends 7 different emails to bring back inactive customers with personalized communication."
-            >
-              <Chip tone="grey" m={m} icon={<PersonMark size={Math.round(m.chipFont * 1.05)} />}>
-                No interaction for 30 days
-              </Chip>
-              <Connector m={m} />
-              {STEPS.map((step, i) => (
-                <FlowStep key={step.subject} last={i === STEPS.length - 1} m={m}>
-                  <StepCard
-                    name={`card${i + 1}`}
-                    tone={i === 0 ? 'mint' : 'blue'}
-                    icon={i === 0
-                      ? <ShieldMark size={Math.round(m.iconTile * 0.62)} />
-                      : <MailMark size={Math.round(m.iconTile * 0.62)} />}
-                    subject={step.subject}
-                    status={step.status}
-                    statusTone={i === 0 ? 'mint' : 'blue'}
-                    state={state}
-                    m={m}
-                  />
-                </FlowStep>
-              ))}
-              <Connector m={m} />
-              <Chip tone="blue" m={m} icon={<RepeatMark size={Math.round(m.chipFont * 1.05)} />}>
-                Repeat sequence
-              </Chip>
-            </SequencePanel>
+            <IdentificationPanel state={state} m={m} style={{ marginTop: m.gapSectionPanel }} />
 
             {m.sequences > 1 && (
               <SequencePanel
@@ -244,11 +186,3 @@ export function ContactsDemo(props: DemoProps) {
     </DemoFrame>
   )
 }
-
-/** A card plus the rule that joins it to the next one. */
-const FlowStep = ({ children, last, m }: { children: React.ReactNode; last: boolean; m: Metrics }) => (
-  <>
-    {children}
-    {!last && <Connector m={m} />}
-  </>
-)

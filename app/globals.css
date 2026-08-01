@@ -324,6 +324,46 @@
    distance is measured at runtime and applied inline. */
 .demo-email-scroll { transition: transform 1500ms cubic-bezier(.4, 0, .2, 1) 320ms; }
 
+/* The automations grid easing down while the cursor rests in it, and back up on
+   its own when the pointer returns to the coach-mark. Same rule as the email
+   preview above: a page only moves under a pointer that is on it. */
+.demo-grid-scroll { transition: transform 900ms cubic-bezier(.4, 0, .2, 1) 240ms; }
+
+/* The generating bar on the beat before the walkthrough starts. It fills in
+   steps rather than sweeping, because each step is one thing finishing. */
+.demo-progress { transition: width 560ms cubic-bezier(.4, 0, .2, 1); }
+
+/* The ring on the screen before the walkthrough, while the content is written. */
+@keyframes demo-spin { to { transform: rotate(360deg); } }
+.demo-spin { animation: demo-spin 900ms linear infinite; }
+
+/* And the confetti when the store finally connects — the one moment in the flow
+   the product has earned.
+   A burst out of the tick, not a fall from the top edge: pieces leave fast in
+   every direction, then gravity drags the tail of the arc down. Each one gets
+   its vector, spin and timing from its own index rather than from Math.random(),
+   so the server and the client agree on where it went. */
+@keyframes demo-confetti {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(0.3) rotate(0deg);
+  }
+  14% {
+    opacity: 1;
+    transform:
+      translate3d(calc(var(--dx, 0px) * 0.42), calc(var(--dy, 0px) * 0.42), 0)
+      scale(1) rotate(calc(var(--spin, 540deg) * 0.22));
+  }
+  72% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform:
+      translate3d(var(--dx, 0px), calc(var(--dy, 0px) + var(--drop, 0px)), 0)
+      scale(1) rotate(var(--spin, 540deg));
+  }
+}
+.demo-confetti { animation: demo-confetti var(--fall, 1.9s) cubic-bezier(.15, .7, .35, 1) var(--delay, 0s) both; }
+
 /* Home card: the screen lifts a little while the row is hovered. Driven by the
    same React state that starts the walkthrough, so the two cannot desync. It
    grows from the bottom edge it already sits on, which keeps the beige margin
@@ -336,7 +376,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .demo-caret       { animation: none; opacity: 1; }
+  .demo-spin        { animation: none; }
+  .demo-confetti    { animation: none; opacity: 0; }
   .demo-screen-in,
+  .demo-grid-scroll,
+  .demo-progress,
   .demo-email-scroll { transition: none; }
   .demo-viewport     { animation: none; }
   .demo-drawer,

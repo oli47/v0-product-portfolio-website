@@ -49,8 +49,19 @@ const keystrokeDelay = (cps: number) => (1000 / cps) * (0.7 + Math.random() * 0.
  * @param rest  What the demo shows while the script is not running: its poster
  *              frame. Pass a module constant, not an object literal, or every
  *              render restarts the script.
+ * @param holdLastFrame  Whether the beat between passes stays on the script's
+ *              last frame instead of dropping back to the poster. Off by
+ *              default, which is right when a script ends where its poster
+ *              begins. A script that ends somewhere else — freemium finishes on
+ *              a success screen and restarts on a loading one — would otherwise
+ *              flash the poster for that beat, halfway through its own ending.
  */
-export function useDemoScript(script: Step[], enabled: boolean, rest?: Partial<DemoState>) {
+export function useDemoScript(
+  script: Step[],
+  enabled: boolean,
+  rest?: Partial<DemoState>,
+  holdLastFrame = false,
+) {
   const poster = useMemo(() => ({ ...EMPTY, ...rest }), [rest])
   const [state, setState] = useState<DemoState>(poster)
   const timers = useRef(new Set<ReturnType<typeof setTimeout>>())
@@ -142,7 +153,7 @@ export function useDemoScript(script: Step[], enabled: boolean, rest?: Partial<D
           if (cancelled) return
           await apply(step)
         }
-        reset(pass)
+        if (!holdLastFrame) reset(pass)
         await sleep(600)
       }
     }

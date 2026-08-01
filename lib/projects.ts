@@ -1,7 +1,7 @@
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId = 'signup' | 'signup-old' | 'contacts'
+export type DemoId = 'signup' | 'signup-old' | 'contacts' | 'freemium'
 
 /** One side of a comparison: either a screenshot or a coded demo. */
 export type CompareSide = { label: string } & ({ src: string } | { demo: DemoId })
@@ -86,8 +86,8 @@ export const projects: Project[] = [
       date: '2025–2026',
     },
     coverImage: '/thumbnails/freemium-activation.png',
-    coverImagePosition: 'bottom-right',
     thumbnailImage: '/thumbnails/freemium-activation.png',
+    demo: 'freemium',
     sections: [
       {
         badge: 'Context',
@@ -140,9 +140,9 @@ export const projects: Project[] = [
             content: 'Users create an account, AI generates branded content from their store URL: newsletters, automations, pop-ups ready to send on arrival. Everything is on by default: 7 automations, popup, and identification sequence active from day one. I started with nothing enabled and tested increments until activation stopped improving. The free tier is capped at 500 messages: the minimum for a user to reach their first attributed order. Integration comes last because connecting a store means sharing contacts and product data. Users make that decision after seeing what edrone does.',
           },
           {
-            kind: 'slideshow',
-            images: ['/images/freemiumgif1.png', '/images/freemiumgif2.png', '/images/freemiumgif3.png', '/images/freemiumgif4.png'],
-            caption: 'The shipped onboarding.',
+            kind: 'demo',
+            demo: 'freemium',
+            caption: 'The shipped onboarding: four steps of one walkthrough, everything already on.',
           },
           {
             kind: 'text',

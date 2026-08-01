@@ -660,6 +660,105 @@ export function StepCard({ name, tone, icon, eyebrow, subject, status, statusTon
   )
 }
 
+// ─── The identification screen's own content ─────────────────────────────────
+// Two case studies show this screen: contacts-identification tells its story,
+// and freemium-activation walks past it as step 3 of onboarding. They are the
+// same screen of the same product, so the numbers and the subjects live here
+// rather than in either demo, where they could only drift apart.
+
+/** The numbers are the ones on the screenshot, including the two-tone split the
+ *  app renders: the fraction is set back in grey, the unit is not. */
+export const IDENTIFICATION_TILES: TileData[] = [
+  { label: 'Identification',                  value: 16.7,     decimals: 1, suffix: ' %', delta: '9%' },
+  { label: 'Reactivation',                    value: 88.4,     decimals: 1, suffix: ' %', delta: '14%' },
+  { label: 'Revenue from activated contacts', value: 21773.63, decimals: 2, prefix: '$ ', delta: '4%' },
+  { label: 'Savings from reactivation',       value: 50,       decimals: 2, prefix: '$ ', delta: '10%' },
+]
+
+/**
+ * The identification sequence's first five sends.
+ *
+ * Every card carries its own subject, because that is the decision the Solution
+ * section describes: seven different emails on a 30-day loop, none of them
+ * marketing. The mockup the screenshot came from repeated one subject across all
+ * five, which is exactly the objection the design answers.
+ */
+export interface IdentificationStep {
+  status: string
+  subject: string
+}
+
+export const IDENTIFICATION_STEPS: IdentificationStep[] = [
+  { status: 'Sent',              subject: 'Safe shopping — how we protect your data' },
+  { status: 'Send in 27 days',   subject: 'How we keep your account safe' },
+  { status: 'Send in 57 days',   subject: 'A short note about your privacy' },
+  { status: 'Send in 87 days',   subject: 'What we store, and what we never do' },
+  { status: 'Send in 117 days',  subject: 'Two minutes on our privacy policy' },
+]
+
+export const IDENTIFICATION_BODY =
+  'Sends 7 different emails to bring back inactive customers with personalized communication.'
+
+/**
+ * The whole identification panel: entry condition, five sends, repeat.
+ *
+ * Card `n` registers as target `card{n}` whether or not anything aims at it —
+ * the contacts demo opens two of them and the freemium walkthrough opens none,
+ * and a registry entry nothing points at costs nothing.
+ */
+export function IdentificationPanel({ steps = IDENTIFICATION_STEPS, state, m, style }: {
+  /** Override the schedule. The subjects are the sequence and never change; the
+   *  dates do, because an account that signed up this morning has not sent the
+   *  first one yet. */
+  steps?: IdentificationStep[]
+  state: DemoState
+  m: Metrics
+  style?: React.CSSProperties
+}) {
+  return (
+    <SequencePanel m={m} style={style} title="Identification" body={IDENTIFICATION_BODY}>
+      <Chip tone="grey" m={m} icon={<PersonMark size={Math.round(m.chipFont * 1.05)} />}>
+        No interaction for 30 days
+      </Chip>
+      <Connector m={m} />
+      {steps.map((step, i) => (
+        <FlowStep key={step.subject} last={i === steps.length - 1} m={m}>
+          <StepCard
+            name={`card${i + 1}`}
+            tone={i === 0 ? 'mint' : 'blue'}
+            icon={i === 0
+              ? <ShieldMark size={Math.round(m.iconTile * 0.62)} />
+              : <MailMark size={Math.round(m.iconTile * 0.62)} />}
+            subject={step.subject}
+            status={step.status}
+            // Mint means gone, blue means booked. A schedule with nothing sent
+            // yet is blue all the way across.
+            statusTone={step.status === 'Sent' ? 'mint' : 'blue'}
+            state={state}
+            m={m}
+          />
+        </FlowStep>
+      ))}
+      <Connector m={m} />
+      <Chip tone="blue" m={m} icon={<RepeatMark size={Math.round(m.chipFont * 1.05)} />}>
+        Repeat sequence
+      </Chip>
+    </SequencePanel>
+  )
+}
+
+/** A card plus the rule that joins it to the next one. */
+export const FlowStep = ({ children, last, m }: {
+  children: React.ReactNode
+  last: boolean
+  m: Metrics
+}) => (
+  <>
+    {children}
+    {!last && <Connector m={m} />}
+  </>
+)
+
 // ─── Newsletter preview drawer ───────────────────────────────────────────────
 
 /** One newsletter, as the preview drawer shows it. */

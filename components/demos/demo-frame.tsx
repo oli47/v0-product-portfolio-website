@@ -55,6 +55,9 @@ interface DemoFrameProps<M extends StageMetrics> {
   restState: Partial<DemoState>
   /** Resolves the layout for the measured column. Must be a module function. */
   metrics: MetricsFor<M>
+  /** Hold the script's last frame through the beat between passes, rather than
+   *  dropping back to the poster. For scripts that do not end where they start. */
+  holdLastFrame?: boolean
   children: (state: DemoState, m: M) => React.ReactNode
   /** Plays exactly while true. Omit it and the frame plays while on screen. */
   play?: boolean
@@ -76,6 +79,7 @@ export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'variant' | 
 
 export function DemoFrame<M extends StageMetrics>({
   script, restState, metrics, children, play, variant = 'inline', fit = 'width',
+  holdLastFrame = false,
 }: DemoFrameProps<M>) {
   const hostRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -88,7 +92,7 @@ export function DemoFrame<M extends StageMetrics>({
   const scale = hostWidth > 0 ? hostWidth / m.stageW : 1
 
   // Reduced motion never plays, so it lands on the poster like anything else.
-  const state = useDemoScript(script, (play ?? inView) && !reduced, restState)
+  const state = useDemoScript(script, (play ?? inView) && !reduced, restState, holdLastFrame)
 
   // Scale the fixed-size stage down to the column width.
   useMeasure(() => {
