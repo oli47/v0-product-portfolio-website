@@ -24,7 +24,7 @@ import type { DemoState, Step } from '@/components/demos/use-demo-script'
  * differ while the branding around them does not.
  *
  * Rebuilt from ci-dashboard.png and ci-email.png, which now live only in git
- * history (see the commit that removed them).
+ * history (see commit 3cead12).
  */
 
 /**

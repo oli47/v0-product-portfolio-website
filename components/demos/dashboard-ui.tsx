@@ -11,7 +11,7 @@ import type { DemoState } from '@/components/demos/use-demo-script'
  * plus the newsletter-preview drawer that opens off a card.
  *
  * Sampled from ci-dashboard.png and ci-email.png, which now live only in git
- * history. Unlike the signup exports those are 1x and 2x of the same 1920x1080
+ * history (commit 3cead12). Unlike the signup exports those are 1x and 2x of the same 1920x1080
  * screen, so every desktop number below is a pixel measured off the 1x file with
  * nothing divided out. The stage is the content area alone — the icon rail and
  * the top bar are cropped, because a demo of a feature should not spend a third

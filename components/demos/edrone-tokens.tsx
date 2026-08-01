@@ -23,7 +23,7 @@ export const C = {
   /**
    * Status ramp. Every state in the product is a fill / mark / ink triple: a
    * tinted chip or icon tile, the glyph drawn on it, and the text that reads on
-   * the tint. Sampled from ci-dashboard.png, which is a 1x export.
+   * the tint. Sampled from ci-dashboard.png (commit 3cead12), a 1x export.
    */
   mint:       '#D3F8E2',
   mintMark:   '#24A850',
