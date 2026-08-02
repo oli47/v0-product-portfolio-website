@@ -71,9 +71,6 @@ export const C = {
   violetRing: '#D7D1F2',
   /** The button's label, and the hairline either side of the halo. */
   violetTint: '#F7F5FF',
-
-  /** The "See how it works" pill: the app's blue at its palest. */
-  blueTint:  '#F5F9FF',
 }
 
 export const Screen = ({ children }: { children: React.ReactNode }) => (

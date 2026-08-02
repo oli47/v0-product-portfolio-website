@@ -98,7 +98,7 @@ const AUTOMATIONS: AutomationData[] = [
       photo: '/images/freemium/loyalty.jpg',
       from: '#2A5C64', to: '#123036', ink: '#D7F26E',
       eyebrow: "Women's day", lines: ['-20%', 'OD 200 ZŁ'], note: 'z kodem BOLDER',
-      heading: 'Dzień Kobiet w ANIA', body: 'Z okazji Dnia Kobiet -20% przy zakupach od 200 zł. Wpisz kod BOLDER przy kasie.', cta: 'ODBIERZ RABAT',
+      heading: 'Dzień Kobiet w ANIA KRUK', body: 'Z okazji Dnia Kobiet -20% przy zakupach od 200 zł. Wpisz kod BOLDER przy kasie.', cta: 'ODBIERZ RABAT',
     },
   },
   {
@@ -147,11 +147,12 @@ const EMPTY_TILES = IDENTIFICATION_TILES.map((tile) => ({ ...tile, value: 0, del
  *
  * The contacts case study shows the sequence mid-flight, with the first mail
  * already gone. Here nothing has gone anywhere: the account is minutes old, so
- * the whole sequence is still ahead of it, one send every thirty days.
+ * the whole sequence is still ahead of it — the first send three days out, and
+ * every one after it thirty days behind the last.
  */
 const EMPTY_SCHEDULE = IDENTIFICATION_STEPS.map((step, i) => ({
   ...step,
-  status: `Send in ${(i + 1) * 30} days`,
+  status: `Send in ${3 + i * 30} days`,
 }))
 
 // ─── The walkthrough ─────────────────────────────────────────────────────────
@@ -207,11 +208,19 @@ const STEPS: CoachStep[] = [
   },
 ]
 
-/** What the setup screen ticks off, in the order edrone actually does it. */
+/**
+ * What the setup screen ticks off, in the order edrone actually does it.
+ *
+ * This is the whole of account creation, which is the case study's claim in
+ * miniature: the user typed a URL, and everything the next four screens hand
+ * them was read off their own site and written for them in the time it takes to
+ * watch this list finish.
+ */
 const SETUP_ITEMS = [
-  'Reading your store and its branding',
-  'Writing 7 automations and a pop-up',
-  'Scheduling your identification sequence',
+  'Reading aniakruk.pl — logo, colours and type',
+  'Importing your products and their photography',
+  'Writing 7 automations and a subscriber pop-up',
+  'Drafting your first newsletters',
 ]
 
 /** The field the script counts finished setup items into. */
@@ -224,16 +233,18 @@ const CONNECTING = 'connecting'
 const READ_MS = 2200
 
 const SCRIPT: Step[] = [
-  // The account is minutes old and the content does not exist yet. Three things
-  // land in turn; the bar under them fills as they do. Short, because the real
-  // thing is short — this is a beat, not a loading screen anyone waits on.
+  // The account is minutes old and the content does not exist yet. The four
+  // things above land in turn; the bar under them fills as they do.
   { kind: 'screen', index: PREPARING },
-  { kind: 'wait',   ms: 520 },
+  { kind: 'wait',   ms: 700 },
   ...SETUP_ITEMS.flatMap((_, i): Step[] => [
     { kind: 'set',  field: READY, text: String(i + 1) },
-    { kind: 'wait', ms: 420 },
+    // Long enough to read the line that just landed. Shorter and the list is a
+    // flicker: the point of showing it is that a reader can see what an account
+    // gets before the walkthrough starts handing it over.
+    { kind: 'wait', ms: 900 },
   ]),
-  { kind: 'wait',   ms: 260 },
+  { kind: 'wait',   ms: 400 },
 
   // Everything above is now real.
   { kind: 'screen', index: AUTOMATIONS_SCREEN },

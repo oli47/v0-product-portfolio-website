@@ -40,12 +40,12 @@ const EMAILS: (EmailPreview | undefined)[] = [
     preheader: 'No offers, no discount codes. Just what happens to your details when y…',
     when: '20 Dec at 2:48 PM',
     due: 'Sent',
-    heroLines: ['SAFE', 'SHOPPING', 'AT ANIA'],
+    heroLines: ['SAFE', 'SHOPPING', 'AT ANIA KRUK'],
     heading: 'What happens to your details when you buy',
     body: 'Your card never touches our servers, your address is stored only for as long as an order needs it, and the whole thing is checked twice a year by an outside auditor. No offers in this one — we just thought you should know.',
     footer: {
-      note: 'You are getting this because you have an account at ania.store.',
-      address: 'ANIA, ul. Krupnicza 12, 31-123 Kraków, Poland',
+      note: 'You are getting this because you have an account at aniakruk.pl.',
+      address: 'ANIA KRUK, ul. Krupnicza 12, 31-123 Kraków, Poland',
     },
   },
   {
@@ -55,10 +55,10 @@ const EMAILS: (EmailPreview | undefined)[] = [
     due: 'In 27 days',
     heroLines: ['ACCOUNT', 'SECURITY', 'EXPLAINED'],
     heading: 'Three things we do so you don’t have to',
-    body: 'Every order you place is encrypted end to end, every payment runs through our provider rather than our own servers, and nobody at ANIA can see your card details. We check the whole thing twice a year with an outside auditor, and we publish what they find.',
+    body: 'Every order you place is encrypted end to end, every payment runs through our provider rather than our own servers, and nobody at ANIA KRUK can see your card details. We check the whole thing twice a year with an outside auditor, and we publish what they find.',
     footer: {
-      note: 'You are getting this because you have an account at ania.store.',
-      address: 'ANIA, ul. Krupnicza 12, 31-123 Kraków, Poland',
+      note: 'You are getting this because you have an account at aniakruk.pl.',
+      address: 'ANIA KRUK, ul. Krupnicza 12, 31-123 Kraków, Poland',
     },
   },
 ]

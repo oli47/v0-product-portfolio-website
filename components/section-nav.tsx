@@ -16,6 +16,9 @@ const ACTIVE_LINE = 160
 // The rail starts level with the first section (Context) and stops here once
 // that section has scrolled up past it — sticky, without leaving the flow.
 const RAIL_PIN_TOP = 160
+// Where it fades in: well before it pins, so it is already there by the time
+// the reader is reading rather than arriving as they pass the heading.
+const RAIL_REVEAL_TOP = 420
 
 function SectionNavItem({
   badge,
@@ -39,7 +42,7 @@ function SectionNavItem({
         }}
         onMouseEnter={label.scramble}
         onMouseLeave={label.reset}
-        className="group flex items-center gap-3 py-1"
+        className="group flex flex-row-reverse items-center gap-3 py-1"
       >
         <span
           aria-hidden="true"
@@ -64,6 +67,17 @@ function SectionNavItem({
 export function SectionNav({ items }: { items: string[] }) {
   const [active, setActive] = useState(items[0] ?? '')
   const [railTop, setRailTop] = useState<number | null>(null)
+  // The rail is a reading aid, and there is nothing to aid until the reader is
+  // in the reading. It stays out of the way over the title and the hero, and
+  // fades in once the first section has come up to meet it.
+  const [shown, setShown] = useState(false)
+  // A click is an explicit choice and it has to hold. The sections at the foot
+  // of the page can be shorter than the scroll the document has left — on the
+  // contacts case study "Impact" wants 4176px and the page stops at 4160 — so
+  // the scroll rule alone can never mark them current, and clicking one either
+  // did nothing or lit up the section below it. The pin holds the reader's
+  // choice until they scroll for themselves.
+  const pinned = useRef<string | null>(null)
 
   useEffect(() => {
     if (items.length === 0) return
@@ -74,9 +88,17 @@ export function SectionNav({ items }: { items: string[] }) {
       frame = 0
       const line = window.scrollY + ACTIVE_LINE
 
-      // Follow the first section down the page, then stop at the pin line.
+      // Follow the first section down the page, then stop at the pin line —
+      // and only show it from the moment it gets there, so it arrives in its
+      // resting place rather than sliding up the page from the fold.
       const first = document.getElementById(sectionId(items[0]))
-      if (first) setRailTop(Math.max(first.getBoundingClientRect().top, RAIL_PIN_TOP))
+      if (first) {
+        const top = first.getBoundingClientRect().top
+        setRailTop(Math.max(top, RAIL_PIN_TOP))
+        setShown(top <= RAIL_REVEAL_TOP)
+      }
+
+      if (pinned.current) return
 
       // Bottom of the page: the last section may be too short to ever cross
       // the line on its own, so claim it explicitly.
@@ -112,9 +134,25 @@ export function SectionNav({ items }: { items: string[] }) {
 
   const animationRef = useRef<number>(0)
 
+  // Any scroll of the reader's own hands the highlight back to the page.
+  useEffect(() => {
+    const release = () => { pinned.current = null }
+    window.addEventListener('wheel', release, { passive: true })
+    window.addEventListener('touchstart', release, { passive: true })
+    window.addEventListener('keydown', release)
+    return () => {
+      window.removeEventListener('wheel', release)
+      window.removeEventListener('touchstart', release)
+      window.removeEventListener('keydown', release)
+    }
+  }, [])
+
   const handleSelect = useCallback((badge: string) => {
     const el = document.getElementById(sectionId(badge))
     if (!el) return
+
+    pinned.current = badge
+    setActive(badge)
 
     const max = document.documentElement.scrollHeight - window.innerHeight
     const target = Math.min(Math.max(el.offsetTop - SCROLL_OFFSET, 0), Math.max(max, 0))
@@ -122,6 +160,8 @@ export function SectionNav({ items }: { items: string[] }) {
     const distance = target - start
 
     if (animationRef.current) cancelAnimationFrame(animationRef.current)
+    // Already as far down as the document goes: the highlight is the whole of
+    // what the click can do, and it has already been set.
     if (Math.abs(distance) < 2) return
 
     // Native `behavior: 'smooth'` is unreliable here — it silently no-ops for
@@ -136,9 +176,18 @@ export function SectionNav({ items }: { items: string[] }) {
     const startTime = performance.now()
 
     // A real scroll gesture mid-flight means the user took over — stop animating.
-    const abort = () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); animationRef.current = 0 }
-    window.addEventListener('wheel', abort, { passive: true, once: true })
-    window.addEventListener('touchstart', abort, { passive: true, once: true })
+    // Both come off together. `once` only retires the one that fired, and the
+    // clean-up at the end of `step` never runs on an aborted scroll, so the
+    // other used to be left behind — one stale listener per interrupted click.
+    const abort = () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current)
+      animationRef.current = 0
+      pinned.current = null
+      window.removeEventListener('wheel', abort)
+      window.removeEventListener('touchstart', abort)
+    }
+    window.addEventListener('wheel', abort, { passive: true })
+    window.addEventListener('touchstart', abort, { passive: true })
 
     const step = (now: number) => {
       const t = Math.min((now - startTime) / duration, 1)
@@ -163,14 +212,27 @@ export function SectionNav({ items }: { items: string[] }) {
   return (
     <nav
       aria-label="Case study sections"
-      className="hidden min-[1200px]:block fixed z-30 w-[11rem]"
+      className="hidden min-[1200px]:block fixed z-30 w-[11rem] text-right"
+      // Not just invisible: nothing behind a transparent nav should take a
+      // click, and a screen reader should not be offered a rail the page is
+      // not showing yet.
+      aria-hidden={!shown}
       style={{
-        left: 'calc(50% - 22.5rem - 2rem - 11rem)',
+        // The far side of the column: half the page, out past the 45rem of
+        // content, then the same 2rem gutter the rail had on the left.
+        left: 'calc(50% + 22.5rem + 2rem)',
         top: railTop ?? RAIL_PIN_TOP,
-        // Hold it back for the one frame before the first measurement lands,
-        // otherwise it flashes at the pin position and jumps down to Context.
-        opacity: railTop === null ? 0 : 1,
-        transition: 'opacity 400ms ease-in-out',
+        opacity: shown ? 1 : 0,
+        // `opacity: 0` alone left six links in the tab order inside an
+        // aria-hidden subtree, which is the one thing aria-hidden must never
+        // cover. `visibility` takes them out of both the tab order and the
+        // accessibility tree; the zero-duration step is delayed so it lands
+        // after the fade rather than cutting it.
+        visibility: shown ? 'visible' : 'hidden',
+        pointerEvents: shown ? undefined : 'none',
+        transition: shown
+          ? 'opacity 400ms ease-in-out, visibility 0s'
+          : 'opacity 400ms ease-in-out, visibility 0s 400ms',
       }}
     >
       <ul className="flex flex-col gap-4">

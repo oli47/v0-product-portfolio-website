@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { AniaWordmark } from '@/components/demos/ania-wordmark'
 import { useTarget } from '@/components/demos/demo-cursor'
 import type { DemoVariant, StageMetrics } from '@/components/demos/demo-frame'
 import { C } from '@/components/demos/edrone-tokens'
@@ -906,9 +907,9 @@ export function Drawer({ open, scrolling, target, dismiss, email, m }: DrawerPro
           <DrawerRow label="Sender" m={m}>
             <span className="flex min-w-0 items-center" style={{ gap: 10 }}>
               {/* One store across the whole demo: the wordmark on the hero, the
-                  address in the footer and the sender here all say ANIA. */}
-              <span style={{ fontWeight: 500 }}>Karol from ANIA</span>
-              <span style={{ color: C.body }} className="truncate">hello@ania.store</span>
+                  address in the footer and the sender here all say ANIA KRUK. */}
+              <span style={{ fontWeight: 500 }}>Karol from ANIA KRUK</span>
+              <span style={{ color: C.body }} className="truncate">hello@aniakruk.pl</span>
             </span>
           </DrawerRow>
           <DrawerRow label="When" m={m} last>
@@ -1059,15 +1060,11 @@ const EmailHero = ({ lines, m }: { lines: string[]; m: Metrics }) => (
     }}
     className="flex w-full shrink-0 flex-col justify-between overflow-hidden"
   >
-    <span
-      style={{
-        fontSize: Math.round(m.emailHeading * 1.2),
-        fontWeight: 300,
-        letterSpacing: '0.34em',
-        color: 'rgba(255,255,255,0.86)',
-      }}
-    >
-      ANIA
+    {/* The store's real mark. It used to be the name set in letterspaced
+        caps, which was a stand-in for this — and one the freemium demo, showing
+        the same store, no longer used. */}
+    <span style={{ color: 'rgba(255,255,255,0.88)' }}>
+      <AniaWordmark height={Math.round(m.emailHeading * 1.7)} />
     </span>
     <span
       style={{

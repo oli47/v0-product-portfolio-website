@@ -6,7 +6,7 @@ import { getProject, getProjectNavigation } from '@/lib/projects'
 import { Bold } from '@/components/bold'
 import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
-import { MetricMain, MetricSupporting } from '@/components/metric-card'
+import { MetricMain } from '@/components/metric-card'
 import { ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
@@ -98,16 +98,24 @@ export default function ProjectPage() {
             </div>
           )}
 
-          {/* Project meta — role, team, duration */}
-          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mt-8 pt-6 border-t border-[var(--color-100)]">
+          {/* Project meta — role, team, duration.
+              Three columns above sm. Below it, one row each with the value
+              pushed to the right edge: stacked label-over-value in a narrow
+              two-column grid left a ragged third cell and a lot of empty space
+              beside the short values, and a phone has the width for a list but
+              not for a grid. */}
+          <dl className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-x-6 sm:gap-y-4 mt-8 pb-6 border-b border-[var(--color-100)]">
             {([
               ['Role', project.meta.role],
               ['Team', project.meta.team],
               ['Duration', project.meta.duration],
             ] as const).map(([label, value]) => (
-              <div key={label} className="flex flex-col gap-1.5">
-                <dt className="text-eyebrow text-[var(--color-400)]">{label.toUpperCase()}</dt>
-                <dd className="text-body-2 text-[var(--color-500)] text-pretty">{value}</dd>
+              <div
+                key={label}
+                className="flex items-baseline justify-between gap-6 sm:flex-col sm:items-start sm:justify-start sm:gap-1.5"
+              >
+                <dt className="text-eyebrow text-[var(--color-400)] shrink-0">{label.toUpperCase()}</dt>
+                <dd className="text-body-2 text-[var(--color-500)] text-pretty text-right sm:text-left">{value}</dd>
               </div>
             ))}
           </dl>
@@ -127,7 +135,10 @@ export default function ProjectPage() {
           <SectionBadge>Impact</SectionBadge>
 
           {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
-            /* 2-col layout: left = MetricMain (northStar), right = stacked MetricSupporting */
+            /* 2-col layout: the north star on the left, the rest stacked on
+               the right. One card component throughout — a second, quieter one
+               only ever meant the same numbers were set smaller on the page
+               where they mattered most. */
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
               <MetricMain
                 label={project.results.northStar.label}
@@ -136,9 +147,7 @@ export default function ProjectPage() {
               />
               <div className="flex flex-col gap-3">
                 {project.results.metrics.map((metric, index) => (
-                  project.results.metricsAsMain
-                    ? <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
-                    : <MetricSupporting key={index} label={metric.label} value={metric.value} description={metric.description} />
+                  <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
                 ))}
               </div>
             </div>
@@ -205,8 +214,8 @@ export default function ProjectPage() {
             onMouseLeave={prevLabel.reset}
           >
             <div className="flex items-center gap-1.5">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
-              <span className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
+              <span className="text-eyebrow text-[var(--color-300)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
             </div>
             <span ref={prevLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {prev.title}
@@ -222,8 +231,8 @@ export default function ProjectPage() {
             onMouseLeave={nextLabel.reset}
           >
             <div className="flex items-center gap-1.5">
-              <span className="text-eyebrow text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--color-400)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M2 8h12M9 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
+              <span className="text-eyebrow text-[var(--color-300)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M2 8h12M9 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
             </div>
             <span ref={nextLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
               {next.title}

@@ -98,6 +98,9 @@ const MOBILE: Metrics = {
  */
 const COMPACT_STAGE_H = 834
 
+/** 834 x 1.81 — the mean of the contacts and freemium card ratios. */
+const CARD_STAGE_W = 1510
+
 /** Compact phone stage. The shipped signup is ~390 tall here, so this leaves it
  *  ~75px of air per side instead of the 155 the tall stage gives. */
 const COMPACT_MOBILE_STAGE_H = 540
@@ -122,7 +125,12 @@ const MOBILE_STAGE_MAX = 460
 export function metricsFor(hostWidth: number, variant: DemoVariant = 'inline'): Metrics {
   // A card is a landscape slot however narrow the viewport gets, and a portrait
   // phone layout cannot fill one, so it never switches.
-  if (variant === 'card') return { ...DESKTOP, stageH: COMPACT_STAGE_H }
+  // The home card sizes demos by height, so a stage's ratio decides how wide
+  // it sits in the row. This screen's own ratio put it 70px narrower than the
+  // other two, which read as one card being smaller rather than one screen
+  // being a different shape. Widened to sit between them; the form is centred
+  // in white, so the extra width is white.
+  if (variant === 'card') return { ...DESKTOP, stageW: CARD_STAGE_W, stageH: COMPACT_STAGE_H }
 
   const compact = variant === 'compact'
 

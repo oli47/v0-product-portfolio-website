@@ -62,11 +62,8 @@ export interface Metrics extends StageMetrics {
   // ── page header ──
   title: number
   headerH: number
-  gapTitlePill: number
-  pillH: number
-  pillPadX: number
-  pillGap: number
-  pillFont: number
+  /** Between the title and whatever the page puts beside it. */
+  gapTitleActions: number
   /** Header actions, which only the Pop-ups screen has. */
   actionH: number
   actionPadX: number
@@ -222,8 +219,7 @@ export const DESKTOP: Metrics = {
   topBarFont: 15, topBarIcon: 18, railIcon: 18,
   padX: 23, padTop: 25,
 
-  title: 31, headerH: 41, gapTitlePill: 16,
-  pillH: 28, pillPadX: 10, pillGap: 12, pillFont: 14,
+  title: 31, headerH: 41, gapTitleActions: 16,
   actionH: 40, actionPadX: 18, actionFont: 15, actionGap: 8,
 
   gapHeaderTabs: 25,
@@ -280,8 +276,7 @@ const MOBILE: Metrics = {
   topBarFont: 0, topBarIcon: 0, railIcon: 0,
   padX: 16, padTop: 16,
 
-  title: 22, headerH: 28, gapTitlePill: 10,
-  pillH: 22, pillPadX: 8, pillGap: 8, pillFont: 11,
+  title: 22, headerH: 28, gapTitleActions: 10,
   actionH: 30, actionPadX: 12, actionFont: 12, actionGap: 6,
 
   gapHeaderTabs: 16,
@@ -524,35 +519,13 @@ export const PageHeader = ({ title, actions, m }: {
   actions?: React.ReactNode
   m: Metrics
 }) => (
-  <div className="flex shrink-0 items-center" style={{ height: m.headerH, gap: m.gapTitlePill }}>
+  <div className="flex shrink-0 items-center" style={{ height: m.headerH, gap: m.gapTitleActions }}>
     <p style={{ fontSize: m.title, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
       {title}
     </p>
-    <HelpPill m={m} />
     <span className="flex-1" />
     {actions}
   </div>
-)
-
-/** "See how it works", which every page in this part of the app carries. */
-const HelpPill = ({ m }: { m: Metrics }) => (
-  <span
-    style={{
-      height: m.pillH,
-      padding: `0 ${m.pillPadX}px`,
-      gap: m.pillGap,
-      background: C.blueTint,
-      color: C.focus,
-      borderRadius: R.chip,
-      fontSize: m.pillFont,
-      fontWeight: 500,
-      whiteSpace: 'nowrap',
-    }}
-    className="flex shrink-0 items-center"
-  >
-    See how it works
-    <QueryMark size={Math.round(m.pillFont * 1.07)} />
-  </span>
 )
 
 /** A header action. `tone` picks the app's two: yellow for the primary one on
@@ -979,40 +952,59 @@ export const CardGrid = ({ lifted, children, m, style }: {
   )
 }
 
-/** The green Active pill with the revenue it has earned welded to its side. */
-export const ActiveBadge = ({ revenue, m }: { revenue?: string; m: Metrics }) => (
-  <span
-    style={{ height: m.cardRowH, borderRadius: R.chip, fontSize: m.badgeFont, fontWeight: 500 }}
-    className="flex shrink-0 items-stretch overflow-hidden"
-  >
+/**
+ * The green Active pill with the revenue it has earned welded to its side.
+ *
+ * Each half carries its own outer radius rather than the pair being rounded and
+ * clipped. A parent with `overflow: hidden` and a corner radius cuts the
+ * corners off the bordered half inside it, which at this size reads as a broken
+ * outline rather than a rounded one.
+ */
+export const ActiveBadge = ({ revenue, m }: { revenue?: string; m: Metrics }) => {
+  const ends = revenue
+    ? [`${R.chip}px 0 0 ${R.chip}px`, `0 ${R.chip}px ${R.chip}px 0`]
+    : [`${R.chip}px`, '']
+
+  return (
     <span
-      style={{
-        padding: `0 ${m.badgePadX}px`,
-        gap: Math.round(m.badgePadX * 0.6),
-        background: C.mintMark,
-        color: '#FFFFFF',
-      }}
-      className="flex items-center"
+      style={{ height: m.cardRowH, fontSize: m.badgeFont, fontWeight: 500 }}
+      className="flex shrink-0 items-stretch"
     >
-      <PlayMark size={Math.round(m.badgeFont * 0.8)} />
-      Active
-    </span>
-    {revenue && (
       <span
         style={{
           padding: `0 ${m.badgePadX}px`,
-          background: '#F6FEF9',
+          gap: Math.round(m.badgePadX * 0.6),
+          background: C.mintMark,
+          // Matched to the other half's border box, so the two sit on one line
+          // instead of the green standing a pixel proud at the top and bottom.
           border: `1px solid ${C.mintMark}`,
-          color: C.mintInk,
-          fontSize: Math.round(m.badgeFont * 0.92),
+          borderRadius: ends[0],
+          color: '#FFFFFF',
         }}
-        className="flex items-center whitespace-nowrap"
+        className="flex items-center"
       >
-        {revenue}
+        <PlayMark size={Math.round(m.badgeFont * 0.8)} />
+        Active
       </span>
-    )}
-  </span>
-)
+      {revenue && (
+        <span
+          style={{
+            padding: `0 ${m.badgePadX}px`,
+            background: '#F6FEF9',
+            border: `1px solid ${C.mintMark}`,
+            borderLeft: 'none',
+            borderRadius: ends[1],
+            color: C.mintInk,
+            fontSize: Math.round(m.badgeFont * 0.92),
+          }}
+          className="flex items-center whitespace-nowrap"
+        >
+          {revenue}
+        </span>
+      )}
+    </span>
+  )
+}
 
 /** Which channels an automation can reach. Only Email is lit: the free tier has
  *  no SMS or WhatsApp, and that is the upgrade the whole funnel is aiming at. */
@@ -1364,7 +1356,8 @@ export const PreparingScreen = ({ items, done, m }: {
       }}
       className="text-center"
     >
-      edrone is reading ania.store and writing everything you are about to see.
+      edrone is reading aniakruk.pl and building the account out of what it finds.
+      Nothing to pick, nothing to configure.
     </p>
 
     <div
@@ -1746,14 +1739,6 @@ const CheckMark = ({ size, pending }: { size: number; pending?: boolean }) => (
 const ChevronMark = ({ size }: { size: number }) => (
   <svg width={size} height={size * 0.6} viewBox="0 0 12 7" fill="none" aria-hidden className="shrink-0">
     <path d="m1.2 1.4 4.8 4.2 4.8-4.2" stroke={C.ink} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
-
-const QueryMark = ({ size }: { size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden className="shrink-0">
-    <circle cx="8" cy="8" r="6.6" stroke="currentColor" strokeWidth="1.2" />
-    <path d="M6.4 6.2a1.6 1.6 0 1 1 2 1.7c-.3.1-.4.4-.4.7v.3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-    <circle cx="8" cy="11.1" r=".75" fill="currentColor" />
   </svg>
 )
 

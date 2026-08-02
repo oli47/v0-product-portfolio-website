@@ -333,6 +333,102 @@
    steps rather than sweeping, because each step is one thing finishing. */
 .demo-progress { transition: width 560ms cubic-bezier(.4, 0, .2, 1); }
 
+/* ── The contact-identification diagram ──────────────────────────────────────
+   One 8s clock, three beats, played one at a time, because the diagram is a
+   sentence with two actors in it and the middle clause is the one that matters:
+   edrone sends, the contact opens, and only then is there a cookie. Standing
+   still this is two boxes and a dashed line, and all of that has to be inferred.
+   Everything below shares the clock, so nothing can land out of order.
+   `left` rather than a transform, because the distance is the parent's width
+   and a percentage translate would measure the envelope instead. */
+
+/* Beat 1, the send — 0 to 26%. The dashes are alive only while something is on
+   the wire; -48 is four whole dash periods, so the line is where it started
+   when it stops. */
+@keyframes cf-dash {
+  0%        { stroke-dashoffset: 0; }
+  26%, 100% { stroke-dashoffset: -48; }
+}
+.cf-dash { animation: cf-dash 8s linear infinite; }
+
+@keyframes cf-send-x {
+  0%        { left: 0%; opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  4%        { left: 0%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  26%, 27%  { left: calc(100% - 16px); opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  32%, 100% { left: calc(100% - 16px); opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+.cf-send-x { animation: cf-send-x 8s cubic-bezier(.5, 0, .4, 1) infinite; }
+
+@keyframes cf-send-y {
+  0%        { top: 0%; opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  4%        { top: 0%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  26%, 27%  { top: calc(100% - 16px); opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  32%, 100% { top: calc(100% - 16px); opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+.cf-send-y { animation: cf-send-y 8s cubic-bezier(.5, 0, .4, 1) infinite; }
+
+/* Beat 2, the open — 27 to 56%. Same mail, same spot: it takes over from the
+   closed one where it landed, with a small pop, and holds long enough to be
+   read as its own event rather than as the tail of the send. */
+@keyframes cf-open {
+  0%, 27%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+  33%       { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  37%, 52%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  56%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.35); }
+}
+.cf-open { animation: cf-open 8s ease-out infinite; }
+
+/* The running caption, one beat each. Crossfading two different lines over the
+   same six pixels reads as a double exposure, so no two ever share the frame:
+   the outgoing one is gone by the handover, the incoming one rises into the
+   space it left. */
+@keyframes cf-say-1 {
+  0%, 26%  { opacity: 1; transform: translateY(0); }
+  30%      { opacity: 0; transform: translateY(-8px); }
+  32%, 96% { opacity: 0; transform: translateY(8px); }
+  100%     { opacity: 1; transform: translateY(0); }
+}
+@keyframes cf-say-2 {
+  0%, 30%   { opacity: 0; transform: translateY(8px); }
+  34%, 48%  { opacity: 1; transform: translateY(0); }
+  52%       { opacity: 0; transform: translateY(-8px); }
+  54%, 100% { opacity: 0; transform: translateY(8px); }
+}
+@keyframes cf-say-3 {
+  0%, 52%   { opacity: 0; transform: translateY(8px); }
+  56%, 92%  { opacity: 1; transform: translateY(0); }
+  96%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+.cf-say-1 { animation: cf-say-1 8s ease-in-out infinite; }
+.cf-say-2 { animation: cf-say-2 8s ease-in-out infinite; }
+.cf-say-3 { animation: cf-say-3 8s ease-in-out infinite; }
+
+/* Beat 3, the contact — 52% to the end. It cannot resolve before the mail has
+   been opened, so it waits out the whole of beat 2, and then it holds: the
+   resolved state is the one worth looking at, and it is what the diagram is for,
+   so it stands for close to three seconds before the loop takes it away. */
+@keyframes cf-state-a {
+  0%, 48%  { opacity: 1; transform: translateY(0); }
+  52%      { opacity: 0; transform: translateY(-8px); }
+  54%, 96% { opacity: 0; transform: translateY(8px); }
+  100%     { opacity: 1; transform: translateY(0); }
+}
+@keyframes cf-state-b {
+  0%, 52%   { opacity: 0; transform: translateY(8px); }
+  56%, 92%  { opacity: 1; transform: translateY(0); }
+  96%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+.cf-state-a { animation: cf-state-a 8s ease-in-out infinite; }
+.cf-state-b { animation: cf-state-b 8s ease-in-out infinite; }
+
+/* The moment of resolution, on the card's own edge. */
+@keyframes cf-resolve {
+  0%, 50%   { border-color: var(--color-100); }
+  58%       { border-color: var(--accent-green); }
+  70%, 100% { border-color: var(--color-100); }
+}
+.cf-resolve { animation: cf-resolve 8s ease-in-out infinite; }
+
 /* The ring on the screen before the walkthrough, while the content is written. */
 @keyframes demo-spin { to { transform: rotate(360deg); } }
 .demo-spin { animation: demo-spin 900ms linear infinite; }
@@ -377,6 +473,19 @@
 @media (prefers-reduced-motion: reduce) {
   .demo-caret       { animation: none; opacity: 1; }
   .demo-spin        { animation: none; }
+  .cf-dash          { animation: none; }
+  /* Freeze the diagram on its outcome: the opened mail sits where it landed and
+     the contact is resolved. The stacked states share one grid slot, so exactly
+     one of each may show. */
+  .cf-send-x,
+  .cf-send-y        { animation: none; opacity: 0; }
+  .cf-open          { animation: none; transform: translate(-50%, -50%); }
+  .cf-say-1,
+  .cf-say-2         { animation: none; opacity: 0; }
+  .cf-say-3         { animation: none; opacity: 1; }
+  .cf-state-a       { animation: none; opacity: 0; }
+  .cf-state-b       { animation: none; opacity: 1; }
+  .cf-resolve       { animation: none; }
   .demo-confetti    { animation: none; opacity: 0; }
   .demo-screen-in,
   .demo-grid-scroll,

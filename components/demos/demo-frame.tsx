@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { DemoCursor, TargetRegistry } from '@/components/demos/demo-cursor'
+import { C } from '@/components/demos/edrone-tokens'
 import { useDemoScript, type DemoState, type Step } from '@/components/demos/use-demo-script'
 
 /**
@@ -143,6 +144,14 @@ export function DemoFrame<M extends StageMetrics>({
             width: m.stageW,
             height: m.stageH,
             transform: `scale(${scale})`,
+            // The demo is a reproduction of another product's interface, and
+            // that product does not have a dark mode. Anchoring type and colour
+            // here rather than in each screen means nothing inside can inherit
+            // the portfolio's: without it the app chrome, which wraps the
+            // screens from outside their own roots, turned near-white the
+            // moment the site did.
+            fontFamily: 'var(--font-dm-sans)',
+            color: C.ink,
             // Before the first measurement the stage is full size inside a much
             // smaller host. The host keeps its aspect ratio either way, so
             // hiding costs a frame and no layout shift.

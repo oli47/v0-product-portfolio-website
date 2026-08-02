@@ -52,7 +52,6 @@ export interface Project {
   sections: ProjectSection[]
   results: {
     note?: string
-    metricsAsMain?: boolean   // use MetricMain (not Supporting) for right-column metrics
     northStar?: {
       label: string
       value: string
@@ -74,15 +73,15 @@ export const projects: Project[] = [
   {
     slug: 'freemium-activation',
     title: 'Freemium launch',
-    tagline: 'From sales-gated to self-serve. 4657 accounts in 10 months.',
+    tagline: 'From sales-gated to self-serve. 4657 accounts in 7 months.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
     metrics: [
       { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
-      team: '1–5 Developers',
-      duration: '10 months',
+      team: '1 Front-end dev, 1 Back-end dev',
+      duration: '7 months',
       date: '2025–2026',
     },
     coverImage: '/thumbnails/freemium-activation.png',
@@ -103,7 +102,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'I saw consistent inbound traffic in GA that never reached Sales, and built the case for a freemium channel to capture it. Freemium launched May 2025, and over 10 months I iterated on the onboarding through continuous user research and production testing.',
+            content: 'I saw consistent inbound traffic in GA that never reached Sales, and built the case for a freemium channel to capture it. Freemium launched May 2025, and over 7 months I iterated on the onboarding through continuous user research and production testing.',
           },
           {
             kind: 'text',
@@ -178,7 +177,7 @@ export const projects: Project[] = [
     ],
     meta: {
       role: 'Sr Product Designer',
-      team: '1 Developer',
+      team: '1 Front-end dev',
       duration: '5 hours',
       date: '2026',
     },
@@ -282,7 +281,6 @@ export const projects: Project[] = [
         label: 'TOTAL SIGNUP CONVERSION',
         value: '+200%',
       },
-      metricsAsMain: true,
       metrics: [
         { value: '+270%', label: 'STEP 1 CONVERSION', color: 'accent', description: 'Share of visitors who began filling the form went from **2.7% to 10%**. Desktop 3% to 10%, mobile 1% to 10%. Splitting the form was the bet, and this is what confirms it.' },
       ],
@@ -420,7 +418,6 @@ export const projects: Project[] = [
       },
     ],
     results: {
-      metricsAsMain: true,
       note: "Share of contacts an automation could reach, from **3.1% to 4.1%** a month after rollout.",
       northStar: {
         label: 'IDENTIFICATION RATE',
@@ -444,8 +441,8 @@ export const projects: Project[] = [
     ],
     meta: {
       role: 'Sole Designer',
-      team: '1 Front-end developer',
-      duration: '2 years',
+      team: '1 Front-end dev, 1 Back-end dev',
+      duration: '10 months',
       date: '2022–2024',
     },
     coverImage: '/images/plo-cover.png',
@@ -508,7 +505,6 @@ export const projects: Project[] = [
       },
     ],
     results: {
-      metricsAsMain: true,
       metrics: [
         { value: '10+', label: 'B2B API CLIENTS', color: 'accent', description: 'Platforms licensing the neural-net engine. Primary revenue channel.' },
         { value: '120+', label: 'PAYING SUBSCRIBERS', color: 'accent', description: 'Players using the app I designed. Three tiers: $0 / $59 / $125.' },
