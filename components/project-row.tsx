@@ -33,16 +33,15 @@ export function ProjectRow({ project }: { project: Project }) {
           rest and playing while the row is hovered. */}
       <div className="flex w-full items-end justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/235] sm:aspect-[680/320] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
         {Demo ? (
-          // Sized by height, not width. Every demo shows the same screen here
-          // that the case study shows, and those screens are not all the same
-          // shape — measuring from the slot's height is what lets each one sit
-          // in it identically instead of each needing its own width. It keeps
-          // the beige margin the covers have (12% of the slot on a phone, 5%
-          // above sm), sits flush with the bottom the way they do, and
-          // `demo-lift` scales it up from that edge while the row is hovered
-          // (see globals.css).
-          <div className="demo-lift h-[88%] sm:h-[95%]" data-lift={hovered}>
-            <Demo variant="card" fit="height" play={hovered} />
+          // Every demo shows the same screen here that the case study shows,
+          // and those screens are not all the same shape, so the slot has to
+          // measure from whichever side binds: its width on a phone, its height
+          // above sm. Either way each one lands on the same margin — 9% of the
+          // slot to each side — rather than each needing its own number. Sits
+          // flush with the bottom the way the covers do, and `demo-lift` scales
+          // it up from that edge while the row is hovered (see globals.css).
+          <div className="demo-lift w-[82%] sm:h-[95%] sm:w-auto" data-lift={hovered}>
+            <Demo variant="card" fit="card" play={hovered} />
           </div>
         ) : (
           <Image

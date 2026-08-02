@@ -22,6 +22,9 @@ const RAIL_REVEAL_TOP = 420
 // The rail only exists at this width, and so does the room it needs at the foot
 // of the page. A phone gets neither.
 const RAIL_QUERY = '(min-width: 1200px)'
+// The stretch of scroll at the very bottom that belongs to the last section.
+// Everything above it has to be able to reach the line under its own steam.
+const BOTTOM_BAND = 80
 
 function SectionNavItem({
   badge,
@@ -101,27 +104,40 @@ export function SectionNav({ items }: { items: string[] }) {
         setShown(top <= RAIL_REVEAL_TOP)
       }
 
-      // A rail whose last entries cannot be scrolled to is a rail that lies:
-      // the document simply runs out before the section reaches the line, so
-      // clicking one used to land on the bottom of the page and light up
-      // whatever was nearest. Rather than paper over that in the highlight,
-      // give the page exactly the room the last section needs — no more, and
-      // none at all on a width that has no rail.
-      const last = document.getElementById(sectionId(items[items.length - 1]))
-      if (last) {
-        const root = document.documentElement
-        // Read what is applied rather than remembering it: the measurement has
-        // to subtract its own effect, and anything held in a ref goes stale the
-        // first time the effect remounts with the padding already gone.
-        const applied = parseFloat(getComputedStyle(root).getPropertyValue('--section-tail')) || 0
-        const below = root.scrollHeight - applied - last.offsetTop
-        const need = window.matchMedia(RAIL_QUERY).matches
-          ? Math.max(0, window.innerHeight - SCROLL_OFFSET - below)
-          : 0
-        if (Math.abs(need - applied) > 1) root.style.setProperty('--section-tail', `${need}px`)
-      }
+      // A rail whose entries cannot be scrolled to is a rail that lies: the
+      // document ran out before Impact could put its heading on the line, so
+      // clicking it landed on the bottom of the page and lit whatever was
+      // nearest. The page borrows the room to fix that — but only enough for
+      // the second-to-last section, not the last. Buying the last one a scroll
+      // to the top costs the better part of a screen of empty page, and it does
+      // not need one: the bottom of the document is already its band, which is
+      // what the `atBottom` rule below reads. This way the borrowing is a
+      // hundred pixels rather than five hundred, and none at all on a width
+      // that has no rail.
+      const reachable = items[items.length - 2]
+      const root = document.documentElement
+      const el = reachable ? document.getElementById(sectionId(reachable)) : null
+      // Read what is applied rather than remembering it: the measurement has to
+      // subtract its own effect, and anything held in a ref goes stale the first
+      // time the effect remounts with the padding already gone.
+      const applied = parseFloat(getComputedStyle(root).getPropertyValue('--section-tail')) || 0
+      const need = el && window.matchMedia(RAIL_QUERY).matches
+        ? Math.max(0, (el.offsetTop - SCROLL_OFFSET) + BOTTOM_BAND
+            - (root.scrollHeight - applied - window.innerHeight))
+        : 0
+      if (Math.abs(need - applied) > 1) root.style.setProperty('--section-tail', `${need}px`)
 
       if (pinned.current) return
+
+      // The last section's band. It is too short to cross the line on its own
+      // and, unlike the rest, it is not given the room to — so the foot of the
+      // document is what claims it.
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
+      if (atBottom) {
+        setActive(items[items.length - 1])
+        return
+      }
 
       let current = items[0]
       for (const badge of items) {
