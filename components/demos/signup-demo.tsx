@@ -2,7 +2,7 @@
 
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
 import { useTarget } from '@/components/demos/demo-cursor'
-import { C, Screen } from '@/components/demos/edrone-tokens'
+import { C, Screen, TYPEFACE } from '@/components/demos/edrone-tokens'
 import {
   Divider, Field, Heading, Label, Legal, metricsFor, type Metrics, OAuthRow, Subtitle,
   Underlined, YellowButton,
@@ -40,7 +40,7 @@ const REST: Partial<DemoState> = { screen: 0 }
 
 export function SignupDemo(props: DemoProps) {
   return (
-    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} {...props}>
+    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} ink={C.ink} typeface={TYPEFACE} {...props}>
       {(state, m) => (
         <div
           className="flex h-full w-full items-center justify-center bg-white"

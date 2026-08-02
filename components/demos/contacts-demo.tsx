@@ -7,6 +7,7 @@ import {
   metricsFor, PersonMark, RepeatMark, SectionTitle, SequencePanel, StepCard, TileRow, Title,
 } from '@/components/demos/dashboard-ui'
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
+import { C, TYPEFACE } from '@/components/demos/edrone-tokens'
 import type { DemoState, Step } from '@/components/demos/use-demo-script'
 
 /**
@@ -124,7 +125,7 @@ export function ContactsDemo(props: DemoProps) {
   const lastOpened = useRef(0)
 
   return (
-    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} {...props}>
+    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} ink={C.ink} typeface={TYPEFACE} {...props}>
       {(state, m) => {
         if (state.screen > 0) lastOpened.current = state.screen - 1
 

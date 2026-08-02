@@ -342,6 +342,11 @@
    `left` rather than a transform, because the distance is the parent's width
    and a percentage translate would measure the envelope instead. */
 
+/* Where the mail comes to rest, and where the line stops so it can. Four
+   things have to agree on this and three of them are keyframes, so it is
+   declared once and read everywhere. */
+.cf-diagram { --cf-mail-inset: 16px; }
+
 /* Beat 1, the send — 0 to 26%. The dashes are alive only while something is on
    the wire; -48 is four whole dash periods, so the line is where it started
    when it stops. */
@@ -351,21 +356,32 @@
 }
 .cf-dash { animation: cf-dash 8s linear infinite; }
 
-@keyframes cf-send-x {
-  0%        { left: 0%; opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
-  4%        { left: 0%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  26%, 27%  { left: calc(100% - 16px); opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  32%, 100% { left: calc(100% - 16px); opacity: 0; transform: translate(-50%, -50%) scale(1); }
+/* The travel is a transform on a wrapper that spans the track, so a percentage
+   measures the track and not the 24px glyph, and so the whole animation stays
+   off the layout — the earlier version moved `left`, which is correct but costs
+   a layout pass every frame. */
+@keyframes cf-travel-x {
+  0%, 4%    { transform: translateX(0); opacity: 0; }
+  6%        { transform: translateX(2%); opacity: 1; }
+  26%, 36%  { transform: translateX(calc(100% - var(--cf-mail-inset))); opacity: 1; }
+  42%, 100% { transform: translateX(calc(100% - var(--cf-mail-inset))); opacity: 0; }
 }
-.cf-send-x { animation: cf-send-x 8s cubic-bezier(.5, 0, .4, 1) infinite; }
+.cf-travel-x { animation: cf-travel-x 8s cubic-bezier(.5, 0, .4, 1) infinite; }
 
-@keyframes cf-send-y {
-  0%        { top: 0%; opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
-  4%        { top: 0%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  26%, 27%  { top: calc(100% - 16px); opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  32%, 100% { top: calc(100% - 16px); opacity: 0; transform: translate(-50%, -50%) scale(1); }
+@keyframes cf-travel-y {
+  0%, 4%    { transform: translateY(0); opacity: 0; }
+  6%        { transform: translateY(2%); opacity: 1; }
+  26%, 36%  { transform: translateY(calc(100% - var(--cf-mail-inset))); opacity: 1; }
+  42%, 100% { transform: translateY(calc(100% - var(--cf-mail-inset))); opacity: 0; }
 }
-.cf-send-y { animation: cf-send-y 8s cubic-bezier(.5, 0, .4, 1) infinite; }
+.cf-travel-y { animation: cf-travel-y 8s cubic-bezier(.5, 0, .4, 1) infinite; }
+
+/* The glyph inside it: the centring, and the scale it leaves and lands on. */
+@keyframes cf-mail {
+  0%        { transform: translate(-50%, -50%) scale(0.6); }
+  6%, 100%  { transform: translate(-50%, -50%) scale(1); }
+}
+.cf-mail { animation: cf-mail 8s cubic-bezier(.5, 0, .4, 1) infinite; }
 
 /* Beat 2, the open — 27 to 56%. Same mail, same spot: it takes over from the
    closed one where it landed, with a small pop, and holds long enough to be
@@ -421,6 +437,9 @@
 .cf-state-a { animation: cf-state-a 8s ease-in-out infinite; }
 .cf-state-b { animation: cf-state-b 8s ease-in-out infinite; }
 
+/* Only ever seen un-stacked, which is to say under reduced motion. */
+.cf-then { display: none; }
+
 /* The moment of resolution, on the card's own edge. */
 @keyframes cf-resolve {
   0%, 50%   { border-color: var(--color-100); }
@@ -473,19 +492,27 @@
 @media (prefers-reduced-motion: reduce) {
   .demo-caret       { animation: none; opacity: 1; }
   .demo-spin        { animation: none; }
+  /* The diagram is a sequence, and with nothing moving there is no handover to
+     carry it — so rather than freeze on one frame and lose the rest, the stacked
+     states come out of their shared grid slot and stand in rows. The card reads
+     before-then-after down its own height, the caption becomes a three-line
+     legend, and `cf-then` appears between the two states to say which way round
+     they go. The row centres instead of stretching, so the sender does not grow
+     to match a box that is now twice as tall. */
   .cf-dash          { animation: none; }
-  /* Freeze the diagram on its outcome: the opened mail sits where it landed and
-     the contact is resolved. The stacked states share one grid slot, so exactly
-     one of each may show. */
-  .cf-send-x,
-  .cf-send-y        { animation: none; opacity: 0; }
+  .cf-travel-x,
+  .cf-travel-y      { animation: none; opacity: 0; }
+  .cf-mail          { animation: none; }
   .cf-open          { animation: none; transform: translate(-50%, -50%); }
-  .cf-say-1,
-  .cf-say-2         { animation: none; opacity: 0; }
-  .cf-say-3         { animation: none; opacity: 1; }
-  .cf-state-a       { animation: none; opacity: 0; }
-  .cf-state-b       { animation: none; opacity: 1; }
   .cf-resolve       { animation: none; }
+  .cf-say-1,
+  .cf-say-2,
+  .cf-say-3,
+  .cf-state-a,
+  .cf-state-b,
+  .cf-then          { animation: none; opacity: 1; transform: none;
+                      grid-row-start: auto; display: flex; }
+  .cf-row           { align-items: center; }
   .demo-confetti    { animation: none; opacity: 0; }
   .demo-screen-in,
   .demo-grid-scroll,

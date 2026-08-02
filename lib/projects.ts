@@ -40,7 +40,6 @@ export interface Project {
     role: string
     team: string
     duration: string
-    date: string
   }
   coverImage: string
   coverImagePosition?: 'bottom-right' | 'center-bottom'
@@ -73,7 +72,7 @@ export const projects: Project[] = [
   {
     slug: 'freemium-activation',
     title: 'Freemium launch',
-    tagline: 'From sales-gated to self-serve. 4657 accounts in 7 months.',
+    tagline: 'From sales-gated to self-serve. 4657 accounts in 10 months.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
     metrics: [
       { value: '8.4%', label: 'PAID CONVERSION', color: 'accent' },
@@ -81,8 +80,7 @@ export const projects: Project[] = [
     meta: {
       role: 'Sr Product Designer',
       team: '1 Front-end dev, 1 Back-end dev',
-      duration: '7 months',
-      date: '2025–2026',
+      duration: '10 months',
     },
     coverImage: '/thumbnails/freemium-activation.png',
     thumbnailImage: '/thumbnails/freemium-activation.png',
@@ -102,7 +100,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'I saw consistent inbound traffic in GA that never reached Sales, and built the case for a freemium channel to capture it. Freemium launched May 2025, and over 7 months I iterated on the onboarding through continuous user research and production testing.',
+            content: 'I saw consistent inbound traffic in GA that never reached Sales, and built the case for a freemium channel to capture it. Freemium launched May 2025, and over 10 months I iterated on the onboarding through continuous user research and production testing.',
           },
           {
             kind: 'text',
@@ -179,7 +177,6 @@ export const projects: Project[] = [
       role: 'Sr Product Designer',
       team: '1 Front-end dev',
       duration: '5 hours',
-      date: '2026',
     },
     coverImage: '/images/sf-cover.png',
     thumbnailImage: '/images/sf-cover.png',
@@ -301,7 +298,6 @@ export const projects: Project[] = [
       role: 'Sr Product Designer',
       team: '1 Back-end dev',
       duration: '6 days',
-      date: '2026',
     },
     coverImage: '/images/ci-cover.png',
     thumbnailImage: '/images/ci-thumbnail.png',
@@ -443,7 +439,6 @@ export const projects: Project[] = [
       role: 'Sole Designer',
       team: '1 Front-end dev, 1 Back-end dev',
       duration: '10 months',
-      date: '2022–2024',
     },
     coverImage: '/images/plo-cover.png',
     coverImagePosition: 'center-bottom',

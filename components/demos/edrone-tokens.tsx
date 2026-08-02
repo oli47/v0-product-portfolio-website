@@ -9,6 +9,10 @@
  * one ink, one border grey, one yellow.
  */
 
+/** The app's face. Named here with the palette so a demo anchors both from one
+ *  place, and so nothing inside a stage can inherit the portfolio's. */
+export const TYPEFACE = 'var(--font-dm-sans)'
+
 export const C = {
   ink:      '#050505',
   body:     '#545454',

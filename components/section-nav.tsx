@@ -19,6 +19,9 @@ const RAIL_PIN_TOP = 160
 // Where it fades in: well before it pins, so it is already there by the time
 // the reader is reading rather than arriving as they pass the heading.
 const RAIL_REVEAL_TOP = 420
+// The rail only exists at this width, and so does the room it needs at the foot
+// of the page. A phone gets neither.
+const RAIL_QUERY = '(min-width: 1200px)'
 
 function SectionNavItem({
   badge,
@@ -98,16 +101,27 @@ export function SectionNav({ items }: { items: string[] }) {
         setShown(top <= RAIL_REVEAL_TOP)
       }
 
-      if (pinned.current) return
-
-      // Bottom of the page: the last section may be too short to ever cross
-      // the line on its own, so claim it explicitly.
-      const atBottom =
-        window.innerHeight + window.scrollY >= document.body.scrollHeight - 2
-      if (atBottom) {
-        setActive(items[items.length - 1])
-        return
+      // A rail whose last entries cannot be scrolled to is a rail that lies:
+      // the document simply runs out before the section reaches the line, so
+      // clicking one used to land on the bottom of the page and light up
+      // whatever was nearest. Rather than paper over that in the highlight,
+      // give the page exactly the room the last section needs — no more, and
+      // none at all on a width that has no rail.
+      const last = document.getElementById(sectionId(items[items.length - 1]))
+      if (last) {
+        const root = document.documentElement
+        // Read what is applied rather than remembering it: the measurement has
+        // to subtract its own effect, and anything held in a ref goes stale the
+        // first time the effect remounts with the padding already gone.
+        const applied = parseFloat(getComputedStyle(root).getPropertyValue('--section-tail')) || 0
+        const below = root.scrollHeight - applied - last.offsetTop
+        const need = window.matchMedia(RAIL_QUERY).matches
+          ? Math.max(0, window.innerHeight - SCROLL_OFFSET - below)
+          : 0
+        if (Math.abs(need - applied) > 1) root.style.setProperty('--section-tail', `${need}px`)
       }
+
+      if (pinned.current) return
 
       let current = items[0]
       for (const badge of items) {
@@ -129,6 +143,7 @@ export function SectionNav({ items }: { items: string[] }) {
       if (frame) cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
+      document.documentElement.style.removeProperty('--section-tail')
     }
   }, [items])
 

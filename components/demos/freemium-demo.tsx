@@ -5,6 +5,7 @@ import {
   TileRow, Title,
 } from '@/components/demos/dashboard-ui'
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
+import { C, TYPEFACE } from '@/components/demos/edrone-tokens'
 import {
   Action, AppFrame, AutomationCard, type AutomationData, CardGrid, CoachMark, type CoachStep,
   Confetti, ConnectedScreen, CONTINUE, GRID, INTEGRATE, IntegrateScreen, type Metrics, metricsFor,
@@ -287,7 +288,7 @@ const REST: Partial<DemoState> = { screen: AUTOMATIONS_SCREEN }
 
 export function FreemiumDemo(props: DemoProps) {
   return (
-    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} holdLastFrame {...props}>
+    <DemoFrame script={SCRIPT} restState={REST} metrics={metricsFor} ink={C.ink} typeface={TYPEFACE} holdLastFrame {...props}>
       {(state, m) => {
         // The card belongs to the walkthrough, and the two screens either side
         // of it are not part of the walkthrough.

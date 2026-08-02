@@ -39,7 +39,10 @@ export default function ProjectPage() {
   ]
 
   return (
-    <main id="main-content" className="min-h-screen bg-background">
+    // The rail hands back how much room the last section needs to be able to
+    // reach the top of the window; without it the foot of the page is a set of
+    // links that cannot be followed. Zero below 1200px, where there is no rail.
+    <main id="main-content" className="min-h-screen bg-background" style={{ paddingBottom: 'var(--section-tail, 0px)' }}>
       <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-16">
 
         {/* Header */}

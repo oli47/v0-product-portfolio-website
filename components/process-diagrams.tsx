@@ -182,8 +182,12 @@ const CELL = 'col-start-1 row-start-1'
 
 /** Where the mail comes to rest: the track's far end, less half the width of
     the opened mail's mask, so the mask clears the card it is delivering to.
-    The travelling mail stops on the same spot — see `cf-send-x` in globals. */
-const MAIL_REST = 'calc(100% - 16px)'
+    The distance itself is `--cf-mail-inset`, declared on `.cf-diagram` in
+    globals.css, because four things have to agree on it — where the line stops,
+    where the travelling mail stops, where the opened one parks, and the same on
+    the vertical track — and three of them are keyframes. */
+const MAIL_REST = 'calc(100% - var(--cf-mail-inset))'
+const LINE_END = 'var(--cf-mail-inset)'
 
 /** Both boxes, one width. 11rem rather than the 9rem they started at because
     `miller@email.com` measures 115px and cannot break: at 9rem the widest state
@@ -207,10 +211,10 @@ export function ContactFlowDiagram({ caption }: { caption?: string }) {
   return (
     <div className="sm:-mx-8">
       <div
-        className="rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
+        className="cf-diagram rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
         style={{ backgroundColor: 'var(--color-000)' }}
       >
-        <div className="flex flex-col items-stretch sm:flex-row justify-between gap-3">
+        <div className="cf-row flex flex-col items-stretch sm:flex-row justify-between gap-3">
 
           {/* Sender: edrone */}
           <div
@@ -232,17 +236,21 @@ export function ContactFlowDiagram({ caption }: { caption?: string }) {
 
             {/* Horizontal track, desktop */}
             <div className="relative hidden h-6 w-full sm:block">
-              {/* The line stops 16px short — `right-4`, the same inset baked
-                  into MAIL_REST and into cf-send-x — so it ends exactly where
-                  the mail comes to rest and the dashes run into it rather than
-                  out from under it. */}
-              <div className="absolute left-0 right-4 top-1/2 h-3 -translate-y-1/2">
+              {/* The line ends exactly where the mail comes to rest, so the
+                  dashes run into it rather than out from under it. */}
+              <div className="absolute left-0 top-1/2 h-3 -translate-y-1/2" style={{ right: LINE_END }}>
                 <svg width="100%" height="12" style={{ display: 'block' }} aria-hidden>
                   <line x1="0" y1="6" x2="100%" y2="6" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" className="cf-dash"/>
                 </svg>
               </div>
-              <span className="cf-send-x absolute top-1/2">
-                <EnvelopeGlyph />
+              {/* Two elements so the travel is a transform and nothing in this
+                  animation touches layout: the outer one spans the track, so a
+                  percentage translate measures the track rather than the 24px
+                  glyph, and the inner one carries the centring and the pop. */}
+              <span className="cf-travel-x absolute inset-x-0 top-1/2 block">
+                <span className="cf-mail absolute left-0 top-0 block">
+                  <EnvelopeGlyph />
+                </span>
               </span>
               <span className="cf-open absolute top-1/2" style={{ left: MAIL_REST }}>
                 <OpenEnvelopeGlyph />
@@ -251,13 +259,15 @@ export function ContactFlowDiagram({ caption }: { caption?: string }) {
 
             {/* Vertical track, phone */}
             <div className="relative h-20 w-6 sm:hidden">
-              <div className="absolute bottom-4 left-1/2 top-0 w-3 -translate-x-1/2">
+              <div className="absolute left-1/2 top-0 w-3 -translate-x-1/2" style={{ bottom: LINE_END }}>
                 <svg width="12" height="100%" style={{ display: 'block' }} aria-hidden>
                   <line x1="6" y1="0" x2="6" y2="100%" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" className="cf-dash"/>
                 </svg>
               </div>
-              <span className="cf-send-y absolute left-1/2">
-                <EnvelopeGlyph />
+              <span className="cf-travel-y absolute inset-y-0 left-1/2 block">
+                <span className="cf-mail absolute left-0 top-0 block">
+                  <EnvelopeGlyph />
+                </span>
               </span>
               <span className="cf-open absolute left-1/2" style={{ top: MAIL_REST }}>
                 <OpenEnvelopeGlyph />
@@ -296,6 +306,15 @@ export function ContactFlowDiagram({ caption }: { caption?: string }) {
                 <p className="text-body-2 text-[var(--color-400)] font-medium">Unidentified</p>
                 <p className="text-body-2 text-[var(--color-300)]">no cookie yet</p>
               </div>
+            </div>
+
+            {/* Only ever seen when the states are un-stacked, which is to say
+                under reduced motion: with both of them on screen at once,
+                something has to say which way round they go. */}
+            <div className={`${CELL} cf-then justify-center`} aria-hidden>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[var(--color-300)]">
+                <path d="M8 2v12M3.5 9.5 8 14l4.5-4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
 
             {/* After */}
