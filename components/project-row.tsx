@@ -31,16 +31,22 @@ export function ProjectRow({ project }: { project: Project }) {
       {/* Thumbnail — full-bleed on mobile, inset on a card fill on desktop.
           Where the project has a coded demo it takes the same slot, still at
           rest and playing while the row is hovered. */}
-      <div className="flex w-full items-end justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/235] sm:aspect-[680/320] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
+      <div className="flex w-full items-center justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/225] sm:items-end sm:aspect-[680/320] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
         {Demo ? (
           // Every demo shows the same screen here that the case study shows,
-          // and those screens are not all the same shape, so the slot has to
-          // measure from whichever side binds: its width on a phone, its height
-          // above sm. Either way each one lands on the same margin — 9% of the
-          // slot to each side — rather than each needing its own number. Sits
-          // flush with the bottom the way the covers do, and `demo-lift` scales
-          // it up from that edge while the row is hovered (see globals.css).
-          <div className="demo-lift w-[82%] sm:h-[95%] sm:w-auto" data-lift={hovered}>
+          // and those screens are not all the same shape, so the slot measures
+          // from whichever side binds: its width on a phone, its height above
+          // sm. Each one then lands on the same margin rather than needing its
+          // own number, and `demo-lift` scales it up while the row is hovered
+          // (see globals.css).
+          //
+          // The phone numbers are solved rather than picked. A 1.6 slot is far
+          // taller than any of the three stages, so filling its width left a
+          // 60px band of beige above a screen with 32px beside it — even, but
+          // lopsided, and the screen small for it. Shortening the slot to 1.68
+          // and taking 91% of its width puts a 16px frame on all four sides of
+          // all three, and buys the screens back about a ninth of their width.
+          <div className="demo-lift w-[91%] sm:h-[95%] sm:w-auto" data-lift={hovered}>
             <Demo variant="card" fit="card" play={hovered} />
           </div>
         ) : (
