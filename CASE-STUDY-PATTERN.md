@@ -199,16 +199,37 @@ admission into a performance.
 ## Known bias in this pattern
 
 It was derived from a five-hour, heavily quantitative project with a clean
-before/after. Two of the other case studies will resist it:
+before/after.
 
-- **`freemium-activation`** — ten months, qualitative research, iterative. Approach's
-  "quantitative first, qualitative second" inverts. Solution has no discrete problem
-  list to close, so the one-beat-per-problem rule has nothing to attach to.
-- **`plo-genius`** — two years, no conversion metrics, no baseline and no benchmark.
-  Goal has no number to state. Impact has no before/after and therefore nowhere to
-  hang a defence metric.
+**`freemium-activation` was the test case, and it passed.** Ten months, qualitative
+research, iterative, and the two things this doc predicted would break did not:
 
-**The open question is whether `Goal` survives a project without a baseline, and
-whether the problem → solution pairing survives a project that was iteration rather
-than diagnosis.** Test both before treating this pattern as closed. `Goal` currently
-exists only on `signup-redesign`; the other three run five sections.
+- `Goal` survived without a funnel baseline. The baseline it uses is the *alternative*:
+  25,000 monthly visitors with no path to the product, against Sales closing 60 to 100
+  customers a month at roughly 4,000 PLN each. A goal can be anchored to what the
+  company was already paying rather than to a conversion rate.
+- The pairing survived a project that was iteration rather than diagnosis, but only
+  after the cards stopped calling themselves problems. Nothing in freemium ever
+  broke. The designer was hunting for leverage on a metric, not for faults, so the
+  cards are `OPPORTUNITY 1–4` and Approach says so out loud: "Nothing in that version
+  was broken. It shipped, it worked, and it took too long to reach the moment that
+  mattered." Approach names four, Solution closes four, and the label matches how the
+  work was actually done.
+
+  **Use `PROBLEM` only when the project really was a diagnosis.** `signup-redesign`
+  found faults, so its cards are problems. Forcing that label onto optimisation work
+  puts a mode of working into the designer's mouth that they cannot defend when asked
+  how they found them.
+
+Two adjustments the rewrite forced, both worth keeping:
+
+- **Approach's "quantitative first, qualitative second" does invert here**, and that is
+  fine. The order of evidence is a claim about how you worked, not a rule.
+- **A defence metric is not always available.** Freemium has none: Support's workload
+  went up, and no counter-metric was ever collected. Naming the cost in Reflections
+  does more for credibility than an omission does, because it is the first thing a
+  reader suspects. Prefer an admitted cost to a missing defence.
+
+**Still open: `plo-genius`** — two years, no conversion metrics, no baseline and no
+benchmark. Impact has no before/after and therefore nowhere to hang either a defence
+metric or an admitted cost. It is the only case study still running four sections.
