@@ -104,21 +104,13 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'GA showed around 25,000 unique visitors a month. Sales was closing 60 to 100 new customers out of them, at an acquisition cost of roughly 4,000 PLN each, so almost all of that traffic left without ever entering the funnel. Self-serve was already standard in the category. I had been edrone\'s only designer for two years, and I took the case for a freemium channel to the CTO across months of conversations, until he brought in the CEO and COO and gave it a green light.',
-          },
-          {
-            kind: 'text',
-            content: 'I set the north star as time to first attributed order. Signups alone would have made the channel look successful by month two. **Time to first attributed order was the only number that would say whether the free tier was doing its job,** and it is the number that later set the size of that tier.',
+            content: 'Around 25,000 stores a month found edrone on their own. Sales converted 60 to 100 of them at roughly 4,000 PLN each, and that does not scale. I made the case for a self-serve path and got it funded.',
           },
         ],
       },
       {
         badge: 'Approach',
         blocks: [
-          {
-            kind: 'text',
-            content: 'Freemium launched May 2025. Two Support people the CSO allocated to me ran most of the research: around thirty interviews with fresh signups spread across the project, alongside internal sessions with Support\'s onboarding and success teams. Three versions of the onboarding reached production over the ten months.',
-          },
           {
             kind: 'text',
             content: '**The vast majority of users reaching edrone were small, one-person stores.** No time, no marketing automation experience, no idea whether it would pay off. They could not spend hours understanding, configuring or learning a tool.',
@@ -129,7 +121,7 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: 'Nothing in that version was broken. It shipped, it worked, and it asked more of a new store than a new store would give. What I spent the ten months looking for was not faults but leverage, and it kept returning to the same four places.',
+            content: 'Nothing in that version was broken. It shipped, it worked, and it asked more of a new store than a new store would give. What I spent the ten months looking for was not faults but leverage: around thirty interviews with fresh signups, run mostly by two Support people the CSO allocated to me, and three shipped versions got me to the same four places.',
           },
           {
             kind: 'decisions',
@@ -183,6 +175,10 @@ export const projects: Project[] = [
               { title: 'First order', subtitle: 'User sees their first order driven by edrone' },
             ],
             caption: 'The final activation path. Value demonstrated before any commitment.',
+          },
+          {
+            kind: 'text',
+            content: 'I set the north star as time to first attributed order. Signups alone would have made the channel look successful by month two. **Time to first attributed order was the only number that would say whether the free tier was doing its job,** and it is the number that set the size of that tier.',
           },
           {
             kind: 'text',
