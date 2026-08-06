@@ -45,7 +45,9 @@
      Use color-500 → color-000 from darkest to lightest */
   --color-500: #1A1714;  /* Primary text: main headings, high-emphasis labels */
   --color-400: #3D3730;  /* Secondary text: card titles, job titles */
-  --color-300: #6B6258;  /* Body text: paragraphs, descriptions, supporting copy */
+  --color-300: #544D45;  /* Body text: paragraphs, descriptions, supporting copy.
+                            7.8:1 on --white, 7.1:1 on --color-000 — WCAG AAA ✓
+                            (was #6B6258, 5.6:1 and 5.1:1, AA only) */
   --color-200: #B5A990;  /* Muted: icon fills, divider text, decorative arrows */
   --color-150: #D9D0BC;  /* Border medium: stronger separators, discover button border */
   --color-100: #E8E0D0;  /* Border default: card borders, input lines, section dividers */
