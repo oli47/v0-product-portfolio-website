@@ -8,6 +8,9 @@ import {
 } from "./chart-context"
 import { SeriesContext } from "./series-context"
 
+// PATCHED: `<Context value=…>` is React 19; this app is React 18.3, so these
+// are `.Provider`. `@dither-kit/cli update` will revert it — see README.md.
+
 export type BarProps = {
   dataKey: string
   variant?: AreaVariant

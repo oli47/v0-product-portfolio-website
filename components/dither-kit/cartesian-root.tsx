@@ -19,6 +19,9 @@ import { cn } from "./lib"
 import type { StackType } from "./scales"
 import { useChartDimensions } from "./use-chart-dimensions"
 
+// PATCHED: `<Context value=…>` is React 19; this app is React 18.3, so these
+// are `.Provider`. `@dither-kit/cli update` will revert it — see README.md.
+
 // `object` rather than `Record<string, unknown>`: interfaces don't get an
 // implicit index signature, so interface-typed rows failed to satisfy the
 // generic. Internal layers still index rows through their own Row type.
