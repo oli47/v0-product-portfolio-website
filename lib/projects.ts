@@ -179,7 +179,7 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: '**An active store is an integrated one with automations running.** For the targeting to have anything to work on, it needs around fifty orders a month. That is what the channel was steered by, not logins.',
+            content: '**An active store is an integrated one with automations running.** I measured it only on stores doing around fifty orders a month or more, because below that a shop is either days old or too small for marketing automation to be for it, and counting them would have made the number meaningless. That is what the channel was steered by, not logins.',
           },
         ],
       },
