@@ -6,6 +6,7 @@ import { getProject, getProjectNavigation } from '@/lib/projects'
 import { Bold } from '@/components/bold'
 import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
+import { CohortChart } from '@/components/cohort-chart'
 import { MetricMain } from '@/components/metric-card'
 import { ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
@@ -27,9 +28,16 @@ export default function ProjectPage() {
   const prevLabel = useScramble(prev.title)
   const nextLabel = useScramble(next.title)
 
-  const metricsGridCols = project.results.metrics.length === 3
+  // A metric carrying a chart takes the full width below the grid — the chart
+  // belongs to its number, so the two are never separate blocks.
+  const plainMetrics = project.results.metrics.filter((m) => !m.chart)
+  const chartedMetrics = project.results.metrics.filter((m) => m.chart)
+
+  const metricsGridCols = plainMetrics.length === 3
     ? 'grid-cols-1 md:grid-cols-3'
-    : 'grid-cols-1 md:grid-cols-2'
+    : plainMetrics.length === 1
+      ? 'grid-cols-1'
+      : 'grid-cols-1 md:grid-cols-2'
 
   const hasReflections = project.reflections && project.reflections.length > 0
   const navItems = [
@@ -43,7 +51,7 @@ export default function ProjectPage() {
     // reach the top of the window; without it the foot of the page is a set of
     // links that cannot be followed. Zero below 1200px, where there is no rail.
     <main id="main-content" className="min-h-screen bg-background" style={{ paddingBottom: 'var(--section-tail, 0px)' }}>
-      <div className="max-w-[45rem] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-16">
+      <div className="max-w-[var(--measure)] mx-auto px-5 pt-[10rem] pb-16 flex flex-col gap-16">
 
         {/* Header */}
         <section>
@@ -51,7 +59,10 @@ export default function ProjectPage() {
             <h1 className="font-display text-[clamp(1.5rem,7vw,2.625rem)] leading-[1.2] text-balance">
               {project.title}
             </h1>
-            <p className="text-body-1 text-[var(--color-300)] text-balance">
+            {/* Fills the line rather than balancing it. Balancing evened the two
+                lines out and split "5,050" from "stores", which reads as a
+                stumble every time. */}
+            <p className="text-body-1 text-[var(--color-500)]">
               {project.tagline}
             </p>
           </div>
@@ -69,7 +80,11 @@ export default function ProjectPage() {
                 className="w-full rounded-sm"
                 // Wider inset at the sides than above; flush with the bottom
                 // edge, the way the `center-bottom` covers sit.
-                style={{ backgroundColor: 'var(--color-000)', padding: '2rem 4rem 0' }}
+                // Side inset is capped by the demos, not by taste: they switch
+                // to the phone layout below a 520px stage, and the narrowed page
+                // column leaves only so much to give away. 2rem keeps the hero
+                // on the desktop layout; 4rem pushed it under.
+                style={{ backgroundColor: 'var(--color-000)', padding: '2rem 2rem 0' }}
               >
                 <ClickableDemo id={project.demo} label={project.title} variant="compact" />
               </div>
@@ -107,7 +122,7 @@ export default function ProjectPage() {
               two-column grid left a ragged third cell and a lot of empty space
               beside the short values, and a phone has the width for a list but
               not for a grid. */}
-          <dl className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-x-6 sm:gap-y-4 mt-8 pb-6 border-b border-[var(--color-100)]">
+          <dl className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-x-12 sm:gap-y-4 mt-8 pb-6 border-b border-[var(--color-100)]">
             {([
               ['Role', project.meta.role],
               ['Team', project.meta.team],
@@ -118,7 +133,14 @@ export default function ProjectPage() {
                 className="flex items-baseline justify-between gap-6 sm:flex-col sm:items-start sm:justify-start sm:gap-1.5"
               >
                 <dt className="text-eyebrow text-[var(--color-400)] shrink-0">{label.toUpperCase()}</dt>
-                <dd className="text-body-2 text-[var(--color-500)] text-pretty text-right sm:text-left">{value}</dd>
+                {/* A comma-separated value gets one line per item. Left to wrap,
+                    "1 Front-end dev, 1 Back-end dev" broke inside "Back-end"
+                    instead of at the comma, which is the only place it should. */}
+                <dd className="text-body-2 text-[var(--color-500)] text-pretty text-right sm:text-left">
+                  {value.split(', ').map((part) => (
+                    <span key={part} className="block">{part}</span>
+                  ))}
+                </dd>
               </div>
             ))}
           </dl>
@@ -172,19 +194,35 @@ export default function ProjectPage() {
                   className="mb-3 sm:-mx-8"
                 />
               )}
-              <div className={`grid gap-3 sm:-mx-8 ${metricsGridCols}`}>
-                {project.results.metrics.map((metric, index) => (
-                  <MetricMain
-                    key={index}
-                    label={metric.label}
-                    value={metric.value}
-                    note={metric.description}
+              {plainMetrics.length > 0 && (
+                <div className={`grid gap-3 sm:-mx-8 ${metricsGridCols}`}>
+                  {plainMetrics.map((metric, index) => (
+                    <MetricMain
+                      key={index}
+                      label={metric.label}
+                      value={metric.value}
+                      note={metric.description}
+                    />
+                  ))}
+                </div>
+              )}
+              {chartedMetrics.map((metric, index) => (
+                <MetricMain
+                  key={index}
+                  label={metric.label}
+                  value={metric.value}
+                  note={metric.description}
+                  className="mt-3 sm:-mx-8"
+                >
+                  <CohortChart
+                    data={metric.chart!.data}
+                    seriesLabel={metric.chart!.seriesLabel}
                   />
-                ))}
-              </div>
+                </MetricMain>
+              ))}
               {project.results.note && (
                 <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={project.results.note} /></p>
+                  <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
                 </div>
               )}
             </>
@@ -197,7 +235,7 @@ export default function ProjectPage() {
             <SectionBadge>Reflections</SectionBadge>
             <div className="flex flex-col gap-4">
               {project.reflections.map((text, index) => (
-                <p key={index} className="text-body-1 text-[var(--color-300)] text-pretty">
+                <p key={index} className="text-body-1 text-[var(--color-500)] text-pretty">
                   <Bold text={text} />
                 </p>
               ))}

@@ -60,6 +60,14 @@ export interface Project {
       label: string
       description?: string
       color?: 'accent' | 'ink'
+      /** Drawn inside this metric's card, under its number. One bar per cohort,
+       *  and a metric that carries a chart is rendered full-width.
+       *  `label` is the axis tick, kept short; `full` is what the tooltip says,
+       *  where there is room to spell it out. */
+      chart?: {
+        seriesLabel: string
+        data: { label: string; full: string; value: number }[]
+      }
     }[]
   }
   /** Rendered as plain paragraphs under a Reflections badge. */
@@ -72,15 +80,16 @@ export const projects: Project[] = [
   {
     slug: 'freemium-activation',
     title: 'Freemium launch',
-    tagline: 'From sales-gated to self-serve. 4657 accounts in 10 months.',
+    tagline: 'From sales-gated to self-serve. 5,050 stores acquired without a salesperson.',
     description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
     metrics: [
-      { value: '8.4%', label: 'FREE TO PAID', color: 'accent' },
+      { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
     ],
     meta: {
       role: 'Sr Product Designer',
       team: '1 Front-end dev, 1 Back-end dev',
-      duration: '10 months',
+      // Eleven monthly cohorts in the data, May 2025 to March 2026.
+      duration: '11 months',
     },
     coverImage: '/thumbnails/freemium-activation.png',
     thumbnailImage: '/thumbnails/freemium-activation.png',
@@ -91,11 +100,11 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'edrone is a marketing automation CRM for ecommerce. Automated messages and newsletters bring shoppers back to finish the orders they abandoned, and stores pay by the size of the contact base they keep there.',
+            content: 'edrone is marketing automation for ecommerce. Automated messages and newsletters bring shoppers back to finish the orders they abandoned.',
           },
           {
             kind: 'text',
-            content: 'For ten years edrone sold one way only. Every customer arrived through Sales: a demo, a contract, then onboarding led by Support. Nobody used the product themselves before signing for it, and no self-serve path existed.',
+            content: 'For ten years edrone sold one way. A salesperson closed the deal and a Support team set the product up. **That put a floor under the size of customer worth acquiring.** Sales promised that team at signing, so almost nobody had ever set the product up alone.',
           },
         ],
       },
@@ -104,7 +113,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'Around 25,000 stores a month found edrone on their own. Sales converted 60 to 100 of them at roughly 4,000 PLN each, and that does not scale. I made the case for a self-serve path and got it funded.',
+            content: '**Open edrone to the stores the old model could not afford to serve.** Take the salesperson and the onboarding team out of the cost and the same store pays for itself. That leaves the product to do the whole job.',
           },
         ],
       },
@@ -113,38 +122,24 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**The vast majority of users reaching edrone were small, one-person stores.** No time, no marketing automation experience, no idea whether it would pay off. They could not spend hours understanding, configuring or learning a tool.',
+            content: '**I had to digitise what the onboarding team did.** Until then every paying customer had their setup handed to them by a person. The first question was whether the product could stand up to a user with nobody behind them, so I went at the places where a store is most on its own.',
           },
           {
             kind: 'text',
-            content: 'The first version asked them to do exactly that. It opened on store integration, then handed over a builder and a list of steps to follow.',
-          },
-          {
-            kind: 'text',
-            content: 'Nothing in that version was broken. It shipped, it worked, and it asked more of a new store than a new store would give. What I spent the ten months looking for was not faults but leverage: around thirty interviews with fresh signups, run mostly by two Support people the CSO allocated to me, and three shipped versions got me to the same four places.',
+            content: 'Even edrone\'s paying customers, who had Support the whole way, did plenty themselves, so the answer was never all or nothing. **What I needed was the line between what should already be done when a store arrives and what it still wants to do itself.** Two things stood in the way.',
           },
           {
             kind: 'decisions',
             items: [
               {
-                num: 'OPPORTUNITY 1',
-                title: 'Setup was the price of entry',
-                description: 'Every route to value started with the user building something: an integration, a pop-up, a campaign. A one-person store has no hours to spend proving that a tool might work.',
+                num: 'PROBLEM 1',
+                title: 'One step only the store can take',
+                description: 'Connecting a shop needs its own credentials and its own decision to hand over a customer list. It was the first thing the product asked for, and a place a store could stall and never come back from.',
               },
               {
-                num: 'OPPORTUNITY 2',
-                title: 'An empty product proves nothing',
-                description: 'With nothing switched on, a new account showed features rather than results. The user had to imagine the value instead of seeing it happen in their own store.',
-              },
-              {
-                num: 'OPPORTUNITY 3',
-                title: 'Integration asks a stranger for everything',
-                description: 'Connecting a store hands over its contacts and its product data. It was the first screen, before edrone had shown anything in return.',
-              },
-              {
-                num: 'OPPORTUNITY 4',
-                title: 'A free tier has two ways to fail',
-                description: 'Too small and the user never reaches proof. Too large and the upgrade never has to happen. The business wanted the cap set low.',
+                num: 'PROBLEM 2',
+                title: 'No honest definition of an active store',
+                description: 'Logins did not mean use. A store could be earning from edrone for weeks without opening it once, so counting sign-ins said nothing about which accounts were alive.',
               },
             ],
           },
@@ -155,74 +150,69 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'Signup now generates the content instead of asking for it. From the store URL, edrone writes branded newsletters, automations and a subscriber pop-up, reading the store\'s own logo, colours, type and product photography. Nothing is waiting to be built when the user arrives. Reading products off the storefront rather than the store backend is what made this work before any integration existed.',
+            content: '**Every feature the store came for is set up for it.** The campaigns are written, the automations are built, the pop-up is ready.',
           },
           {
             kind: 'text',
-            content: 'Everything ships switched on. I started with two automations and a pop-up, went to three, then five, then seven, measuring activation at each step. **No step made it worse, and past seven it stopped getting better,** so seven is where it stayed.',
+            content: 'Being ready still leaves a decision to make about each one, so I went further and switched them on. **Seven automations run from the first minute.** Abandoned cart, product recommendations, welcome, birthday, win-back, remarketing to past customers and loyalty, plus the pop-up and the first newsletters.',
           },
           {
             kind: 'text',
-            content: 'Integration moved to the end. The business wanted it first, because an integrated store is a committed one and its real product feed makes better content. Both of those are true, but products can be read off the storefront, so at that position integration was buying the commitment and nothing else. My argument was that asking a stranger for their contacts and product data before showing them anything inverts the order of trust. If I had that wrong, fewer accounts would end up integrated with automations running.',
-          },
-          {
-            kind: 'vertical-flow',
-            steps: [
-              { title: 'Signup', subtitle: 'User creates an account' },
-              { title: 'AI content', subtitle: "User sees their store's branded content ready to go", labelAfter: 'AHA MOMENT' },
-              { title: 'Activation', subtitle: 'User reviews what is already on. No setup needed.' },
-              { title: 'Integration', subtitle: 'User decides to connect their store' },
-              { title: 'First order', subtitle: 'User sees their first order driven by edrone' },
-            ],
-            caption: 'The final activation path. Value demonstrated before any commitment.',
+            content: 'I started with two, to find out whether a store would leave running something it had no hand in making. Nobody switched them off, so the rest followed.',
           },
           {
             kind: 'text',
-            content: 'I set the north star as time to first attributed order. Signups alone would have made the channel look successful by month two. **Time to first attributed order was the only number that would say whether the free tier was doing its job,** and it is the number that set the size of that tier.',
+            content: 'All of it is built from the store\'s own site in the minutes after signup. The store gives a URL and nothing else. No credentials, no connection, nothing to fill in.',
           },
           {
             kind: 'text',
-            content: 'The free tier is capped at 500 messages a month. It meters a quota rather than walling off features, so nothing in the product is hidden from a free store and what runs out is the sending. I worked the number out in two steps: how many messages it takes to generate one order attributed to edrone under a pessimistic conversion assumption, then how many of those orders a store needs before paying for edrone returns more than it costs. **Five hundred is the smallest number that clears both.** The business had asked for 200, which would have held down the cost of a free user and pushed the upgrade sooner, but would have stopped most stores short of the proof they came for.',
+            content: '**Integration is the test.** It is the last step, and it takes one click. That is where the store decides whether what edrone has already done is worth handing over its customer list.',
           },
           {
             kind: 'text',
-            content: 'What happens at the limit was mine as well. A meter in the menu shows how much of the month is left, a short series of messages goes out through Intercom as the store gets close, and the banner to upgrade holds until the allowance is actually spent. I made the upgrade a drawer asking how many contacts the store wants to bring across, because **the free tier meters what a store sends while the paid plan prices what it keeps.**',
+            content: 'The business wanted it first. A connected store is a committed one, and its real product feed makes better content, and both of those are true. But products can be read off the storefront, so at that position integration was buying the commitment and nothing else. **I argued it cost more than it bought, and moved it.**',
           },
           {
             kind: 'demo',
             demo: 'freemium',
-            caption: 'The shipped onboarding. Setup runs while the account is being created, and everything is already on by the time the user arrives.',
+            caption: 'The shipped onboarding. Setup runs while the account is being created, so everything is already on by the time the user arrives.',
           },
           {
             kind: 'text',
-            content: 'I did not push back on everything. I also took direction on features I had not validated, built them, and watched them move nothing.',
-          },
-          {
-            kind: 'text',
-            content: 'The company now had two ways to acquire a customer. One took a sales cycle and roughly 4,000 PLN every time. The other took ten months to build and then ran at the cost of the free tier.',
-          },
-          {
-            kind: 'text',
-            content: 'Developers built the foundation from May. From December I built improvements and fixes across the frontend myself in Codex, somewhere between thirty and forty releases, while the developers handled the backend and the changes with the widest blast radius. Pricing of the paid plan, positioning and campaigns were not mine.',
+            content: '**An active store is an integrated one with automations running.** For the targeting to have anything to work on, it needs around fifty orders a month. That is what the channel was steered by, not logins.',
           },
         ],
       },
     ],
     results: {
-      note: "Freemium's north star, measured as a median. Shortening newsletter delivery from **13 to 1 day** was the largest contributor. Newsletters generate the orders, so the earlier they go out, the sooner a store sees a return.",
-      northStar: {
-        label: 'TIME TO FIRST ATTRIBUTED ORDER',
-        value: '44 → 5 days',
-      },
       metrics: [
-        { value: '78%', label: 'ACTIVE ACCOUNTS', color: 'accent', description: 'An integrated store with five or more automations running. Integration was the last step in the flow, so this is the number that would have fallen if the business had been right to want it first.' },
-        { value: '8.4%', label: 'FREE TO PAID', color: 'accent', description: 'Roughly 390 paying customers against every account created across the ten months. The 2026 ChartMogul and ProductLed survey of 200 self-serve products puts good freemium conversion at 3–5% and great at **8–12%**, measured on six-month signup cohorts rather than a cumulative window like this one.' },
+        { value: '5,050', label: 'STORES ACQUIRED', color: 'accent', description: 'Signed up in under a year, and not one of them cost a salesperson or an onboarding team. Those were the two costs that made a small store unprofitable to begin with. **393 started paying, adding 16% to the 2,500-customer base edrone had built in ten years.**' },
+        {
+          value: '77%',
+          label: 'ACTIVE STORES',
+          color: 'accent',
+          description: 'Every monthly cohort above, from the first to the last, counting a store once it is integrated with automations running. **Over the same months, median time to a first attributed order fell from 35 days to 5.** An attributed order is a sale from a shopper who came back through an edrone message.',
+          chart: {
+            seriesLabel: 'ACTIVE STORES',
+            data: [
+              { label: 'May', full: 'May 2025', value: 44.0 },
+              { label: 'Jun', full: 'June 2025', value: 33.6 },
+              { label: 'Jul', full: 'July 2025', value: 40.9 },
+              { label: 'Aug', full: 'August 2025', value: 23.2 },
+              { label: 'Sep', full: 'September 2025', value: 37.0 },
+              { label: 'Oct', full: 'October 2025', value: 51.5 },
+              { label: 'Nov', full: 'November 2025', value: 56.4 },
+              { label: 'Dec', full: 'December 2025', value: 49.9 },
+              { label: 'Jan', full: 'January 2026', value: 74.0 },
+              { label: 'Feb', full: 'February 2026', value: 77.6 },
+              { label: 'Mar', full: 'March 2026', value: 80.3 },
+            ],
+          },
+        },
       ],
     },
     reflections: [
-      'Removing the sales call moved every question it used to absorb onto Support, and the onboarding answered fewer of them than it should have. We never instrumented a counter-metric for it, which is the first thing I would fix. What the flow needed was an assistant that could explain what was running and why, in the product, at the moment the question formed. Coach marks put words on the screen but cannot answer anything back.',
-      'Around thirty interviews across ten months was too few for a channel this size, and it left me short of evidence at the moments I needed it most. More of the calls I made in that period rested on what the two of us in Support had heard most recently than I would like.',
-      'The piece I would push hardest with more room is generating content with AI at a larger scale, for every user. It removed more work from the user than anything else in the flow, and it stayed narrower than it needed to be.',
+      'Everything shipped as a single preset. The lever I would pull next is a small curated choice, which buys agency without adding a step to setup.',
     ],
   },
   {

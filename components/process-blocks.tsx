@@ -55,7 +55,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             <div key={i} className="flex flex-col gap-4">
               {item.map((block, j) =>
                 block.kind === 'text' ? (
-                  <p key={j} className="text-body-1 text-[var(--color-300)] text-pretty">
+                  <p key={j} className="text-body-1 text-[var(--color-500)] text-pretty">
                     <Bold text={block.content} />
                   </p>
                 ) : (
@@ -175,7 +175,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
                     <div className="flex flex-col gap-2">
                       <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
-                      <p className="text-body-1 text-[var(--color-300)] text-pretty"><Bold text={item.description} /></p>
+                      <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={item.description} /></p>
                     </div>
                   </div>
                 ))}

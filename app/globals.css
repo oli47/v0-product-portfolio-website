@@ -89,6 +89,12 @@
   --input:                var(--border);
   --ring:                 var(--color-300);
   --radius:               4px;
+
+  /* Page column. One source of truth — the nav and footer share this axis with
+     the content, so they drift apart the moment it is set per file.
+     At 36rem the text runs ~72 characters to the line; it was 91 at 45rem,
+     a third over the 45–75 the eye tracks without re-reading lines. */
+  --measure: 36rem;
 }
 
 .dark {
@@ -134,6 +140,11 @@
   --color-accent:     var(--accent);
   --color-muted:      var(--color-100);
   --color-muted-foreground: var(--color-300);
+  /* Needed by shadcn-shaped components (the dither-kit chart tooltip uses
+     bg-popover / text-popover-foreground). Without the mapping the utility
+     compiles to nothing and the panel renders transparent. */
+  --color-popover:            var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
 
   --radius-sm: 0.125rem;  /* 2px — buttons, badges, cards */
   --radius-md: 0.25rem;   /* 4px — modals, larger containers */
@@ -206,8 +217,9 @@
 /* body-1 — Main prose: hero description, section paragraphs, currently section */
 .text-body-1 {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-size: 1rem;         /* 16px */
-  line-height: 1.75rem;    /* 28px */
+  font-size: 1.0625rem;    /* 17px — 67 characters to the line in the 536px
+                              column, against 72 at 16px and 76 at 15px. */
+  line-height: 1.875rem;   /* 30px — holds the 1.76 ratio 16/28 had. */
   font-weight: 400;
 }
 
