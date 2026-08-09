@@ -174,7 +174,9 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                   >
                     <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
                     <div className="flex flex-col gap-2">
-                      <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
+                      {item.title && (
+                        <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
+                      )}
                       <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={item.description} /></p>
                     </div>
                   </div>

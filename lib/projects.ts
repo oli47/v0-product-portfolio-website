@@ -13,7 +13,9 @@ export type ProcessBlock =
   | { kind: 'compare'; before: CompareSide; after: CompareSide; caption?: string }
   | { kind: 'contact-flow'; caption?: string }
   | { kind: 'vertical-flow'; steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]; arc?: { fromStep: number; toStep: number; label: string }; caption?: string }
-  | { kind: 'decisions'; items: { num: string; title: string; description: string }[] }
+  /** `title` is optional: omit it and the card is one paragraph, with bold
+   *  carrying the emphasis a heading would have carried. */
+  | { kind: 'decisions'; items: { num: string; title?: string; description: string }[] }
   | { kind: 'slideshow'; images: string[]; caption?: string }
   | { kind: 'demo'; demo: DemoId; caption?: string }
 
@@ -100,11 +102,11 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'edrone is marketing automation for ecommerce. Automated messages and newsletters bring shoppers back to finish the orders they abandoned.',
+            content: 'edrone is marketing automation for ecommerce. Automated messages and newsletters bring shoppers back to the store to buy. Sometimes that is a cart they left behind, sometimes a first order.',
           },
           {
             kind: 'text',
-            content: 'For ten years edrone sold one way. A salesperson closed the deal and a Support team set the product up. **That put a floor under the size of customer worth acquiring.** Sales promised that team at signing, so almost nobody had ever set the product up alone.',
+            content: 'For ten years edrone sold one way. A salesperson closed the deal and a Support team ran the account from there. **Both cost more than a small store would ever pay, so small stores were not worth acquiring.** Sales promised that team at signing, so almost nobody had ever run edrone alone.',
           },
         ],
       },
@@ -113,7 +115,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**Open edrone to the stores the old model could not afford to serve.** Take the salesperson and the onboarding team out of the cost and the same store pays for itself. That leaves the product to do the whole job.',
+            content: '**Open edrone to the stores the old model could not afford to serve.** That means no salesperson and no Support team. The product has to sell itself, set itself up and earn its keep.',
           },
         ],
       },
@@ -122,24 +124,34 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**I had to digitise what the onboarding team did.** Until then every paying customer had their setup handed to them by a person. The first question was whether the product could stand up to a user with nobody behind them, so I went at the places where a store is most on its own.',
+            content: '**Could the product stand on its own, with nobody behind it?** Until then a person set up every paying customer, so it had never had to. My job was to digitise what the onboarding team did.',
           },
           {
             kind: 'text',
-            content: 'Even edrone\'s paying customers, who had Support the whole way, did plenty themselves, so the answer was never all or nothing. **What I needed was the line between what should already be done when a store arrives and what it still wants to do itself.** Two things stood in the way.',
+            content: 'Those customers still did some things themselves, mostly their own newsletters. So it was never all or nothing. **I had to find the line. What is done for the store before it arrives, and what it still wants to do itself.**',
+          },
+          {
+            kind: 'text',
+            content: 'Then a third thing: what keeps happening after that. A newsletter only counts if the next one is coming. **Setup that runs once is a demo.**',
+          },
+          {
+            kind: 'text',
+            content: '**The build was quick. The eleven months were the iterating.** Two freemium specialists joined from the onboarding team. They gave me dozens of calls with stores I would not have had on my own. Signup, onboarding, the automations, the messages, everything went through pass after pass.',
           },
           {
             kind: 'decisions',
             items: [
               {
                 num: 'PROBLEM 1',
-                title: 'One step only the store can take',
-                description: 'Connecting a shop needs its own credentials and its own decision to hand over a customer list. It was the first thing the product asked for, and a place a store could stall and never come back from.',
+                description: 'A trial ends on a date whether or not anything has happened. Freemium ends when the store outgrows it. **Which one holds a store long enough for edrone to show what it is worth?**',
               },
               {
                 num: 'PROBLEM 2',
-                title: 'No honest definition of an active store',
-                description: 'Logins did not mean use. A store could be earning from edrone for weeks without opening it once, so counting sign-ins said nothing about which accounts were alive.',
+                description: 'A prepared account still leaves every choice to the store. And no two stores want the same messages going out under their name. **If the store has to decide, the setup is not really finished. If I decide for everyone, some of it will be wrong for someone.**',
+              },
+              {
+                num: 'PROBLEM 3',
+                description: 'Is the win the moment a store sees that everything is ready, or the moment edrone brings an order back? **Only one of the two can be the number the channel is steered by.**',
               },
             ],
           },
@@ -150,27 +162,23 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**Every feature the store came for is set up for it.** The campaigns are written, the automations are built, the pop-up is ready.',
+            content: '**Freemium, not a trial.** The value shows up as orders, and orders come when shoppers are ready, not when we are. A trial would have closed the account before that happened. A free account costs us almost nothing. Support was the only expensive part of a customer, and this model removed it.',
           },
           {
             kind: 'text',
-            content: 'Being ready still leaves a decision to make about each one, so I went further and switched them on. **Seven automations run from the first minute.** Abandoned cart, product recommendations, welcome, birthday, win-back, remarketing to past customers and loyalty, plus the pop-up and the first newsletters.',
+            content: '**Every feature the store came for is set up for it.** The campaigns are written, the automations are built, the pop-up is ready. All of it is built from the store\'s own site in the minutes after signup. The store gives us a URL and nothing else.',
           },
           {
             kind: 'text',
-            content: 'I started with two, to find out whether a store would leave running something it had no hand in making. Nobody switched them off, so the rest followed.',
+            content: 'Being ready still leaves a decision about each one, and I took that decision. edrone knows what works better than a store that has never run marketing automation. So I switched everything on. **Seven automations run from the first minute.** Abandoned cart, product recommendations, welcome, birthday, win-back, remarketing to past customers and loyalty, plus the pop-up and the first newsletters.',
           },
           {
             kind: 'text',
-            content: 'All of it is built from the store\'s own site in the minutes after signup. The store gives a URL and nothing else. No credentials, no connection, nothing to fill in.',
+            content: 'I started with two, to see whether a store would leave running something it had no hand in making. Nobody switched them off, so the rest followed.',
           },
           {
             kind: 'text',
-            content: '**Integration is the test.** It is the last step, and it takes one click. That is where the store decides whether what edrone has already done is worth handing over its customer list.',
-          },
-          {
-            kind: 'text',
-            content: 'The business wanted it first. A connected store is a committed one, and its real product feed makes better content, and both of those are true. But products can be read off the storefront, so at that position integration was buying the commitment and nothing else. **I argued it cost more than it bought, and moved it.**',
+            content: '**One preset, the same for a furniture store and a store selling socks.** The onboarding walkthrough shows exactly what is running under the store\'s name. Every automation has an off switch, so a store that disagrees turns it off in one click.',
           },
           {
             kind: 'demo',
@@ -179,7 +187,7 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: '**An active store is an integrated one with automations running.** I measured it only on stores doing around fifty orders a month or more, because below that a shop is either days old or too small for marketing automation to be for it, and counting them would have made the number meaningless. That is what the channel was steered by, not logins.',
+            content: '**An active store is one that is integrated and has automations running.** I only counted stores doing around fifty orders a month or more. Below that a shop is either days old or too small for marketing automation. That is what we steered the channel by, not logins. A store can go weeks without opening edrone while edrone earns for it, and for this product that is success, not neglect.',
           },
         ],
       },
@@ -191,7 +199,7 @@ export const projects: Project[] = [
           value: '77%',
           label: 'ACTIVE STORES',
           color: 'accent',
-          description: 'Every monthly cohort above, from the first to the last, counting a store once it is integrated with automations running. **Over the same months, median time to a first attributed order fell from 35 days to 5.** An attributed order is a sale from a shopper who came back through an edrone message.',
+          description: 'Every monthly cohort above, counting a store as active once it is integrated with automations running. **Over the same months, the median time to a first attributed order fell from 35 days to 5.** An attributed order is a sale from a shopper who came back through an edrone message.',
           chart: {
             seriesLabel: 'ACTIVE STORES',
             data: [
@@ -212,7 +220,7 @@ export const projects: Project[] = [
       ],
     },
     reflections: [
-      'Everything shipped as a single preset. The lever I would pull next is a small curated choice, which buys agency without adding a step to setup.',
+      'Everything shipped as one preset. Next I would give the store a small set of choices, so it has a say without adding a step to setup.',
     ],
   },
   {
@@ -237,7 +245,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'edrone is a marketing automation CRM for ecommerce. It exists to keep customers coming back. Automated messages and newsletters bring shoppers back to the store to finish orders they had abandoned, and the rest of the product feeds the same loop.',
+            content: 'edrone is a marketing automation CRM for ecommerce. Automated messages and newsletters bring shoppers to the store to buy: a cart they left behind, a first order, the next one.',
           },
           {
             kind: 'text',
