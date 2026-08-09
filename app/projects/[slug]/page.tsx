@@ -250,7 +250,7 @@ export default function ProjectPage() {
           <Link
             href={`/projects/${prev.slug}`}
             aria-label={`Previous: ${prev.title}`}
-            className="group flex flex-col gap-1.5"
+            className="group flex flex-col gap-1.5 p-3 -m-3"
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
@@ -267,7 +267,7 @@ export default function ProjectPage() {
           <Link
             href={`/projects/${next.slug}`}
             aria-label={`Next: ${next.title}`}
-            className="group flex flex-col gap-1.5 items-end text-right"
+            className="group flex flex-col gap-1.5 items-end text-right p-3 -m-3"
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >
