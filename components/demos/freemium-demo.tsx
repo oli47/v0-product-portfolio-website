@@ -7,9 +7,10 @@ import {
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
 import { C, TYPEFACE } from '@/components/demos/edrone-tokens'
 import {
-  Action, AppFrame, AutomationCard, type AutomationData, CardGrid, CoachMark, type CoachStep,
-  Confetti, ConnectedScreen, CONTINUE, GRID, INTEGRATE, IntegrateScreen, type Metrics, metricsFor,
-  Page, PageHeader, PlusMark, PopupCard, PreparingScreen, ReportMark, TabRow,
+  Action, AppFrame, AutomationCard, AutomationDetail, type AutomationData, BACK, CARD, CardGrid,
+  CoachMark, type CoachStep, Confetti, ConnectedScreen, CONTINUE, type DetailFact, GRID, INTEGRATE,
+  IntegrateScreen, type Metrics, metricsFor, Page, PageHeader, PlusMark, PopupCard, PreparingScreen,
+  ReportMark, TabRow,
 } from '@/components/demos/freemium-ui'
 import type { DemoState, Step } from '@/components/demos/use-demo-script'
 
@@ -29,6 +30,12 @@ import type { DemoState, Step } from '@/components/demos/use-demo-script'
  * it closes on the one the funnel is for: the store connects, and the free
  * account starts working. Between them is the argument the Solution makes.
  *
+ * On step 1 it stops and opens one automation. The grid renders each generated
+ * mail at about 150 CSS pixels, which is large enough to see that a mail exists
+ * and far too small to read a word of it — so the screen was asserting that
+ * edrone wrote the content rather than showing what it wrote. Opening one puts
+ * the mail at a size that settles it.
+ *
  * Every number on it is zero. This is a brand new account: the automations are
  * on, the sequence is scheduled and the pop-up is live, but none of them has
  * earned anything yet, and a demo that opened on someone else's revenue would be
@@ -45,10 +52,13 @@ const AUTOMATIONS_SCREEN = 0
 const POPUPS = 1
 const CONTACTS = 2
 const INTEGRATE_SCREEN = 3
-/** Neither of these is one of the four steps, and both sit past them so that
- *  `restState` — the poster, which has to be a finished screen — stays at 0. */
+/** None of these is one of the four steps, and all sit past them so that
+ *  `restState` — the poster, which has to be a finished screen — stays at 0,
+ *  and so that `STEPS[state.screen]` is undefined on them: a screen with an
+ *  index past the walkthrough is a screen with no coach-mark over it. */
 const PREPARING = 4
 const CONNECTED = 5
+const DETAIL = 6
 
 // ─── Step 1: Automations ─────────────────────────────────────────────────────
 
@@ -132,6 +142,36 @@ const AUTOMATIONS: AutomationData[] = [
       heading: 'Wszystkiego najlepszego!', body: 'Mamy dla Ciebie -15% na wszystko. Prezent jest ważny przez cały tydzień.', cta: 'ODBIERZ PREZENT' },
   },
 ]
+
+/**
+ * The one the walkthrough opens.
+ *
+ * Abandoned cart, because it is the automation anyone reading this case study
+ * already knows, which leaves the mail itself as the only thing on the screen a
+ * reader has to take in.
+ */
+const OPENED = AUTOMATIONS[1]
+
+/**
+ * What is true about it, beside the mail.
+ *
+ * Every line here is something the case study already claims, restated as a
+ * field on a screen: the content came off the store's own site, it is on before
+ * anyone asks, and it starts earning the moment the store connects. Nothing
+ * about how edrone's abandoned-cart timing actually works, which this demo has
+ * no business inventing.
+ */
+const FACTS: DetailFact[] = [
+  { label: 'TRIGGER', value: 'Cart abandoned' },
+  { label: 'CHANNELS', value: 'Email, SMS, WhatsApp' },
+  { label: 'WRITTEN FROM', value: 'aniakruk.pl' },
+  { label: 'STATUS', value: 'On from minute one' },
+]
+
+/** Short, because the stage is drawn at about 0.3x and every extra line is one
+ *  more line nobody can read. */
+const DETAIL_NOTE =
+  'Nobody wrote this. edrone read the store and drafted it in the minutes after signup.'
 
 /**
  * Step 3's tiles, on an account that is minutes old.
@@ -251,6 +291,20 @@ const SCRIPT: Step[] = [
   { kind: 'screen', index: AUTOMATIONS_SCREEN },
   { kind: 'wait',   ms: 1300 },
 
+  // Open one, before anything else. At card size the generated mail is legible
+  // as "a mail" and not as words, which leaves the screen asserting that edrone
+  // wrote something rather than showing what it wrote. So the walkthrough stops
+  // and reads one. This happens before the scroll, not after, because the grid
+  // is at rest here and a card that slid out from under the pointer on the way
+  // to being clicked would read as a misfire.
+  { kind: 'click',  target: CARD },
+  { kind: 'screen', index: DETAIL },
+  // Long enough to read the subject, the paragraph under it and one fact.
+  { kind: 'wait',   ms: 3600 },
+  { kind: 'click',  target: BACK },
+  { kind: 'screen', index: AUTOMATIONS_SCREEN },
+  { kind: 'wait',   ms: 900 },
+
   // Down into the cards to finish the second row, then back up to the button.
   // The grid follows the pointer down and eases back on its own once it leaves,
   // so the rest of the walkthrough runs without the page moving again.
@@ -323,6 +377,9 @@ export function FreemiumDemo(props: DemoProps) {
                   about. */}
               <div key={state.screen} className="h-full w-full">
                 {state.screen === AUTOMATIONS_SCREEN && <Automations state={state} m={m} />}
+                {state.screen === DETAIL && (
+                  <AutomationDetail data={OPENED} facts={FACTS} note={DETAIL_NOTE} state={state} m={m} />
+                )}
                 {state.screen === POPUPS && <Popups m={m} />}
                 {state.screen === CONTACTS && <Contacts state={state} m={m} />}
                 {state.screen === INTEGRATE_SCREEN && (
@@ -369,7 +426,15 @@ const Automations = ({ state, m }: { state: DemoState; m: Metrics }) => (
     <PageHeader title="Automations" m={m} />
     <TabRow m={m} style={{ marginTop: m.gapHeaderTabs }} toggleRight tabs={TABS} />
     <CardGrid lifted={state.cursor === GRID} m={m} style={{ marginTop: m.gapTabsGrid }}>
-      {AUTOMATIONS.map((a) => <AutomationCard key={a.title} data={a} m={m} />)}
+      {AUTOMATIONS.map((a) => (
+        <AutomationCard
+          key={a.title}
+          data={a}
+          target={a === OPENED ? CARD : undefined}
+          state={state}
+          m={m}
+        />
+      ))}
     </CardGrid>
   </Page>
 )
