@@ -28,16 +28,11 @@ export default function ProjectPage() {
   const prevLabel = useScramble(prev.title)
   const nextLabel = useScramble(next.title)
 
-  // A metric carrying a chart takes the full width below the grid — the chart
-  // belongs to its number, so the two are never separate blocks.
+  // Charted metrics sort last, because a chart is taller than a bare number and
+  // reads as the closing evidence. The chart belongs to its number, so the two
+  // are never separate blocks.
   const plainMetrics = project.results.metrics.filter((m) => !m.chart)
   const chartedMetrics = project.results.metrics.filter((m) => m.chart)
-
-  const metricsGridCols = plainMetrics.length === 3
-    ? 'grid-cols-1 md:grid-cols-3'
-    : plainMetrics.length === 1
-      ? 'grid-cols-1'
-      : 'grid-cols-1 md:grid-cols-2'
 
   const hasReflections = project.reflections && project.reflections.length > 0
   const navItems = [
@@ -159,74 +154,34 @@ export default function ProjectPage() {
         <section id={sectionId('Impact')}>
           <SectionBadge>Impact</SectionBadge>
 
-          {project.results.northStar && project.results.note && project.results.metrics.length > 0 ? (
-            /* 2-col layout: the north star on the left, the rest stacked on
-               the right. One card component throughout — a second, quieter one
-               only ever meant the same numbers were set smaller on the page
-               where they mattered most. */
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:-mx-8">
+          {/* One column on every case study. Cards were side by side here and
+              stacked on freemium, which made the same section read as two
+              different layouts. Stacked wins: a metric gets the full measure for
+              its note, and a chart never has to share a row. */}
+          <div className="flex flex-col gap-3 sm:-mx-8">
+            {project.results.northStar && (
               <MetricMain
                 label={project.results.northStar.label}
                 value={project.results.northStar.value}
+                /* The note defines the north-star number, so it belongs in that
+                   card rather than orphaned at the bottom of the section. */
                 note={project.results.note}
               />
-              <div className="flex flex-col gap-3">
-                {project.results.metrics.map((metric, index) => (
-                  <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
-                ))}
+            )}
+            {plainMetrics.map((metric, index) => (
+              <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
+            ))}
+            {chartedMetrics.map((metric, index) => (
+              <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description}>
+                <CohortChart data={metric.chart!.data} seriesLabel={metric.chart!.seriesLabel} />
+              </MetricMain>
+            ))}
+            {project.results.note && !project.results.northStar && (
+              <div className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+                <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
               </div>
-            </div>
-          ) : project.results.northStar && project.results.note && project.results.metrics.length === 0 ? (
-            /* Single-wide: one MetricMain full-width */
-            <MetricMain
-              label={project.results.northStar.label}
-              value={project.results.northStar.value}
-              note={project.results.note}
-              className="sm:-mx-8"
-            />
-          ) : (
-            /* Default layout: grid of MetricMain cards */
-            <>
-              {project.results.northStar && (
-                <MetricMain
-                  label={project.results.northStar.label}
-                  value={project.results.northStar.value}
-                  className="mb-3 sm:-mx-8"
-                />
-              )}
-              {plainMetrics.length > 0 && (
-                <div className={`grid gap-3 sm:-mx-8 ${metricsGridCols}`}>
-                  {plainMetrics.map((metric, index) => (
-                    <MetricMain
-                      key={index}
-                      label={metric.label}
-                      value={metric.value}
-                      note={metric.description}
-                    />
-                  ))}
-                </div>
-              )}
-              {chartedMetrics.map((metric, index) => (
-                <MetricMain
-                  key={index}
-                  label={metric.label}
-                  value={metric.value}
-                  note={metric.description}
-                  className="mt-3 sm:-mx-8"
-                >
-                  <CohortChart
-                    data={metric.chart!.data}
-                    seriesLabel={metric.chart!.seriesLabel}
-                  />
-                </MetricMain>
-              ))}
-              {project.results.note && (
-                <div className="mt-3 p-5 rounded-sm sm:-mx-8" style={{ backgroundColor: 'var(--color-000)' }}>
-                  <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
-                </div>
-              )}
-            </>
-          )}
+            )}
+          </div>
         </section>
 
         {/* Reflections */}
