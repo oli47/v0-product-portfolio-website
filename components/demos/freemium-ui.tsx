@@ -132,30 +132,6 @@ export interface Metrics extends StageMetrics {
    *  lines cannot be taller than the one beside it. */
   cardH: number
 
-  // ── the opened automation ──
-  /** The mail, drawn at a size a reader can actually read rather than at the
-   *  card's thumbnail scale. Everything else on the screen is sized off it. */
-  detailMailW: number
-  detailBannerH: number
-  detailPad: number
-  detailMark: number
-  detailLines: number
-  detailHeading: number
-  detailHeadingLH: number
-  detailBody: number
-  detailBodyLH: number
-  detailBtnH: number
-  detailBtnFont: number
-  /** The facts beside the mail: what fires it, where the copy came from. */
-  detailFactsW: number
-  detailFactLabel: number
-  detailFactValue: number
-  detailFactRowH: number
-  detailFactGap: number
-  detailColGap: number
-  detailNote: number
-  detailNoteLH: number
-
   // ── pop-up card ──
   popupW: number
   popupH: number
@@ -262,17 +238,6 @@ export const DESKTOP: Metrics = {
   cardRowH: 32, badgeFont: 15, badgePadX: 10, channelFont: 13, channelGap: 13,
   cardH: 495,
 
-  // Set from the stage, not from the product. A 1846px stage renders at 546 CSS
-  // pixels inside `--measure`, so everything here is drawn at about 0.3x by the
-  // time anyone sees it: the mail at the app's own type sizes would put its body
-  // copy at under six pixels. These are the sizes that survive the scale, which
-  // is why the mail is 1040 wide on a screen the app draws at 1846.
-  detailMailW: 1040, detailBannerH: 400, detailPad: 44, detailMark: 44, detailLines: 60,
-  detailHeading: 62, detailHeadingLH: 76, detailBody: 38, detailBodyLH: 54,
-  detailBtnH: 92, detailBtnFont: 30,
-  detailFactsW: 640, detailFactLabel: 24, detailFactValue: 42, detailFactRowH: 124,
-  detailFactGap: 16, detailColGap: 56, detailNote: 36, detailNoteLH: 50,
-
   popupW: 383, popupH: 453, previewAreaH: 320, previewW: 302, previewH: 189,
 
   logoTile: 52, logoRadius: 8, logoLink: 20,
@@ -329,15 +294,6 @@ const MOBILE: Metrics = {
   gapCreativeTitle: 14, gapTitleBody: 6, gapBodyRow: 16,
   cardRowH: 26, badgeFont: 12, badgePadX: 8, channelFont: 10, channelGap: 9,
   cardH: 0,
-
-  // One column, so the mail takes the width and the facts stack under it. These
-  // stay at product scale, unlike the desktop table above: a phone stage renders
-  // at close to 1:1, so blowing the mail up here would only make it wrong.
-  detailMailW: 358, detailBannerH: 205, detailPad: 18, detailMark: 20, detailLines: 27,
-  detailHeading: 20, detailHeadingLH: 27, detailBody: 13, detailBodyLH: 19,
-  detailBtnH: 42, detailBtnFont: 13,
-  detailFactsW: 358, detailFactLabel: 10, detailFactValue: 14, detailFactRowH: 52,
-  detailFactGap: 8, detailColGap: 16, detailNote: 12, detailNoteLH: 18,
 
   popupW: 0, popupH: 0, previewAreaH: 264, previewW: 250, previewH: 156,
 
@@ -865,28 +821,13 @@ export const Creative = ({ art, m }: { art: CreativeArt; m: Metrics }) => {
   )
 }
 
-export const AutomationCard = ({ data, target, state, m }: {
-  data: AutomationData
-  /** Set on the one card the walkthrough opens, so the cursor has somewhere to
-   *  land. Every other card is scenery and carries no target. */
-  target?: string
-  state?: DemoState
-  m: Metrics
-}) => {
-  const ref = useTarget(target ?? '')
-  const pressed = target != null && state?.pressed === target
-
-  return (
+export const AutomationCard = ({ data, m }: { data: AutomationData; m: Metrics }) => (
   <div
-    ref={target ? (ref as React.Ref<HTMLDivElement>) : undefined}
     style={{
       height: m.cardH || undefined,
       padding: m.cardPad,
       background: C.mint,
       borderRadius: R.box,
-      // The only card that reacts to being pressed is the one being pressed.
-      transform: pressed ? 'scale(0.985)' : 'none',
-      transition: 'transform 120ms ease-out',
     }}
     className="flex min-w-0 flex-col"
   >
@@ -931,8 +872,7 @@ export const AutomationCard = ({ data, target, state, m }: {
       <Channels m={m} />
     </div>
   </div>
-  )
-}
+)
 
 /**
  * The store's mark, over whichever kind of banner is underneath.
@@ -963,241 +903,6 @@ const Wordmark = ({ ink, size, pad, shadow }: {
     <AniaWordmark height={Math.round(size * 1.5)} />
   </span>
 )
-
-// ─── The opened automation ───────────────────────────────────────────────────
-
-/** Target key for the card the cursor opens, and for the way back out of it. */
-export const CARD = 'card'
-export const BACK = 'back'
-
-export interface DetailFact {
-  label: string
-  value: string
-}
-
-/**
- * One automation, opened.
- *
- * The walkthrough's whole claim is that this content was written for *this*
- * store, and the grid renders that claim at 400px a card — about 150 CSS pixels
- * by the time the stage is scaled into a case study. At that size a reader can
- * see there is a mail there and cannot read a word of it, so the argument is
- * being made in a font nobody can see.
- *
- * So the demo opens one. Same mail as the card shows, drawn large enough to read
- * the subject line and the copy under it, with the facts that make the point
- * beside it: what fires it, and where the words came from.
- *
- * The mail itself is `Creative`'s layout at a different scale rather than a
- * second implementation — it has to be the same mail the card was previewing, or
- * opening a card would be showing something else entirely.
- */
-export const AutomationDetail = ({ data, facts, note, state, m }: {
-  data: AutomationData
-  facts: DetailFact[]
-  note: string
-  state: DemoState
-  m: Metrics
-}) => {
-  const back = useTarget(BACK)
-  const pressed = state.pressed === BACK
-  const art = data.art
-
-  return (
-    <Page m={m}>
-      <div
-        className="flex shrink-0 items-center"
-        style={{ height: m.headerH, gap: m.gapTitleActions }}
-      >
-        <span
-          ref={back as React.Ref<HTMLSpanElement>}
-          style={{
-            width: m.headerH,
-            height: m.headerH,
-            background: pressed ? C.border : '#FFFFFF',
-            border: `1px solid ${C.border}`,
-            borderRadius: R.box,
-            // The chevron points down; a quarter turn is a back arrow, which
-            // saves carrying a second icon for one screen.
-            transform: 'rotate(90deg)',
-          }}
-          className="flex shrink-0 items-center justify-center"
-        >
-          <ChevronMark size={Math.round(m.title * 0.5)} />
-        </span>
-        <p style={{ fontSize: m.title, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-          {data.title}
-        </p>
-        <span className="flex-1" />
-        {!m.mobile && <ActiveBadge revenue={data.revenue} m={m} />}
-      </div>
-
-      {/* Two columns on a desktop, one on a phone. The mail leads either way:
-          it is the thing being claimed, and the facts only qualify it. */}
-      <div
-        style={{ marginTop: m.gapTabsGrid, gap: m.detailColGap }}
-        className={`flex min-h-0 flex-1 ${m.mobile ? 'flex-col' : 'flex-row items-start justify-center'}`}
-      >
-        <div
-          style={{
-            width: m.detailMailW,
-            background: '#FFFFFF',
-            border: `1px solid ${C.border}`,
-            borderRadius: R.box,
-          }}
-          className="flex shrink-0 flex-col overflow-hidden"
-        >
-          <div
-            style={{
-              height: m.detailBannerH,
-              padding: m.detailPad,
-              background: `linear-gradient(146deg, ${art.from} 0%, ${art.to} 100%)`,
-            }}
-            className="relative flex shrink-0 flex-col justify-between overflow-hidden"
-          >
-            <Image
-              src={art.photo}
-              alt=""
-              fill
-              quality={80}
-              // The banner is 1040 stage pixels and the stage draws at ~0.3x, so
-              // it lands at about 307 CSS px. This asks for twice that, and not
-              // for the 1040 the markup says.
-              sizes="(max-width: 520px) 360px, 640px"
-              className="object-cover"
-            />
-            {art.lines && (
-              <span
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(to top, rgba(8,6,4,0.76) 0%, rgba(8,6,4,0.42) 38%,' +
-                    ' rgba(8,6,4,0.10) 68%, rgba(8,6,4,0) 100%)',
-                }}
-              />
-            )}
-            <span className="relative">
-              <Wordmark ink={art.ink} size={m.detailMark} shadow />
-            </span>
-            {art.lines && (
-              <span className="relative flex flex-col">
-                {art.eyebrow && (
-                  <span
-                    style={{
-                      marginBottom: Math.round(m.detailPad * 0.4),
-                      fontSize: Math.round(m.detailLines * 0.44),
-                      color: art.ink,
-                      opacity: 0.9,
-                    }}
-                  >
-                    {art.eyebrow}
-                  </span>
-                )}
-                {art.lines.map((line) => (
-                  <span
-                    key={line}
-                    style={{
-                      fontSize: m.detailLines,
-                      lineHeight: 1.06,
-                      fontWeight: 700,
-                      letterSpacing: '-0.01em',
-                      color: art.ink,
-                    }}
-                  >
-                    {line}
-                  </span>
-                ))}
-                {art.note && (
-                  <span
-                    style={{
-                      marginTop: Math.round(m.detailPad * 0.3),
-                      fontSize: Math.round(m.detailLines * 0.38),
-                      color: art.ink,
-                      opacity: 0.9,
-                    }}
-                  >
-                    {art.note}
-                  </span>
-                )}
-              </span>
-            )}
-          </div>
-
-          <div style={{ padding: m.detailPad }} className="flex flex-col items-center text-center">
-            <p style={{ fontSize: m.detailHeading, lineHeight: `${m.detailHeadingLH}px`, fontWeight: 700, letterSpacing: '-0.01em' }}>
-              {art.heading}
-            </p>
-            <p
-              style={{
-                marginTop: Math.round(m.detailPad * 0.5),
-                fontSize: m.detailBody,
-                lineHeight: `${m.detailBodyLH}px`,
-                color: C.body,
-              }}
-            >
-              {art.body}
-            </p>
-            <span
-              style={{
-                marginTop: m.detailPad,
-                height: m.detailBtnH,
-                padding: `0 ${m.detailPad * 2}px`,
-                background: C.ink,
-                color: '#FFFFFF',
-                borderRadius: R.chip,
-                fontSize: m.detailBtnFont,
-                fontWeight: 600,
-                letterSpacing: '0.06em',
-              }}
-              className="flex shrink-0 items-center"
-            >
-              {art.cta}
-            </span>
-          </div>
-        </div>
-
-        <div
-          style={{ width: m.detailFactsW, gap: m.detailFactGap }}
-          className="flex shrink-0 flex-col"
-        >
-          {facts.map((fact) => (
-            <div
-              key={fact.label}
-              style={{
-                height: m.detailFactRowH,
-                padding: `0 ${m.detailPad}px`,
-                background: C.mint,
-                borderRadius: R.box,
-              }}
-              className="flex flex-col justify-center"
-            >
-              <span style={{ fontSize: m.detailFactLabel, letterSpacing: '0.08em', color: C.mintInk, opacity: 0.75 }}>
-                {fact.label}
-              </span>
-              <span style={{ fontSize: m.detailFactValue, fontWeight: 600, color: C.mintInk }}>
-                {fact.value}
-              </span>
-            </div>
-          ))}
-          {/* The sentence the whole screen exists to earn. A phone has no room
-              for it under the mail, and the facts above already carry it. */}
-          {!m.mobile && (
-            <p
-              style={{
-                marginTop: m.detailFactGap,
-                fontSize: m.detailNote,
-                lineHeight: `${m.detailNoteLH}px`,
-                color: C.body,
-              }}
-            >
-              {note}
-            </p>
-          )}
-        </div>
-      </div>
-    </Page>
-  )
-}
 
 /** Target key for the point in the card grid the cursor rests on to scroll it. */
 export const GRID = 'grid'
