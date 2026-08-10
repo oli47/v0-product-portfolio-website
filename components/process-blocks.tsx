@@ -10,6 +10,52 @@ import { DEMOS } from '@/components/demos/registry'
 import { ContactFlowDiagram, VerticalFlow } from '@/components/process-diagrams'
 import { Slideshow } from '@/components/slideshow'
 
+/**
+ * How far a visual block breaks out of the text column.
+ *
+ * The column is `--measure` (36rem) less its 5-unit padding, so 536px of text.
+ * `-mx-8` put a frame at 600px; this takes it to 720px, which is not a taste
+ * call: `section-nav.tsx` pins its rail at `calc(50% + 22.5rem + 2rem)`, so the
+ * layout was already built expecting content up to 45rem with a 2rem gutter
+ * beside it. A frame at 720px lands exactly on that gutter.
+ *
+ * It buys legibility, which is the actual point. A demo is a fixed-size scene
+ * scaled to whatever width the frame hands it, and the scenes differ: 1920 for
+ * freemium, 1846 for the dashboard, 1340 for signup. At the old 600px frame the
+ * freemium demo ran at scale 0.296, so a 14px label in the reproduced product
+ * rendered at four pixels and the demo could only ever read as a decorative
+ * screenshot. A 720px frame less `FRAME_PAD` leaves a 640px host, which is
+ * 0.333 there and 0.347 on the dashboard. Every stage stays far above the 520px
+ * floor where the demos switch to their phone layout.
+ *
+ * Those two numbers move whenever `FRAME_PAD` does. They are recorded because
+ * the reason for this value is legibility, and a legibility argument with no
+ * measurement in it is a preference.
+ *
+ * Only at `lg` and up. At the 768px `sm` breakpoint a 720px frame would leave
+ * 4px of margin either side.
+ *
+ * Text-bearing blocks — `decisions`, and the Impact metric cards — deliberately
+ * do not take this. Widening them widens the measure of the prose inside them,
+ * which is the one thing `--measure` exists to hold.
+ */
+export const BLEED_VISUAL = 'sm:-mx-8 lg:-mx-[5.75rem]'
+
+/**
+ * The mat every framed block sits in.
+ *
+ * One value across previews, problem cards and Impact metrics, because three
+ * frames stacked down one page at three different insets read as three
+ * different components. It is the figure the process diagrams already used, so
+ * this is the rest of the page catching up to them rather than a new number.
+ *
+ * On a preview it is not free: the frame is a fixed 720px, so every pixel of
+ * mat is a pixel off the demo stage inside it. That trade is deliberate and it
+ * is the only lever here — the frame itself cannot grow, because the section
+ * rail is pinned just past its edge.
+ */
+export const FRAME_PAD = 'p-6 sm:p-10'
+
 /** One half of a comparison: a coded demo, or a screenshot filling the slider. */
 function compareSide(side: CompareSide) {
   if ('demo' in side) {
@@ -71,10 +117,10 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
         switch (block.kind) {
           case 'image':
             return (
-              <div key={i} className="group sm:-mx-8">
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
                 <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)] ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <ClickableImage
@@ -96,10 +142,10 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'slideshow':
             return (
-              <div key={i} className="group sm:-mx-8">
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
                 <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)] ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
                 >
                   <Slideshow images={block.images} />
                   {block.caption && (
@@ -113,12 +159,16 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
 
           case 'demo': {
             return (
-              <div key={i} className="group sm:-mx-8">
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
                 <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
                 >
-                  <ClickableDemo id={block.demo} label={block.caption ?? 'Product walkthrough'} />
+                  <ClickableDemo
+                    id={block.demo}
+                    label={block.caption ?? 'Product walkthrough'}
+                    pinnedScreen={block.step}
+                  />
                   {block.caption && (
                     <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
                       {block.caption}
@@ -133,10 +183,10 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             // Screenshots need the slider to impose a box; demos bring their own.
             const framed = 'src' in block.after
             return (
-              <div key={i} className="group sm:-mx-8">
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
                 <div
-                  className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out"
-                  style={{ backgroundColor: 'var(--color-000)', padding: '1rem 1rem 1.25rem' }}
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
                 >
                   <div className="rounded-[0.125rem] overflow-hidden mb-4">
                     <CompareSlider
@@ -170,7 +220,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                 {block.items.map((item, j) => (
                   <div
                     key={j}
-                    className={`p-5 flex flex-col gap-3${j < count - 1 ? ' border-b border-[var(--color-100)]' : ''}`}
+                    className={`${FRAME_PAD} flex flex-col gap-3${j < count - 1 ? ' border-b border-[var(--color-100)]' : ''}`}
                   >
                     <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
                     <div className="flex flex-col gap-2">

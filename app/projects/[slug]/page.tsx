@@ -8,11 +8,15 @@ import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
 import { CohortChart } from '@/components/cohort-chart'
 import { MetricMain } from '@/components/metric-card'
-import { ProcessBlocks } from '@/components/process-blocks'
+import { BLEED_VISUAL, FRAME_PAD, ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
 import { SectionNav, sectionId } from '@/components/section-nav'
 import { useScramble } from '@/lib/use-scramble'
+
+/** Its own badge, so the rail can carry it and it reads as a section rather
+ *  than as a caption bolted to the header. */
+const CONTRIBUTION = 'Contribution'
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -35,8 +39,19 @@ export default function ProjectPage() {
   const chartedMetrics = project.results.metrics.filter((m) => m.chart)
 
   const hasReflections = project.reflections && project.reflections.length > 0
+
+  // Contribution is a section like any other, and it sits after Context: a
+  // reader has to know what the product is before "I owned the funnel" means
+  // anything, and they should know whose decisions these were before Goal
+  // starts making claims about them. Every case study opens on Context by the
+  // pattern, so the fallback of first-position is a formality.
+  const contextAt = project.sections.findIndex((s) => s.badge.toLowerCase() === 'context')
+  const afterContext = (contextAt === -1 ? 0 : contextAt) + 1
+
   const navItems = [
-    ...project.sections.map((section) => section.badge),
+    ...project.sections.slice(0, afterContext).map((section) => section.badge),
+    CONTRIBUTION,
+    ...project.sections.slice(afterContext).map((section) => section.badge),
     'Impact',
     ...(hasReflections ? ['Reflections'] : []),
   ]
@@ -70,32 +85,29 @@ export default function ProjectPage() {
               The compact stage: the tall one is only needed further down the page,
               where the old four-field form has to fit beside this one. */}
           {project.demo ? (
-            <div className="sm:-mx-8">
+            <div className={BLEED_VISUAL}>
+              {/* The same mat as every other frame, minus its bottom: the hero
+                  sits flush with the card's lower edge, the way the
+                  `center-bottom` covers do, so the screen reads as standing on
+                  the card rather than floating in it. */}
               <div
-                className="w-full rounded-sm"
-                // Wider inset at the sides than above; flush with the bottom
-                // edge, the way the `center-bottom` covers sit.
-                // Side inset is capped by the demos, not by taste: they switch
-                // to the phone layout below a 520px stage, and the narrowed page
-                // column leaves only so much to give away. 2rem keeps the hero
-                // on the desktop layout; 4rem pushed it under.
-                style={{ backgroundColor: 'var(--color-000)', padding: '2rem 2rem 0' }}
+                className={`w-full rounded-sm ${FRAME_PAD} pb-0 sm:pb-0`}
+                style={{ backgroundColor: 'var(--color-000)' }}
               >
                 <ClickableDemo id={project.demo} label={project.title} variant="compact" />
               </div>
             </div>
           ) : (
-            <div className="group sm:-mx-8">
+            <div className={`group ${BLEED_VISUAL}`}>
+              {/* Same mat, with the sides or the foot dropped where the cover
+                  is meant to run off the edge rather than sit inside it. */}
               <div
-                className="w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]"
-                style={{
-                  backgroundColor: 'var(--color-000)',
-                  padding: project.coverImagePosition === 'bottom-right'
-                    ? '1rem 0 0 0'
-                    : project.coverImagePosition === 'center-bottom'
-                    ? '1rem 1rem 0'
-                    : '1rem 1rem 1.25rem',
-                }}
+                className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)] ${FRAME_PAD} ${
+                  project.coverImagePosition === 'bottom-right' ? 'px-0 sm:px-0 pb-0 sm:pb-0'
+                  : project.coverImagePosition === 'center-bottom' ? 'pb-0 sm:pb-0'
+                  : ''
+                }`}
+                style={{ backgroundColor: 'var(--color-000)' }}
               >
                 <div className="rounded-[0.125rem] overflow-hidden">
                   <ClickableImage
@@ -111,39 +123,51 @@ export default function ProjectPage() {
             </div>
           )}
 
-          {/* Project meta — role, team, duration.
-              Three columns above sm. Below it, one row each with the value
-              pushed to the right edge: stacked label-over-value in a narrow
-              two-column grid left a ragged third cell and a lot of empty space
-              beside the short values, and a phone has the width for a list but
-              not for a grid. */}
-          <dl className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-x-12 sm:gap-y-4 mt-8 pb-6 border-b border-[var(--color-100)]">
-            {([
-              ['Role', project.meta.role],
-              ['Team', project.meta.team],
-              ['Duration', project.meta.duration],
-            ] as const).map(([label, value]) => (
-              <div
-                key={label}
-                className="flex items-baseline justify-between gap-6 sm:flex-col sm:items-start sm:justify-start sm:gap-1.5"
-              >
-                <dt className="text-eyebrow text-[var(--color-400)] shrink-0">{label.toUpperCase()}</dt>
-                {/* A comma-separated value gets one line per item. Left to wrap,
-                    "1 Front-end dev, 1 Back-end dev" broke inside "Back-end"
-                    instead of at the comma, which is the only place it should. */}
-                <dd className="text-body-2 text-[var(--color-500)] text-pretty text-right sm:text-left">
-                  {value.split(', ').map((part) => (
-                    <span key={part} className="block">{part}</span>
-                  ))}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
         </section>
 
-        {/* Narrative sections — badges and order come from the project data */}
-        {project.sections.map((section) => (
+        {/* Narrative sections — badges and order come from the project data,
+            with Contribution spliced in behind Context. */}
+        {project.sections.slice(0, afterContext).map((section) => (
+          <section key={section.badge} id={sectionId(section.badge)}>
+            <SectionBadge>{section.badge}</SectionBadge>
+            <ProcessBlocks blocks={section.blocks} />
+          </section>
+        ))}
+
+        {/* One sentence where ROLE / TEAM / DURATION used to be three columns in
+            the header. That row listed who was in the room and left "so what
+            did you decide" to be mined out of the prose.
+
+            Deliberately not <Bold>: the sentence is the designer's own claim
+            about their own work, which is the one place CASE-STUDY-PATTERN.md
+            says bold must never go. */}
+        <section id={sectionId(CONTRIBUTION)}>
+          <SectionBadge>{CONTRIBUTION}</SectionBadge>
+          <div className="flex flex-col gap-4">
+            <p className="text-body-1 text-[var(--color-500)] text-pretty">
+              {project.meta.contribution}
+            </p>
+            {/* The claim above is "I shipped this"; this is the receipt. It sits
+                under the sentence rather than in it so that it reads as evidence
+                offered, not as a citation propping the sentence up. */}
+            {project.meta.live && (
+              <a
+                href={project.meta.live.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${project.meta.live.label} (opens in new tab)`}
+                className="flex w-fit items-center gap-1.5 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+              >
+                <span>{project.meta.live.label}</span>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0" style={{ stroke: 'currentColor' }}>
+                  <path d="M4 12L12 4M6 4h6v6" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter" />
+                </svg>
+              </a>
+            )}
+          </div>
+        </section>
+
+        {project.sections.slice(afterContext).map((section) => (
           <section key={section.badge} id={sectionId(section.badge)}>
             <SectionBadge>{section.badge}</SectionBadge>
             <ProcessBlocks blocks={section.blocks} />
@@ -177,7 +201,7 @@ export default function ProjectPage() {
               </MetricMain>
             ))}
             {project.results.note && !project.results.northStar && (
-              <div className="p-5 rounded-sm" style={{ backgroundColor: 'var(--color-000)' }}>
+              <div className={`${FRAME_PAD} rounded-sm`} style={{ backgroundColor: 'var(--color-000)' }}>
                 <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
               </div>
             )}
@@ -205,7 +229,7 @@ export default function ProjectPage() {
           <Link
             href={`/projects/${prev.slug}`}
             aria-label={`Previous: ${prev.title}`}
-            className="group flex flex-col gap-1.5"
+            className="group flex flex-col gap-1.5 p-3 -m-3"
             onMouseEnter={prevLabel.scramble}
             onMouseLeave={prevLabel.reset}
           >
@@ -222,7 +246,7 @@ export default function ProjectPage() {
           <Link
             href={`/projects/${next.slug}`}
             aria-label={`Next: ${next.title}`}
-            className="group flex flex-col gap-1.5 items-end text-right"
+            className="group flex flex-col gap-1.5 items-end text-right p-3 -m-3"
             onMouseEnter={nextLabel.scramble}
             onMouseLeave={nextLabel.reset}
           >

@@ -144,7 +144,11 @@ export function Nav() {
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none py-[2.5rem]">
       <div className="w-full max-w-[var(--measure)] mx-auto px-5">
         <div
-          className="pointer-events-auto mx-auto transition-all duration-[400ms] ease-in-out"
+          // Width eases; the surface does not. Animating the background meant
+          // 400ms where the bar was half-transparent over body copy, and the
+          // name and whatever line sat under it were both unreadable for the
+          // whole transition. The bar either has a surface or it does not.
+          className="pointer-events-auto mx-auto transition-[width] duration-[400ms] ease-in-out"
           style={{
             width: scrolled ? '93%' : '100%',
             ...(scrolled

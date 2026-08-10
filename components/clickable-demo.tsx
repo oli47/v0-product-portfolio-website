@@ -29,10 +29,14 @@ import type { DemoId } from '@/lib/projects'
  */
 const PHONE_W = 390
 
-export function ClickableDemo({ id, label, variant = 'inline' }: {
+export function ClickableDemo({ id, label, pinnedScreen, variant = 'inline' }: {
   id: DemoId
   /** Names the demo for the button's accessible label. */
   label: string
+  /** Hold the demo on one screen instead of playing it. The enlarged copy
+   *  ignores it and plays the whole thing, which is what the click is for: a
+   *  still that opens into the same still would be a dead control. */
+  pinnedScreen?: number
   variant?: DemoVariant
 }) {
   const [open, setOpen] = useState(false)
@@ -53,7 +57,7 @@ export function ClickableDemo({ id, label, variant = 'inline' }: {
         {/* The demo takes no pointer events of its own, so the whole surface is
             the button however the reproduction is built. */}
         <div className="pointer-events-none">
-          <Demo variant={variant} />
+          <Demo variant={variant} pinnedScreen={pinnedScreen} />
         </div>
       </button>
 

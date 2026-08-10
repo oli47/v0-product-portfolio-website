@@ -1,7 +1,7 @@
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId = 'signup' | 'signup-old' | 'contacts' | 'freemium'
+export type DemoId = 'signup' | 'signup-old' | 'contacts' | 'freemium' | 'freemium-setup'
 
 /** One side of a comparison: either a screenshot or a coded demo. */
 export type CompareSide = { label: string } & ({ src: string } | { demo: DemoId })
@@ -17,7 +17,12 @@ export type ProcessBlock =
    *  carrying the emphasis a heading would have carried. */
   | { kind: 'decisions'; items: { num: string; title?: string; description: string }[] }
   | { kind: 'slideshow'; images: string[]; caption?: string }
-  | { kind: 'demo'; demo: DemoId; caption?: string }
+  /** `step` holds the demo still on one screen of its script, by that script's
+   *  `screen` index, so the same demo can sit beside three different paragraphs
+   *  with each one showing what its paragraph is about. Leave it off and the
+   *  demo plays while it is on screen. Only one per page should be left
+   *  playing: two moving pictures in one column compete rather than read. */
+  | { kind: 'demo'; demo: DemoId; step?: number; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -39,9 +44,22 @@ export interface Project {
     color?: 'accent' | 'ink'
   }[]
   meta: {
-    role: string
-    team: string
-    duration: string
+    /**
+     * One sentence: the title held, then what was mine and what was somebody
+     * else's.
+     *
+     * This replaced a ROLE / TEAM / DURATION row. `TEAM: 1 Front-end dev, 1
+     * Back-end dev` read as a cast list rather than an ownership claim, and a
+     * reader looking for "what did *you* decide" found the answer only by
+     * mining the prose. Durations moved here or were already in the tagline —
+     * see the one-number-one-place rule in CASE-STUDY-PATTERN.md.
+     *
+     * No bold, ever. Bold marks the insight or the number; bolding your own
+     * contribution is the thing that rule exists to stop.
+     */
+    contribution: string
+    /** The shipped product, linked from the header. Prototypes have none. */
+    live?: { label: string; url: string }
   }
   coverImage: string
   coverImagePosition?: 'bottom-right' | 'center-bottom'
@@ -88,10 +106,10 @@ export const projects: Project[] = [
       { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
     ],
     meta: {
-      role: 'Sr Product Designer',
-      team: '1 Front-end dev, 1 Back-end dev',
-      // Eleven monthly cohorts in the data, May 2025 to March 2026.
-      duration: '11 months',
+      // The eleven months are in Approach ("The build was quick. The eleven
+      // months were the iterating"), so they are not repeated here.
+      contribution: 'Sr Product Designer. I owned the acquisition model, the funnel and every design decision. Two developers built it; two freemium specialists from the onboarding team ran the customer calls.',
+      live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
     coverImage: '/thumbnails/freemium-activation.png',
     thumbnailImage: '/thumbnails/freemium-activation.png',
@@ -102,11 +120,11 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'edrone is marketing automation for ecommerce. Automated messages and newsletters bring shoppers back to the store to buy. Sometimes that is a cart they left behind, sometimes a first order.',
+            content: 'edrone is marketing automation for ecommerce. Automated messages bring shoppers back to buy: an abandoned cart, a first order, the next one.',
           },
           {
             kind: 'text',
-            content: 'For ten years edrone sold one way. A salesperson closed the deal and a Support team ran the account from there. **Both cost more than a small store would ever pay, so small stores were not worth acquiring.** Sales promised that team at signing, so almost nobody had ever run edrone alone.',
+            content: 'For ten years every customer came through a salesperson and stayed with a Support team. **Both cost more than a small store would ever pay, so small stores were not worth acquiring.** Almost nobody had ever run edrone alone.',
           },
         ],
       },
@@ -115,7 +133,19 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**Open edrone to the stores the old model could not afford to serve.** That means no salesperson and no Support team. The product has to sell itself, set itself up and earn its keep.',
+            content: '**Open edrone to the stores the old model could not afford to serve.** No salesperson, no Support team. The product sells itself, sets itself up and earns its keep.',
+          },
+          {
+            // The definition of the number, in the section that is supposed to
+            // define it. It spent a while at the foot of Solution, where it
+            // read as a caveat arriving after the work rather than as the bar
+            // the work was aimed at.
+            kind: 'text',
+            content: 'Ten years of the old model had built 2,500 paying stores. This channel had to reach the ones it never could, and most of them would never pay at all.',
+          },
+          {
+            kind: 'text',
+            content: 'Active meant a store had connected its shop to edrone, had automations running, and was doing around fifty orders a month. Not logins.',
           },
         ],
       },
@@ -124,34 +154,30 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**Could the product stand on its own, with nobody behind it?** Until then a person set up every paying customer, so it had never had to. My job was to digitise what the onboarding team did.',
+            content: 'A person had set up every paying customer, so the product had never stood on its own. My job was to digitise the onboarding team.',
           },
           {
             kind: 'text',
-            content: 'Those customers still did some things themselves, mostly their own newsletters. So it was never all or nothing. **I had to find the line. What is done for the store before it arrives, and what it still wants to do itself.**',
+            content: 'Those customers still wrote their own newsletters, so it was never all or nothing. **I had to find the line: what is done before the store arrives, and what it still wants to do itself.**',
           },
           {
             kind: 'text',
-            content: 'Then a third thing: what keeps happening after that. A newsletter only counts if the next one is coming. **Setup that runs once is a demo.**',
+            content: 'Then a third thing. A newsletter only counts if the next one is coming. **Setup that runs once is a demo.**',
           },
           {
             kind: 'text',
-            content: '**The build was quick. The eleven months were the iterating.** Two freemium specialists joined from the onboarding team. They gave me dozens of calls with stores I would not have had on my own. Signup, onboarding, the automations, the messages, everything went through pass after pass.',
+            content: 'The build was quick; the eleven months were the iterating. Two freemium specialists gave me dozens of store calls, and everything went through pass after pass.',
           },
           {
             kind: 'decisions',
             items: [
               {
                 num: 'PROBLEM 1',
-                description: 'A trial ends on a date whether or not anything has happened. Freemium ends when the store outgrows it. **Which one holds a store long enough for edrone to show what it is worth?**',
+                description: 'A trial ends on a date. Freemium ends when the store outgrows it. **Which one holds a store long enough to be worth anything?**',
               },
               {
                 num: 'PROBLEM 2',
-                description: 'A prepared account still leaves every choice to the store. And no two stores want the same messages going out under their name. **If the store has to decide, the setup is not really finished. If I decide for everyone, some of it will be wrong for someone.**',
-              },
-              {
-                num: 'PROBLEM 3',
-                description: 'Is the win the moment a store sees that everything is ready, or the moment edrone brings an order back? **Only one of the two can be the number the channel is steered by.**',
+                description: 'No two stores want the same messages going out under their name. **If the store has to decide, the setup is not finished. If I decide for everyone, some of it is wrong for someone.**',
               },
             ],
           },
@@ -162,15 +188,32 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**Freemium, not a trial.** The value shows up as orders, and orders come when shoppers are ready, not when we are. A trial would have closed the account before that happened. A free account costs us almost nothing. Support was the only expensive part of a customer, and this model removed it.',
+            content: '**Freemium, not a trial.** Orders come when shoppers are ready, not when we are. A trial closes the account before that happens; a free one costs us nothing to leave open.',
           },
           {
+            // The list this used to carry (campaigns written, automations
+            // built, pop-up ready) is the still below it. Saying it twice made
+            // the picture an illustration of the sentence instead of the
+            // evidence for it.
             kind: 'text',
-            content: '**Every feature the store came for is set up for it.** The campaigns are written, the automations are built, the pop-up is ready. All of it is built from the store\'s own site in the minutes after signup. The store gives us a URL and nothing else.',
+            content: "Everything is built from the store's own site in the minutes after signup. It gives us a URL and nothing else.",
           },
           {
+            kind: 'demo',
+            demo: 'freemium-setup',
+            caption: 'Account creation in full. Four stages, no question asked at any of them, all of it read off the one address the store typed.',
+          },
+          {
+            // Same cut: the seven automations were named one by one here and
+            // are named again on their own cards in the still below.
             kind: 'text',
-            content: 'Being ready still leaves a decision about each one, and I took that decision. edrone knows what works better than a store that has never run marketing automation. So I switched everything on. **Seven automations run from the first minute.** Abandoned cart, product recommendations, welcome, birthday, win-back, remarketing to past customers and loyalty, plus the pop-up and the first newsletters.',
+            content: 'Someone still had to decide what runs, and I took it. edrone knows what works better than a store that never ran marketing automation, so I switched everything on. Seven automations are live before the store logs in.',
+          },
+          {
+            kind: 'demo',
+            demo: 'freemium',
+            step: 0,
+            caption: 'What the store finds waiting: seven automations, every one of them already switched on.',
           },
           {
             kind: 'text',
@@ -178,28 +221,32 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: '**One preset, the same for a furniture store and a store selling socks.** The onboarding walkthrough shows exactly what is running under the store\'s name. Every automation has an off switch, so a store that disagrees turns it off in one click.',
-          },
-          {
-            kind: 'demo',
-            demo: 'freemium',
-            caption: 'The shipped onboarding. Setup runs while the account is being created, so everything is already on by the time the user arrives.',
+            content: '**Nothing is asked before something is shown.** Tailoring means questions, and a question comes before anything runs. So the same seven go out for a furniture store and a store selling socks, and every one has an off switch. Disagreeing costs a click, not a setup.',
           },
           {
             kind: 'text',
-            content: '**An active store is one that is integrated and has automations running.** I only counted stores doing around fifty orders a month or more. Below that a shop is either days old or too small for marketing automation. That is what we steered the channel by, not logins. A store can go weeks without opening edrone while edrone earns for it, and for this product that is success, not neglect.',
+            content: 'Nothing sends until the store connects its shop, so integration is the real start line, not signup. That ask is the last step of the walkthrough rather than the first, because by then the store has seen what is waiting for it.',
+          },
+          {
+            // The whole walkthrough, and it belongs here rather than three
+            // paragraphs earlier. It ends on the store connecting, which is
+            // what the paragraph above it is about; run before that and the
+            // section showed the full sequence and then its own ending again.
+            kind: 'demo',
+            demo: 'freemium',
+            caption: 'The shipped onboarding, end to end. Four steps of showing what is already done, and one ask at the end of them.',
           },
         ],
       },
     ],
     results: {
       metrics: [
-        { value: '5,050', label: 'STORES ACQUIRED', color: 'accent', description: 'Signed up in under a year, and not one of them cost a salesperson or an onboarding team. Those were the two costs that made a small store unprofitable to begin with. **393 started paying, adding 16% to the 2,500-customer base edrone had built in ten years.**' },
+        { value: '5,050', label: 'STORES ACQUIRED', color: 'accent', description: 'Signed up in under a year, none of them costing a salesperson or an onboarding team, which were the two costs that made a small store unprofitable. **393 started paying, adding 16% to a base built over ten years.**' },
         {
           value: '77%',
           label: 'ACTIVE STORES',
           color: 'accent',
-          description: 'Every monthly cohort above, counting a store as active once it is integrated with automations running. **Over the same months, the median time to a first attributed order fell from 35 days to 5.** An attributed order is a sale from a shopper who came back through an edrone message.',
+          description: 'Every monthly cohort above. **Over the same months, the median time to a first attributed order fell from 35 days to 5.** That is a sale from a shopper who came back through an edrone message.',
           chart: {
             seriesLabel: 'ACTIVE STORES',
             data: [
@@ -221,6 +268,7 @@ export const projects: Project[] = [
     },
     reflections: [
       'Everything shipped as one preset. Next I would give the store a small set of choices, so it has a say without adding a step to setup.',
+      'The model was built to take Support out of the customer, and Support\u2019s workload went up anyway. I never put a number on that, which is the first thing anyone should ask of a model that claims to remove a cost.',
     ],
   },
   {
@@ -232,9 +280,10 @@ export const projects: Project[] = [
       { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
     ],
     meta: {
-      role: 'Sr Product Designer',
-      team: '1 Front-end dev',
-      duration: '5 hours',
+      // "Five hours" is the tagline and the last line of Solution. Twice is
+      // already the limit; a third place would be the punchline told again.
+      contribution: 'Sr Product Designer. I owned the diagnosis, the design and the shipped frontend. A developer built the backend, reviewed my code and released it.',
+      live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
     coverImage: '/images/sf-cover.png',
     thumbnailImage: '/images/sf-cover.png',
@@ -353,9 +402,9 @@ export const projects: Project[] = [
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
     ],
     meta: {
-      role: 'Sr Product Designer',
-      team: '1 Back-end dev',
-      duration: '6 days',
+      // The six days close Solution, so they are not repeated here.
+      contribution: 'Sr Product Designer. I owned the concept, the sequence and every screen. A backend developer built the sending.',
+      live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
     coverImage: '/images/ci-cover.png',
     thumbnailImage: '/images/ci-thumbnail.png',
@@ -366,7 +415,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: "edrone is a marketing automation CRM for ecommerce, there to make the customers who already reach a shop's website come back and convert. It has two core features. Automations are triggered by any customer activity on the site, and newsletters are sent by the user by hand to subscribed customers only. Each brings half of the total revenue edrone can generate for the shop. Stores pay for edrone by the size of the contact base they keep there.",
+            content: "edrone is marketing automation for ecommerce. Automations fire off what a shopper does on the site; newsletters go out by hand to subscribers. Each brings half the revenue edrone can earn a shop, and a store pays by the size of the contact base it keeps there.",
           },
         ],
       },
@@ -375,7 +424,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: "For edrone to follow a customer's activity live and fire an automation off it, that customer has to be identified by a cookie.",
+            content: "An automation can only fire at a contact edrone has identified by a cookie.",
           },
           {
             kind: 'contact-flow',
@@ -383,11 +432,11 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: "Identification sat at **3.1%** for the median store, so all the rest of the traffic on the site was getting no automations at all, which makes identification the single biggest lever in the product.",
+            content: "For the median store that was **3.1%**. The other 97% of the traffic got no automations at all, which makes identification the biggest lever in the product.",
           },
           {
             kind: 'text',
-            content: "The ceiling is higher than it looks, because an automation does not need marketing consent, so it reaches contacts a newsletter never will. I took the number on myself, because every point of it is leverage on a base the store already pays for.",
+            content: "The ceiling is higher than it looks: an automation needs no marketing consent, so it reaches contacts a newsletter never will. Every point is leverage on a base the store already pays for.",
           },
         ],
       },
@@ -396,15 +445,15 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: "I put the product analyst on my team on the data first, to find out whether the number was a reporting artefact or the real state of the base. It was real.",
+            content: "My product analyst checked the data first, in case 3.1% was a reporting artefact. It was real.",
           },
           {
             kind: 'text',
-            content: "Then I went through what other platforms do about it, Klaviyo, HubSpot, Omnisend, Brevo and a few others. **None of them do anything to raise it.** Identification happens wherever a contact engages on their own, and nowhere else.",
+            content: "Then Klaviyo, HubSpot, Omnisend, Brevo and a few others. **None of them do anything to raise it.** Identification happens where a contact engages on their own, and nowhere else.",
           },
           {
             kind: 'text',
-            content: "Support was the next place to look, since I wanted to know whether they had any way of handling this already and how customers actually talk about identification. It mattered to them enough that they were sending a short series of emails to a store's entire base by hand, purely to get contacts identified, though only for a small handful of stores, one at a time and only once.",
+            content: "Support was already solving it by hand: a short series of emails to a store's whole base, purely to get contacts identified. For a handful of stores, one at a time, once.",
           },
           {
             kind: 'decisions',
@@ -412,17 +461,17 @@ export const projects: Project[] = [
               {
                 num: 'PROBLEM 1',
                 title: 'Nothing identifies a contact unless the contact acts first',
-                description: 'It takes an email open or click, a newsletter signup, or an order. Only the first can be repeated on a cycle, and only if the store sends to its entire base.',
+                description: 'It takes an open, a click, a signup or an order. Only the first can be repeated, and only if the store mails its whole base.',
               },
               {
                 num: 'PROBLEM 2',
                 title: 'Identification decays on its own',
-                description: 'Cookies might clear on their own within about 30 days depending on the browser, so anything sent once stops working the moment they do.',
+                description: 'Cookies clear on their own within about 30 days, so anything sent once stops working.',
               },
               {
                 num: 'PROBLEM 3',
                 title: 'Almost nobody knows identification exists',
-                description: 'Around three quarters of users did not know a contact has to be identified before an automation can reach them, and only marketers did. The feature had to explain its own value simply and fast, or nobody would use it.',
+                description: 'Three quarters of users did not know a contact has to be identified at all. The feature had to explain its own value fast, or nobody would use it.',
               },
             ],
           },
@@ -433,23 +482,35 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: "The first decision was what to send. Marketing content cannot go to contacts who never gave consent, and those are exactly the ones worth reaching, so nothing in the sequence is marketing.",
+            content: "What to send. Marketing cannot go to contacts without consent, and those are exactly the ones worth reaching, so nothing in the sequence is marketing.",
           },
           {
             kind: 'text',
-            content: "The second was how often. A single send lifts identification and loses it again as the cookies clear, so the sequence repeats every 30 days instead of running once.",
+            content: "How often. One send lifts identification and loses it again as the cookies clear, so the sequence repeats every 30 days.",
+          },
+          {
+            kind: 'demo',
+            demo: 'contacts',
+            step: 0,
+            caption: 'The sequence as the user sees it: each send 30 days after the one before, and a repeat at the end rather than a stop.',
           },
           {
             kind: 'text',
-            content: "The third was variety. Seven different emails rather than the same one resent, because a base that gets an identical message every month stops opening it, and an unopened email identifies nobody.",
+            content: "Variety. Seven different emails, not one resent: a base that gets the same message monthly stops opening it, and an unopened email identifies nobody.",
           },
           {
             kind: 'text',
-            content: "The fourth was the content itself. Each message had to be worth opening and had to look like the store rather than like edrone, so AI generates it from the store's own branding.",
+            content: "The content. Each message had to look like the store rather than like edrone, so AI writes it from the store's own branding.",
+          },
+          {
+            kind: 'demo',
+            demo: 'contacts',
+            step: 1,
+            caption: "One send opened in the preview drawer, carrying the store's own branding rather than edrone's.",
           },
           {
             kind: 'text',
-            content: "The last decision was who turns it on. Leaving it off until the user found the setting would have meant nobody ever did, so **the feature starts on**, shown in the onboarding walkthrough as something already running rather than something to configure, and it comes off in one click. That was how the rest of the onboarding already worked.",
+            content: "Who turns it on. Left off until someone found the setting, nobody would have, so **the feature starts on**, shown in onboarding as something already running. It comes off in one click.",
           },
           {
             kind: 'demo',
@@ -458,15 +519,15 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: "Before any of it went out I validated the whole thing internally with the eight people from Support who had been sending those emails by hand.",
+            content: "I validated it first with the eight people in Support who had been sending those emails by hand.",
           },
           {
             kind: 'text',
-            content: "That left the customers already on the product, who did not get it turned on automatically. Switching it on for one of them came down to a single click for Support, instead of the campaign they used to send themselves.",
+            content: "Existing customers did not get it switched on automatically. For them it became one click for Support, instead of the campaign they used to send themselves.",
           },
           {
             kind: 'text',
-            content: "I designed the screen and the email templates in Figma and built the frontend in Codex, a backend developer handled the sending, and it went to production in six days.",
+            content: "I designed the screen and the templates in Figma and built the frontend in Codex; a backend developer handled the sending. Six days to production.",
           },
         ],
       },
@@ -494,9 +555,10 @@ export const projects: Project[] = [
       { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },
     ],
     meta: {
-      role: 'Sole Designer',
-      team: '1 Front-end dev, 1 Back-end dev',
-      duration: '10 months',
+      // The ten months live here rather than in the prose: this is the one
+      // project whose duration is stated nowhere else.
+      contribution: 'Sole designer over ten months. I owned research, UX, UI, the marketing website and the design system. A frontend developer built the app.',
+      live: { label: 'plogenius.com', url: 'https://www.plogenius.com' },
     },
     coverImage: '/images/plo-cover.png',
     coverImagePosition: 'center-bottom',
@@ -516,6 +578,22 @@ export const projects: Project[] = [
           {
             kind: 'text',
             content: "I was the sole designer. The team was small: the CEO as PM, two professional poker players who were also investors, a frontend developer, and a 3-5 person engine team building the neural-net solver. I owned research, UX, UI, the marketing website, and built a standalone design system to give PLO Genius its own brand identity separate from Deepsolver.",
+          },
+        ],
+      },
+      {
+        badge: 'Goal',
+        blocks: [
+          {
+            // No conversion baseline exists for this one, so the goal is
+            // anchored to the alternative and what it cost, the way freemium's
+            // is anchored to what Sales was already being paid.
+            kind: 'text',
+            content: '**Put a PLO solver in a browser at a price a player could justify.** The bar was whatever a player would otherwise do: buy a $5,000 PC, run MonkerSolver on it, and wait minutes for a single calculation. Most would not, so most PLO players studied without a solver at all.',
+          },
+          {
+            kind: 'text',
+            content: 'Deepsolver had already shown a neural-net cloud solver worked for No-Limit Hold’em, so the engine was never the open question. **The interface was.** A solver answers with a matrix of frequencies, and the players who needed one most were the least able to read it.',
           },
         ],
       },
@@ -563,7 +641,10 @@ export const projects: Project[] = [
         { value: '120+', label: 'PAYING SUBSCRIBERS', color: 'accent', description: 'Players using the app I designed. Three tiers: $0 / $59 / $125.' },
       ],
     },
-    reflections: [],
+    reflections: [
+      'The engine sold better than the app around it. Ten platforms licensed the API against 120 subscribers on the product I spent ten months designing. Knowing that, I would put the design effort where the revenue was and treat the consumer app as the demo for it.',
+      'Nothing in the product let players teach each other. PLO study already happens inside stables and the groups around them, which is where my own research came from, and the product never gave those groups anything to work with. A trainer a stable lead could set drills in would have grown through the people already doing that work by hand.',
+    ],
   },
 ]
 
