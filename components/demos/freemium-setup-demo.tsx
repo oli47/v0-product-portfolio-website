@@ -33,16 +33,28 @@ const READY = 'ready'
  */
 const STAGE_MS = 1800
 
+/**
+ * `READY` is the stage that is *running*, not the count of finished ones.
+ *
+ * It used to be the count, set to `i + 1` before the hold — which meant every
+ * picture was on screen during the wait belonging to the stage after it. Stage
+ * one got the 500ms lead-in and nothing else, less than the 420ms its own
+ * entrance animation takes, and the last stage got two waits instead of one and
+ * sat there for four and a half seconds. Four stages, four equal holds.
+ */
 const SCRIPT: Step[] = [
-  { kind: 'set',  field: READY, text: '0' },
-  { kind: 'wait', ms: 500 },
   ...SETUP_ITEMS.flatMap((_, i): Step[] => [
-    { kind: 'set',  field: READY, text: String(i + 1) },
-    // The last one holds through the beat before the loop restarts, so the
-    // finished state is a place the demo arrives at rather than a frame it
-    // passes through on its way back to the beginning.
-    { kind: 'wait', ms: i === SETUP_ITEMS.length - 1 ? STAGE_MS * 1.5 : STAGE_MS },
+    { kind: 'set',  field: READY, text: String(i) },
+    { kind: 'wait', ms: STAGE_MS },
   ]),
+  // Then all four finished: the stepper fills to the end and the last picture
+  // holds, so the finished state is a place the demo arrives at rather than a
+  // frame it passes through on its way back to the beginning. Shorter than a
+  // stage, because the picture does not change here — only the stepper does,
+  // and a full stage of it left the last photographs on screen for twice as
+  // long as any of the three before them.
+  { kind: 'set',  field: READY, text: String(SETUP_ITEMS.length) },
+  { kind: 'wait', ms: Math.round(STAGE_MS * 0.6) },
 ]
 
 /** The poster: nothing built yet, which is where the loop starts anyway. */
@@ -63,7 +75,7 @@ export function FreemiumSetupDemo(props: DemoProps) {
         <div className="flex h-full w-full items-center justify-center bg-white" style={{ padding: `0 ${m.padX}px` }}>
           <PreparingScreen
             items={SETUP_ITEMS}
-            art={AUTOMATIONS.map((a) => a.art)}
+            automations={AUTOMATIONS}
             done={Number(state.values[READY] ?? 0)}
             m={m}
           />

@@ -239,21 +239,26 @@ const CONNECTING = 'connecting'
  *  enough to read the bold lead, which is all any of these steps asks of you. */
 const READ_MS = 2200
 
+/** And how long one stage of the setup beat holds. A fast pass: the same four
+ *  stages get 1800ms each in `freemium-setup-demo`, where they are the subject;
+ *  here they are the doorway into four screens that are, and a reader made to
+ *  wait eight seconds for the first one leaves. */
+const SETUP_MS = 520
+
 const SCRIPT: Step[] = [
   // The account is minutes old and the content does not exist yet. The four
   // things above land in turn; the bar under them fills as they do.
   { kind: 'screen', index: PREPARING },
-  // Short. The frame this opens on is four empty tiles, and holding it is the
-  // one moment in the beat with nothing to look at.
-  { kind: 'wait',   ms: 380 },
-  // A fast pass. The same seven stages get 1500ms each in `freemium-setup-demo`,
-  // where they are the subject; here they are the doorway into four screens
-  // that are, and a reader made to wait ten seconds for the first one leaves.
+  // `READY` is the stage that is running, not the count of finished ones — see
+  // `freemium-setup-demo`, which holds the same four stages for longer and where
+  // counting the other way was leaving the first picture on screen for less time
+  // than its own entrance animation takes.
   ...SETUP_ITEMS.flatMap((_, i): Step[] => [
-    { kind: 'set',  field: READY, text: String(i + 1) },
-    { kind: 'wait', ms: 420 },
+    { kind: 'set',  field: READY, text: String(i) },
+    { kind: 'wait', ms: SETUP_MS },
   ]),
-  { kind: 'wait',   ms: 400 },
+  { kind: 'set',    field: READY, text: String(SETUP_ITEMS.length) },
+  { kind: 'wait',   ms: SETUP_MS },
 
   // Everything above is now real.
   { kind: 'screen', index: AUTOMATIONS_SCREEN },
@@ -314,7 +319,7 @@ export function FreemiumDemo(props: DemoProps) {
             >
               <PreparingScreen
                 items={SETUP_ITEMS}
-                art={AUTOMATIONS.map((a) => a.art)}
+                automations={AUTOMATIONS}
                 // Pinned, the script never runs and never counts, so the honest
                 // still of this beat is the one where it has finished. Reading
                 // the counter would draw four empty tiles and claim that is
