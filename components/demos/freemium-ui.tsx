@@ -1069,11 +1069,26 @@ const Channels = ({ m }: { m: Metrics }) => (
  * The pop-up itself is drawn rather than screenshotted, for the same reason the
  * automation creatives are — half of it is a campaign photograph.
  */
-export const PopupCard = ({ m }: { m: Metrics }) => (
+export const PopupCard = ({ m, w, h }: {
+  m: Metrics
+  /** Override the card's own footprint. The Pop-ups screen shows this card at
+   *  the size it was measured at; the setup preview stands it beside two
+   *  automation cards, where being 47px shorter and 47px narrower than its
+   *  neighbours reads as a mistake rather than as a different kind of thing.
+   *
+   *  Stretched, it takes an automation card's internal rhythm rather than its
+   *  own: the pale stage matches their creative exactly, so all three previews
+   *  and all three titles sit on one line, and the slack goes where their
+   *  two-line description is — under the title, where it is mint and invisible.
+   *  Letting the stage swallow the slack instead put this card's title 40px
+   *  below the other two, which is the same misalignment one level down. */
+  w?: number
+  h?: number
+}) => (
   <div
     style={{
-      width: m.popupW || '100%',
-      height: m.popupH || undefined,
+      width: w ?? (m.popupW || '100%'),
+      height: h ?? (m.popupH || undefined),
       padding: m.cardPad,
       background: C.mint,
       borderRadius: R.box,
@@ -1081,7 +1096,11 @@ export const PopupCard = ({ m }: { m: Metrics }) => (
     className="flex shrink-0 flex-col"
   >
     <div
-      style={{ height: m.previewAreaH, background: '#F2FDF6', borderRadius: R.chip }}
+      style={{
+        height: h ? m.creativeH : m.previewAreaH,
+        background: '#F2FDF6',
+        borderRadius: R.chip,
+      }}
       className="flex shrink-0 items-center justify-center overflow-hidden"
     >
       <PopupPreview m={m} />
@@ -1100,8 +1119,12 @@ export const PopupCard = ({ m }: { m: Metrics }) => (
       Sign up for email and phone
     </p>
 
+    {/* An auto margin only on a stretched card, where it takes the slack the
+        automations spend on their description and lands this row on the same
+        pixel as theirs. At the card's own size there is no slack to take, and
+        the measured gap is the whole of it. */}
     <div
-      style={{ marginTop: m.gapBodyRow, height: m.cardRowH }}
+      style={{ marginTop: h ? 'auto' : m.gapBodyRow, height: m.cardRowH }}
       className="flex shrink-0 items-center"
     >
       <ActiveBadge revenue="+0 subscribers" m={m} />
@@ -1368,13 +1391,15 @@ const LogoPair = ({ m }: { m: Metrics }) => {
  * everything the walkthrough hands over was made in this moment, and the user
  * chose none of it.
  */
-export const PreparingScreen = ({ items, art, done, m }: {
+export const PreparingScreen = ({ items, automations, done, m }: {
   items: string[]
-  /** The campaign artwork the account is getting. Passed in rather than
-   *  imported, because this module draws edrone's interface and does not know
-   *  which store is in the demo. */
-  art: CreativeArt[]
-  /** How many stages have finished. Names the active one and fills the stepper. */
+  /** The automations the account is getting, artwork and copy both. Passed in
+   *  rather than imported, because this module draws edrone's interface and does
+   *  not know which store is in the demo. Stage two used to take only the
+   *  artwork and carry a hardcoded copy of one card's title beside it, which is
+   *  the same card's text written down in two files. */
+  automations: AutomationData[]
+  /** Which stage is running. Names it, and fills the stepper behind it. */
   done: number
   m: Metrics
 }) => {
@@ -1408,7 +1433,7 @@ export const PreparingScreen = ({ items, art, done, m }: {
         className="relative flex w-full items-center justify-center overflow-hidden"
       >
         <div key={active} className="demo-harvest-in flex h-full w-full items-center justify-center">
-          <StagePreview index={active} art={art} m={m} />
+          <StagePreview index={active} automations={automations} m={m} />
         </div>
 
         {/* Every photograph, fetched at mount and never shown here.
@@ -1418,8 +1443,8 @@ export const PreparingScreen = ({ items, art, done, m }: {
             loop moved on, and the stage before it flashed its placeholder
             colours first. Mounted once out here, they are warm for all four. */}
         <span aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
-          {art.map((a) => (
-            <Image key={a.photo + 'pre'} src={a.photo} alt="" width={8} height={8} sizes={PREVIEW_SIZES} />
+          {automations.map(({ art }) => (
+            <Image key={art.photo + 'pre'} src={art.photo} alt="" width={8} height={8} sizes={PREVIEW_SIZES} />
           ))}
         </span>
       </div>
@@ -1483,9 +1508,6 @@ const Fit = ({ w, h, k, children }: {
   </span>
 )
 
-/** The card copy the preview shows, in the product's own words. It lives here
- *  rather than inside `CreativeArt`, which describes artwork and has no
- *  business carrying a card's text. */
 /**
  * One `sizes` for every photograph in the setup previews.
  *
@@ -1497,11 +1519,17 @@ const Fit = ({ w, h, k, children }: {
  */
 const PREVIEW_SIZES = '(max-width: 520px) 110px, 220px'
 
-const CARD = {
-  title: 'Recover abandoned carts',
-  body: 'Automated reminders for customers who left items in their cart.',
-  revenue: '+0,00 zł',
-}
+/**
+ * The card the preview cuts everything to: one grid column of the Automations
+ * screen, which is where two of the three artefacts actually live.
+ *
+ * A pop-up card is 383 x 453 on its own screen and a bare creative is 400 x 315,
+ * and standing all three at their natural sizes read as three cards someone had
+ * failed to line up rather than as three different kinds of thing. So the shells
+ * match and the contents differ, which is the honest way round: what edrone
+ * generated differs, the card it hands it over on does not.
+ */
+const PREVIEW_CARD = { w: 430, h: DESKTOP.cardH }
 
 /**
  * What one stage shows.
@@ -1510,24 +1538,32 @@ const CARD = {
  * is written from that material, the words are then fitted to the store, and
  * the account exists. Every picture is a real product component, because a
  * drawn approximation of a card is a mock of a mock.
+ *
+ * The artefacts are drawn at desktop metrics on both breakpoints. `Fit` builds
+ * them full size and scales the result, so a phone is already looking at a
+ * picture of a scaled-down product rather than at a phone layout — and the
+ * three cards are ~95px wide there, where nobody is reading their type but
+ * everybody can see whether they are the same size.
  */
-const StagePreview = ({ index, art, m }: { index: number; art: CreativeArt[]; m: Metrics }) => {
+const StagePreview = ({ index, automations, m }: {
+  index: number
+  automations: AutomationData[]
+  m: Metrics
+}) => {
   const gap = Math.round(m.gridGap * 0.5)
   const boxH = m.prepPreviewH - Math.round(m.gridGap * 1.5)
-  // One factor for every artefact on stage two, bound by whichever runs out
-  // first: the box's height against the tallest of them, or its width against
-  // all three side by side. Fitting each one to the box separately gave three
-  // different internal type sizes; fitting only by height left them at half the
-  // width of the box with nothing beside them.
-  const cardH = m.cardH || 495
-  const rowW = 430 + (m.popupW || 383) + 400 + gap * 2
-  // 0.94 of the width it could take, so the row has air beside it rather than
-  // sitting hard against both walls of the box.
-  const k = Math.min(boxH / cardH, ((m.prepW - Math.round(m.gridGap * 1.5)) / rowW) * 0.94)
+  const boxW = m.prepW - Math.round(m.gridGap * 1.5)
+  // One factor for all three cards, bound by whichever of the box's sides runs
+  // out first: its height against one card, or its width against three of them
+  // and the two gaps between, which are drawn at full size and so come off the
+  // width before it is shared out. 0.98, so the row has air beside it rather
+  // than sitting hard against both walls.
+  const k = Math.min(boxH / PREVIEW_CARD.h, ((boxW - gap * 2) / (PREVIEW_CARD.w * 3)) * 0.98)
 
   // Stage 1. Everything the site gave up, on one board: the mark, the
   // photography and the palette the campaigns are coloured from.
   if (index === 0) {
+    const art = automations.map((a) => a.art)
     const lead = art[0]
     return (
       <span className="flex h-full w-full flex-col" style={{ gap }}>
@@ -1553,24 +1589,22 @@ const StagePreview = ({ index, art, m }: { index: number; art: CreativeArt[]; m:
     )
   }
 
-  // Stage 2. Three different things made from that material, side by side: an
-  // automation, the subscriber pop-up and a newsletter. One of each rather than
-  // three of one, because the claim is that all of it gets written, not that a
-  // lot of one thing does.
+  // Stage 2. Three things made from that material, on three cards of one size:
+  // two automations and the subscriber pop-up. Not three of one, because the
+  // claim is that all of it gets written rather than that a lot of one thing
+  // does — and not a loose creative for the third, which is what stood here and
+  // which read as a card that had lost its own frame.
   if (index === 1) {
     return (
-      // Bottom-aligned. Three artefacts of three natural heights centred in a
-      // box hang at three different levels and read as a layout mistake; on one
-      // baseline they read as a shelf.
-      <span className="flex h-full items-end justify-center" style={{ gap }}>
-        <Fit w={430} h={cardH} k={k}>
-          <AutomationCard data={{ ...CARD, art: art[1] }} m={m} />
+      <span className="flex h-full items-center justify-center" style={{ gap }}>
+        <Fit {...PREVIEW_CARD} k={k}>
+          <AutomationCard data={automations[1]} m={DESKTOP} />
         </Fit>
-        <Fit w={m.popupW || 383} h={m.popupH || 453} k={k}>
-          <PopupCard m={m} />
+        <Fit {...PREVIEW_CARD} k={k}>
+          <PopupCard w={PREVIEW_CARD.w} h={PREVIEW_CARD.h} m={DESKTOP} />
         </Fit>
-        <Fit w={400} h={m.creativeH} k={k}>
-          <Creative art={art[5]} m={m} />
+        <Fit {...PREVIEW_CARD} k={k}>
+          <AutomationCard data={automations[5]} m={DESKTOP} />
         </Fit>
       </span>
     )
@@ -1578,12 +1612,17 @@ const StagePreview = ({ index, art, m }: { index: number; art: CreativeArt[]; m:
 
   // Stage 3. Nothing new is made here. The same creative, with the heading
   // still landing, which is the only honest way to draw a stage that is about
-  // words rather than about things.
+  // words rather than about things. Bound by the box's width as well as its
+  // height: fitted to the height alone it ran off both sides of a phone.
   if (index === 2) {
     return (
       <span className="flex h-full items-center justify-center">
-        <Fit w={430} h={m.creativeH} k={boxH / m.creativeH}>
-          <Creative art={art[0]} m={m} typing />
+        <Fit
+          w={PREVIEW_CARD.w}
+          h={DESKTOP.creativeH}
+          k={Math.min(boxH / DESKTOP.creativeH, boxW / PREVIEW_CARD.w)}
+        >
+          <Creative art={automations[0].art} m={DESKTOP} typing />
         </Fit>
       </span>
     )
@@ -1595,7 +1634,7 @@ const StagePreview = ({ index, art, m }: { index: number; art: CreativeArt[]; m:
   // beneath the box is called Account ready anyway.
   return (
     <span className="flex h-full w-full" style={{ gap: Math.round(gap * 0.6) }}>
-      {art.map((a) => (
+      {automations.map(({ art: a }) => (
         <span
           key={a.photo + 'all'}
           className="relative min-w-0 flex-1 overflow-hidden"
