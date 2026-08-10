@@ -347,6 +347,15 @@
    steps rather than sweeping, because each step is one thing finishing. */
 .demo-progress { transition: width 560ms cubic-bezier(.4, 0, .2, 1); }
 
+/* One step's preview arriving. Slower and travelling further
+   than `demo-screen-in`, because a screen replaces what was there and this
+   arrives into an empty box: the distance is what says the box was waiting. */
+@keyframes demo-harvest-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.demo-harvest-in { animation: demo-harvest-in 420ms cubic-bezier(.2, .7, .3, 1) both; }
+
 /* ── The contact-identification diagram ──────────────────────────────────────
    One 8s clock, three beats, played one at a time, because the diagram is a
    sentence with two actors in it and the middle clause is the one that matters:
@@ -506,6 +515,8 @@
 @media (prefers-reduced-motion: reduce) {
   .demo-caret       { animation: none; opacity: 1; }
   .demo-spin        { animation: none; }
+  /* The preview keeps its picture and loses only the travel. */
+  .demo-harvest-in  { animation: none; }
   /* The diagram is a sequence, and with nothing moving there is no handover to
      carry it — so rather than freeze on one frame and lose the rest, the stacked
      states come out of their shared grid slot and stand in rows. The card reads

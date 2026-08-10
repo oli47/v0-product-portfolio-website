@@ -61,6 +61,22 @@ interface DemoFrameProps<M extends StageMetrics> {
   children: (state: DemoState, m: M) => React.ReactNode
   /** Plays exactly while true. Omit it and the frame plays while on screen. */
   play?: boolean
+  /**
+   * Freeze the frame on one screen of the script, by its `screen` index.
+   *
+   * This is how a case study puts the same demo beside three different
+   * paragraphs: one instance plays, the others hold the single screen the
+   * paragraph next to them is about. It overrides the resolved state rather
+   * than seeking the script, because a script is a list of timed steps with no
+   * addressable frames in it. The only way to reach the sixth step by playing
+   * is to sit through the five before it.
+   *
+   * Pinning stops the script outright, and does not leave that to the caller.
+   * A running script under a frozen screen still moves the cursor and fills
+   * fields, so the pointer would travel to a card on a screen that is no longer
+   * showing and press it to no effect.
+   */
+  pinnedScreen?: number
   variant?: DemoVariant
   /**
    * Which axis the caller is sizing by.
@@ -93,10 +109,10 @@ interface DemoFrameProps<M extends StageMetrics> {
 }
 
 /** What a demo component takes and forwards straight to its frame. */
-export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'variant' | 'fit'>
+export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'pinnedScreen' | 'variant' | 'fit'>
 
 export function DemoFrame<M extends StageMetrics>({
-  script, restState, metrics, children, play, variant = 'inline', fit = 'width',
+  script, restState, metrics, children, play, pinnedScreen, variant = 'inline', fit = 'width',
   holdLastFrame = false, ink, typeface,
 }: DemoFrameProps<M>) {
   const hostRef = useRef<HTMLDivElement>(null)
@@ -109,8 +125,11 @@ export function DemoFrame<M extends StageMetrics>({
   const m = metrics(hostWidth, variant)
   const scale = hostWidth > 0 ? hostWidth / m.stageW : 1
 
+  const pinned = pinnedScreen !== undefined
+
   // Reduced motion never plays, so it lands on the poster like anything else.
-  const state = useDemoScript(script, (play ?? inView) && !reduced, restState, holdLastFrame)
+  const resting = useDemoScript(script, (play ?? inView) && !reduced && !pinned, restState, holdLastFrame)
+  const state = pinned ? { ...resting, screen: pinnedScreen, pinned: true } : resting
 
   // Scale the fixed-size stage down to the column width.
   useMeasure(() => {
@@ -124,17 +143,17 @@ export function DemoFrame<M extends StageMetrics>({
   }, [])
 
   // Only animate what the visitor can actually see. Skipped entirely when the
-  // caller drives playback.
+  // caller drives playback, and when there is no playback to drive.
   useEffect(() => {
     const host = hostRef.current
-    if (!host || play !== undefined) return
+    if (!host || play !== undefined || pinned) return
     const observer = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
       { threshold: 0.4 }
     )
     observer.observe(host)
     return () => observer.disconnect()
-  }, [play])
+  }, [play, pinned])
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')

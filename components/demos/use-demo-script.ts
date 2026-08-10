@@ -32,9 +32,19 @@ export interface DemoState {
   /** Which pass of the loop is running; 0 while the demo sits at rest. Screens
    *  watch it to restart anything that should play once per pass. */
   run: number
+  /**
+   * True when the frame is held on one screen and the script is not running.
+   *
+   * A screen whose look depends on how far the script has counted has to know
+   * this, because pinning hands it a `screen` without the `values` that screen
+   * would have collected on the way. The setup screen is the case that forced
+   * it: pinned, it read `values[READY]` as zero and drew four empty tiles,
+   * which is the one frame of that beat nobody should ever be shown.
+   */
+  pinned: boolean
 }
 
-const EMPTY: DemoState = { screen: 0, values: {}, focus: null, pressed: null, cursor: null, run: 0 }
+const EMPTY: DemoState = { screen: 0, values: {}, focus: null, pressed: null, cursor: null, run: 0, pinned: false }
 
 /** Cursor travel time. Matches the CSS transition in demo-cursor.tsx. */
 export const MOVE_MS = 480

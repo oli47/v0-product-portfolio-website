@@ -177,6 +177,30 @@ export interface Metrics extends StageMetrics {
   gapItemsBar: number
   confetti: number
 
+  // ── the setup screen's harvest ──
+  /** The store's address, which is the whole claim this screen makes: one URL
+   *  in, an account out. Set at display size because it is the subject, not a
+   *  detail inside a status line. */
+  prepUrl: number
+  /** The step's own name, under the preview of what it produced. */
+  prepStep: number
+  /** Internal columns inside a preview that needs them, not a layout for the
+   *  screen: the whole beat is one preview, not a grid of four. */
+  prepCols: number
+  /** How wide the whole beat is allowed to get. A loading screen is a card in
+   *  the middle of a window, not a layout: run full-bleed it stopped reading as
+   *  a product waiting and started reading as a page. */
+  prepW: number
+  prepPreviewH: number
+  prepSwatch: number
+  /** The type specimen drawn on the branding preview. */
+  prepSpecimen: number
+  /** One segment of the stepper, which is also the progress bar. */
+  prepSegH: number
+  gapUrlPreview: number
+  gapPreviewStep: number
+  gapStepBar: number
+
   // ── coach-mark ──
   /** 0 on a phone, where the card is a full-width sheet instead. */
   coachW: number
@@ -250,6 +274,10 @@ export const DESKTOP: Metrics = {
   loaderRing: 44, loaderW: 560, loaderItem: 15, loaderItemGap: 10, loaderBarW: 320, loaderBarH: 6,
   gapRingHeading: 30, gapSubItems: 30, gapItemsBar: 30, confetti: 14,
 
+  prepUrl: 50, prepStep: 21, prepCols: 4, prepW: 1240, prepPreviewH: 520,
+  prepSwatch: 32, prepSpecimen: 84, prepSegH: 6,
+  gapUrlPreview: 34, gapPreviewStep: 26, gapStepBar: 14,
+
   coachW: 402, coachH: 350, coachInset: 28, coachPad: 14,
   coachIcon: 22, coachLabel: 14,
   coachLead: 16, coachLeadLH: 22, coachLines: 4,
@@ -306,6 +334,10 @@ const MOBILE: Metrics = {
 
   loaderRing: 34, loaderW: 330, loaderItem: 12, loaderItemGap: 8, loaderBarW: 0, loaderBarH: 5,
   gapRingHeading: 22, gapSubItems: 22, gapItemsBar: 22, confetti: 10,
+
+  prepUrl: 24, prepStep: 11, prepCols: 2, prepW: 330, prepPreviewH: 250,
+  prepSwatch: 16, prepSpecimen: 40, prepSegH: 4,
+  gapUrlPreview: 18, gapPreviewStep: 14, gapStepBar: 10,
 
   coachW: 0, coachH: 288, coachInset: 0, coachPad: 14,
   coachIcon: 18, coachLabel: 12,
@@ -694,7 +726,15 @@ export interface AutomationData {
  * stage, a third of that on the home card — the type is what carries the claim
  * anyway. Same trade the contacts demo makes for its newsletter hero.
  */
-export const Creative = ({ art, m }: { art: CreativeArt; m: Metrics }) => {
+export const Creative = ({ art, m, typing = false }: {
+  art: CreativeArt
+  m: Metrics
+  /** Leaves a caret after the heading. The setup demo's third stage is the one
+   *  where nothing new is made and only the words are still landing, and a
+   *  caret is the shortest way to say a sentence is being written for this
+   *  store rather than picked off a list. */
+  typing?: boolean
+}) => {
   const pad = m.creativePad
   const headline = m.creativeHeadline
 
@@ -794,6 +834,7 @@ export const Creative = ({ art, m }: { art: CreativeArt; m: Metrics }) => {
       >
         <span style={{ fontSize: m.emailHeading, fontWeight: 700, lineHeight: 1.3 }}>
           {art.heading}
+          {typing && <span className="demo-caret" style={{ background: C.ink }} />}
         </span>
         <span
           style={{ fontSize: m.emailBody, lineHeight: `${m.emailBodyLH}px`, color: C.body }}
@@ -882,7 +923,7 @@ export const AutomationCard = ({ data, m }: { data: AutomationData; m: Metrics }
  * not have to change: the lockup was about one and a half times its cap height,
  * and the logotype is scaled to match.
  */
-const Wordmark = ({ ink, size, pad, shadow }: {
+export const Wordmark = ({ ink, size, pad, shadow }: {
   ink: string
   size: number
   /** Set to place it in a banner's corner. Omitted where the banner's own
@@ -1327,83 +1368,245 @@ const LogoPair = ({ m }: { m: Metrics }) => {
  * everything the walkthrough hands over was made in this moment, and the user
  * chose none of it.
  */
-export const PreparingScreen = ({ items, done, m }: {
+export const PreparingScreen = ({ items, art, done, m }: {
   items: string[]
-  /** How many have landed. Drives both the ticks and the bar. */
+  /** The campaign artwork the account is getting. Passed in rather than
+   *  imported, because this module draws edrone's interface and does not know
+   *  which store is in the demo. */
+  art: CreativeArt[]
+  /** How many stages have finished. Names the active one and fills the stepper. */
   done: number
   m: Metrics
-}) => (
-  <div className="flex flex-col items-center" style={{ maxWidth: m.loaderW }}>
-    <Ring size={m.loaderRing} stroke={3} />
+}) => {
+  const active = Math.min(done, items.length - 1)
+  const gap = Math.round(m.gridGap * 0.5)
 
-    <p
-      style={{
-        marginTop: m.gapRingHeading,
-        fontSize: m.intHeading,
-        fontWeight: 700,
-        lineHeight: 1.25,
-        letterSpacing: '-0.02em',
-      }}
-    >
-      Preparing your content
-    </p>
-    <p
-      style={{
-        marginTop: m.gapHeadingSub,
-        fontSize: m.intSub,
-        lineHeight: `${m.intSubLH}px`,
-        color: C.body,
-      }}
-      className="text-center"
-    >
-      edrone is reading aniakruk.pl and building the account out of what it finds.
-      Nothing to pick, nothing to configure.
-    </p>
+  return (
+    <div className="flex flex-col items-center" style={{ width: '100%', maxWidth: m.prepW }}>
+      {/* What the product says to the person waiting. It named the store's
+          domain for a while, which read as browser chrome rather than as the
+          product talking, and spent the largest type on the stage on a string
+          the user had just typed in themselves. */}
+      <span style={{ fontSize: m.prepUrl, fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+        Preparing your account
+      </span>
 
-    <div
-      style={{ marginTop: m.gapSubItems, gap: m.loaderItemGap }}
-      className="flex flex-col"
-    >
-      {items.map((item, i) => {
-        const pending = i >= done
-        return (
-          <span
-            key={item}
-            style={{
-              gap: 9,
-              fontSize: m.loaderItem,
-              color: pending ? C.muted : C.ink,
-            }}
-            className="flex items-center"
-          >
-            <CheckMark size={Math.round(m.loaderItem * 0.85)} pending={pending} />
-            {item}
-          </span>
-        )
-      })}
-    </div>
-
-    <span
-      style={{
-        marginTop: m.gapItemsBar,
-        width: m.loaderBarW || '100%',
-        height: m.loaderBarH,
-        background: C.violetRing,
-        borderRadius: m.loaderBarH,
-      }}
-      className="block overflow-hidden"
-    >
-      <span
-        className="demo-progress block h-full"
+      {/* One preview, and everything in it is the real component the product
+          builds: the store's own wordmark and palette, its own photography, the
+          automation cards from the screen the walkthrough opens on, the
+          generated mail exactly as a card previews it. Drawn approximations
+          were quicker and read as a mock of a mock. */}
+      <div
         style={{
-          width: `${(done / Math.max(1, items.length)) * 100}%`,
-          background: C.violet,
-          borderRadius: m.loaderBarH,
+          marginTop: m.gapUrlPreview,
+          height: m.prepPreviewH,
+          borderRadius: R.box,
+          background: C.surface,
+          boxShadow: `inset 0 0 0 1px ${C.border}`,
+          padding: Math.round(m.gridGap * 0.75),
         }}
-      />
+        className="relative flex w-full items-center justify-center overflow-hidden"
+      >
+        <div key={active} className="demo-harvest-in flex h-full w-full items-center justify-center">
+          <StagePreview index={active} art={art} m={m} />
+        </div>
+
+        {/* Every photograph, fetched at mount and never shown here.
+            Each stage is keyed, so it mounts when it becomes the active one and
+            only then asks for its pictures. The last stage holds for under
+            three seconds and was reliably still drawing empty tiles when the
+            loop moved on, and the stage before it flashed its placeholder
+            colours first. Mounted once out here, they are warm for all four. */}
+        <span aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
+          {art.map((a) => (
+            <Image key={a.photo + 'pre'} src={a.photo} alt="" width={8} height={8} sizes={PREVIEW_SIZES} />
+          ))}
+        </span>
+      </div>
+
+      {/* Every stage stays on screen, and the stepper is the progress bar: one
+          segment each, the finished ones filled, the running one tinted. A
+          single label naming only the current stage hid how many there were,
+          which is the fact the beat is making a claim about. */}
+      <span style={{ marginTop: m.gapPreviewStep, gap }} className="flex w-full">
+        {items.map((item, i) => (
+          <span key={item} className="flex min-w-0 flex-1 flex-col" style={{ gap: m.gapStepBar }}>
+            <span
+              style={{
+                height: m.prepSegH,
+                borderRadius: m.prepSegH,
+                background: i < done ? C.violet : i === active ? C.violetRing : C.border,
+                transition: 'background 300ms ease-out',
+              }}
+            />
+            <span
+              style={{
+                fontSize: m.prepStep,
+                lineHeight: 1.3,
+                fontWeight: i === active ? 600 : 400,
+                color: i === active ? C.ink : C.muted,
+                transition: 'color 300ms ease-out',
+              }}
+            >
+              {item}
+            </span>
+          </span>
+        ))}
+      </span>
+    </div>
+  )
+}
+
+/**
+ * Holds a real component at its own size and scales the result.
+ *
+ * The product's pieces are authored at fixed pixel sizes — a card is 495 tall
+ * whatever is around it — so the only way to show the real one rather than a
+ * drawing of it is to build it full size and shrink what comes out. The factor
+ * is passed in rather than derived per component: three artefacts of different
+ * heights each fitted to the same box would each end up at a different internal
+ * type size, and they would stop reading as one set of things from one account.
+ */
+const Fit = ({ w, h, k, children }: {
+  w: number
+  h: number
+  k: number
+  children: React.ReactNode
+}) => (
+  <span className="relative block shrink-0" style={{ width: w * k, height: h * k }}>
+    <span
+      className="absolute left-0 top-0 block"
+      style={{ width: w, height: h, transform: `scale(${k})`, transformOrigin: 'top left' }}
+    >
+      {children}
     </span>
-  </div>
+  </span>
 )
+
+/** The card copy the preview shows, in the product's own words. It lives here
+ *  rather than inside `CreativeArt`, which describes artwork and has no
+ *  business carrying a card's text. */
+/**
+ * One `sizes` for every photograph in the setup previews.
+ *
+ * Not a rounding of what each stage needs. Next picks a source file per `sizes`
+ * string, so three stages asking for three widths meant the same photograph was
+ * fetched three times, and the last stage holds for under three seconds: it was
+ * reliably still blank when the loop moved on. One string means one file, warm
+ * by the time any stage after the first asks for it.
+ */
+const PREVIEW_SIZES = '(max-width: 520px) 110px, 220px'
+
+const CARD = {
+  title: 'Recover abandoned carts',
+  body: 'Automated reminders for customers who left items in their cart.',
+  revenue: '+0,00 zł',
+}
+
+/**
+ * What one stage shows.
+ *
+ * The four are an arc, not a checklist: material is read off the site, content
+ * is written from that material, the words are then fitted to the store, and
+ * the account exists. Every picture is a real product component, because a
+ * drawn approximation of a card is a mock of a mock.
+ */
+const StagePreview = ({ index, art, m }: { index: number; art: CreativeArt[]; m: Metrics }) => {
+  const gap = Math.round(m.gridGap * 0.5)
+  const boxH = m.prepPreviewH - Math.round(m.gridGap * 1.5)
+  // One factor for every artefact on stage two, bound by whichever runs out
+  // first: the box's height against the tallest of them, or its width against
+  // all three side by side. Fitting each one to the box separately gave three
+  // different internal type sizes; fitting only by height left them at half the
+  // width of the box with nothing beside them.
+  const cardH = m.cardH || 495
+  const rowW = 430 + (m.popupW || 383) + 400 + gap * 2
+  // 0.94 of the width it could take, so the row has air beside it rather than
+  // sitting hard against both walls of the box.
+  const k = Math.min(boxH / cardH, ((m.prepW - Math.round(m.gridGap * 1.5)) / rowW) * 0.94)
+
+  // Stage 1. Everything the site gave up, on one board: the mark, the
+  // photography and the palette the campaigns are coloured from.
+  if (index === 0) {
+    const lead = art[0]
+    return (
+      <span className="flex h-full w-full flex-col" style={{ gap }}>
+        <span className="flex min-h-0 flex-1" style={{ gap }}>
+          <span
+            className="flex flex-[1.4] items-center justify-center"
+            style={{ borderRadius: R.chip, background: `linear-gradient(146deg, ${lead.from} 0%, ${lead.to} 100%)` }}
+          >
+            <Wordmark ink={lead.ink} size={m.prepSpecimen} shadow />
+          </span>
+          {art.slice(1, 4).map((a) => (
+            <span key={a.photo} className="relative flex-1 overflow-hidden" style={{ borderRadius: R.chip, background: C.border }}>
+              <Image src={a.photo} alt="" fill quality={75} sizes={PREVIEW_SIZES} className="object-cover" />
+            </span>
+          ))}
+        </span>
+        <span className="flex shrink-0" style={{ gap, height: m.prepSwatch }}>
+          {art.slice(0, 5).map((a) => (
+            <span key={a.from} className="flex-1" style={{ background: a.from, borderRadius: R.chip }} />
+          ))}
+        </span>
+      </span>
+    )
+  }
+
+  // Stage 2. Three different things made from that material, side by side: an
+  // automation, the subscriber pop-up and a newsletter. One of each rather than
+  // three of one, because the claim is that all of it gets written, not that a
+  // lot of one thing does.
+  if (index === 1) {
+    return (
+      // Bottom-aligned. Three artefacts of three natural heights centred in a
+      // box hang at three different levels and read as a layout mistake; on one
+      // baseline they read as a shelf.
+      <span className="flex h-full items-end justify-center" style={{ gap }}>
+        <Fit w={430} h={cardH} k={k}>
+          <AutomationCard data={{ ...CARD, art: art[1] }} m={m} />
+        </Fit>
+        <Fit w={m.popupW || 383} h={m.popupH || 453} k={k}>
+          <PopupCard m={m} />
+        </Fit>
+        <Fit w={400} h={m.creativeH} k={k}>
+          <Creative art={art[5]} m={m} />
+        </Fit>
+      </span>
+    )
+  }
+
+  // Stage 3. Nothing new is made here. The same creative, with the heading
+  // still landing, which is the only honest way to draw a stage that is about
+  // words rather than about things.
+  if (index === 2) {
+    return (
+      <span className="flex h-full items-center justify-center">
+        <Fit w={430} h={m.creativeH} k={boxH / m.creativeH}>
+          <Creative art={art[0]} m={m} typing />
+        </Fit>
+      </span>
+    )
+  }
+
+  // Stage 4. The account, and nothing said about it. A line reading "7
+  // automations, 1 pop-up, 2 newsletters" under a picture of exactly that is
+  // the caption telling you what you are already looking at, and the step
+  // beneath the box is called Account ready anyway.
+  return (
+    <span className="flex h-full w-full" style={{ gap: Math.round(gap * 0.6) }}>
+      {art.map((a) => (
+        <span
+          key={a.photo + 'all'}
+          className="relative min-w-0 flex-1 overflow-hidden"
+          style={{ borderRadius: R.chip, background: C.border }}
+        >
+          <Image src={a.photo} alt="" fill quality={75} sizes={PREVIEW_SIZES} className="object-cover" />
+        </span>
+      ))}
+    </span>
+  )
+}
 
 /**
  * And the screen after the store is connected.

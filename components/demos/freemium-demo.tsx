@@ -63,7 +63,7 @@ const NO_REVENUE = '+0,00 zł'
  * the screen at this height, exactly as it is in the export, and finishing it is
  * what the small scroll on this step is for.
  */
-const AUTOMATIONS: AutomationData[] = [
+export const AUTOMATIONS: AutomationData[] = [
   {
     title: 'Restore customers',
     body: 'Keep your past customers coming back with personalized remarketing campaigns that remind them what they liked.',
@@ -216,12 +216,18 @@ const STEPS: CoachStep[] = [
  * miniature: the user typed a URL, and everything the next four screens hand
  * them was read off their own site and written for them in the time it takes to
  * watch this list finish.
+ *
+ * Each line is now a caption under the thing it produced rather than a status
+ * message on its own. The first one used to open "Reading aniakruk.pl —", which
+ * was the only interesting fact on the screen and was spending it as the fourth
+ * word of a grey status line; the address is the headline now, so repeating it
+ * here would be saying it twice.
  */
-const SETUP_ITEMS = [
-  'Reading aniakruk.pl — logo, colours and type',
-  'Importing your products and their photography',
-  'Writing 7 automations and a subscriber pop-up',
-  'Drafting your first newsletters',
+export const SETUP_ITEMS = [
+  'Reading the store',
+  'Writing the content',
+  'Fitting the copy',
+  'Account ready',
 ]
 
 /** The field the script counts finished setup items into. */
@@ -237,13 +243,15 @@ const SCRIPT: Step[] = [
   // The account is minutes old and the content does not exist yet. The four
   // things above land in turn; the bar under them fills as they do.
   { kind: 'screen', index: PREPARING },
-  { kind: 'wait',   ms: 700 },
+  // Short. The frame this opens on is four empty tiles, and holding it is the
+  // one moment in the beat with nothing to look at.
+  { kind: 'wait',   ms: 380 },
+  // A fast pass. The same seven stages get 1500ms each in `freemium-setup-demo`,
+  // where they are the subject; here they are the doorway into four screens
+  // that are, and a reader made to wait ten seconds for the first one leaves.
   ...SETUP_ITEMS.flatMap((_, i): Step[] => [
     { kind: 'set',  field: READY, text: String(i + 1) },
-    // Long enough to read the line that just landed. Shorter and the list is a
-    // flicker: the point of showing it is that a reader can see what an account
-    // gets before the walkthrough starts handing it over.
-    { kind: 'wait', ms: 900 },
+    { kind: 'wait', ms: 420 },
   ]),
   { kind: 'wait',   ms: 400 },
 
@@ -306,7 +314,12 @@ export function FreemiumDemo(props: DemoProps) {
             >
               <PreparingScreen
                 items={SETUP_ITEMS}
-                done={Number(state.values[READY] ?? 0)}
+                art={AUTOMATIONS.map((a) => a.art)}
+                // Pinned, the script never runs and never counts, so the honest
+                // still of this beat is the one where it has finished. Reading
+                // the counter would draw four empty tiles and claim that is
+                // what the screen looks like.
+                done={state.pinned ? SETUP_ITEMS.length : Number(state.values[READY] ?? 0)}
                 m={m}
               />
             </div>
