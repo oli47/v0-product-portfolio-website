@@ -209,13 +209,10 @@ research, iterative, and the two things this doc predicted would break did not:
   25,000 monthly visitors with no path to the product, against Sales closing 60 to 100
   customers a month at roughly 4,000 PLN each. A goal can be anchored to what the
   company was already paying rather than to a conversion rate.
-- The pairing survived a project that was iteration rather than diagnosis, but only
-  after the cards stopped calling themselves problems. Nothing in freemium ever
-  broke. The designer was hunting for leverage on a metric, not for faults, so the
-  cards are `OPPORTUNITY 1–4` and Approach says so out loud: "Nothing in that version
-  was broken. It shipped, it worked, and it took too long to reach the moment that
-  mattered." Approach names four, Solution closes four, and the label matches how the
-  work was actually done.
+- The pairing survived a project that was iteration rather than diagnosis. Nothing
+  in freemium ever broke; the designer was hunting for leverage on a metric, not
+  for faults. Its Approach cards are `PROBLEM 1–2` in the current copy, but each
+  one reads as a decision about leverage rather than a discovered fault.
 
   **Use `PROBLEM` only when the project really was a diagnosis.** `signup-redesign`
   found faults, so its cards are problems. Forcing that label onto optimisation work
