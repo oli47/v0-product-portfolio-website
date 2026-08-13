@@ -187,7 +187,8 @@ admission into a performance.
   "The COO pushed back" reads as a junior boasting about beating an exec. Aim for
   four to six bold spans in a whole case study.
 - **No em dashes.**
-- **One number, one place.** If "five hours" is in the tagline, it does not also
+- **One number, one place.** If "five hours" is in the description, it does not
+  also
   need to be in the meta row and the Solution.
 - **Do not start a paragraph or a note with a digit.**
 - **Every number gets divided before it ships.** See Impact.

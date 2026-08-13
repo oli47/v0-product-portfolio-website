@@ -17,18 +17,18 @@ export async function generateMetadata({
 
   return {
     title: project.title,  // root template adds " — Olaf Otrząsek"
-    description: project.tagline,
+    description: project.description,
     alternates: { canonical: `/projects/${params.slug}` },
     openGraph: {
       title: `${project.title} — Olaf Otrząsek`,
-      description: project.tagline,
+      description: project.description,
       url,
       images: [{ url: project.coverImage }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${project.title} — Olaf Otrząsek`,
-      description: project.tagline,
+      description: project.description,
       images: [project.coverImage],
     },
   }
@@ -41,7 +41,7 @@ export default function ProjectLayout({ children, params }: { children: React.Re
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: project.title,
-    description: project.tagline,
+    description: project.description,
     author: { '@type': 'Person', name: 'Olaf Otrząsek', url: 'https://olafotrzasek.com' },
     url: `https://olafotrzasek.com/projects/${params.slug}`,
     image: project.coverImage,

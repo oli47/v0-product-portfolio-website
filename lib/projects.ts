@@ -36,7 +36,9 @@ export interface ProjectSection {
 export interface Project {
   slug: string
   title: string
-  tagline: string
+  /** The one shared one-liner for the project: rendered on the home card,
+   *  under the header of the case study, and in its SEO, Open Graph, Twitter
+   *  and JSON-LD metadata. There is no separate tagline to drift from it. */
   description: string
   metrics: {
     value: string
@@ -51,7 +53,7 @@ export interface Project {
      * This replaced a ROLE / TEAM / DURATION row. `TEAM: 1 Front-end dev, 1
      * Back-end dev` read as a cast list rather than an ownership claim, and a
      * reader looking for "what did *you* decide" found the answer only by
-     * mining the prose. Durations moved here or were already in the tagline —
+     * mining the prose. Durations moved here or were already in the description —
      * see the one-number-one-place rule in CASE-STUDY-PATTERN.md.
      *
      * No bold, ever. Bold marks the insight or the number; bolding your own
@@ -100,8 +102,7 @@ export const projects: Project[] = [
   {
     slug: 'freemium-activation',
     title: 'Freemium launch',
-    tagline: 'From sales-gated to self-serve. 5,050 stores acquired without a salesperson.',
-    description: "edrone had no self-serve path. Every new customer went through Sales. This is the acquisition model I built alongside it.",
+    description: "Freemium, edrone's first product-led channel after a decade of sales-led growth.",
     metrics: [
       { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
     ],
@@ -274,14 +275,13 @@ export const projects: Project[] = [
   {
     slug: 'signup-redesign',
     title: 'Signup flow',
-    tagline: 'Tripled signup conversion in five hours, with Codex.',
     description: 'Tripled signup conversion in five hours, with Codex.',
     metrics: [
       { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
     ],
     meta: {
-      // "Five hours" is the tagline and the last line of Solution. Twice is
-      // already the limit; a third place would be the punchline told again.
+      // "Five hours" is the description and the last line of Solution. Twice
+      // is already the limit; a third place would be the punchline told again.
       contribution: 'Sr Product Designer. I owned the diagnosis, the design and the shipped frontend. A developer built the backend, reviewed my code and released it.',
       live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
@@ -396,8 +396,7 @@ export const projects: Project[] = [
   {
     slug: 'contacts-activation',
     title: 'Contacts identification',
-    tagline: 'Raised contact identification by a third, with a sequence nobody has to switch on.',
-    description: "Automations only reach contacts edrone has identified, and it had identified almost none of them. I designed the sequence that changed that.",
+    description: "Identified a third more of a shop's traffic, the metric behind half its revenue.",
     metrics: [
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
     ],
@@ -549,8 +548,7 @@ export const projects: Project[] = [
   {
     slug: 'plo-genius',
     title: 'PLO Genius',
-    tagline: 'A cloud-based PLO solver and trainer. Designed from zero as sole designer.',
-    description: "Cloud-based poker solver and trainer. Designed from zero for a game I didn't play.",
+    description: "The first PLO poker solver ever to run in a browser. Designed from zero as the sole designer.",
     metrics: [
       { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },
     ],

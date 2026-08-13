@@ -69,11 +69,8 @@ export default function ProjectPage() {
             <h1 className="font-display text-[clamp(1.5rem,7vw,2.625rem)] leading-[1.2] text-balance">
               {project.title}
             </h1>
-            {/* Fills the line rather than balancing it. Balancing evened the two
-                lines out and split "5,050" from "stores", which reads as a
-                stumble every time. */}
-            <p className="text-body-1 text-[var(--color-500)]">
-              {project.tagline}
+            <p className="text-body-1 text-[var(--color-500)] text-pretty">
+              {project.description}
             </p>
           </div>
 
