@@ -25,12 +25,12 @@ const META_DESCRIPTION =
 export const metadata: Metadata = {
   title: { default: "Olaf Otrząsek • Design", template: "%s — Olaf Otrząsek" },
   description: META_DESCRIPTION,
-  metadataBase: new URL("https://olafotrzasek.com"),
+  metadataBase: new URL("https://www.olafotrzasek.com"),
   alternates: { canonical: "/" },
   openGraph: {
     title: "Olaf Otrząsek • Design",
     description: META_DESCRIPTION,
-    url: "https://olafotrzasek.com",
+    url: "https://www.olafotrzasek.com",
     siteName: "Olaf Otrząsek",
     images: [
       {
@@ -84,7 +84,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Olaf Otrząsek",
-              url: "https://olafotrzasek.com",
+              url: "https://www.olafotrzasek.com",
               jobTitle: "Senior Product Designer",
               description: META_DESCRIPTION,
               sameAs: ["https://www.linkedin.com/in/olafotrzasek/"],

@@ -13,7 +13,7 @@ export async function generateMetadata({
   const project = getProject(params.slug)
   if (!project) return {}
 
-  const url = `https://olafotrzasek.com/projects/${params.slug}`
+  const url = `https://www.olafotrzasek.com/projects/${params.slug}`
 
   return {
     title: project.title,  // root template adds " — Olaf Otrząsek"
@@ -42,8 +42,8 @@ export default function ProjectLayout({ children, params }: { children: React.Re
     '@type': 'CreativeWork',
     name: project.title,
     description: project.description,
-    author: { '@type': 'Person', name: 'Olaf Otrząsek', url: 'https://olafotrzasek.com' },
-    url: `https://olafotrzasek.com/projects/${params.slug}`,
+    author: { '@type': 'Person', name: 'Olaf Otrząsek', url: 'https://www.olafotrzasek.com' },
+    url: `https://www.olafotrzasek.com/projects/${params.slug}`,
     image: project.coverImage,
   } : null
 
