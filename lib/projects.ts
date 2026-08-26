@@ -47,19 +47,12 @@ export interface Project {
   }[]
   meta: {
     /**
-     * One sentence: the title held, then what was mine and what was somebody
-     * else's.
-     *
-     * This replaced a ROLE / TEAM / DURATION row. `TEAM: 1 Front-end dev, 1
-     * Back-end dev` read as a cast list rather than an ownership claim, and a
-     * reader looking for "what did *you* decide" found the answer only by
-     * mining the prose. Durations moved here or were already in the description —
-     * see the one-number-one-place rule in CASE-STUDY-PATTERN.md.
+     * One sentence: what was mine and what was somebody else's.
      *
      * No bold, ever. Bold marks the insight or the number; bolding your own
-     * contribution is the thing that rule exists to stop.
+     * role is the thing that rule exists to stop.
      */
-    contribution: string
+    myRole: string
     /** The shipped product, linked from the header. Prototypes have none. */
     live?: { label: string; url: string }
   }
@@ -109,7 +102,7 @@ export const projects: Project[] = [
     meta: {
       // The eleven months are in Approach ("The build was quick. The eleven
       // months were the iterating"), so they are not repeated here.
-      contribution: 'Sr Product Designer. I owned the acquisition model, the funnel and every design decision. Two developers built it; two freemium specialists from the onboarding team ran the customer calls.',
+      myRole: 'I owned the acquisition model, the funnel and every design decision. Two developers built it and two freemium specialists from the onboarding team ran the customer calls that shaped every iteration.',
       live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
     coverImage: '/thumbnails/freemium-activation.png',
@@ -282,7 +275,7 @@ export const projects: Project[] = [
     meta: {
       // "Five hours" is the description and the last line of Solution. Twice
       // is already the limit; a third place would be the punchline told again.
-      contribution: 'Sr Product Designer. I owned the diagnosis, the design and the shipped frontend. A developer built the backend, reviewed my code and released it.',
+      myRole: 'I owned the diagnosis, the design and the shipped frontend. I built it in Codex using the design system I had created. A developer handled the backend, reviewed my code and released it.',
       live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
     coverImage: '/images/sf-cover.png',
@@ -402,7 +395,7 @@ export const projects: Project[] = [
     ],
     meta: {
       // The six days close Solution, so they are not repeated here.
-      contribution: 'Sr Product Designer. I owned the concept, the sequence and every screen. A backend developer built the sending.',
+      myRole: 'I owned the concept, the sequence and every screen. My product analyst verified the data. A backend developer built the sending.',
       live: { label: 'edrone.me', url: 'https://edrone.me' },
     },
     coverImage: '/images/ci-cover.png',
@@ -555,7 +548,7 @@ export const projects: Project[] = [
     meta: {
       // The ten months live here rather than in the prose: this is the one
       // project whose duration is stated nowhere else.
-      contribution: 'Sole designer over ten months. I owned research, UX, UI, the marketing website and the design system. A frontend developer built the app.',
+      myRole: 'I owned research, UX, UI, the marketing website and the design system over ten months. A frontend developer built the app and the engine team handled the neural-net solver.',
       live: { label: 'plogenius.com', url: 'https://www.plogenius.com' },
     },
     coverImage: '/images/plo-cover.png',

@@ -16,7 +16,7 @@ import { useScramble } from '@/lib/use-scramble'
 
 /** Its own badge, so the rail can carry it and it reads as a section rather
  *  than as a caption bolted to the header. */
-const CONTRIBUTION = 'Contribution'
+const MY_ROLE = 'My Role'
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -40,18 +40,16 @@ export default function ProjectPage() {
 
   const hasReflections = project.reflections && project.reflections.length > 0
 
-  // Contribution is a section like any other, and it sits after Context: a
-  // reader has to know what the product is before "I owned the funnel" means
-  // anything, and they should know whose decisions these were before Goal
-  // starts making claims about them. Every case study opens on Context by the
-  // pattern, so the fallback of first-position is a formality.
-  const contextAt = project.sections.findIndex((s) => s.badge.toLowerCase() === 'context')
-  const afterContext = (contextAt === -1 ? 0 : contextAt) + 1
+  // My Role sits after Goal: a reader knows what the product is (Context), what
+  // needed to happen (Goal), and then who did the work (My Role) before
+  // Approach explains how.
+  const goalAt = project.sections.findIndex((s) => s.badge.toLowerCase() === 'goal')
+  const afterGoal = (goalAt === -1 ? 0 : goalAt) + 1
 
   const navItems = [
-    ...project.sections.slice(0, afterContext).map((section) => section.badge),
-    CONTRIBUTION,
-    ...project.sections.slice(afterContext).map((section) => section.badge),
+    ...project.sections.slice(0, afterGoal).map((section) => section.badge),
+    MY_ROLE,
+    ...project.sections.slice(afterGoal).map((section) => section.badge),
     'Impact',
     ...(hasReflections ? ['Reflections'] : []),
   ]
@@ -123,26 +121,24 @@ export default function ProjectPage() {
         </section>
 
         {/* Narrative sections — badges and order come from the project data,
-            with Contribution spliced in behind Context. */}
-        {project.sections.slice(0, afterContext).map((section) => (
+            with My Role spliced in behind Goal. */}
+        {project.sections.slice(0, afterGoal).map((section) => (
           <section key={section.badge} id={sectionId(section.badge)}>
             <SectionBadge>{section.badge}</SectionBadge>
             <ProcessBlocks blocks={section.blocks} />
           </section>
         ))}
 
-        {/* One sentence where ROLE / TEAM / DURATION used to be three columns in
-            the header. That row listed who was in the room and left "so what
-            did you decide" to be mined out of the prose.
+        {/* One sentence: what was mine and what was somebody else's.
 
             Deliberately not <Bold>: the sentence is the designer's own claim
             about their own work, which is the one place CASE-STUDY-PATTERN.md
             says bold must never go. */}
-        <section id={sectionId(CONTRIBUTION)}>
-          <SectionBadge>{CONTRIBUTION}</SectionBadge>
+        <section id={sectionId(MY_ROLE)}>
+          <SectionBadge>{MY_ROLE}</SectionBadge>
           <div className="flex flex-col gap-4">
             <p className="text-body-1 text-[var(--color-500)] text-pretty">
-              {project.meta.contribution}
+              {project.meta.myRole}
             </p>
             {/* The claim above is "I shipped this"; this is the receipt. It sits
                 under the sentence rather than in it so that it reads as evidence
@@ -164,7 +160,7 @@ export default function ProjectPage() {
           </div>
         </section>
 
-        {project.sections.slice(afterContext).map((section) => (
+        {project.sections.slice(afterGoal).map((section) => (
           <section key={section.badge} id={sectionId(section.badge)}>
             <SectionBadge>{section.badge}</SectionBadge>
             <ProcessBlocks blocks={section.blocks} />
