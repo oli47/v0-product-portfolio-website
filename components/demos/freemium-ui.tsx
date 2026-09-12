@@ -128,6 +128,10 @@ export interface Metrics extends StageMetrics {
   badgePadX: number
   channelFont: number
   channelGap: number
+  /** The little on/off toggle on a card's footer: track, and the knob inside it. */
+  switchW: number
+  switchH: number
+  switchKnob: number
   /** Fixed, because the grid is a grid: a card whose description wraps to three
    *  lines cannot be taller than the one beside it. */
   cardH: number
@@ -260,6 +264,7 @@ export const DESKTOP: Metrics = {
   cardTitle: 17.5, cardTitleLH: 24, cardBody: 15, cardBodyLH: 20,
   gapCreativeTitle: 20, gapTitleBody: 8, gapBodyRow: 24,
   cardRowH: 32, badgeFont: 15, badgePadX: 10, channelFont: 13, channelGap: 13,
+  switchW: 30, switchH: 18, switchKnob: 14,
   cardH: 495,
 
   popupW: 383, popupH: 453, previewAreaH: 320, previewW: 302, previewH: 189,
@@ -321,6 +326,7 @@ const MOBILE: Metrics = {
   cardTitle: 15, cardTitleLH: 20, cardBody: 12, cardBodyLH: 17,
   gapCreativeTitle: 14, gapTitleBody: 6, gapBodyRow: 16,
   cardRowH: 26, badgeFont: 12, badgePadX: 8, channelFont: 10, channelGap: 9,
+  switchW: 30, switchH: 18, switchKnob: 14,
   cardH: 0,
 
   popupW: 0, popupH: 0, previewAreaH: 264, previewW: 250, previewH: 156,
@@ -862,7 +868,16 @@ export const Creative = ({ art, m, typing = false }: {
   )
 }
 
-export const AutomationCard = ({ data, m }: { data: AutomationData; m: Metrics }) => (
+export const AutomationCard = ({ data, m, on = true, pressed = false, switchRef }: {
+  data: AutomationData
+  m: Metrics
+  /** The switch state the card sits in. Only the one the walkthrough aims at
+   *  ever reads anything but the default: the other six stay on. */
+  on?: boolean
+  /** True for the card whose toggle the demo's cursor is pressing. */
+  pressed?: boolean
+  switchRef?: React.Ref<HTMLSpanElement>
+}) => (
   <div
     style={{
       height: m.cardH || undefined,
@@ -908,9 +923,10 @@ export const AutomationCard = ({ data, m }: { data: AutomationData; m: Metrics }
       style={{ marginTop: m.gapBodyRow, height: m.cardRowH }}
       className="flex shrink-0 items-center"
     >
-      <ActiveBadge revenue={data.revenue} m={m} />
+      <ActiveBadge revenue={data.revenue} m={m} on={on} />
       <span className="flex-1" />
       <Channels m={m} />
+      <CardSwitch on={on} pressed={pressed} m={m} switchRef={switchRef} />
     </div>
   </div>
 )
@@ -1000,11 +1016,15 @@ export const CardGrid = ({ lifted, children, m, style }: {
  * clipped. A parent with `overflow: hidden` and a corner radius cuts the
  * corners off the bordered half inside it, which at this size reads as a broken
  * outline rather than a rounded one.
+ *
+ * `on` is the switch state the card sits in. Off, the pill drops to a grey
+ * "Inactive" with the revenue hidden and nothing left to weld to it.
  */
-export const ActiveBadge = ({ revenue, m }: { revenue?: string; m: Metrics }) => {
-  const ends = revenue
+export const ActiveBadge = ({ revenue, m, on = true }: { revenue?: string; m: Metrics; on?: boolean }) => {
+  const ends = on && revenue
     ? [`${R.chip}px 0 0 ${R.chip}px`, `0 ${R.chip}px ${R.chip}px 0`]
     : [`${R.chip}px`, '']
+  const mark = on ? C.mintMark : '#E6E6E6'
 
   return (
     <span
@@ -1015,19 +1035,19 @@ export const ActiveBadge = ({ revenue, m }: { revenue?: string; m: Metrics }) =>
         style={{
           padding: `0 ${m.badgePadX}px`,
           gap: Math.round(m.badgePadX * 0.6),
-          background: C.mintMark,
+          background: mark,
           // Matched to the other half's border box, so the two sit on one line
           // instead of the green standing a pixel proud at the top and bottom.
-          border: `1px solid ${C.mintMark}`,
+          border: `1px solid ${mark}`,
           borderRadius: ends[0],
-          color: '#FFFFFF',
+          color: on ? '#FFFFFF' : '#8A8A8A',
         }}
         className="flex items-center"
       >
-        <PlayMark size={Math.round(m.badgeFont * 0.8)} />
-        Active
+        {on && <PlayMark size={Math.round(m.badgeFont * 0.8)} />}
+        {on ? 'Active' : 'Inactive'}
       </span>
-      {revenue && (
+      {on && revenue && (
         <span
           style={{
             padding: `0 ${m.badgePadX}px`,
@@ -1046,6 +1066,52 @@ export const ActiveBadge = ({ revenue, m }: { revenue?: string; m: Metrics }) =>
     </span>
   )
 }
+
+/**
+ * The on/off toggle every automation card carries.
+ *
+ * It is the product's whole argument in one control: everything is switched on
+ * for the store, and disagreeing with that is one click, not a setup step. The
+ * badge beside it flips with it.
+ *
+ * `switchRef` lets the walkthrough aim its cursor at one card's toggle and is
+ * attached to a single card, so the pressed beat never scales every switch on
+ * the grid at once.
+ */
+export const CardSwitch = ({ on, pressed, m, switchRef }: {
+  on?: boolean
+  pressed?: boolean
+  m: Metrics
+  switchRef?: React.Ref<HTMLSpanElement>
+}) => (
+  <span
+    ref={switchRef}
+    aria-hidden
+    className="flex shrink-0 items-center"
+    style={{
+      marginLeft: m.channelGap,
+      width: m.switchW,
+      height: m.switchH,
+      padding: 2,
+      background: on ? C.mintMark : '#DBDBDB',
+      borderRadius: 99,
+      transform: pressed ? 'scale(0.92)' : 'none',
+      transition: 'background-color 200ms ease-in-out, transform 90ms ease-out',
+    }}
+  >
+    <span
+      style={{
+        width: m.switchKnob,
+        height: m.switchKnob,
+        background: '#FFFFFF',
+        borderRadius: 99,
+        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.22)',
+        transform: on ? `translateX(${m.switchW - m.switchKnob - 4}px)` : 'translateX(0)',
+        transition: 'transform 200ms ease-in-out',
+      }}
+    />
+  </span>
+)
 
 /** Which channels an automation can reach. Only Email is lit: the free tier has
  *  no SMS or WhatsApp, and that is the upgrade the whole funnel is aiming at. */

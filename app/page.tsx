@@ -58,9 +58,11 @@ const EXPERIENCE = [
 
 type CopiedId = 'email' | 'phone' | null
 
+type HoverId = 'resume' | 'linkedin' | 'email' | 'phone' | null
+
 function ContactBar() {
   const [copiedId, setCopiedId] = useState<CopiedId>(null)
-  const [progressKey, setProgressKey] = useState(0)
+  const [hoverId, setHoverId]   = useState<HoverId>(null)
   const resume   = useScramble(t.contact.resume)
   const email    = useScramble(t.contact.email)
   const phone    = useScramble(t.contact.phone)
@@ -69,91 +71,77 @@ function ContactBar() {
   const copy = useCallback((text: string, id: CopiedId) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopiedId(id)
-      setProgressKey(k => k + 1)
       setTimeout(() => setCopiedId(null), 1500)
     })
   }, [])
 
-  const baseItem =
-    'relative flex items-center gap-1.5 px-3 py-2.5 border-l border-[var(--color-100)] transition-colors duration-[400ms] ease-in-out hover:bg-[var(--color-000)] overflow-hidden'
-  const labelCls = 'text-eyebrow text-[var(--color-300)] transition-colors duration-[400ms] ease-in-out'
-  const icon     = 'font-neubit text-[1rem] leading-[1.25rem] text-[var(--color-200)]'
-  const arrowCls = 'text-[var(--color-200)] shrink-0'
+  const labelCls = 'text-eyebrow text-[var(--color-300)]'
+  const tooltipBase =
+    'pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-10 flex items-center gap-1 rounded-[0.125rem] px-2 py-0.5 shadow-[0_2px_10px_2px_rgba(0,0,0,0.12)] whitespace-nowrap text-eyebrow transition-opacity duration-[400ms] ease-in-out opacity-0'
+  // Light command tooltip (hover) — DS neutrals; accent tooltip for confirm.
+  const tooltipOpen  = `${tooltipBase} bg-[var(--color-000)] border border-[var(--color-100)] text-[var(--color-300)]`
+  const tooltipCopied = `${tooltipBase} bg-[var(--accent)] text-[var(--background)]`
+  const tooltipSym   = 'font-neubit text-[0.75rem] leading-none'
 
-  // Mobile: full-width stacked column. Desktop: hug-content horizontal row.
-  const mobileItem = 'border-b border-[var(--color-100)] sm:border-b-0 sm:border-l'
+  // Single wrapping row, no symbols. Every label shows a hover tooltip with
+  // its command (open / copy); copy flips to an accent "copied" confirm.
   return (
-    <div className="w-full sm:w-fit border border-[var(--color-100)] rounded-[0.125rem] overflow-hidden">
-      <div className="flex flex-col sm:flex-row">
-
-        {/* Resume */}
-        <a
-          href="/olaf-resume.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Download resume (PDF)"
-          className={`${baseItem} ${mobileItem} sm:border-l-0 cursor-pointer`}
-          onMouseEnter={resume.scramble}
-          onMouseLeave={resume.reset}
-        >
-          <span ref={resume.spanRef} aria-hidden="true" className={labelCls}>{t.contact.resume}</span>
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/></svg>
-        </a>
-
-        {/* Email — scramble + fixed width when copied */}
-        <button
-          onClick={() => copy(t.contact.email, 'email')}
-          aria-label={`Copy email: ${t.contact.email}`}
-          className={`${baseItem} ${mobileItem} cursor-pointer`}
-          onMouseEnter={() => { if (copiedId !== 'email') email.scramble() }}
-          onMouseLeave={email.reset}
-        >
-          <span className={`flex items-center gap-1.5 ${copiedId === 'email' ? 'invisible' : ''}`}>
-            <span ref={email.spanRef} className={labelCls}>{t.contact.email}</span>
-            <span className={icon}>⧉</span>
-          </span>
-          {copiedId === 'email' && (
-            <span className="absolute inset-0 flex items-center px-3">
-              <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
-              <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
-            </span>
-          )}
-        </button>
-
-        {/* Phone — scramble + fixed width when copied */}
-        <button
-          onClick={() => copy(t.contact.phoneRaw, 'phone')}
-          aria-label={`Copy phone: ${t.contact.phone}`}
-          className={`${baseItem} ${mobileItem} cursor-pointer`}
-          onMouseEnter={() => { if (copiedId !== 'phone') phone.scramble() }}
-          onMouseLeave={phone.reset}
-        >
-          <span className={`flex items-center gap-1.5 ${copiedId === 'phone' ? 'invisible' : ''}`}>
-            <span ref={phone.spanRef} className={labelCls}>{t.contact.phone}</span>
-            <span className={icon}>⧉</span>
-          </span>
-          {copiedId === 'phone' && (
-            <span className="absolute inset-0 flex items-center px-3">
-              <span className="text-eyebrow text-[var(--accent)]">{t.contact.copied}</span>
-              <span key={progressKey} className="animate-progress absolute bottom-0 left-0 h-px bg-[var(--accent)]" />
-            </span>
-          )}
-        </button>
-
-        {/* LinkedIn */}
-        <a
-          href="https://www.linkedin.com/in/olafotrzasek/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn profile (opens in new tab)"
-          className={`${baseItem} sm:border-l cursor-pointer`}
-          onMouseEnter={linkedin.scramble}
-          onMouseLeave={linkedin.reset}
-        >
-          <span ref={linkedin.spanRef} aria-hidden="true" className={labelCls}>{t.contact.linkedin}</span>
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" className={arrowCls} style={{stroke:'currentColor'}}><path d="M4 12L12 4M6 4h6v6" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/></svg>
-        </a>
-      </div>
+    <div className="flex flex-wrap items-center gap-y-3">
+      <a
+        href="/olaf-resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Download resume (PDF)"
+        className="relative flex items-center cursor-pointer"
+        onMouseEnter={() => { setHoverId('resume'); resume.scramble() }}
+        onMouseLeave={() => { setHoverId(null); resume.reset() }}
+      >
+        <span ref={resume.spanRef} aria-hidden="true" className={labelCls}>{t.contact.resume}</span>
+        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'resume' ? 'opacity-100' : ''}`}>
+          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
+        </span>
+      </a>
+      <span className={labelCls}>,</span>
+      <a
+        href="https://www.linkedin.com/in/olafotrzasek/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn profile (opens in new tab)"
+        className="relative ml-2 flex items-center cursor-pointer"
+        onMouseEnter={() => { setHoverId('linkedin'); linkedin.scramble() }}
+        onMouseLeave={() => { setHoverId(null); linkedin.reset() }}
+      >
+        <span ref={linkedin.spanRef} aria-hidden="true" className={labelCls}>{t.contact.linkedin}</span>
+        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'linkedin' ? 'opacity-100' : ''}`}>
+          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
+        </span>
+      </a>
+      <span className={labelCls}>,</span>
+      <button
+        onClick={() => copy(t.contact.email, 'email')}
+        aria-label={`Copy email: ${t.contact.email}`}
+        className="relative ml-2 flex items-center cursor-pointer"
+        onMouseEnter={() => { setHoverId('email'); if (copiedId !== 'email') email.scramble() }}
+        onMouseLeave={() => { setHoverId(null); email.reset() }}
+      >
+        <span ref={email.spanRef} className={labelCls}>{t.contact.email}</span>
+        <span role="status" className={`${copiedId === 'email' ? tooltipCopied : tooltipOpen} ${hoverId === 'email' || copiedId === 'email' ? 'opacity-100' : ''}`}>
+          {copiedId === 'email' ? t.contact.copied : <>{t.contact.copy}<span className={`${tooltipSym} text-[var(--color-200)]`}>⧉</span></>}
+        </span>
+      </button>
+      <span className={labelCls}>,</span>
+      <button
+        onClick={() => copy(t.contact.phoneRaw, 'phone')}
+        aria-label={`Copy phone: ${t.contact.phone}`}
+        className="relative ml-2 flex items-center cursor-pointer"
+        onMouseEnter={() => { setHoverId('phone'); if (copiedId !== 'phone') phone.scramble() }}
+        onMouseLeave={() => { setHoverId(null); phone.reset() }}
+      >
+        <span ref={phone.spanRef} className={labelCls}>{t.contact.phone}</span>
+        <span role="status" className={`${copiedId === 'phone' ? tooltipCopied : tooltipOpen} ${hoverId === 'phone' || copiedId === 'phone' ? 'opacity-100' : ''}`}>
+          {copiedId === 'phone' ? t.contact.copied : <>{t.contact.copy}<span className={`${tooltipSym} text-[var(--color-200)]`}>⧉</span></>}
+        </span>
+      </button>
     </div>
   )
 }
@@ -167,22 +155,16 @@ export default function Home() {
 
         {/* ── Hero ── */}
         <section className="mb-16">
+
+          {/* The one-line identity, then the story under it. */}
           <FadeUp delay={0}>
-            <h1
-              className="font-display font-normal tracking-[0.025rem] text-[var(--color-500)] mb-5"
-              style={{
-                fontSize: 'clamp(2.5rem, 5vw, 3rem)',
-                lineHeight: 'clamp(3rem, 6vw, 3.5rem)',
-              }}
-            >
-              {t.hero.headlinePre}
-              <span style={{ color: 'var(--accent)' }}>{t.hero.headlineAccent}</span>
-              {t.hero.headlinePost}
-            </h1>
+            <p className="text-body-2 font-[450] text-[var(--color-500)] mb-3 text-pretty">
+              {noOrphans(t.hero.positioning)}
+            </p>
           </FadeUp>
 
           <FadeUp delay={0.08}>
-            <p className="text-body-1 text-[var(--color-300)] mb-8 text-pretty">
+            <p className="text-body-2 text-[var(--color-500)] mb-8 text-pretty">
               {noOrphans(t.hero.body)}
               <a
                 href="https://edrone.me/"
@@ -242,7 +224,7 @@ export default function Home() {
                   {/* Role + company + period (period below on mobile) */}
                   <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:flex-1 sm:min-w-0 sm:justify-between">
                     <div className="flex items-center gap-1 flex-wrap">
-                      <span className="text-eyebrow text-[var(--color-500)] whitespace-nowrap">
+                      <span className="text-eyebrow text-[var(--color-300)] whitespace-nowrap">
                         {job.role}
                       </span>
                       <a

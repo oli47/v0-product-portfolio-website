@@ -12,18 +12,82 @@ const t = content[defaultLang].nav
 export function Nav() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted]     = useState(false)
-  const [scrolled, setScrolled]   = useState(false)
   const [hovering, setHovering]   = useState(false)
   const animating                  = useRef(false)
   const cleanupTimerRef            = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pathname                   = usePathname()
   const isProjectPage              = pathname.startsWith('/projects/')
 
+  const logoRef    = useRef<HTMLAnchorElement>(null)
+  const toggleRef  = useRef<HTMLButtonElement>(null)
+  const scrollRef  = useRef(0)
+  const progressRef = useRef(0)
+  const rafRef     = useRef(0)
+  const lastScrollRef = useRef(0)
+  const [hidden, setHidden] = useState(false)
+
+  // In-grid baseline offsets (untransformed), captured once before any spread.
+  const baseLogoLeftRef   = useRef(0)
+  const baseToggleRightRef = useRef(0)
+  const baseReadyRef      = useRef(false)
+
+  // On scroll (0..1) spread logo to the top-left and toggle to the top-right
+  // corner via translateX from their captured in-grid positions. At p=0 they sit
+  // in the grid. Baselines are measured once so ongoing transforms never feed back.
   useEffect(() => {
     setMounted(true)
-    const onScroll = () => setScrolled(window.scrollY > 80)
+
+    const capture = () => {
+      if (logoRef.current) baseLogoLeftRef.current = logoRef.current.getBoundingClientRect().left
+      if (toggleRef.current) {
+        baseToggleRightRef.current = window.innerWidth - toggleRef.current.getBoundingClientRect().right
+      }
+      baseReadyRef.current = true
+    }
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+
+    const tick = () => {
+      if (!baseReadyRef.current) capture()
+
+      const target = scrollRef.current <= 0 ? 0 : scrollRef.current >= 80 ? 1 : scrollRef.current / 80
+      progressRef.current = lerp(progressRef.current, target, 0.08)
+      if (Math.abs(progressRef.current - target) < 0.001) progressRef.current = target
+      const p = progressRef.current
+
+      if (logoRef.current) {
+        const dx = (20 - baseLogoLeftRef.current) * p
+        logoRef.current.style.transform = `translateX(${dx}px)`
+      }
+      if (toggleRef.current) {
+        const dx = (baseToggleRightRef.current - 20) * p
+        toggleRef.current.style.transform = `translateX(${dx}px)`
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    const onScroll = () => {
+      const y = window.scrollY
+      scrollRef.current = y
+      if (window.innerWidth < 768) {
+        const delta = y - lastScrollRef.current
+        if (y > 120 && delta > 4) setHidden(true)
+        else if (delta < -4) setHidden(false)
+        if (y <= 4) setHidden(false)
+      }
+      lastScrollRef.current = y
+    }
+    const onResize = () => { baseReadyRef.current = false; setHidden(false) }
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize)
+    rafRef.current = requestAnimationFrame(tick)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+      cancelAnimationFrame(rafRef.current)
+    }
   }, [])
 
   const isDark = resolvedTheme === 'dark'
@@ -114,132 +178,79 @@ export function Nav() {
 
       const cleanup = () => { svg.remove(); animating.current = false; cleanupTimerRef.current = null }
       transition.finished.then(cleanup).catch(cleanup)
-      // Safety: always reset after 800ms in case finished never resolves (Safari)
       cleanupTimerRef.current = setTimeout(cleanup, 800)
     },
     [isDark, setTheme],
   )
 
   // ── Scramble labels ────────────────────────────────────────────────────────
-  const themeWord  = mounted ? (isDark ? t.light : t.dark) : t.dark
+  const themeWord = mounted ? (isDark ? t.light : t.dark) : t.dark
   const themeLabel = useScramble(themeWord)
-  const nameLabel  = useScramble(t.name)
-  const backLabel  = useScramble('Back')
 
-  const showBack = isProjectPage && scrolled && hovering
+  const showBack = isProjectPage && progressRef.current >= 1 && hovering
 
-  const handleLinkEnter = useCallback(() => {
-    setHovering(true)
-    if (isProjectPage && scrolled) backLabel.scramble()
-    else nameLabel.scramble()
-  }, [isProjectPage, scrolled, backLabel, nameLabel])
-
-  const handleLinkLeave = useCallback(() => {
-    setHovering(false)
-    if (isProjectPage && scrolled) backLabel.reset()
-    else nameLabel.reset()
-  }, [isProjectPage, scrolled, backLabel, nameLabel])
+  const handleLinkEnter = useCallback(() => { setHovering(true) }, [])
+  const handleLinkLeave = useCallback(() => { setHovering(false) }, [])
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none py-[2.5rem]">
-      <div className="w-full max-w-[var(--measure)] mx-auto px-5">
-        <div
-          // Width eases; the surface does not. Animating the background meant
-          // 400ms where the bar was half-transparent over body copy, and the
-          // name and whatever line sat under it were both unreadable for the
-          // whole transition. The bar either has a surface or it does not.
-          className="pointer-events-auto mx-auto transition-[width] duration-[400ms] ease-in-out"
-          style={{
-            width: scrolled ? '93%' : '100%',
-            ...(scrolled
-              ? {
-                  background: 'var(--color-000)',
-                  border: '1px solid var(--color-100)',
-                  borderRadius: '0.125rem',
-                  boxShadow: '0 0 0.75rem rgba(0,0,0,0.08)',
-                }
-              : {
-                  background: 'transparent',
-                }),
-          }}
+    <header
+      className="fixed top-0 left-0 right-0 z-50 pointer-events-none"
+      style={{
+        transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+        transition: 'transform 300ms ease-in-out',
+      }}
+    >
+      <div className="w-full max-w-[var(--measure)] mx-auto p-5 flex items-center justify-between">
+
+        {/* Logo — in-grid left; translateX spreads it to top-left corner on scroll */}
+        <Link
+          ref={logoRef}
+          href="/"
+          aria-label={showBack ? 'Back to home' : t.name}
+          className="group relative block pointer-events-auto"
+          style={{ willChange: 'transform' }}
+          onMouseEnter={handleLinkEnter}
+          onMouseLeave={handleLinkLeave}
         >
-          {/* Single padding source: px-3 (8px) always on this container */}
-          <div className="h-[2.5rem] flex items-center justify-between px-3">
-
-            {/* Left */}
-            <div className="flex items-center">
-              <Link
-                href="/"
-                aria-label={showBack ? 'Back to home' : t.name}
-                className="group text-eyebrow text-[var(--color-500)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
-                onMouseEnter={handleLinkEnter}
-                onMouseLeave={handleLinkLeave}
-              >
-                {/*
-                  inline-grid: ghost (always t.name) fixes the element width.
-                  OLAF and BACK layers sit on top, cross-fading via opacity.
-                  Width never changes → separator and status never move.
-                */}
-                <span className="inline-grid shrink-0">
-
-                  {/* Ghost — invisible, always t.name, fixes width */}
-                  <span
-                    className="col-start-1 row-start-1 invisible whitespace-nowrap select-none"
-                    aria-hidden
-                  >
-                    {t.name}
-                  </span>
-
-                  {/* OLAF layer — visible by default, fades out on project+scrolled */}
-                  <span
-                    className="col-start-1 row-start-1 flex items-center whitespace-nowrap"
-                    style={{ opacity: showBack ? 0 : 1, transition: 'opacity 400ms ease-in-out' }}
-                    aria-hidden={showBack}
-                  >
-                    <span ref={nameLabel.spanRef}>{t.name}</span>
-                  </span>
-
-                  {/* BACK layer — fades in on project+scrolled */}
-                  <span
-                    className="col-start-1 row-start-1 flex items-center whitespace-nowrap"
-                    style={{ opacity: showBack ? 1 : 0, transition: 'opacity 400ms ease-in-out' }}
-                    aria-hidden={!showBack}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="mr-1 shrink-0" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
-                    <span ref={backLabel.spanRef}>Back</span>
-                  </span>
-
-                </span>
-              </Link>
-
-              {/* Separator */}
-              <div className="w-px h-[1.125rem] bg-[var(--color-100)] mx-3" />
-
-              {/* Status — hidden on mobile */}
-              <div className="hidden sm:flex items-center gap-2">
-                <span
-                  className="w-1.5 h-1.5 bg-[var(--accent-green)] animate-pulse-slow shrink-0"
-                  aria-hidden="true"
-                />
-                <span className="text-eyebrow text-[var(--accent-green)]">
-                  {t.status}
-                </span>
-              </div>
-            </div>
-
-            {/* Right */}
-            <button
-              onClick={handleThemeToggle}
-              aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-              className="text-eyebrow text-[var(--color-300)] hover:text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out cursor-pointer"
-              onMouseEnter={themeLabel.scramble}
-              onMouseLeave={themeLabel.reset}
+          <span className="relative block" style={{ width: 28, height: 17 }}>
+            <span
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                opacity: showBack ? 0 : 1,
+                transform: showBack ? 'translateX(-100%)' : 'translateX(0)',
+                transition: 'opacity 400ms ease-in-out, transform 400ms ease-in-out',
+              }}
+              aria-hidden={showBack}
             >
-              <span ref={themeLabel.spanRef} aria-hidden="true">{themeWord}</span>
-            </button>
+              <svg width="28" height="17" viewBox="0 0 5 3" fill="currentColor" className="text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--accent)]" aria-hidden="true"><rect x="1" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="0" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/></svg>
+            </span>
+            <span
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                opacity: showBack ? 1 : 0,
+                transform: showBack ? 'translateX(0)' : 'translateX(-100%)',
+                transition: 'opacity 400ms ease-in-out, transform 400ms ease-in-out',
+              }}
+              aria-hidden={!showBack}
+            >
+              <svg width="24" height="17" viewBox="0 0 16 16" fill="none" className="text-[var(--color-500)] transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--accent)]" aria-hidden="true"><path d="M14 8H2M7 3L2 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/></svg>
+            </span>
+          </span>
+        </Link>
 
-          </div>
-        </div>
+        {/* Theme toggle — in-grid right; translateX spreads it to top-right corner on scroll */}
+        <button
+          ref={toggleRef}
+          onClick={handleThemeToggle}
+          aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+          className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out cursor-pointer pointer-events-auto p-2"
+          style={{ willChange: 'transform' }}
+          onMouseEnter={themeLabel.scramble}
+          onMouseLeave={themeLabel.reset}
+        >
+          <span ref={themeLabel.spanRef} aria-hidden="true">{themeWord}</span>
+        </button>
+
       </div>
     </header>
   )

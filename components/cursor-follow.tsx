@@ -19,8 +19,11 @@ const clamp = (value: number, min: number, max: number) =>
  * The follow element is placed from the area's top-left corner, so it needs
  * `absolute left-0 top-0` and must not carry a transform of its own — this
  * hook writes `transform` straight to the node, outside React's render loop.
+ *
+ * `offsetX`/`offsetY` nudge the element away from the pointer (e.g. to float
+ * beside it) while keeping it inside the area.
  */
-export function useCursorFollow<A extends HTMLElement, F extends HTMLElement>() {
+export function useCursorFollow<A extends HTMLElement, F extends HTMLElement>(offsetX = 0, offsetY = 0) {
   const areaRef = useRef<A>(null)
   const followRef = useRef<F>(null)
 
@@ -58,10 +61,10 @@ export function useCursorFollow<A extends HTMLElement, F extends HTMLElement>() 
     if (!area || !follow) return
     const bounds = area.getBoundingClientRect()
     target.current = {
-      x: clamp(clientX - bounds.left, 0, bounds.width - follow.offsetWidth),
-      y: clamp(clientY - bounds.top, 0, bounds.height - follow.offsetHeight),
+      x: clamp(clientX - bounds.left + offsetX, 0, bounds.width - follow.offsetWidth),
+      y: clamp(clientY - bounds.top + offsetY, 0, bounds.height - follow.offsetHeight),
     }
-  }, [])
+  }, [offsetX, offsetY])
 
   const tick = useCallback((time: number) => {
     const delta = Math.min((time - lastTime.current) / 1000, MAX_FRAME)
@@ -90,7 +93,7 @@ export function useCursorFollow<A extends HTMLElement, F extends HTMLElement>() 
 
   const onMouseEnter = useCallback((e: React.MouseEvent) => {
     measure(e.clientX, e.clientY)
-    // Appear under the pointer, then trail it from there.
+    // Appear beside the pointer (offset included in measure), then trail it.
     position.current = { ...target.current }
     velocity.current = { x: 0, y: 0 }
     draw()

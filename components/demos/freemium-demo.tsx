@@ -5,6 +5,7 @@ import {
   TileRow, Title,
 } from '@/components/demos/dashboard-ui'
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
+import { useTarget } from '@/components/demos/demo-cursor'
 import { C, TYPEFACE } from '@/components/demos/edrone-tokens'
 import {
   Action, AppFrame, AutomationCard, type AutomationData, CardGrid, CoachMark, type CoachStep,
@@ -49,6 +50,10 @@ const INTEGRATE_SCREEN = 3
  *  `restState` — the poster, which has to be a finished screen — stays at 0. */
 const PREPARING = 4
 const CONNECTED = 5
+
+/** The one card's toggle the script flips, and the field it marks. */
+const SWITCH = 'switch'
+const OFF = 'off'
 
 // ─── Step 1: Automations ─────────────────────────────────────────────────────
 
@@ -264,6 +269,17 @@ const SCRIPT: Step[] = [
   { kind: 'screen', index: AUTOMATIONS_SCREEN },
   { kind: 'wait',   ms: 1300 },
 
+  // The argument in miniature: someone disagrees with one of the seven, and
+  // disagreeing is a click — the toggle off, a hold to read the Inactive badge,
+  // and one click back, because everything is on by default and the walkthrough
+  // is about the store it will belong to, not about one stubborn card.
+  { kind: 'click', target: SWITCH },
+  { kind: 'set',   field: OFF, text: '1' },
+  { kind: 'wait',  ms: 950 },
+  { kind: 'click', target: SWITCH },
+  { kind: 'set',   field: OFF, text: '' },
+  { kind: 'wait',  ms: 250 },
+
   // Down into the cards to finish the second row, then back up to the button.
   // The grid follows the pointer down and eases back on its own once it leaves,
   // so the rest of the walkthrough runs without the page moving again.
@@ -382,15 +398,40 @@ const TABS = [
   { label: 'Inactive', count: 10 },
 ]
 
-const Automations = ({ state, m }: { state: DemoState; m: Metrics }) => (
-  <Page m={m}>
-    <PageHeader title="Automations" m={m} />
-    <TabRow m={m} style={{ marginTop: m.gapHeaderTabs }} toggleRight tabs={TABS} />
-    <CardGrid lifted={state.cursor === GRID} m={m} style={{ marginTop: m.gapTabsGrid }}>
-      {AUTOMATIONS.map((a) => <AutomationCard key={a.title} data={a} m={m} />)}
-    </CardGrid>
-  </Page>
-)
+/**
+ * The card whose toggle the script flips, by layout.
+ *
+ * It has to be a card the cursor can reach: on the grid, clear of the coach-mark
+ * on the automations step. A four-column desktop grid puts anything past the
+ * second column under the 402px coach card, so the second card it is; a phone
+ * has one column and a coach sheet across the bottom, so its first card.
+ */
+const scriptedIndex = (mobile: boolean) => (mobile ? 0 : 2)
+
+const Automations = ({ state, m }: { state: DemoState; m: Metrics }) => {
+  const scripted = scriptedIndex(m.mobile)
+  const switchRef = useTarget(SWITCH)
+  const off = state.values[OFF] === '1'
+
+  return (
+    <Page m={m}>
+      <PageHeader title="Automations" m={m} />
+      <TabRow m={m} style={{ marginTop: m.gapHeaderTabs }} toggleRight tabs={TABS} />
+      <CardGrid lifted={state.cursor === GRID} m={m} style={{ marginTop: m.gapTabsGrid }}>
+        {AUTOMATIONS.map((a, i) => (
+          <AutomationCard
+            key={a.title}
+            data={a}
+            m={m}
+            on={i === scripted ? !off : true}
+            pressed={i === scripted && state.pressed === SWITCH}
+            switchRef={i === scripted ? switchRef : undefined}
+          />
+        ))}
+      </CardGrid>
+    </Page>
+  )
+}
 
 const Popups = ({ m }: { m: Metrics }) => (
   <Page m={m}>

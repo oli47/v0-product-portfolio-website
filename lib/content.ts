@@ -6,18 +6,15 @@ export const content = {
   en: {
     nav: {
       name: 'Olaf Otrząsek',
-      status: 'Open to opportunities',
       dark: 'Dark',
       light: 'Light',
     },
     hero: {
-      headlinePre: 'I design the moments where products\u00a0',
-      headlineAccent: 'start working',
-      headlinePost: '\u00a0for people.',
-      body: 'I use product data to find where users don\u2019t get through, then design the experience that gets them there. At\u00a0',
+      positioning: 'I find where users don\u2019t get through, then design the experience that gets them there.',
+      body: 'At\u00a0',
       bodyEdrone: 'edrone',
       bodyPost:
-        '\u00a0I rebuilt the platform from sales-gated to self-serve freemium, redesigned most of the product, and grew the design team from one to three. 7+ years in SaaS. I prototype and ship production code with Claude Code and v0.dev.',
+        '\u00a0I took the product from sales-gated to self-serve freemium and redesigned most of it, making the judgment calls no salesperson had made before: what runs, what gets asked, and what the product decides on its own. I sell each decision with the evidence that proves it. I prototype and ship production code with Claude Code and v0.dev. 7+ years in SaaS.',
     },
     contact: {
       resume: 'Resume',
@@ -25,6 +22,8 @@ export const content = {
       phone: '+48\u00a0732\u00a0188\u00a0613',
       phoneRaw: '+48732188613',
       linkedin: 'LinkedIn',
+      open: 'open',
+      copy: 'copy',
       copied: '\u2713\u00a0Copied',
     },
     sections: {

@@ -7,7 +7,7 @@ import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
 import { CompareSlider } from '@/components/compare-slider'
 import { DEMOS } from '@/components/demos/registry'
-import { ContactFlowDiagram, VerticalFlow } from '@/components/process-diagrams'
+import { ContactFlowDiagram } from '@/components/process-diagrams'
 import { Slideshow } from '@/components/slideshow'
 
 /**
@@ -101,11 +101,11 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             <div key={i} className="flex flex-col gap-4">
               {item.map((block, j) =>
                 block.kind === 'text' ? (
-                  <p key={j} className="text-body-1 text-[var(--color-500)] text-pretty">
+                  <p key={j} className="text-body-2 text-[var(--color-500)] text-pretty">
                     <Bold text={block.content} />
                   </p>
                 ) : (
-                  <p key={j} className="text-body-1 text-[var(--color-500)] font-medium text-pretty">
+                  <p key={j} className="text-body-2 text-[var(--color-500)] font-medium text-pretty">
                     <Bold text={block.content} />
                   </p>
                 )
@@ -132,7 +132,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     />
                   </div>
                   {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-0">
                       {block.caption}
                     </p>
                   )}
@@ -149,7 +149,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                 >
                   <Slideshow images={block.images} />
                   {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-4">
                       {block.caption}
                     </p>
                   )}
@@ -170,9 +170,42 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     pinnedScreen={block.step}
                   />
                   {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-4">
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-4">
                       {block.caption}
                     </p>
+                  )}
+                </div>
+              </div>
+            )
+          }
+
+          case 'split': {
+            return (
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
+                <div
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
+                >
+                  <div className="grid gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-12 items-start">
+                    <div className="flex flex-col gap-4">
+                      {block.text.map((text, j) => (
+                        <p key={j} className="text-body-2 text-[var(--color-500)] text-pretty">
+                          <Bold text={text} />
+                        </p>
+                      ))}
+                    </div>
+                    <div className="flex flex-col gap-10">
+                      {block.sides.map((side, j) => (
+                        <div key={j} className="flex flex-col">
+                          <p className="text-eyebrow text-[var(--accent)] mb-2">{side.label}</p>
+                          <p className="text-body-2 text-[var(--color-500)] text-pretty mb-4">{side.text}</p>
+                          <div className="rounded-[0.125rem] overflow-hidden">{compareSide(side)}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {block.caption && (
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-6">{block.caption}</p>
                   )}
                 </div>
               </div>
@@ -198,7 +231,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     />
                   </div>
                   {block.caption && (
-                    <p className="text-body-2 text-[var(--color-300)] text-center mt-0">
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-0">
                       {block.caption}
                     </p>
                   )}
@@ -206,9 +239,6 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
               </div>
             )
           }
-
-          case 'vertical-flow':
-            return <VerticalFlow key={i} steps={block.steps} arc={block.arc} caption={block.caption} />
 
           case 'contact-flow':
             return <ContactFlowDiagram key={i} caption={block.caption} />
@@ -225,9 +255,9 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     <span className="text-eyebrow text-[var(--accent)]">{item.num}</span>
                     <div className="flex flex-col gap-2">
                       {item.title && (
-                        <p className="text-body-1 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
+                        <p className="text-body-2 text-[var(--color-500)] text-pretty" style={{ fontWeight: 600 }}>{item.title}</p>
                       )}
-                      <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={item.description} /></p>
+                      <p className="text-body-2 text-[var(--color-500)] text-pretty"><Bold text={item.description} /></p>
                     </div>
                   </div>
                 ))}

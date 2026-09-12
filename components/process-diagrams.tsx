@@ -1,154 +1,3 @@
-'use client'
-
-import { useState, useEffect, useRef } from 'react'
-
-// ─── Shared primitives ────────────────────────────────────────────────────────
-
-function FlowArrow({ id }: { id: string }) {
-  return (
-    <div className="flex justify-center py-3">
-      <svg width="12" height="20" style={{ display: 'block', overflow: 'visible' }}>
-        <defs>
-          <marker id={id} markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-            <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </marker>
-        </defs>
-        <line x1="6" y1="0" x2="6" y2="20" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd={`url(#${id})`} />
-      </svg>
-    </div>
-  )
-}
-
-// ─── Vertical Flow ────────────────────────────────────────────────────────────
-
-export function VerticalFlow({ steps, arc, caption }: {
-  steps: { title: string; subtitle?: string; labelAfter?: string; mobileAnnotation?: string }[]
-  arc?: { fromStep: number; toStep: number; label: string }
-  caption?: string
-}) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([])
-  const [arcGeo, setArcGeo] = useState<{ x: number; y1: number; y2: number; midX: number; midY: number } | null>(null)
-
-  useEffect(() => {
-    if (!arc) return
-    const measure = () => {
-      const container = containerRef.current
-      const fromEl = stepRefs.current[arc.fromStep]
-      const toEl   = stepRefs.current[arc.toStep]
-      const prevEl = arc.fromStep > 0 ? stepRefs.current[arc.fromStep - 1] : null
-      if (!container || !fromEl || !toEl) return
-      const cr = container.getBoundingClientRect()
-      const fr = fromEl.getBoundingClientRect()
-      const tr = toEl.getBoundingClientRect()
-      const x  = fr.right - cr.left + 12
-      const y1 = prevEl
-        ? (prevEl.getBoundingClientRect().bottom + fr.top) / 2 - cr.top
-        : fr.top - cr.top
-      const y2 = (tr.top + tr.bottom) / 2 - cr.top
-      setArcGeo({ x, y1, y2, midX: x + 48, midY: (y1 + y2) / 2 })
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    if (containerRef.current) ro.observe(containerRef.current)
-    return () => ro.disconnect()
-  }, [arc])
-
-  return (
-    <div className="sm:-mx-8">
-      <div
-        ref={containerRef}
-        className="relative rounded-sm border border-[var(--color-100)] p-6 sm:p-10"
-        style={{ backgroundColor: 'var(--color-000)' }}
-      >
-        <div className="flex flex-col items-center max-w-xs mx-auto">
-          {steps.map((step, i) => (
-            <div key={i} className="flex flex-col items-center w-full">
-              <div
-                ref={el => { stepRefs.current[i] = el }}
-                className="w-full rounded-[0.125rem] border border-[var(--color-100)] overflow-hidden text-center"
-                style={{ backgroundColor: 'var(--color-step-bg)' }}
-              >
-                <div className="px-5 pt-3">
-                  <p className="text-body-1 font-bold text-[var(--color-500)] text-balance">{step.title}</p>
-                </div>
-                {step.subtitle && (
-                  <div className="px-5 pb-3">
-                    <p className="text-body-2 text-[var(--color-300)] text-pretty">{step.subtitle}</p>
-                  </div>
-                )}
-                {step.mobileAnnotation && (
-                  <div className="sm:hidden px-5 pb-3">
-                    <span className="text-eyebrow text-[var(--accent)]">{step.mobileAnnotation}</span>
-                  </div>
-                )}
-              </div>
-
-              {i < steps.length - 1 && (
-                step.labelAfter ? (
-                  <div className="flex flex-col items-center py-2 gap-1">
-                    <span className="text-eyebrow text-[var(--accent)]">{step.labelAfter}</span>
-                    <svg width="12" height="20" style={{ display: 'block', overflow: 'visible' }}>
-                      <defs>
-                        <marker id={`vf-l-${i}`} markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                          <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </marker>
-                      </defs>
-                      <line x1="6" y1="0" x2="6" y2="20" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6 6" strokeLinecap="round" markerEnd={`url(#vf-l-${i})`} />
-                    </svg>
-                  </div>
-                ) : (
-                  <FlowArrow id={`vf-${i}`} />
-                )
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Arc annotation — desktop only */}
-        {arc && arcGeo && (
-          <svg
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none hidden sm:block"
-            style={{ width: '100%', height: '100%', overflow: 'visible' }}
-          >
-            <defs>
-              <marker id="vf-arc-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <path d="M0 0.5 L5 3 L0 5.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </marker>
-            </defs>
-            <path
-              d={`M ${arcGeo.x},${arcGeo.y2} C ${arcGeo.x + 64},${arcGeo.y2} ${arcGeo.x + 64},${arcGeo.y1} ${arcGeo.x},${arcGeo.y1}`}
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="1.5"
-              strokeDasharray="6 6"
-              markerEnd="url(#vf-arc-arr)"
-            />
-          </svg>
-        )}
-        {arc && arcGeo && (
-          <div
-            aria-hidden="true"
-            className="absolute hidden sm:flex items-center pointer-events-none px-1.5 py-0.5 rounded-[0.125rem] text-eyebrow text-[var(--accent)] whitespace-nowrap"
-            style={{
-              left: arcGeo.midX,
-              top: arcGeo.midY,
-              transform: 'translate(-50%, -50%)',
-              backgroundColor: 'var(--color-000)',
-            }}
-          >
-            {arc.label}
-          </div>
-        )}
-        {caption && (
-          <p className="text-body-2 text-[var(--color-300)] text-center mt-6">{caption}</p>
-        )}
-      </div>
-    </div>
-  )
-}
-
 // ─── Contact Flow ─────────────────────────────────────────────────────────────
 
 /** The mail in flight. */
@@ -304,7 +153,7 @@ export function ContactFlowDiagram({ caption }: { caption?: string }) {
               </svg>
               <div className="text-center">
                 <p className="text-body-2 text-[var(--color-400)] font-medium">Unidentified</p>
-                <p className="text-body-2 text-[var(--color-300)]">no cookie yet</p>
+                <p className="text-body-2 text-[var(--color-500)]">no cookie yet</p>
               </div>
             </div>
 
@@ -326,14 +175,14 @@ export function ContactFlowDiagram({ caption }: { caption?: string }) {
               </svg>
               <div className="text-center">
                 <p className="text-body-2 text-[var(--color-400)] font-medium">Sarah Miller</p>
-                <p className="text-body-2 text-[var(--color-300)]">miller@email.com</p>
+                <p className="text-body-2 text-[var(--color-500)]">miller@email.com</p>
               </div>
             </div>
           </div>
 
         </div>
         {caption && (
-          <p className="text-body-2 text-[var(--color-300)] text-center mt-6">
+          <p className="text-body-2 text-[var(--color-500)] text-center mt-6">
             {caption}
           </p>
         )}

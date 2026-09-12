@@ -40,18 +40,18 @@ export default function ProjectPage() {
 
   const hasReflections = project.reflections && project.reflections.length > 0
 
-  // My Role sits after Goal: a reader knows what the product is (Context), what
-  // needed to happen (Goal), and then who did the work (My Role) before
-  // Approach explains how.
-  const goalAt = project.sections.findIndex((s) => s.badge.toLowerCase() === 'goal')
-  const afterGoal = (goalAt === -1 ? 0 : goalAt) + 1
+  // Context opens the page beside My Role: the facts of the product in one
+  // column, the claim about the designer's part in it in the other, then the
+  // rest of the narrative reads as its own sections under them. My Role stays
+  // out of the rail — one shared row, and the legend reads as the sections.
+  const firstSection = project.sections[0]
+
+  const sectionItem = (badge: string) => ({ label: badge, target: sectionId(badge) })
 
   const navItems = [
-    ...project.sections.slice(0, afterGoal).map((section) => section.badge),
-    MY_ROLE,
-    ...project.sections.slice(afterGoal).map((section) => section.badge),
-    'Impact',
-    ...(hasReflections ? ['Reflections'] : []),
+    ...project.sections.map((section) => sectionItem(section.badge)),
+    sectionItem('Impact'),
+    ...(hasReflections ? [sectionItem('Reflections')] : []),
   ]
 
   return (
@@ -63,14 +63,6 @@ export default function ProjectPage() {
 
         {/* Header */}
         <section>
-          <div className="flex flex-col gap-3 mb-8">
-            <h1 className="font-display text-[clamp(1.5rem,7vw,2.625rem)] leading-[1.2] text-balance">
-              {project.title}
-            </h1>
-            <p className="text-body-1 text-[var(--color-500)] text-pretty">
-              {project.description}
-            </p>
-          </div>
 
           {/* Hero — a coded demo where the project has one, the cover PNG otherwise.
               It enlarges on click like the screenshots do, but skips the hover
@@ -118,49 +110,44 @@ export default function ProjectPage() {
             </div>
           )}
 
+          {/* The card headline the homepage rows roll on, under the hero rather
+              than above it: the screen first, the sentence that sums it up. The
+              accent measure is kept from the home row. */}
+          <div className="flex flex-col gap-3 mt-8">
+            <h3 className="font-display text-[clamp(1.25rem,4vw,1.75rem)] leading-[1.2] text-balance">
+              {project.card.lead}{' '}
+              <span className="text-[var(--accent)] font-[450]">
+                {project.card.number} {project.card.label}
+              </span>
+              {project.card.tail && <> {project.card.tail}</>}
+            </h3>
+          </div>
+
         </section>
 
-        {/* Narrative sections — badges and order come from the project data,
-            with My Role spliced in behind Goal. */}
-        {project.sections.slice(0, afterGoal).map((section) => (
-          <section key={section.badge} id={sectionId(section.badge)}>
-            <SectionBadge>{section.badge}</SectionBadge>
-            <ProcessBlocks blocks={section.blocks} />
-          </section>
-        ))}
+        {/* Context and My Role share the first row: the facts of the product
+            beside the claim about the designer's part in it. The rest of the
+            narrative reads as its own sections under them.
 
-        {/* One sentence: what was mine and what was somebody else's.
-
-            Deliberately not <Bold>: the sentence is the designer's own claim
-            about their own work, which is the one place CASE-STUDY-PATTERN.md
-            says bold must never go. */}
-        <section id={sectionId(MY_ROLE)}>
-          <SectionBadge>{MY_ROLE}</SectionBadge>
-          <div className="flex flex-col gap-4">
-            <p className="text-body-1 text-[var(--color-500)] text-pretty">
+            Deliberately not <Bold>: the role sentence is the designer's own
+            claim about their own work, which is the one place
+            CASE-STUDY-PATTERN.md says bold must never go. */}
+        <div className="grid gap-16 sm:gap-10 md:grid-cols-2">
+          {firstSection && (
+            <section id={sectionId(firstSection.badge)}>
+              <SectionBadge>{firstSection.badge}</SectionBadge>
+              <ProcessBlocks blocks={firstSection.blocks} />
+            </section>
+          )}
+          <section id={sectionId(MY_ROLE)}>
+            <SectionBadge>{MY_ROLE}</SectionBadge>
+            <p className="text-body-2 text-[var(--color-500)] text-pretty">
               {project.meta.myRole}
             </p>
-            {/* The claim above is "I shipped this"; this is the receipt. It sits
-                under the sentence rather than in it so that it reads as evidence
-                offered, not as a citation propping the sentence up. */}
-            {project.meta.live && (
-              <a
-                href={project.meta.live.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.meta.live.label} (opens in new tab)`}
-                className="flex w-fit items-center gap-1.5 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
-              >
-                <span>{project.meta.live.label}</span>
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0" style={{ stroke: 'currentColor' }}>
-                  <path d="M4 12L12 4M6 4h6v6" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter" />
-                </svg>
-              </a>
-            )}
-          </div>
-        </section>
+          </section>
+        </div>
 
-        {project.sections.slice(afterGoal).map((section) => (
+        {project.sections.slice(1).map((section) => (
           <section key={section.badge} id={sectionId(section.badge)}>
             <SectionBadge>{section.badge}</SectionBadge>
             <ProcessBlocks blocks={section.blocks} />
@@ -170,6 +157,14 @@ export default function ProjectPage() {
         {/* Impact */}
         <section id={sectionId('Impact')}>
           <SectionBadge>Impact</SectionBadge>
+
+          {/* Read the outcome in prose, then meet it again in the cards. The
+              summary carries the story; the cards carry the definitions. */}
+          {project.results.summary && (
+            <p className="text-body-2 text-[var(--color-500)] text-pretty mb-8">
+              <Bold text={project.results.summary} />
+            </p>
+          )}
 
           {/* One column on every case study. Cards were side by side here and
               stacked on freemium, which made the same section read as two
@@ -195,7 +190,7 @@ export default function ProjectPage() {
             ))}
             {project.results.note && !project.results.northStar && (
               <div className={`${FRAME_PAD} rounded-sm`} style={{ backgroundColor: 'var(--color-000)' }}>
-                <p className="text-body-1 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
+                <p className="text-body-2 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
               </div>
             )}
           </div>
@@ -207,7 +202,7 @@ export default function ProjectPage() {
             <SectionBadge>Reflections</SectionBadge>
             <div className="flex flex-col gap-4">
               {project.reflections.map((text, index) => (
-                <p key={index} className="text-body-1 text-[var(--color-500)] text-pretty">
+                <p key={index} className="text-body-2 text-[var(--color-500)] text-pretty">
                   <Bold text={text} />
                 </p>
               ))}
@@ -230,7 +225,7 @@ export default function ProjectPage() {
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M14 8H2M7 3L2 8l5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
               <span className="text-eyebrow text-[var(--color-300)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">PREV\</span>
             </div>
-            <span ref={prevLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
+            <span ref={prevLabel.spanRef} className="text-eyebrow text-[var(--color-300)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out text-balance">
               {prev.title}
             </span>
           </Link>
@@ -247,7 +242,7 @@ export default function ProjectPage() {
               <span className="text-eyebrow text-[var(--color-300)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out">/NEXT</span>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-[var(--accent)] transition-colors duration-[400ms] ease-in-out shrink-0" style={{stroke:'currentColor'}}><path d="M2 8h12M9 3l5 5-5 5" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/></svg>
             </div>
-            <span ref={nextLabel.spanRef} className="text-eyebrow text-[clamp(1rem,3vw,1.25rem)] leading-[1.3] text-[var(--color-500)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out uppercase text-balance">
+            <span ref={nextLabel.spanRef} className="text-eyebrow text-[var(--color-300)] group-hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out text-balance">
               {next.title}
             </span>
           </Link>

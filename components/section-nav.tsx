@@ -27,27 +27,29 @@ const RAIL_QUERY = '(min-width: 1200px)'
 const BOTTOM_BAND = 80
 
 function SectionNavItem({
-  badge,
+  label,
+  target,
   active,
   onSelect,
 }: {
-  badge: string
+  label: string
+  target: string
   active: boolean
-  onSelect: (badge: string) => void
+  onSelect: (label: string) => void
 }) {
-  const label = useScramble(badge)
+  const scramble = useScramble(label)
 
   return (
     <li>
       <a
-        href={`#${sectionId(badge)}`}
+        href={`#${target}`}
         aria-current={active ? 'true' : undefined}
         onClick={(e) => {
           e.preventDefault()
-          onSelect(badge)
+          onSelect(label)
         }}
-        onMouseEnter={label.scramble}
-        onMouseLeave={label.reset}
+        onMouseEnter={scramble.scramble}
+        onMouseLeave={scramble.reset}
         className="group flex flex-row-reverse items-center gap-3 py-1"
       >
         <span
@@ -59,19 +61,24 @@ function SectionNavItem({
           }}
         />
         <span
-          ref={label.spanRef}
+          ref={scramble.spanRef}
           className="text-eyebrow transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--accent)]"
           style={{ color: active ? 'var(--color-500)' : 'var(--color-300)' }}
         >
-          {badge}
+          {label}
         </span>
       </a>
     </li>
   )
 }
 
-export function SectionNav({ items }: { items: string[] }) {
-  const [active, setActive] = useState(items[0] ?? '')
+export type SectionNavItemData = { label: string; target: string }
+
+/** `target` is the element id the link scrolls to; `label` is what the rail
+ *  shows and what lights up. They can differ so that a row shared by two
+ *  sections — Context beside My Role — reads as one entry. */
+export function SectionNav({ items }: { items: SectionNavItemData[] }) {
+  const [active, setActive] = useState(items[0]?.label ?? '')
   const [railTop, setRailTop] = useState<number | null>(null)
   // The rail is a reading aid, and there is nothing to aid until the reader is
   // in the reading. It stays out of the way over the title and the hero, and
@@ -97,7 +104,7 @@ export function SectionNav({ items }: { items: string[] }) {
       // Follow the first section down the page, then stop at the pin line —
       // and only show it from the moment it gets there, so it arrives in its
       // resting place rather than sliding up the page from the fold.
-      const first = document.getElementById(sectionId(items[0]))
+      const first = document.getElementById(items[0].target)
       if (first) {
         const top = first.getBoundingClientRect().top
         setRailTop(Math.max(top, RAIL_PIN_TOP))
@@ -116,7 +123,7 @@ export function SectionNav({ items }: { items: string[] }) {
       // that has no rail.
       const reachable = items[items.length - 2]
       const root = document.documentElement
-      const el = reachable ? document.getElementById(sectionId(reachable)) : null
+      const el = reachable ? document.getElementById(reachable.target) : null
       // Read what is applied rather than remembering it: the measurement has to
       // subtract its own effect, and anything held in a ref goes stale the first
       // time the effect remounts with the padding already gone.
@@ -135,14 +142,14 @@ export function SectionNav({ items }: { items: string[] }) {
       const atBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
       if (atBottom) {
-        setActive(items[items.length - 1])
+        setActive(items[items.length - 1].label)
         return
       }
 
-      let current = items[0]
-      for (const badge of items) {
-        const el = document.getElementById(sectionId(badge))
-        if (el && el.offsetTop <= line) current = badge
+      let current = items[0].label
+      for (const item of items) {
+        const el = document.getElementById(item.target)
+        if (el && el.offsetTop <= line) current = item.label
       }
       setActive(current)
     }
@@ -178,12 +185,13 @@ export function SectionNav({ items }: { items: string[] }) {
     }
   }, [])
 
-  const handleSelect = useCallback((badge: string) => {
-    const el = document.getElementById(sectionId(badge))
+  const handleSelect = useCallback((label: string) => {
+    const item = items.find((i) => i.label === label)
+    const el = item ? document.getElementById(item.target) : null
     if (!el) return
 
-    pinned.current = badge
-    setActive(badge)
+    pinned.current = label
+    setActive(label)
 
     const max = document.documentElement.scrollHeight - window.innerHeight
     const target = Math.min(Math.max(el.offsetTop - SCROLL_OFFSET, 0), Math.max(max, 0))
@@ -267,11 +275,12 @@ export function SectionNav({ items }: { items: string[] }) {
       }}
     >
       <ul className="flex flex-col gap-4">
-        {items.map((badge) => (
+        {items.map((item) => (
           <SectionNavItem
-            key={badge}
-            badge={badge}
-            active={badge === active}
+            key={item.label}
+            label={item.label}
+            target={item.target}
+            active={item.label === active}
             onSelect={handleSelect}
           />
         ))}

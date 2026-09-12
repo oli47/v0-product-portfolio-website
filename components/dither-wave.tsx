@@ -101,8 +101,6 @@ function crestAt(u: number, t: number) {
   return CEILING + SOFT * Math.log1p(Math.exp((crest - CEILING) / SOFT))
 }
 
-const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v)
-
 // ImageData is byte-ordered RGBA; a Uint32 view packs it in the machine's byte
 // order, so which end the alpha sits on depends on the platform.
 const littleEndian =

@@ -12,7 +12,7 @@ export default function NotFound() {
         <p className="font-display text-[clamp(4rem,15vw,8rem)] leading-none text-[var(--color-100)] select-none mb-6">
           404
         </p>
-        <p className="text-body-1 text-[var(--color-300)] mb-8">
+        <p className="text-body-2 text-[var(--color-500)] mb-8">
           This page does not exist.
         </p>
         <Link

@@ -1075,7 +1075,7 @@ const EmailHero = ({ lines, m }: { lines: string[]; m: Metrics }) => (
         color: '#FFFFFF',
       }}
     >
-      {lines.map((line, i) => (
+      {lines.map((line) => (
         <span key={line} className="block">{line}</span>
       ))}
     </span>

@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import {
   Chip, Connector, CrossMark, Dashboard, Drawer, type EmailPreview, FlowStep,
   IDENTIFICATION_STEPS, IDENTIFICATION_TILES, IdentificationPanel, MailMark,
-  metricsFor, PersonMark, RepeatMark, SectionTitle, SequencePanel, StepCard, TileRow, Title,
+  metricsFor, PersonMark, SectionTitle, SequencePanel, StepCard, TileRow, Title,
 } from '@/components/demos/dashboard-ui'
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
 import { C, TYPEFACE } from '@/components/demos/edrone-tokens'

@@ -14,7 +14,7 @@ const t = content[defaultLang].projects
 // ─── Active project row ──────────────────────────────────────────────────────
 
 export function ProjectRow({ project }: { project: Project }) {
-  const { areaRef, followRef, handlers } = useCursorFollow<HTMLAnchorElement, HTMLDivElement>()
+  const { areaRef, followRef, handlers } = useCursorFollow<HTMLAnchorElement, HTMLDivElement>(20, -32)
   const [hovered, setHovered] = useState(false)
   const Demo = project.demo ? DEMOS[project.demo] : null
 
@@ -31,7 +31,7 @@ export function ProjectRow({ project }: { project: Project }) {
       {/* Thumbnail — full-bleed on mobile, inset on a card fill on desktop.
           Where the project has a coded demo it takes the same slot, still at
           rest and playing while the row is hovered. */}
-      <div className="flex w-full items-center justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/225] sm:items-end sm:aspect-[680/320] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
+      <div className="flex w-full items-center justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/236] sm:items-end sm:aspect-[680/400] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
         {Demo ? (
           // Every demo shows the same screen here that the case study shows,
           // and those screens are not all the same shape, so the slot measures
@@ -46,19 +46,21 @@ export function ProjectRow({ project }: { project: Project }) {
           // lopsided, and the screen small for it. Shortening the slot to 1.68
           // and taking 91% of its width puts a 16px frame on all four sides of
           // all three, and buys the screens back about a ninth of their width.
-          <div className="demo-lift w-[91%] sm:h-[95%] sm:w-auto" data-lift={hovered}>
+          <div className="demo-lift w-[91%] sm:h-[76%] sm:w-auto" data-lift={hovered}>
             <Demo variant="card" fit="card" play={hovered} />
           </div>
         ) : (
-          <Image
-            src={project.thumbnailImage}
-            alt=""
-            width={680}
-            height={423}
-            quality={95}
-            sizes="(max-width: 640px) 100vw, 514px"
-            className="h-full w-full object-cover sm:w-[75.6%]"
-          />
+          <div className="demo-lift h-full w-full sm:h-auto sm:w-[82.5%]" data-lift={hovered}>
+            <Image
+              src={project.thumbnailImage}
+              alt=""
+              width={680}
+              height={423}
+              quality={95}
+              sizes="(max-width: 640px) 100vw, 514px"
+              className="h-full w-full object-cover sm:h-auto sm:w-full sm:object-contain"
+            />
+          </div>
         )}
       </div>
 
@@ -81,39 +83,18 @@ export function ProjectRow({ project }: { project: Project }) {
         </svg>
       </div>
 
-      {/* Title + description, metrics chip — chip sits above the title on mobile */}
+      {/* The card is a single sentence: the scramble lead runs into the accent
+          metric phrase, kept in the same font as the rest. */}
       <div className="flex flex-col-reverse gap-3 py-3 sm:flex-row sm:items-start sm:gap-10 sm:py-4">
         <div className="flex min-w-0 flex-col gap-1 sm:flex-1">
-          <h3 className="text-h4 text-[var(--color-400)] text-pretty">
-            <ScrambleText text={project.title} active={hovered} />
-          </h3>
-          <p className="text-body-2 text-[var(--color-300)] text-pretty">
-            <ScrambleText text={project.description} active={hovered} />
+          <p className="text-body-2 text-[var(--color-500)] text-pretty underline-offset-[0.16em] decoration-[var(--accent)] transition-[text-decoration-color] duration-[400ms] ease-in-out group-hover:underline">
+            <ScrambleText text={project.card.lead} active={hovered} />{' '}
+            <span className="text-[var(--accent)] font-[450]">
+              {project.card.number} {project.card.label}
+            </span>
+            {project.card.tail && <> {project.card.tail}</>}
           </p>
         </div>
-
-        {project.metrics.length > 0 && (
-          <div className="flex shrink-0 flex-wrap gap-2 self-start">
-            {project.metrics.map((metric, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-1.5 rounded-[0.125rem] bg-[var(--color-000)] px-2 py-0.5"
-              >
-                <span
-                  className="text-eyebrow whitespace-nowrap"
-                  style={{
-                    color: metric.color === 'accent' ? 'var(--accent)' : 'var(--color-400)',
-                  }}
-                >
-                  <ScrambleText text={metric.value} active={hovered} />
-                </span>
-                <span className="text-eyebrow whitespace-nowrap text-[var(--color-300)]">
-                  <ScrambleText text={metric.label} active={hovered} />
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </Link>
   )

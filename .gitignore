@@ -17,3 +17,11 @@ node_modules
 .DS_Store
 .vercel
 tsconfig.tsbuildinfo
+
+# Dev-only files
+font-preview.html
+tmp/
+figma-tmp/
+0
+pytania-*
+.opencode/

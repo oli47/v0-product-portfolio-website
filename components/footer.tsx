@@ -11,10 +11,10 @@ export function Footer() {
           half-leading puts the glyphs themselves a few px higher still, ogonek
           included. */}
       <div className="max-w-[var(--measure)] mx-auto px-5 pt-10 pb-4 flex items-center justify-between">
-        <p className="font-mono text-[0.75rem] font-medium uppercase leading-[1.25rem] text-[var(--color-300)]">
+        <p className="text-eyebrow text-[var(--color-300)]">
           <span className="font-display text-[1.25rem] leading-[1.25rem] align-middle text-[var(--accent)]">©</span> 2026 Olaf Otrząsek
         </p>
-        <p className="font-mono text-[0.75rem] font-medium uppercase leading-[1.25rem] text-[var(--color-300)]">
+        <p className="text-eyebrow text-[var(--color-300)]">
           Built with Claude Code <span className="font-display text-[1.25rem] leading-[1.25rem] align-middle text-[var(--accent)]">✨</span>
         </p>
       </div>

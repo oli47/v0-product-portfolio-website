@@ -18,7 +18,7 @@ export function MetricMain({ label, value, note, className, children }: {
         </div>
       </div>
       {children}
-      {note && <p className="text-body-1 text-[var(--color-500)] text-pretty mt-auto pt-6"><Bold text={note} /></p>}
+      {note && <p className="text-body-2 text-[var(--color-500)] text-pretty mt-auto pt-6"><Bold text={note} /></p>}
     </div>
   )
 }

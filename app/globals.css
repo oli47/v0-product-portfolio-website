@@ -5,8 +5,7 @@
 /* ─────────────────────────────────────────────
    FONTS
    Loaded via next/font in layout.tsx.
-   DM Sans and DM Mono are available as CSS
-   variables --font-dm-sans / --font-dm-mono.
+   DM Sans is available as CSS variable --font-dm-sans.
    PP Mondwest and PP NeueBit are self-hosted.
 ───────────────────────────────────────────── */
 
@@ -67,28 +66,13 @@
   --background:    var(--white);       /* Page/layout background */
   --foreground:    var(--color-500);   /* Default text color */
   --border:        var(--color-100);   /* Default border color */
-  --border-md:     var(--color-150);   /* Medium border (discover button etc.) */
   --bg-card:       var(--color-000);   /* Card / hover background */
   --color-step-bg: var(--white);       /* Step box bg: 1 level lighter than --color-000 */
-  --nav-bg-blur: rgba(250, 247, 242, 0.92);
 
-  /* Next.js / Tailwind internals — do not use directly in components */
-  --card:                 var(--bg-card);
-  --card-foreground:      var(--foreground);
+  /* Shared by the shadcn-shaped dither-kit chart tooltip. It uses bg-popover /
+     text-popover-foreground, so these must map to real colours. */
   --popover:              var(--background);
   --popover-foreground:   var(--foreground);
-  --primary:              var(--foreground);
-  --primary-foreground:   var(--background);
-  --secondary:            var(--color-100);
-  --secondary-foreground: var(--foreground);
-  --muted:                var(--color-100);
-  --muted-foreground:     var(--color-300);
-  --accent-color:         var(--accent);
-  --accent-foreground:    var(--white);
-  --destructive:          oklch(0.577 0.245 27.325);
-  --input:                var(--border);
-  --ring:                 var(--color-300);
-  --radius:               4px;
 
   /* Page column. One source of truth — the nav and footer share this axis with
      the content, so they drift apart the moment it is set per file.
@@ -113,14 +97,8 @@
   --background:    var(--white);
   --foreground:    var(--color-500);
   --border:        var(--color-100);
-  --border-md:     var(--color-150);
   --bg-card:       var(--color-000);
   --color-step-bg: var(--color-100);  /* Step box bg: 1 level lighter than --color-000 in dark */
-  --nav-bg-blur: rgba(37, 33, 24, 0.92);
-
-  --card:               var(--bg-card);
-  --card-foreground:    var(--foreground);
-  --muted-foreground:   var(--color-300);
 }
 
 /* ─────────────────────────────────────────────
@@ -130,7 +108,6 @@
 
 @theme inline {
   --font-sans:    var(--font-dm-sans), sans-serif;
-  --font-mono:    var(--font-dm-mono), monospace;
   --font-display: 'PPMondwest', serif;
 
   --color-background: var(--background);
@@ -167,63 +144,15 @@
 
    Fonts:
    - font-display  PP Mondwest — display headings
-   - font-body     DM Sans — all prose and UI text
-   - font-mono     DM Mono — labels, metrics, nav, badges
-   - font-neubit   PP NeueBit — decorative arrows/icons only
+   - font-neubit   PP NeueBit — decorative arrows/icons and labels (text-eyebrow)
+   - DM Sans       — all prose and UI text
 ───────────────────────────────────────────── */
 
 /* font families */
 .font-display { font-family: 'PPMondwest', serif !important; }
 .font-neubit  { font-family: 'PPNeueBit', monospace !important; font-weight: 700; }
-.font-body    { font-family: var(--font-dm-sans), 'DM Sans', sans-serif; }
-.font-mono    { font-family: var(--font-dm-mono), 'DM Mono', monospace; }
 
-/* h1 — Hero headline. One per page. Clamps 40→52px for responsive. */
-.text-h1 {
-  font-family: 'PPMondwest', serif;
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: clamp(2.5rem, 6vw, 3.5rem);
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-}
-
-/* h2 — Section headline in project detail pages (Overview, Results…) */
-.text-h2 {
-  font-family: 'PPMondwest', serif;
-  font-size: clamp(1.75rem, 6vw, 2.5rem);   /* 28px → 40px */
-  line-height: clamp(2.25rem, 7vw, 3rem);
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-}
-
-/* h3 — Sub-section headings inside project pages */
-.text-h3 {
-  font-family: 'PPMondwest', serif;
-  font-size: clamp(1.5rem, 5vw, 2rem);      /* 24px → 32px */
-  line-height: clamp(2rem, 6vw, 2.5rem);
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-}
-
-/* h4 — Project card titles, list item headings, result metric values */
-.text-h4 {
-  font-family: 'PPMondwest', serif;
-  font-size: clamp(1.25rem, 4vw, 1.5rem);   /* 20px → 24px */
-  line-height: clamp(1.75rem, 5vw, 2rem);
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-}
-
-/* body-1 — Main prose: hero description, section paragraphs, currently section */
-.text-body-1 {
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-size: 1.0625rem;    /* 17px — 67 characters to the line in the 536px
-                              column, against 72 at 16px and 76 at 15px. */
-  line-height: 1.875rem;   /* 30px — holds the 1.76 ratio 16/28 had. */
-  font-weight: 400;
-}
-
-/* body-2 — Secondary prose: card descriptions, project detail body copy */
+/* body-2 — Prose and card descriptions */
 .text-body-2 {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-size: 0.875rem;     /* 14px */
@@ -234,10 +163,10 @@
 /* eyebrow — All mono uppercase labels: nav, metrics, badges, section labels,
              contact bar, experience dates, discover button, period fields */
 .text-eyebrow {
-  font-family: var(--font-dm-mono), 'DM Mono', monospace;
-  font-size: 0.75rem;      /* 12px */
-  line-height: 1.25rem;    /* 20px */
-  font-weight: 500;
+  font-family: 'PPNeueBit', monospace;
+  font-size: 1rem;         /* 16px */
+  line-height: 1.5rem;     /* 24px */
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0;
 }
@@ -248,20 +177,6 @@
 
 /* Prevent orphaned words at line ends (Chrome 117+) */
 .text-pretty { text-wrap: pretty; }
-
-/* Nav link: underline animates left → right on hover */
-.nav-link { position: relative; display: inline-block; }
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0;
-  width: 100%; height: 1px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 400ms ease-in-out;
-}
-.nav-link:hover::after { transform: scaleX(1); }
 
 /* ── Dark mode transition via View Transitions API ──────────────────────────
    Old theme frozen as screenshot. New theme clips via an SVG polygon that
@@ -276,20 +191,6 @@
 ::view-transition-new(root) {
   clip-path: url(#theme-pixel-clip);
 }
-
-/* Copied progress bar: depletes width over 1.5s */
-@keyframes progress-shrink {
-  from { width: 100%; }
-  to   { width: 0%; }
-}
-.animate-progress { animation: progress-shrink 1.5s linear forwards; }
-
-/* Status dot pulse */
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-}
-.animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
 
 /* ── Coded product-UI demos (components/demos) ──────────────────────────────
    These belong to the app being shown inside the case study frame, not to the
