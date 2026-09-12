@@ -214,6 +214,17 @@
 }
 .demo-screen-in { animation: demo-screen-in 220ms ease-out both; }
 
+/* A ring flashed around a demo the instant a scroll-linked step changes it —
+   see demo-scroll-steps.tsx. Re-keyed on every step, because the point is a
+   cue that fires on the change itself, not a state that could be missed by
+   scrolling past it: `demo-screen-in` says "this screen just arrived", this
+   says "look here, something on it just did". */
+@keyframes demo-step-flash {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+.demo-step-flash { animation: demo-step-flash 900ms ease-out both; }
+
 /* The lightbox's desktop/mobile toggle. The two layouts have different aspect
    ratios, so there is no size to interpolate that does not look broken halfway;
    the new one fades up in place instead. */
@@ -440,6 +451,7 @@
                       grid-row-start: auto; display: flex; }
   .cf-row           { align-items: center; }
   .demo-confetti    { animation: none; opacity: 0; }
+  .demo-step-flash  { animation: none; opacity: 0; }
   .demo-screen-in,
   .demo-grid-scroll,
   .demo-progress,

@@ -77,6 +77,17 @@ interface DemoFrameProps<M extends StageMetrics> {
    * showing and press it to no effect.
    */
   pinnedScreen?: number
+  /**
+   * Extra `values` frozen alongside `pinnedScreen`, merged over `restState`'s.
+   *
+   * A pinned frame does not replay the script up to its screen — it just
+   * shows `restState` with `screen` overridden — so a screen whose look also
+   * depends on a flag the script sets mid-run with `set` (not a `screen` it
+   * explicitly changes to) cannot be reached by `pinnedScreen` alone. This is
+   * for that: a caller that wants "the form, with the phone number already
+   * gone" rather than only "the form".
+   */
+  pinnedValues?: Record<string, string>
   variant?: DemoVariant
   /**
    * Which axis the caller is sizing by.
@@ -109,10 +120,10 @@ interface DemoFrameProps<M extends StageMetrics> {
 }
 
 /** What a demo component takes and forwards straight to its frame. */
-export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'pinnedScreen' | 'variant' | 'fit'>
+export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'pinnedScreen' | 'pinnedValues' | 'variant' | 'fit'>
 
 export function DemoFrame<M extends StageMetrics>({
-  script, restState, metrics, children, play, pinnedScreen, variant = 'inline', fit = 'width',
+  script, restState, metrics, children, play, pinnedScreen, pinnedValues, variant = 'inline', fit = 'width',
   holdLastFrame = false, ink, typeface,
 }: DemoFrameProps<M>) {
   const hostRef = useRef<HTMLDivElement>(null)
@@ -129,7 +140,9 @@ export function DemoFrame<M extends StageMetrics>({
 
   // Reduced motion never plays, so it lands on the poster like anything else.
   const resting = useDemoScript(script, (play ?? inView) && !reduced && !pinned, restState, holdLastFrame)
-  const state = pinned ? { ...resting, screen: pinnedScreen, pinned: true } : resting
+  const state = pinned
+    ? { ...resting, screen: pinnedScreen, values: { ...resting.values, ...pinnedValues }, pinned: true }
+    : resting
 
   // Scale the fixed-size stage down to the column width.
   useMeasure(() => {

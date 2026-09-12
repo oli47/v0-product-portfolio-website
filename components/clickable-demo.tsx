@@ -29,7 +29,7 @@ import type { DemoId } from '@/lib/projects'
  */
 const PHONE_W = 390
 
-export function ClickableDemo({ id, label, pinnedScreen, variant = 'inline' }: {
+export function ClickableDemo({ id, label, pinnedScreen, pinnedValues, variant = 'inline' }: {
   id: DemoId
   /** Names the demo for the button's accessible label. */
   label: string
@@ -37,6 +37,9 @@ export function ClickableDemo({ id, label, pinnedScreen, variant = 'inline' }: {
    *  ignores it and plays the whole thing, which is what the click is for: a
    *  still that opens into the same still would be a dead control. */
   pinnedScreen?: number
+  /** Extra frozen values alongside `pinnedScreen` — see `DemoFrame`. Also
+   *  ignored by the enlarged copy, for the same reason `pinnedScreen` is. */
+  pinnedValues?: Record<string, string>
   variant?: DemoVariant
 }) {
   const [open, setOpen] = useState(false)
@@ -57,7 +60,7 @@ export function ClickableDemo({ id, label, pinnedScreen, variant = 'inline' }: {
         {/* The demo takes no pointer events of its own, so the whole surface is
             the button however the reproduction is built. */}
         <div className="pointer-events-none">
-          <Demo variant={variant} pinnedScreen={pinnedScreen} />
+          <Demo variant={variant} pinnedScreen={pinnedScreen} pinnedValues={pinnedValues} />
         </div>
       </button>
 

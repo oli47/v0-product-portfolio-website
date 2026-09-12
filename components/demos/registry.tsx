@@ -6,6 +6,7 @@ import { FreemiumDemo } from '@/components/demos/freemium-demo'
 import { FreemiumSetupDemo } from '@/components/demos/freemium-setup-demo'
 import { SignupDemo } from '@/components/demos/signup-demo'
 import { SignupOldDemo } from '@/components/demos/signup-old-demo'
+import { SignupStoryDemo } from '@/components/demos/signup-story-demo'
 import type { DemoId } from '@/lib/projects'
 
 /**
@@ -15,6 +16,7 @@ import type { DemoId } from '@/lib/projects'
 export const DEMOS: Record<DemoId, React.ComponentType<DemoProps>> = {
   'signup': SignupDemo,
   'signup-old': SignupOldDemo,
+  'signup-story': SignupStoryDemo,
   'contacts': ContactsDemo,
   'freemium': FreemiumDemo,
   'freemium-setup': FreemiumSetupDemo,

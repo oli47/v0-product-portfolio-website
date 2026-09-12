@@ -1,10 +1,12 @@
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId = 'signup' | 'signup-old' | 'contacts' | 'freemium' | 'freemium-setup'
+export type DemoId = 'signup' | 'signup-old' | 'signup-story' | 'contacts' | 'freemium' | 'freemium-setup'
 
-/** One side of a comparison: either a screenshot or a coded demo. */
-export type CompareSide = { label: string } & ({ src: string } | { demo: DemoId })
+/** One side of a comparison: either a screenshot or a coded demo. `step` only
+ *  does anything on a `demo` side — it freezes that demo on one screen of its
+ *  script, the same way the standalone `demo` block's `step` does. */
+export type CompareSide = { label: string; step?: number } & ({ src: string } | { demo: DemoId })
 
 export type ProcessBlock =
   | { kind: 'text'; content: string }
@@ -26,6 +28,21 @@ export type ProcessBlock =
    *  demo plays while it is on screen. Only one per page should be left
    *  playing: two moving pictures in one column compete rather than read. */
   | { kind: 'demo'; demo: DemoId; step?: number; caption?: string }
+  /**
+   * A demo pinned in a sticky column beside prose that scrolls past it, one
+   * paragraph lit up at a time as it crosses the reading line — the same demo
+   * instance the whole way down, re-pinned to each step's own screen/values
+   * rather than one still per paragraph. Put nothing after it in `sections`
+   * that should sit inside the same scroll span: the sticky column's height
+   * is exactly its own steps stacked, and anything meant to read once the
+   * reader has scrolled past the last one belongs in its own block after it,
+   * not appended to the last step's text.
+   */
+  | {
+      kind: 'scroll-steps'
+      demo: DemoId
+      steps: { text: string[]; pinnedScreen?: number; pinnedValues?: Record<string, string> }[]
+    }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -375,7 +392,9 @@ export const projects: Project[] = [
               {
                 label: 'Before',
                 text: 'Four fields in one pass, with SSO under the form it would have filled in.',
-                demo: 'signup-old',
+                demo: 'signup-story',
+                // Screen 1 of the story script: the old form, all four fields.
+                step: 1,
               },
             ],
           },
@@ -402,30 +421,46 @@ export const projects: Project[] = [
         badge: 'Solution',
         blocks: [
           {
-            kind: 'text',
-            content: 'The obvious fix was the phone number it asked for. The check on it was the one person who actually used it: the salesperson who cold-called every quiet signup, who said there was no value in the calls. The field came out, and it stayed out.',
+            kind: 'scroll-steps',
+            demo: 'signup-story',
+            steps: [
+              {
+                // The untouched, four-field original — same pinned frame as
+                // the Problem section's, a deliberate bridge into the fixes.
+                text: ['Time to act on what the research had found.'],
+                pinnedScreen: 1,
+              },
+              {
+                text: [
+                  '**The main change was cutting the phone number.** I checked with Sales whether it still had value — it was marginal. One field gone.',
+                ],
+                pinnedScreen: 1,
+                pinnedValues: { phonePhase: 'gone' },
+              },
+              {
+                text: [
+                  'The next change was **finally making SSO work**, so users could create an account with Google or Shopify.',
+                ],
+                pinnedScreen: 1,
+                pinnedValues: { phonePhase: 'gone', namePhase: 'gone', urlPhase: 'gone', splitDone: '1' },
+              },
+              {
+                text: [
+                  'Then came the third change. Creating an account still required the store\'s URL, so — against convention — **I split that step in two**, which let the SSO flow run clean. After the account was created, the user gave the store\'s URL and their name, for Support and in-app personalization.',
+                ],
+                pinnedScreen: 2,
+              },
+              {
+                text: [
+                  'I drafted a prototype in Figma. After talking it through with a developer, it needed some backend work, so I took the frontend myself, in Codex.',
+                ],
+                pinnedScreen: 3,
+              },
+            ],
           },
           {
             kind: 'text',
-            content: 'The second was making SSO real. We had just added Shopify alongside Google, so it had to actually create the account across both providers.',
-          },
-          {
-            kind: 'text',
-            content: 'Then I went further and split the form to make signing up feel lighter and to capture the account earlier. **Step 1 now creates the account from an email address or SSO. Step 2 collects name and store URL.**',
-          },
-          {
-            kind: 'compare',
-            before: { demo: 'signup-old', label: 'Before' },
-            after: { demo: 'signup', label: 'After' },
-            caption: 'Before: four fields in one pass, with SSO under the form it would have filled in. After: step 1 creates the account, step 2 collects what the product needs.',
-          },
-          {
-            kind: 'text',
-            content: 'More steps normally means less conversion. My bet was that what people see at the moment of the decision matters more than how many steps follow, and the result says it did. Anyone who drops out of step 2 already has an account, so recovery paths in Intercom bring them back. The friction moved to after the contact rather than before it.',
-          },
-          {
-            kind: 'text',
-            content: 'I designed and built the flow in a single pass, standing on the design system already in the codebase. **Five hours** was the whole cycle from diagnosis through shipped product, which is the point of working this way: a design decision goes from judgment to evidence in the same afternoon, not a sprint later.',
+            content: "And that's how we shipped the new signup flow in **five hours**.",
           },
         ],
       },

@@ -6,6 +6,7 @@ import { Bold } from '@/components/bold'
 import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
 import { CompareSlider } from '@/components/compare-slider'
+import { DemoScrollSteps } from '@/components/demo-scroll-steps'
 import { DEMOS } from '@/components/demos/registry'
 import { ContactFlowDiagram } from '@/components/process-diagrams'
 import { Slideshow } from '@/components/slideshow'
@@ -60,7 +61,7 @@ export const FRAME_PAD = 'p-6 sm:p-10'
 function compareSide(side: CompareSide) {
   if ('demo' in side) {
     const Demo = DEMOS[side.demo]
-    return <Demo />
+    return <Demo pinnedScreen={side.step} />
   }
   return (
     <Image
@@ -186,7 +187,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                   className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out ${FRAME_PAD}`}
                   style={{ backgroundColor: 'var(--color-000)' }}
                 >
-                  <div className="grid gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-12 items-start">
+                  <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12 items-start">
                     <div className="flex flex-col gap-4">
                       {block.text.map((text, j) => (
                         <p key={j} className="text-body-2 text-[var(--color-500)] text-pretty">
@@ -208,6 +209,20 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     <p className="text-body-2 text-[var(--color-500)] text-center mt-6">{block.caption}</p>
                   )}
                 </div>
+              </div>
+            )
+          }
+
+          case 'scroll-steps': {
+            // No card wrapper here, unlike every other block: the sticky
+            // panel inside `DemoScrollSteps` carries its own card styling
+            // (same background, radius and `FRAME_PAD`), sized to itself
+            // rather than to the tall, invisible scroll track around it. A
+            // card wrapped around the whole track would be as tall as the
+            // track — mostly empty beige once the panel pins.
+            return (
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
+                <DemoScrollSteps demo={block.demo} steps={block.steps} />
               </div>
             )
           }
