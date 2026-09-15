@@ -1,13 +1,14 @@
 'use client'
 
+import { useTarget } from '@/components/demos/demo-cursor'
 import { C, Screen } from '@/components/demos/edrone-tokens'
 import {
-  Field, Heading, Label, MOBILE, type Metrics, Subtitle, YellowButton,
+  Field, Heading, Label, MOBILE, type Metrics, Subtitle,
 } from '@/components/demos/signup-ui'
 import type { DemoState } from '@/components/demos/use-demo-script'
 
 /**
- * Pieces unique to the signup story: the fake landing page it opens on, the
+ * Pieces unique to the signup story: the real landing page it opens on, the
  * field that visibly leaves the old form, the step indicator the split form
  * gains, and the success beat it ends on. Everything else — the old form's
  * remaining fields, the new flow's two steps — is `signup-ui.tsx` unchanged,
@@ -15,16 +16,6 @@ import type { DemoState } from '@/components/demos/use-demo-script'
  */
 
 export interface StoryMetrics extends Metrics {
-  /** Landing screen. An original composition, not a screenshot — unlike the
-   *  rest of this file's numbers, these are chosen rather than measured. */
-  navH: number
-  landingMark: number
-  landingHeroH: number
-  gapHeadlineSub: number
-  gapSubHero: number
-  gapHeroCta: number
-  gapCtaFeatures: number
-
   /** The step-dot pair STEP1/STEP2 gain, that the old form never had. */
   gapDotsHeading: number
 
@@ -45,8 +36,6 @@ export interface StoryMetrics extends Metrics {
  */
 export const STORY: StoryMetrics = {
   ...MOBILE,
-  navH: 52, landingMark: 20, landingHeroH: 168,
-  gapHeadlineSub: 10, gapSubHero: 24, gapHeroCta: 24, gapCtaFeatures: 20,
   gapDotsHeading: 14,
   ring: 40, gapRingHeading: 22, gapHeadingSub: 6,
   confetti: 8,
@@ -61,89 +50,53 @@ export function metricsForStory(): StoryMetrics {
 // ─── Landing ─────────────────────────────────────────────────────────────────
 
 /**
- * A generic landing draft — deliberately not a copy of edrone's real
- * marketing site, down to the invented product name. The point of this beat
- * is "a visitor lands on a website and clicks sign up", so it is built like a
- * page — a nav bar pinned to the top, a scrollable-feeling hero under it —
- * rather than like one more centred app dialog.
+ * edrone's real marketing site, not a coded reproduction — the one screen in
+ * this whole story that is a screenshot rather than a rebuild. Every other
+ * screen here is the product itself, reproduced in code because the point is
+ * to show exactly what changed in it; this one only has to read as "a
+ * website", and a hand-drawn stand-in for that read as a stand-in. The real
+ * thing is one image and free.
+ *
+ * The tap target is an invisible box over the real "Try now for free" button.
+ * Its source position was measured by scanning the file for the button's own
+ * dark pixels, not eyeballed: x 22.1-77.8%, y 44.9-51.4% of the 918×1806 PNG.
+ * `object-fit: cover` with `object-position: top` only ever crops the
+ * image's own bottom edge (the stage is slightly wider, relatively, than the
+ * screenshot), never its sides, so the x fraction carries over unchanged —
+ * but the y fraction does not: cover scales the image up until it fills the
+ * stage's width, which stretches it past the stage's height too, so a y
+ * fraction measured against the *uncropped* source has to be rescaled by
+ * that same zoom factor to land on the right pixel of the *cropped* stage.
+ * The box below is that rescaled result, not the raw source fraction.
  */
-export function LandingScreen({ state, m }: { state: DemoState; m: StoryMetrics }) {
+export function LandingScreen({ state }: { state: DemoState; m: StoryMetrics }) {
+  const ref = useTarget('cta')
+  const pressed = state.pressed === 'cta'
+
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="relative h-full w-full overflow-hidden">
+      {/* eslint-disable-next-line @next/next/no-img-element -- a fixed-size
+          stage inside a scaled, transformed demo frame; next/image's own
+          responsive sizing has nothing to measure against here. */}
+      <img
+        src="/images/sf-landing.png"
+        alt=""
+        aria-hidden
+        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+      />
       <div
-        className="flex shrink-0 items-center justify-between"
-        style={{ height: m.navH, padding: `0 ${m.mobile ? 20 : 32}px`, borderBottom: `1px solid ${C.border}` }}
-      >
-        <span className="flex items-center" style={{ gap: 8 }}>
-          <span
-            aria-hidden
-            style={{ width: m.landingMark, height: m.landingMark, borderRadius: 5, background: C.yellow, border: `1px solid ${C.ink}` }}
-          />
-          <span style={{ fontSize: m.mobile ? 15 : 18, fontWeight: 700, letterSpacing: '-0.01em' }}>looply</span>
-        </span>
-        <BurgerMark />
-      </div>
-
-      {/* Anchored under the nav with its own padding, not centred in whatever
-          height the frame around this demo happens to give it: a real hero
-          sits right under the header, and centring it in a tall "inline"
-          frame left a gap under the nav no real page would have. */}
-      <div
-        className="flex flex-1 flex-col items-center"
-        style={{ padding: `${Math.round(m.stageH * 0.08)}px ${m.mobile ? 24 : 0}px 0` }}
-      >
-        <div className="demo-screen-in flex flex-col items-center" style={{ width: m.mobile ? '100%' : m.column }}>
-          <Heading size={m.heading}>Marketing on autopilot</Heading>
-          <div style={{ marginTop: m.gapHeadlineSub, width: '100%' }}>
-            <Subtitle m={m}>Automated emails that bring shoppers back to buy again.</Subtitle>
-          </div>
-
-          <div
-            className="relative overflow-hidden"
-            style={{
-              marginTop: m.gapSubHero, width: '100%', height: m.landingHeroH, borderRadius: 8,
-              background: 'linear-gradient(146deg, #FFE37A 0%, #F2B33C 100%)',
-            }}
-          >
-            <span
-              style={{
-                position: 'absolute', left: 12, top: 12, padding: '4px 8px', borderRadius: 4,
-                background: 'rgba(5, 5, 5, 0.1)', fontSize: 11, fontWeight: 600, color: C.ink,
-              }}
-            >
-              New · Freemium
-            </span>
-          </div>
-
-          <div style={{ marginTop: m.gapHeroCta, width: '100%' }}>
-            <YellowButton target="cta" state={state} m={m}>Try now for free</YellowButton>
-          </div>
-
-          <div
-            className="flex items-center justify-center text-center"
-            style={{ marginTop: m.gapCtaFeatures, gap: 12, fontSize: 11, color: C.body }}
-          >
-            <span>No credit card</span>
-            <Dot />
-            <span>Free forever</span>
-            <Dot />
-            <span>2 min setup</span>
-          </div>
-        </div>
-      </div>
+        ref={ref as React.Ref<HTMLDivElement>}
+        aria-hidden
+        className="absolute rounded-md"
+        style={{
+          left: '22%', top: '49%', width: '56%', height: '7%',
+          background: pressed ? 'rgba(255, 255, 255, 0.28)' : 'transparent',
+          transition: 'background 120ms ease-out',
+        }}
+      />
     </div>
   )
 }
-
-const BurgerMark = () => (
-  <svg width={18} height={13} viewBox="0 0 18 13" fill="none" aria-hidden>
-    <path d="M1 1h16M1 6.5h16M1 12h16" stroke={C.ink} strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-)
-
-const Dot = () => (
-  <span aria-hidden style={{ width: 3, height: 3, borderRadius: '50%', background: C.muted }} />
-)
 
 // ─── Step indicator ──────────────────────────────────────────────────────────
 
@@ -170,31 +123,62 @@ export function StepDots({ active }: { active: 0 | 1 }) {
 
 // ─── The fields that leave ───────────────────────────────────────────────────
 
-/** A field's own place in the "this is leaving" beat: shown, then dimmed to
- *  flag it as the one about to go, then collapsed. */
-export type FieldPhase = 'visible' | 'fading' | 'gone'
-
-export const phaseOf = (v: string | undefined): FieldPhase =>
-  v === 'fading' || v === 'gone' ? v : 'visible'
+/**
+ * Reads a field's "how far has it left" as a plain 0-1 number: `'fading'` is
+ * partway, `'gone'` is all the way, undefined (never touched) is fully
+ * present.
+ */
+export const leaveOf = (v: string | undefined): number => {
+  if (v === undefined) return 0
+  const n = Number(v)
+  if (!Number.isNaN(n)) return Math.min(1, Math.max(0, n))
+  return v === 'gone' ? 1 : v === 'fading' ? 0.6 : 0
+}
 
 /**
- * A field that visibly leaves the form. Two different departures, because two
- * different things are happening to the product:
+ * `leaveOf`'s mirror, for the field's own other end: how far it has
+ * *arrived* (0 = not yet here, 1 = fully settled). Undefined reads as fully
+ * arrived, not fully absent — the inverse of `leaveOf`'s default — because
+ * every demo except the one this exists for (`SignupSplitArriveDemo`, step
+ * 2's own half of Name/Shop URL relocating) never touches `arrive` at all,
+ * and those fields have always simply been there.
+ */
+export const arriveOf = (v: string | undefined): number => {
+  if (v === undefined) return 1
+  const n = Number(v)
+  if (!Number.isNaN(n)) return Math.min(1, Math.max(0, n))
+  return v === 'here' ? 1 : v === 'entering' ? 0.6 : 0
+}
+
+/**
+ * A field that visibly leaves the form, continuously in `leave` (0 = fully
+ * present, 1 = fully gone) rather than a handful of named poses — `leaveOf`
+ * still only ever writes two discrete values (`'fading'`, `'gone'`) as a
+ * script plays, but reading them as one continuous number rather than a
+ * three-way switch keeps the CSS transition below the only thing animating
+ * the field, instead of also branching its own logic per pose.
  *
- * `remove` — the phone number. It dims in place, flagging it as the one about
- * to go, then its height collapses to exactly zero. Nothing about it survives.
+ * Two different departures, because two different things are happening to
+ * the product:
+ *
+ * `remove` — the phone number. It fades and shrinks in place. Nothing about
+ * it survives (`FormScreen` throws dust at it while `leave` is in between).
  *
  * `relocate` — Name and Shop URL. They are not deleted; the form splits and
- * they reappear on step 2. So instead of dimming in place they slide toward
- * where step 2 lives — right, the direction the step dots read — and fade as
- * they go, then the gap closes behind them. Sent onward, not deleted.
+ * they reappear on step 2. So instead of just dimming in place they also
+ * slide toward where step 2 lives — right, the direction the step dots read.
+ * Sent onward, not deleted.
  *
- * Either way the open height is computed from the same metrics that place
- * every other field, not eyeballed, so the row above and the row below meet
- * exactly where the field used to be.
+ * The open height is computed from the same metrics that place every other
+ * field, not eyeballed, so the row above and the row below meet exactly
+ * where the field used to be. It holds until `leave` is most of the way
+ * there, so the fade (or the slide) gets to read before the gap starts
+ * closing behind it, then collapses over the rest of `leave`'s own range —
+ * a real height, driven by scroll, rather than a fixed-duration collapse a
+ * CSS transition would have to guess the timing of.
  */
-export function CollapsibleField({ phase, mode = 'remove', label, name, placeholder, prefix, prefixWidth, state, m, topGap }: {
-  phase: FieldPhase
+export function CollapsibleField({ leave, mode = 'remove', label, name, placeholder, prefix, prefixWidth, state, m, topGap }: {
+  leave: number
   mode?: 'remove' | 'relocate'
   label: string
   name: string
@@ -211,29 +195,41 @@ export function CollapsibleField({ phase, mode = 'remove', label, name, placehol
   // Matches `Label`'s own explicit `lineHeight: 1.2` exactly.
   const labelH = Math.round(m.label * 1.2)
   const openH = gap + labelH + m.gapLabelField + m.fieldH
-  const collapsed = phase === 'gone'
-  const leaving = phase === 'fading'
+  const clamped = Math.min(1, Math.max(0, leave))
   const relocating = mode === 'relocate'
-  const leaveMs = relocating ? 340 : 260
+
+  const collapseFrom = 0.7
+  const collapseT = Math.min(1, Math.max(0, (clamped - collapseFrom) / (1 - collapseFrom)))
 
   return (
     <div
+      // `flex flex-col`, not the block default: `Label` renders a `<span>`
+      // (inline), and margin-top has no effect at all on an inline box (CSS
+      // 2.1 §8.3) — flex blockifies it, the same way `Screen`'s own
+      // `flex flex-col` already makes Email's identical `Label` behave
+      // correctly. Without this, `openH` below reserves the right amount of
+      // space but the label renders flush against the top of it, leaving the
+      // difference as dead space at the *bottom* — a gap that looks bigger
+      // than its neighbours', by exactly this field's own `topGap`.
+      className="flex flex-col"
       style={{
-        height: collapsed ? 0 : openH,
-        opacity: collapsed ? 0 : leaving ? (relocating ? 0 : 0.25) : 1,
-        transform: relocating && (leaving || collapsed) ? 'translateX(28px)' : 'none',
+        height: openH * (1 - collapseT),
+        opacity: 1 - clamped,
+        transform: relocating ? `translateX(${clamped * 64}px)` : 'none',
         overflow: 'hidden',
-        // The height holds for a beat after the field starts leaving, so the
-        // dim (or the slide) gets a moment to read before "gone" closes the gap.
-        transition: collapsed
-          ? `height 640ms cubic-bezier(.4, 0, .2, 1) 140ms, opacity ${leaveMs}ms ease-out, transform ${leaveMs}ms ease-out`
-          : `opacity ${leaveMs}ms ease-out, transform ${leaveMs}ms ease-out`,
+        // All three the same 300ms: they used to run height at 420ms, so
+        // once opacity and transform had already finished fading and
+        // sliding the field away, the row below it kept sliding up for
+        // another 120ms on its own — a lagging tail that read as a hiccup,
+        // most visible once there was a second card's motion right beside
+        // it to compare against.
+        transition: 'height 300ms cubic-bezier(.4, 0, .2, 1), opacity 300ms ease-out, transform 300ms ease-out',
       }}
     >
-      <Label m={m} style={{ marginTop: gap }}>{label}</Label>
+      <Label m={m} style={{ marginTop: gap, flexShrink: 0 }}>{label}</Label>
       <Field
         name={name} placeholder={placeholder} prefix={prefix} prefixWidth={prefixWidth}
-        state={state} m={m} style={{ marginTop: m.gapLabelField }}
+        state={state} m={m} style={{ marginTop: m.gapLabelField, flexShrink: 0 }}
       />
     </div>
   )
@@ -303,6 +299,68 @@ export function Confetti({ m }: { m: StoryMetrics }) {
               marginLeft: -m.confetti / 2,
               background: colours[i % colours.length],
               borderRadius: tall ? 2 : '50%',
+              ['--dx' as string]: `${Math.round(dx)}px`,
+              ['--dy' as string]: `${Math.round(dy)}px`,
+              ['--drop' as string]: `${Math.round(drop)}px`,
+              ['--spin' as string]: `${spin}deg`,
+              ['--fall' as string]: `${fall}s`,
+              ['--delay' as string]: `${delay}s`,
+            }}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+/**
+ * The phone number, breaking apart into dust rather than just fading — the
+ * field being *removed* (as opposed to Name/Shop URL, which *relocate*) gets
+ * a beat that reads as destruction, not a plain collapse. Reuses `Confetti`'s
+ * own mechanism verbatim: the same `.demo-confetti` class and `--dx`/`--dy`/
+ * `--drop`/`--spin`/`--fall`/`--delay` custom properties from `app/globals.css`,
+ * the same deterministic index-seeded vectors — only the palette (muted greys,
+ * not the product's status colours), the piece count, and the reach are
+ * different, because dust drifting off a deleted field is a much quieter
+ * event than a store connecting.
+ *
+ * `top`/`height` are the field's own measured box (from a ref in
+ * `FormScreen`, taken the instant it starts leaving) — not a formula guessed
+ * from the metrics that place it, because those would have to re-derive
+ * exactly how tall a two-line subtitle rendered above it, and a measurement
+ * is the whole point of "measure, never eyeball".
+ */
+export function DustBurst({ top, height, m }: { top: number; height: number; m: Metrics }) {
+  const colours = [C.border, C.muted, C.body]
+  const count = 22
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-x-0 z-20"
+      style={{ top: top + height / 2, height: 0 }}
+    >
+      {Array.from({ length: count }, (_, i) => {
+        const angle = (i / count) * Math.PI * 2 + ((i * 7) % 11) * 0.12
+        const reach = 0.35 + ((i * 31) % 50) / 100
+        const dx = Math.cos(angle) * m.column * 0.32 * reach
+        const dy = Math.sin(angle) * (height * 0.6) * reach
+        const drop = 22 + ((i * 19) % 18)
+        const spin = 90 + ((i * 97) % 200)
+        const fall = 0.55 + ((i * 29) % 30) / 100
+        const delay = ((i * 13) % 10) / 100
+        const size = 2 + (i % 3)
+        return (
+          <span
+            key={i}
+            className="demo-confetti absolute block rounded-full"
+            style={{
+              left: '50%',
+              top: 0,
+              width: size,
+              height: size,
+              marginLeft: -size / 2,
+              background: colours[i % colours.length],
               ['--dx' as string]: `${Math.round(dx)}px`,
               ['--dy' as string]: `${Math.round(dy)}px`,
               ['--drop' as string]: `${Math.round(drop)}px`,

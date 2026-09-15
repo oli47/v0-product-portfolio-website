@@ -8,26 +8,10 @@ import { XAxis } from '@/components/dither-kit/x-axis'
 import { YAxis } from '@/components/dither-kit/y-axis'
 import { Grid } from '@/components/dither-kit/grid'
 import { Tooltip } from '@/components/dither-kit/tooltip'
-import { PALETTE, type Rgb } from '@/components/dither-kit/palette'
+import { PALETTE } from '@/components/dither-kit/palette'
+import { hexToRgb, mix } from '@/components/dither-kit/site-colors'
 
 export type CohortPoint = { label: string; full: string; value: number }
-
-/** dither-kit resolves a series colour through a static PALETTE keyed by name,
- *  so the only way to make it follow the site's `--accent` (which flips between
- *  themes) is to rewrite the seed and hand the chart a fresh `config` object —
- *  the chart memoises its colour lookup on `config` identity. */
-const hexToRgb = (hex: string): Rgb | null => {
-  const m = /^#?([\da-f]{6})$/i.exec(hex.trim())
-  if (!m) return null
-  const n = parseInt(m[1], 16)
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-}
-
-const mix = ([r, g, b]: Rgb, amount: number): Rgb => [
-  Math.round(r + (255 - r) * amount),
-  Math.round(g + (255 - g) * amount),
-  Math.round(b + (255 - b) * amount),
-]
 
 export function CohortChart({
   data,

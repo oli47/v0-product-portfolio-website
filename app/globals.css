@@ -171,6 +171,20 @@
   letter-spacing: 0;
 }
 
+/* headline — The case-study hero's lead sentence (a claim, with an accent
+   number run inline into it), and anywhere else a display font carries a
+   short statement rather than a bare number (MetricMain's own, much larger
+   clamp) or a caption (text-body-2). Was a one-off arbitrary value
+   (clamp(1.25rem,4vw,1.75rem)) inline on the one element that used it; named
+   here so the next place that wants "a headline in the display face" reaches
+   for this instead of retyping the same size. */
+.text-headline {
+  font-family: 'PPMondwest', serif;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
 /* ─────────────────────────────────────────────
    UTILITIES & ANIMATIONS
 ───────────────────────────────────────────── */
@@ -213,17 +227,6 @@
   to   { opacity: 1; transform: none; }
 }
 .demo-screen-in { animation: demo-screen-in 220ms ease-out both; }
-
-/* A ring flashed around a demo the instant a scroll-linked step changes it —
-   see demo-scroll-steps.tsx. Re-keyed on every step, because the point is a
-   cue that fires on the change itself, not a state that could be missed by
-   scrolling past it: `demo-screen-in` says "this screen just arrived", this
-   says "look here, something on it just did". */
-@keyframes demo-step-flash {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-.demo-step-flash { animation: demo-step-flash 900ms ease-out both; }
 
 /* The lightbox's desktop/mobile toggle. The two layouts have different aspect
    ratios, so there is no size to interpolate that does not look broken halfway;
@@ -451,7 +454,6 @@
                       grid-row-start: auto; display: flex; }
   .cf-row           { align-items: center; }
   .demo-confetti    { animation: none; opacity: 0; }
-  .demo-step-flash  { animation: none; opacity: 0; }
   .demo-screen-in,
   .demo-grid-scroll,
   .demo-progress,

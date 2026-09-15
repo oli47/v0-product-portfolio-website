@@ -150,9 +150,17 @@ export function useDemoScript(
     }
 
     // Every reset keeps the cursor: the pointer is continuous for as long as the
-    // demo is playing, whatever the script does to the screen under it.
+    // demo is playing, whatever the script does to the screen under it. It
+    // resets to `poster`, not to a blank `EMPTY` — a script picks up from
+    // wherever its own `restState` says it starts (screen included), rather
+    // than always from screen 0 with nothing filled in. For a script whose
+    // `restState` is `{ screen: 0 }` (the common case), this is the same
+    // thing; it only matters for a script that is deliberately posed to start
+    // somewhere else — the signup story's own shorter demos, for instance,
+    // start on the form screen rather than the landing page, since that beat
+    // is the whole point of each one.
     const reset = (pass: number) =>
-      setState((s) => ({ ...EMPTY, cursor: s.cursor, run: pass }))
+      setState((s) => ({ ...poster, cursor: s.cursor, run: pass }))
 
     const run = async () => {
       let pass = 0

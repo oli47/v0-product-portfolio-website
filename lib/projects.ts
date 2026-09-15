@@ -1,12 +1,25 @@
+import type { BreakdownChart } from '@/components/breakdown-chart'
+
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId = 'signup' | 'signup-old' | 'signup-story' | 'contacts' | 'freemium' | 'freemium-setup'
+export type DemoId =
+  | 'signup-story'
+  | 'signup-story-phone' | 'signup-story-google' | 'signup-story-split' | 'signup-story-split-arrive' | 'signup-story-fixed'
+  | 'contacts' | 'freemium' | 'freemium-setup'
 
 /** One side of a comparison: either a screenshot or a coded demo. `step` only
  *  does anything on a `demo` side — it freezes that demo on one screen of its
- *  script, the same way the standalone `demo` block's `step` does. */
-export type CompareSide = { label: string; step?: number } & ({ src: string } | { demo: DemoId })
+ *  script, the same way the standalone `demo` block's `step` does. Omit it
+ *  and a demo side plays live instead, the same as the standalone block. */
+export type CompareSide = {
+  label: string
+  step?: number
+  /** Extra values frozen alongside `step`, the same way `DemoFrame`'s own
+   *  `pinnedValues` works — for a side that needs more than just a screen
+   *  index to show the right frame (e.g. a form with a field already gone). */
+  pinnedValues?: Record<string, string>
+} & ({ src: string } | { demo: DemoId })
 
 export type ProcessBlock =
   | { kind: 'text'; content: string }
@@ -28,21 +41,22 @@ export type ProcessBlock =
    *  demo plays while it is on screen. Only one per page should be left
    *  playing: two moving pictures in one column compete rather than read. */
   | { kind: 'demo'; demo: DemoId; step?: number; caption?: string }
-  /**
-   * A demo pinned in a sticky column beside prose that scrolls past it, one
-   * paragraph lit up at a time as it crosses the reading line — the same demo
-   * instance the whole way down, re-pinned to each step's own screen/values
-   * rather than one still per paragraph. Put nothing after it in `sections`
-   * that should sit inside the same scroll span: the sticky column's height
-   * is exactly its own steps stacked, and anything meant to read once the
-   * reader has scrolled past the last one belongs in its own block after it,
-   * not appended to the last step's text.
-   */
+  /** Two demos side by side in one card, no per-side caption — each side is
+   *  its own `Omit<CompareSide, 'label'>`, so one can play live while the
+   *  other holds a pinned frame (or both can do either). `text`, if given,
+   *  sits inside the same card above the two screens, rather than as its own
+   *  block before it — one visual unit, not a paragraph then a separate card. */
   | {
-      kind: 'scroll-steps'
-      demo: DemoId
-      steps: { text: string[]; pinnedScreen?: number; pinnedValues?: Record<string, string> }[]
+      kind: 'demo-pair'
+      text?: string[]
+      left: { step?: number; pinnedValues?: Record<string, string> } & ({ src: string } | { demo: DemoId })
+      right: { step?: number; pinnedValues?: Record<string, string> } & ({ src: string } | { demo: DemoId })
+      caption?: string
     }
+  /** Two plain screenshots side by side, one row, no demo machinery — the
+   *  process evidence a coded demo can't stand in for (a third-party tool's
+   *  own UI, e.g. an analytics dashboard or a session recorder). */
+  | { kind: 'image-pair'; left: { src: string; alt?: string }; right: { src: string; alt?: string }; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -112,6 +126,12 @@ export interface Project {
       label: string
       value: string
     }
+    /** A stacked-bar breakdown shown beside the north star in the same card —
+     *  e.g. desktop vs mobile, before vs after — rather than as more
+     *  `MetricMain` cards stacked below it. Only renders that composite
+     *  layout when both this and `northStar` are set; every project without
+     *  one keeps today's stacked cards untouched. */
+    breakdownChart?: BreakdownChart
     metrics: {
       value: string
       label: string
@@ -338,10 +358,9 @@ export const projects: Project[] = [
     title: 'Signup flow',
     description: 'Tripled signup conversion in five hours, with Codex.',
     card: {
-      lead: "Finding most signups died on the form, I rebuilt it so the first step alone creates an account,",
+      lead: "I rebuilt edrone's four-field signup around one first step, creating an account, with everything else after,",
       number: '+200%',
       label: 'signup conversion',
-      tail: 'in five hours of shipped product',
     },
     metrics: [
       { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
@@ -364,7 +383,16 @@ export const projects: Project[] = [
     },
     coverImage: '/images/sf-cover.png',
     thumbnailImage: '/images/sf-cover.png',
-    demo: 'signup',
+    // The redesigned story, not the old prototype `signup-demo.tsx` shows.
+    // Not the full narrative either, landing page included — that version
+    // still exists (`SignupStoryDemo`, kept alive by the Solution section's
+    // own pinned use of `'signup-story'`), but the click-to-enlarge lightbox
+    // ClickableDemo opens ignores every pin and always plays a demo's `id`
+    // from the top, so a hero built on it surfaced the landing page again
+    // however small the hero itself was capped. Both the hero and the home
+    // card play the shipped product only: the redesign's own history is the
+    // case study's job to tell, not this demo's.
+    demo: 'signup-story-fixed',
     sections: [
       {
         badge: 'Context',
@@ -386,12 +414,12 @@ export const projects: Project[] = [
             kind: 'split',
             text: [
               'The largest drop across the four-step funnel sat between clicking "Sign up free" and creating an account. **A mandatory phone number almost nobody used** was kept for one salesperson who cold-called quiet signups, and every signing-up user paid for it at the most expensive moment in the funnel.',
-              '"Sign up with Google" did not create an account. It took an address from the Google dialog and dropped the user back on the same four fields, now partly filled. **The button looked like a shortcut and behaved like autofill.**',
+              '**"Sign up with Google" did not create an account.** It took an address from the Google dialog and dropped the user back on the same four fields, now partly filled. The button looked like a shortcut and behaved like autofill.',
             ],
             sides: [
               {
-                label: 'Before',
-                text: 'Four fields in one pass, with SSO under the form it would have filled in.',
+                label: '',
+                text: '',
                 demo: 'signup-story',
                 // Screen 1 of the story script: the old form, all four fields.
                 step: 1,
@@ -401,11 +429,16 @@ export const projects: Project[] = [
         ],
       },
       {
-        badge: 'Approach',
+        badge: 'Research',
         blocks: [
           {
             kind: 'text',
             content: 'I started in Amplitude. I checked the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a short list of what I thought was wrong.',
+          },
+          {
+            kind: 'image-pair',
+            left: { src: '/images/sf-research-funnel.png', alt: 'The signup funnel in Amplitude' },
+            right: { src: '/images/sf-research-session.png', alt: 'A session recording of the signup flow' },
           },
           {
             kind: 'text',
@@ -421,61 +454,79 @@ export const projects: Project[] = [
         badge: 'Solution',
         blocks: [
           {
-            kind: 'scroll-steps',
-            demo: 'signup-story',
-            steps: [
-              {
-                // The untouched, four-field original — same pinned frame as
-                // the Problem section's, a deliberate bridge into the fixes.
-                text: ['Time to act on what the research had found.'],
-                pinnedScreen: 1,
-              },
-              {
-                text: [
-                  '**The main change was cutting the phone number.** I checked with Sales whether it still had value — it was marginal. One field gone.',
-                ],
-                pinnedScreen: 1,
-                pinnedValues: { phonePhase: 'gone' },
-              },
-              {
-                text: [
-                  'The next change was **finally making SSO work**, so users could create an account with Google or Shopify.',
-                ],
-                pinnedScreen: 1,
-                pinnedValues: { phonePhase: 'gone', namePhase: 'gone', urlPhase: 'gone', splitDone: '1' },
-              },
-              {
-                text: [
-                  'Then came the third change. Creating an account still required the store\'s URL, so — against convention — **I split that step in two**, which let the SSO flow run clean. After the account was created, the user gave the store\'s URL and their name, for Support and in-app personalization.',
-                ],
-                pinnedScreen: 2,
-              },
-              {
-                text: [
-                  'I drafted a prototype in Figma. After talking it through with a developer, it needed some backend work, so I took the frontend myself, in Codex.',
-                ],
-                pinnedScreen: 3,
-              },
+            // Each of the three changes gets its own short, live, looping
+            // demo — `signup-story-demo.tsx`'s `SignupPhoneRemoveDemo`, not
+            // a screenshot and not scroll-driven: it plays on its own once it
+            // is on screen, the same as every other demo on this page.
+            kind: 'split',
+            text: [
+              'Time to act on what the research had found.',
+              'The main change was **removing the phone number input**. I had to confirm with Sales whether it held real value; it turned out to be marginal, one to cut outright.',
+            ],
+            sides: [
+              { label: '', text: '', demo: 'signup-story-phone' },
             ],
           },
           {
+            kind: 'split',
+            text: [
+              "Next, SSO finally worked correctly, so **users could create an account through Google or Shopify**.",
+              "And that's where the third change came in: creating an account still required the shop's URL up front...",
+            ],
+            sides: [
+              { label: '', text: '', demo: 'signup-story-google' },
+            ],
+          },
+          {
+            // Left plays Name and Shop URL leaving (`SignupSplitDemo`);
+            // right plays them landing on the step 2 it's splitting into
+            // (`SignupSplitArriveDemo`) — two `DemoFrame`s on an identical
+            // timeline, not one pinned still, so the pair reads as one
+            // relocation rather than a before/after cut.
+            kind: 'demo-pair',
+            text: [
+              "So **I split that step into two**, an unpopular move, though it did streamline the SSO flow. After creating the account, the user supplied their shop link and name, for the Support team and in-app personalization.",
+            ],
+            left: { demo: 'signup-story-split' },
+            right: { demo: 'signup-story-split-arrive' },
+          },
+          {
             kind: 'text',
-            content: "And that's how we shipped the new signup flow in **five hours**.",
+            content: 'I put together a prototype draft in Figma, and after checking with a developer it turned out the whole thing needed some backend work, so I took the front end myself, in Codex.',
+          },
+          {
+            kind: 'text',
+            content: "And that's how we shipped **the new signup flow in five hours**.",
           },
         ],
       },
     ],
     results: {
-      note: 'Unique visitors who ended up with a created account, from **0.75% to 2.25%**. Conversion on to an integrated store did not move, so the extra signups were no worse than the ones before.',
-      summary: 'The bet was that what people see at the moment of the decision matters more than the number of steps. Step 1 creates the account, so anyone who drops off the second step is a user the funnel kept rather than lost.',
+      summary: "I waited three weeks before deciding whether the flow stayed or not. Given the site's average traffic, that was the least I'd trust the number, though honestly, I already knew the decision after the first few days of seeing the performance.",
+      note: '**Desktop, about 85% of the traffic, went from 1% to 2%; mobile, which had a dismal 0.05%, rose to 3%.**',
       northStar: {
         label: 'TOTAL SIGNUP CONVERSION',
         value: '+200%',
       },
+      // The +200% north star is the independently-measured total
+      // (0.75% → 2.25%), not something the chart below has to derive on
+      // its own. `share` here is picked so the chart's own blend lands on
+      // that same +200% (desktop and mobile as component facts, not a
+      // recomputation) — it's a looser fit than the "about 85%" in the
+      // note above, which is Olaf's own prose and stays as written.
+      breakdownChart: {
+        channels: [
+          { key: 'desktop', label: 'Desktop', share: 0.75 },
+          { key: 'mobile', label: 'Mobile', share: 0.25 },
+        ],
+        before: { desktop: 1, mobile: 0.05 },
+        after: { desktop: 2, mobile: 3 },
+      },
       metrics: [],
     },
     reflections: [
-      'I shipped three changes at once and gave up knowing which one worked better. Traffic was low enough that isolating each change would have meant at least three weeks per change to collect anything meaningful, and an A/B test would have taken longer still. With more traffic I would split it, but at that point I had to move quicker and leaner.',
+      'At the same time, I was aware of the risk that **rolling out three changes at once could make it hard to tell which one actually moved the needle**, especially splitting the form into two steps, so I tracked that one on its own. **Share of visitors who began filling the form went from 2.7% to 10%: desktop 3% to 10%, mobile 1% to 10%. Splitting the form was the bet, and this is what confirms it.**',
+      "For cleanliness, I would have shipped the phone number removal on its own, then SSO and the split together as a second phase, but I didn't have that much time at that point.",
     ],
   },
   {

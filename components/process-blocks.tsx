@@ -1,12 +1,11 @@
 'use client'
 
 import Image from 'next/image'
-import type { CompareSide, ProcessBlock } from '@/lib/projects'
+import type { DemoId, ProcessBlock } from '@/lib/projects'
 import { Bold } from '@/components/bold'
 import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
 import { CompareSlider } from '@/components/compare-slider'
-import { DemoScrollSteps } from '@/components/demo-scroll-steps'
 import { DEMOS } from '@/components/demos/registry'
 import { ContactFlowDiagram } from '@/components/process-diagrams'
 import { Slideshow } from '@/components/slideshow'
@@ -14,33 +13,21 @@ import { Slideshow } from '@/components/slideshow'
 /**
  * How far a visual block breaks out of the text column.
  *
- * The column is `--measure` (36rem) less its 5-unit padding, so 536px of text.
- * `-mx-8` put a frame at 600px; this takes it to 720px, which is not a taste
- * call: `section-nav.tsx` pins its rail at `calc(50% + 22.5rem + 2rem)`, so the
- * layout was already built expecting content up to 45rem with a 2rem gutter
- * beside it. A frame at 720px lands exactly on that gutter.
+ * Set to exactly `FRAME_PAD`'s own padding (`sm:p-10` → `sm:-mx-10`), not a
+ * larger figure: the two have to cancel, or the block's own prose sits at a
+ * different left edge than a plain `text` block does. A card that bleeds
+ * `n` and pads `n` is wider than the column by `2n` on the outside, but its
+ * content starts exactly where an un-bled paragraph's does — bigger, without
+ * the two reading as different columns.
  *
- * It buys legibility, which is the actual point. A demo is a fixed-size scene
- * scaled to whatever width the frame hands it, and the scenes differ: 1920 for
- * freemium, 1846 for the dashboard, 1340 for signup. At the old 600px frame the
- * freemium demo ran at scale 0.296, so a 14px label in the reproduced product
- * rendered at four pixels and the demo could only ever read as a decorative
- * screenshot. A 720px frame less `FRAME_PAD` leaves a 640px host, which is
- * 0.333 there and 0.347 on the dashboard. Every stage stays far above the 520px
- * floor where the demos switch to their phone layout.
- *
- * Those two numbers move whenever `FRAME_PAD` does. They are recorded because
- * the reason for this value is legibility, and a legibility argument with no
- * measurement in it is a preference.
- *
- * Only at `lg` and up. At the 768px `sm` breakpoint a 720px frame would leave
- * 4px of margin either side.
+ * No `lg:` step: `FRAME_PAD` does not add one either, so there is nothing
+ * past `sm` to match.
  *
  * Text-bearing blocks — `decisions`, and the Impact metric cards — deliberately
  * do not take this. Widening them widens the measure of the prose inside them,
  * which is the one thing `--measure` exists to hold.
  */
-export const BLEED_VISUAL = 'sm:-mx-8 lg:-mx-[5.75rem]'
+export const BLEED_VISUAL = 'sm:-mx-10'
 
 /**
  * The mat every framed block sits in.
@@ -57,16 +44,26 @@ export const BLEED_VISUAL = 'sm:-mx-8 lg:-mx-[5.75rem]'
  */
 export const FRAME_PAD = 'p-6 sm:p-10'
 
-/** One half of a comparison: a coded demo, or a screenshot filling the slider. */
-function compareSide(side: CompareSide) {
+/** A phone-shaped demo's own footprint wherever it renders alone rather than
+ *  in a grid column that halves the card width for it (the `split` block's
+ *  single-side layout does that for free) — the `demo-pair` block, and the
+ *  case-study hero when the project's own demo is phone-shaped. Wide enough
+ *  to read as a phone, narrow enough not to blow up into something that
+ *  looks like a stretched mobile screenshot filling a desktop-width card. */
+export const PHONE_MAX_W = 300
+
+/** One half of a comparison: a coded demo, or a screenshot filling the slider.
+ *  `label` is optional here (unlike on `CompareSide` itself) so the same
+ *  helper renders a `demo-pair` side too, which has no label of its own. */
+function compareSide(side: { step?: number; pinnedValues?: Record<string, string>; label?: string } & ({ src: string } | { demo: DemoId })) {
   if ('demo' in side) {
     const Demo = DEMOS[side.demo]
-    return <Demo pinnedScreen={side.step} />
+    return <Demo pinnedScreen={side.step} pinnedValues={side.pinnedValues} />
   }
   return (
     <Image
       src={side.src}
-      alt={side.label}
+      alt={side.label ?? 'Process image'}
       fill
       quality={95}
       sizes="(max-width: 768px) 100vw, 680px"
@@ -198,8 +195,8 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     <div className="flex flex-col gap-10">
                       {block.sides.map((side, j) => (
                         <div key={j} className="flex flex-col">
-                          <p className="text-eyebrow text-[var(--accent)] mb-2">{side.label}</p>
-                          <p className="text-body-2 text-[var(--color-500)] text-pretty mb-4">{side.text}</p>
+                          {side.label && <p className="text-eyebrow text-[var(--accent)] mb-2">{side.label}</p>}
+                          {side.text && <p className="text-body-2 text-[var(--color-500)] text-pretty mb-4">{side.text}</p>}
                           <div className="rounded-[0.125rem] overflow-hidden">{compareSide(side)}</div>
                         </div>
                       ))}
@@ -213,16 +210,78 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
             )
           }
 
-          case 'scroll-steps': {
-            // No card wrapper here, unlike every other block: the sticky
-            // panel inside `DemoScrollSteps` carries its own card styling
-            // (same background, radius and `FRAME_PAD`), sized to itself
-            // rather than to the tall, invisible scroll track around it. A
-            // card wrapped around the whole track would be as tall as the
-            // track — mostly empty beige once the panel pins.
+          case 'demo-pair': {
+            // Two phones side by side, `text` (if given) inside the same
+            // card above them, rather than as its own block before it — one
+            // visual unit. Each side is capped at 300px — wide enough to
+            // read as a phone, narrow enough that two sit comfortably in the
+            // 640px frame.
             return (
               <div key={i} className={`group ${BLEED_VISUAL}`}>
-                <DemoScrollSteps demo={block.demo} steps={block.steps} />
+                <div
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
+                >
+                  {block.text && (
+                    <div className="flex flex-col gap-4 mb-8">
+                      {block.text.map((text, j) => (
+                        <p key={j} className="text-body-2 text-[var(--color-500)] text-pretty">
+                          <Bold text={text} />
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
+                    {[block.left, block.right].map((side, j) => (
+                      <div key={j} className="w-full overflow-hidden rounded-[0.125rem]" style={{ maxWidth: PHONE_MAX_W }}>
+                        {compareSide(side)}
+                      </div>
+                    ))}
+                  </div>
+                  {block.caption && (
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-6">{block.caption}</p>
+                  )}
+                </div>
+              </div>
+            )
+          }
+
+          case 'image-pair': {
+            // Two plain screenshots, one row — a third-party tool's own UI
+            // (an analytics dashboard, a session recorder), which is the one
+            // kind of evidence a coded demo can't stand in for. No responsive
+            // stack to a single column: the pair reads as one comparison, so
+            // it stays a row at every width.
+            return (
+              <div key={i} className={`group ${BLEED_VISUAL}`}>
+                <div
+                  className={`w-full rounded-sm transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)] ${FRAME_PAD}`}
+                  style={{ backgroundColor: 'var(--color-000)' }}
+                >
+                  {/* Plain `Image`, not `ClickableImage`: these screenshots
+                      are only 323×184 natively, so the click-to-enlarge
+                      Lightbox (plus its own 2.5x zoom) would blow a source
+                      that small up to fill most of the viewport — visibly
+                      pixelated, not a closer look. */}
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {[block.left, block.right].map((side, j) => (
+                      <div key={j} className="rounded-[0.125rem] overflow-hidden">
+                        <Image
+                          src={side.src}
+                          alt={side.alt ?? 'Process image'}
+                          width={323}
+                          height={184}
+                          quality={95}
+                          sizes="(max-width: 640px) 50vw, 320px"
+                          className="w-full h-auto"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {block.caption && (
+                    <p className="text-body-2 text-[var(--color-500)] text-center mt-4">{block.caption}</p>
+                  )}
+                </div>
               </div>
             )
           }

@@ -1,6 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion } from "motion/react"
+import type { ReactNode } from "react"
 import { useState } from "react"
 import { useCommonChart } from "./common-context"
 import { cn } from "./lib"
@@ -22,10 +23,27 @@ export function Tooltip({
   labelKey,
   valueFormatter,
   variant = "default",
+  forceIndex,
+  order,
 }: {
   labelKey?: string
-  valueFormatter?: (value: number, name: string) => string
+  // PATCHED (site-specific): return type widened from `string` to
+  // `ReactNode` — a plain string still works untouched, but a caller that
+  // needs part of the value in a different weight/colour (e.g. a muted
+  // growth annotation beside the bold rate) can return JSX instead.
+  valueFormatter?: (value: number, name: string) => ReactNode
   variant?: TooltipVariant
+  // PATCHED (site-specific, not upstream): show/hide and position still
+  // follow the real hovered point, but the content pins to this index
+  // always — for a chart where only one point's story is worth a tooltip
+  // (e.g. a two-point growth curve, where only "after" has a rate to defend),
+  // rather than one that reshapes as the cursor crosses each point.
+  forceIndex?: number
+  // PATCHED (site-specific): row order as an array of series dataKeys.
+  // `chart.itemsAt` orders rows by the chart's own `config` key order, which
+  // also drives stacking — so a chart that stacks bottom-to-top in one order
+  // but wants to *list* top-to-bottom in another needs this to tell them apart.
+  order?: string[]
 }) {
   const chart = useCommonChart()
   const show = chart.ready && chart.hoverIndex != null
@@ -36,10 +54,15 @@ export function Tooltip({
   if (chart.hoverIndex != null && chart.hoverIndex !== lastIndex) {
     setLastIndex(chart.hoverIndex)
   }
-  const index = chart.hoverIndex ?? lastIndex
+  const index = forceIndex ?? (chart.hoverIndex ?? lastIndex)
 
   const heading = chart.heading(index, labelKey)
-  const items = chart.itemsAt(index)
+  const itemsAtIndex = chart.itemsAt(index)
+  const items = order
+    ? order
+        .map((name) => itemsAtIndex.find((item) => item.name === name))
+        .filter((item): item is (typeof itemsAtIndex)[number] => item != null)
+    : itemsAtIndex
 
   return (
     <AnimatePresence>
