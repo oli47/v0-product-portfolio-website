@@ -152,7 +152,7 @@ export default function ProjectPage() {
 
             Deliberately not <Bold>: the role sentence is the designer's own
             claim about their own work, the one place bold must never go. */}
-        <FadeUp>
+        <FadeUp scrollLinked>
           <div className="grid gap-16 sm:gap-10 md:grid-cols-2">
             {firstSection && (
               <section id={sectionId(firstSection.badge)}>
@@ -170,7 +170,7 @@ export default function ProjectPage() {
         </FadeUp>
 
         {project.sections.slice(1).map((section) => (
-          <FadeUp key={section.badge}>
+          <FadeUp key={section.badge} scrollLinked>
             <section id={sectionId(section.badge)}>
               <SectionBadge>{section.badge}</SectionBadge>
               <ProcessBlocks blocks={section.blocks} />
@@ -179,7 +179,7 @@ export default function ProjectPage() {
         ))}
 
         {/* Impact */}
-        <FadeUp>
+        <FadeUp scrollLinked>
           <section id={sectionId('Impact')}>
             <SectionBadge>Impact</SectionBadge>
 
@@ -235,7 +235,7 @@ export default function ProjectPage() {
 
         {/* Reflections */}
         {hasReflections && (
-          <FadeUp>
+          <FadeUp scrollLinked>
             <section id={sectionId('Reflections')}>
               <SectionBadge>Reflections</SectionBadge>
               <div className="flex flex-col gap-4">

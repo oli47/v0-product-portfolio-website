@@ -585,7 +585,7 @@ export function StepTwo({ state, m }: ScreenProps) {
         }}
       >
         <Label m={m} style={{ marginTop: m.gapFirstLabel - 5 }}>Name</Label>
-        <Field name="name" placeholder="" state={state} m={m} style={{ marginTop: m.gapLabelField }} />
+        <Field name="name" placeholder="John Doe" state={state} m={m} style={{ marginTop: m.gapLabelField }} />
 
         <Label m={m} style={{ marginTop: m.gapFieldLabel }}>Shop URL</Label>
         <Field

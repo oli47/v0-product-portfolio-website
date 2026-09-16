@@ -9,6 +9,11 @@ import { content, defaultLang } from '@/lib/content'
 
 const t = content[defaultLang].nav
 
+// Extra invisible hit-area padding on the logo and theme toggle, in px.
+// Paired everywhere with an equal negative margin so it grows only what's
+// clickable, not the visible glyph, its position, or the header's layout.
+const HIT_PAD = 16
+
 export function Nav() {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted]     = useState(false)
@@ -38,9 +43,15 @@ export function Nav() {
     setMounted(true)
 
     const capture = () => {
-      if (logoRef.current) baseLogoLeftRef.current = logoRef.current.getBoundingClientRect().left
+      // Both hit targets carry HIT_PAD of invisible padding, offset by an
+      // equal negative margin so neither their flex position nor their
+      // visible size moves — but that margin also pulls their own
+      // getBoundingClientRect() edges outward by HIT_PAD, so it's added
+      // back here to recover the visual (pre-padding) position this scroll
+      // transform is built around.
+      if (logoRef.current) baseLogoLeftRef.current = logoRef.current.getBoundingClientRect().left + HIT_PAD
       if (toggleRef.current) {
-        baseToggleRightRef.current = window.innerWidth - toggleRef.current.getBoundingClientRect().right
+        baseToggleRightRef.current = window.innerWidth - toggleRef.current.getBoundingClientRect().right + HIT_PAD
       }
       baseReadyRef.current = true
     }
@@ -207,7 +218,7 @@ export function Nav() {
           ref={logoRef}
           href="/"
           aria-label={showBack ? 'Back to home' : t.name}
-          className="group relative block pointer-events-auto"
+          className="group relative block pointer-events-auto p-4 -m-4"
           style={{ willChange: 'transform' }}
           onMouseEnter={handleLinkEnter}
           onMouseLeave={handleLinkLeave}
@@ -243,7 +254,7 @@ export function Nav() {
           ref={toggleRef}
           onClick={handleThemeToggle}
           aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-          className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out cursor-pointer pointer-events-auto p-2"
+          className="text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out cursor-pointer pointer-events-auto p-6 -m-4"
           style={{ willChange: 'transform' }}
           onMouseEnter={themeLabel.scramble}
           onMouseLeave={themeLabel.reset}

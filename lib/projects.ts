@@ -358,9 +358,9 @@ export const projects: Project[] = [
     title: 'Signup flow',
     description: 'Tripled signup conversion in five hours, with Codex.',
     card: {
-      lead: "I rebuilt edrone's four-field signup around one first step, creating an account, with everything else after,",
-      number: '+200%',
-      label: 'signup conversion',
+      lead: 'Redesigned the signup form and tripled conversion, delivered with AI in',
+      number: '5',
+      label: 'hours',
     },
     metrics: [
       { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
@@ -413,8 +413,8 @@ export const projects: Project[] = [
           {
             kind: 'split',
             text: [
-              'The largest drop across the four-step funnel sat between clicking "Sign up free" and creating an account. **A mandatory phone number almost nobody used** was kept for one salesperson who cold-called quiet signups, and every signing-up user paid for it at the most expensive moment in the funnel.',
-              '**"Sign up with Google" did not create an account.** It took an address from the Google dialog and dropped the user back on the same four fields, now partly filled. The button looked like a shortcut and behaved like autofill.',
+              'The four-step funnel lost the most people between clicking "Sign up free" and creating an account. **A mandatory phone number almost nobody used** stayed in the form for one salesperson who cold-called quiet signups, and every signing-up user paid for it at the most expensive moment in the funnel.',
+              '**"Sign up with Google" did not create an account.** It pulled a name and email from the Google dialog and dropped the user back on the same four fields, now partly filled. The button looked like a shortcut and behaved like autofill.',
             ],
             sides: [
               {
@@ -433,7 +433,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'I started in Amplitude. I checked the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a short list of what I thought was wrong.',
+            content: 'I started in Amplitude, checked that the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a dozen or so issues I thought were wrong.',
           },
           {
             kind: 'image-pair',
@@ -442,7 +442,7 @@ export const projects: Project[] = [
           },
           {
             kind: 'text',
-            content: 'Alongside it I ran a UX agent I had built on Claude across the flow. It walks the screens in a browser, clicks through them the way a user would, and returns a report with problem, description and severity.',
+            content: 'Alongside it, I ran a UX agent I\'d built on Claude through the flow. It walks the screens in a browser, clicks through them the way a user would, and comes back with a report: what\'s wrong, why, and how severe.',
           },
           {
             kind: 'text',
@@ -461,7 +461,7 @@ export const projects: Project[] = [
             kind: 'split',
             text: [
               'Time to act on what the research had found.',
-              'The main change was **removing the phone number input**. I had to confirm with Sales whether it held real value; it turned out to be marginal, one to cut outright.',
+              'The main change was **removing the phone number input**. I had to confirm with Sales whether it held real value; it turned out to be marginal, worth cutting outright.',
             ],
             sides: [
               { label: '', text: '', demo: 'signup-story-phone' },

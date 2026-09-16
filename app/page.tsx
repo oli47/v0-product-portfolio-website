@@ -58,15 +58,13 @@ const EXPERIENCE = [
 
 type CopiedId = 'email' | 'phone' | null
 
-type HoverId = 'resume' | 'linkedin' | 'email' | 'phone' | null
+type HoverId = 'email' | 'phone' | null
 
 function ContactBar() {
   const [copiedId, setCopiedId] = useState<CopiedId>(null)
   const [hoverId, setHoverId]   = useState<HoverId>(null)
-  const resume   = useScramble(t.contact.resume)
   const email    = useScramble(t.contact.email)
   const phone    = useScramble(t.contact.phone)
-  const linkedin = useScramble(t.contact.linkedin)
 
   const copy = useCallback((text: string, id: CopiedId) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -75,7 +73,6 @@ function ContactBar() {
     })
   }, [])
 
-  const labelCls = 'text-eyebrow text-[var(--color-300)]'
   const tooltipBase =
     'pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-10 flex items-center gap-1 rounded-[0.125rem] px-2 py-0.5 shadow-[0_2px_10px_2px_rgba(0,0,0,0.12)] whitespace-nowrap text-eyebrow transition-opacity duration-[400ms] ease-in-out opacity-0'
   // Light command tooltip (hover) — DS neutrals; accent tooltip for confirm.
@@ -83,66 +80,75 @@ function ContactBar() {
   const tooltipCopied = `${tooltipBase} bg-[var(--accent)] text-[var(--background)]`
   const tooltipSym   = 'font-neubit text-[0.75rem] leading-none'
 
-  // Single wrapping row, no symbols. Every label shows a hover tooltip with
-  // its command (open / copy); copy flips to an accent "copied" confirm.
+  // One flowing sentence, not a chip row: email and phone (copy on click)
+  // lead since they matter more, resume and LinkedIn (open) follow. Every
+  // word shows a hover tooltip with its command; copy flips to an accent
+  // "copied" confirm.
+  const linkCls =
+    'relative inline-block cursor-pointer hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out'
+  const wordCls = 'underline underline-offset-2 decoration-[var(--color-100)]'
   return (
-    <div className="flex flex-wrap items-center gap-y-3">
+    <p className="text-body-2 text-[var(--color-500)] mb-8 text-pretty">
+      {noOrphans(t.hero.contactLead)}
+      <button
+        onClick={() => copy(t.contact.email, 'email')}
+        aria-label={`Copy email: ${t.contact.email}`}
+        className={linkCls}
+        onMouseEnter={() => { setHoverId('email'); if (copiedId !== 'email') email.scramble() }}
+        onMouseLeave={() => { setHoverId(null); email.reset() }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="inline-block align-middle mr-1" aria-hidden="true">
+          <path d="M6 8h2v2H6zm2 2h2v2H8zm10-2h-2v2h2zm-2 2h-2v2h2zm-6 2h4v2h-4zM2 6h2v12H2zm18 0h2v12h-2zM4 4h16v2H4zm0 14h16v2H4z" />
+        </svg>
+        <span ref={email.spanRef} className={wordCls}>{t.contact.email}</span>
+        <span role="status" className={`${copiedId === 'email' ? tooltipCopied : tooltipOpen} ${hoverId === 'email' || copiedId === 'email' ? 'opacity-100' : ''}`}>
+          {copiedId === 'email' ? t.contact.copied : <>{t.contact.copy}<span className={`${tooltipSym} text-[var(--color-200)]`}>⧉</span></>}
+        </span>
+      </button>
+      {noOrphans(t.hero.contactOr)}
+      <button
+        onClick={() => copy(t.contact.phoneRaw, 'phone')}
+        aria-label={`Copy phone: ${t.contact.phone}`}
+        className={linkCls}
+        onMouseEnter={() => { setHoverId('phone'); if (copiedId !== 'phone') phone.scramble() }}
+        onMouseLeave={() => { setHoverId(null); phone.reset() }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="inline-block align-middle mr-1" aria-hidden="true">
+          <path d="M4 1h5v2H4zm5 2h2v4H9zM7 7h2v4H7zm-3 5h2v2H4zM2 3h2v9H2zm7 8h2v2H9zm2 2h2v2h-2zm2 2h4v2h-4zm4-2h4v2h-4zm4 2h2v5h-2zM6 14h2v2H6zm2 2h2v2H8zm2 2h2v2h-2zm2 2h9v2h-9z" />
+        </svg>
+        <span ref={phone.spanRef} className={wordCls}>{t.contact.phone}</span>
+        <span role="status" className={`${copiedId === 'phone' ? tooltipCopied : tooltipOpen} ${hoverId === 'phone' || copiedId === 'phone' ? 'opacity-100' : ''}`}>
+          {copiedId === 'phone' ? t.contact.copied : <>{t.contact.copy}<span className={`${tooltipSym} text-[var(--color-200)]`}>⧉</span></>}
+        </span>
+      </button>
+      {noOrphans(t.hero.contactBridge)}
       <a
         href="/olaf-resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Download resume (PDF)"
-        className="relative flex items-center cursor-pointer"
-        onMouseEnter={() => { setHoverId('resume'); resume.scramble() }}
-        onMouseLeave={() => { setHoverId(null); resume.reset() }}
+        className={linkCls}
       >
-        <span ref={resume.spanRef} aria-hidden="true" className={labelCls}>{t.contact.resume}</span>
-        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'resume' ? 'opacity-100' : ''}`}>
-          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
-        </span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="inline-block align-middle mr-1" aria-hidden="true">
+          <path d="M21 15v4h-2v-4zm-2 4v2H5v-2zM5 15v4H3v-4zm8-12v14h-2V3z" />
+          <path d="M7 11v2h10v-2zm2 2v2h2v-2zm4 0v2h2v-2z" />
+          <path d="M15 11v2h2v-2z" />
+        </svg>
+        <span className={wordCls}>{t.hero.closingResume}</span>
       </a>
-      <span className={labelCls}>,</span>
+      {noOrphans(t.hero.closingMid)}
       <a
         href="https://www.linkedin.com/in/olafotrzasek/"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="LinkedIn profile (opens in new tab)"
-        className="relative ml-2 flex items-center cursor-pointer"
-        onMouseEnter={() => { setHoverId('linkedin'); linkedin.scramble() }}
-        onMouseLeave={() => { setHoverId(null); linkedin.reset() }}
+        className={linkCls}
       >
-        <span ref={linkedin.spanRef} aria-hidden="true" className={labelCls}>{t.contact.linkedin}</span>
-        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'linkedin' ? 'opacity-100' : ''}`}>
-          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
-        </span>
+        <Image src="/logos/linkedin.svg" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
+        <span className={wordCls}>{t.hero.closingLinkedin}</span>
       </a>
-      <span className={labelCls}>,</span>
-      <button
-        onClick={() => copy(t.contact.email, 'email')}
-        aria-label={`Copy email: ${t.contact.email}`}
-        className="relative ml-2 flex items-center cursor-pointer"
-        onMouseEnter={() => { setHoverId('email'); if (copiedId !== 'email') email.scramble() }}
-        onMouseLeave={() => { setHoverId(null); email.reset() }}
-      >
-        <span ref={email.spanRef} className={labelCls}>{t.contact.email}</span>
-        <span role="status" className={`${copiedId === 'email' ? tooltipCopied : tooltipOpen} ${hoverId === 'email' || copiedId === 'email' ? 'opacity-100' : ''}`}>
-          {copiedId === 'email' ? t.contact.copied : <>{t.contact.copy}<span className={`${tooltipSym} text-[var(--color-200)]`}>⧉</span></>}
-        </span>
-      </button>
-      <span className={labelCls}>,</span>
-      <button
-        onClick={() => copy(t.contact.phoneRaw, 'phone')}
-        aria-label={`Copy phone: ${t.contact.phone}`}
-        className="relative ml-2 flex items-center cursor-pointer"
-        onMouseEnter={() => { setHoverId('phone'); if (copiedId !== 'phone') phone.scramble() }}
-        onMouseLeave={() => { setHoverId(null); phone.reset() }}
-      >
-        <span ref={phone.spanRef} className={labelCls}>{t.contact.phone}</span>
-        <span role="status" className={`${copiedId === 'phone' ? tooltipCopied : tooltipOpen} ${hoverId === 'phone' || copiedId === 'phone' ? 'opacity-100' : ''}`}>
-          {copiedId === 'phone' ? t.contact.copied : <>{t.contact.copy}<span className={`${tooltipSym} text-[var(--color-200)]`}>⧉</span></>}
-        </span>
-      </button>
-    </div>
+      {noOrphans(t.hero.closingEnd)}
+    </p>
   )
 }
 
@@ -170,15 +176,26 @@ export default function Home() {
                 href="https://edrone.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2 decoration-[var(--color-100)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+                className="hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
               >
-                {t.hero.bodyEdrone}
+                <Image src="/logos/logoedrone.png" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
+                <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyEdrone}</span>
               </a>
-              {noOrphans(t.hero.bodyPost)}
+              {noOrphans(t.hero.bodyMid)}
+              <a
+                href="https://claude.com/claude-code"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+              >
+                <Image src="/logos/claude-code.svg" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
+                <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyClaude}</span>
+              </a>
+              {noOrphans(t.hero.bodyEnd)}
             </p>
           </FadeUp>
 
-          <FadeUp delay={0.16}>
+          <FadeUp delay={0.12}>
             <ContactBar />
           </FadeUp>
         </section>

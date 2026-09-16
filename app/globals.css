@@ -155,7 +155,7 @@
 /* body-2 — Prose and card descriptions */
 .text-body-2 {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-size: 0.875rem;     /* 14px */
+  font-size: 0.9375rem;    /* 15px */
   line-height: 1.5rem;     /* 24px */
   font-weight: 400;
 }
@@ -164,7 +164,7 @@
              contact bar, experience dates, discover button, period fields */
 .text-eyebrow {
   font-family: 'PPNeueBit', monospace;
-  font-size: 1rem;         /* 16px */
+  font-size: 1.0625rem;    /* 17px */
   line-height: 1.5rem;     /* 24px */
   font-weight: 700;
   text-transform: uppercase;
