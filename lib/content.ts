@@ -10,7 +10,7 @@ export const content = {
       light: 'Light',
     },
     hero: {
-      positioning: 'Hey, I\u2019m Olaf. Enhancing things is what I actually like doing.',
+      positioning: 'Hey, I\u2019m Olaf. I just like making things better.',
       body: 'Product designer with 7+ years in SaaS. I design how a product works as much as how it looks, find what to fix in the data and ship it myself with\u00a0',
       bodyClaude: 'Claude Code',
       bodyMid: '. At\u00a0',
