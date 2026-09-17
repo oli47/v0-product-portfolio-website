@@ -186,7 +186,7 @@ export default function Home() {
                 href="https://claude.com/claude-code"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+                className="whitespace-nowrap hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
               >
                 <Image src="/logos/claude-code.svg" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
                 <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyClaude}</span>
@@ -196,7 +196,7 @@ export default function Home() {
                 href="https://edrone.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+                className="whitespace-nowrap hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
               >
                 <Image src="/logos/logoedrone.png" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
                 <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyEdrone}</span>
