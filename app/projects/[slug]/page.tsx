@@ -9,6 +9,7 @@ import { ClickableImage } from '@/components/clickable-image'
 import { CohortChart } from '@/components/cohort-chart'
 import { FadeUp } from '@/components/fade-up'
 import { ImpactSummaryCard, MetricMain } from '@/components/metric-card'
+import { CardSentence } from '@/components/card-sentence'
 import { BLEED_VISUAL, FRAME_PAD, PHONE_MAX_W, ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
@@ -136,11 +137,7 @@ export default function ProjectPage() {
               accent measure is kept from the home row. */}
           <div className="flex flex-col gap-3 mt-16">
             <h3 className="text-headline text-pretty">
-              {project.card.lead}{' '}
-              <span className="text-[var(--accent)] font-[450]">
-                {project.card.number} {project.card.label}
-              </span>
-              {project.card.tail && <> {project.card.tail}</>}
+              <CardSentence text={project.card.text} />
             </h3>
           </div>
 

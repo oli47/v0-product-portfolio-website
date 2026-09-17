@@ -74,13 +74,11 @@ export interface Project {
    *  under the header of the case study, and in its SEO, Open Graph, Twitter
    *  and JSON-LD metadata. There is no separate tagline to drift from it. */
   description: string
-  /** The card headline, composed as one sentence: the scrambled lead runs into
-   *  an accent number with its eyebrow label, all inline. */
+  /** The card headline, one sentence that carries its own accents. Anything
+   *  inside `[[ ]]` renders in the accent colour — at most two per sentence,
+   *  the second one always the number. Rendered by `CardSentence`. */
   card: {
-    lead: string
-    number: string
-    label: string
-    tail?: string
+    text: string
   }
   metrics: {
     value: string
@@ -159,10 +157,7 @@ export const projects: Project[] = [
     title: 'Freemium launch',
     description: "Freemium, edrone's first product-led channel after a decade of sales-led growth.",
     card: {
-      lead: 'Opened edrone to self-serve after ten years of sales-led growth, reaching',
-      number: '5,050',
-      label: 'stores in 11 months',
-      tail: 'with 7.8% converting to paid',
+      text: 'Opened edrone to self-serve after ten years of sales-led growth, reaching [[5,050 stores in 11 months]] with [[7.8% converting to paid]]',
     },
     metrics: [
       { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
@@ -358,9 +353,7 @@ export const projects: Project[] = [
     title: 'Signup flow',
     description: 'Tripled signup conversion in five hours, with Codex.',
     card: {
-      lead: 'Redesigned the signup form and tripled conversion, delivered with AI in',
-      number: '5',
-      label: 'hours',
+      text: 'Redesigned the signup form and [[tripled conversion]], delivered with AI in [[5 hours]]',
     },
     metrics: [
       { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
@@ -529,9 +522,7 @@ export const projects: Project[] = [
     title: 'Contacts identification',
     description: "Identified a third more of a shop's traffic, the metric behind half its revenue.",
     card: {
-      lead: "Reactivated stores' customers through a feature built with AI in a week, making",
-      number: '32%',
-      label: 'more of them reachable by automations',
+      text: "Reactivated stores' customers through a feature built with AI in a week, making [[32% more of them reachable by automations]]",
     },
     metrics: [
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
@@ -702,9 +693,7 @@ export const projects: Project[] = [
     title: 'PLO Genius',
     description: "The first PLO poker solver ever to run in a browser. Designed from zero as the sole designer.",
     card: {
-      lead: 'Sole designer of the first PLO solver in a browser, from research to design system, still live four years on with',
-      number: '120+',
-      label: 'paying subscribers',
+      text: 'Sole designer of the first PLO solver in a browser, from research to design system, still live [[four years on]] with [[120+ paying subscribers]]',
     },
     metrics: [
       { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },
