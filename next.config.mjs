@@ -4,6 +4,14 @@ const nextConfig = {
   // Lets a check build write somewhere other than `.next`, so it cannot pull the
   // rug out from under a dev server running in the same directory.
   distDir: process.env.NEXT_DIST_DIR || '.next',
+  // The browser's Save dialog names the file after the URL, so the resume
+  // lives under the name a recruiter should end up with. The old path stays
+  // alive for links already sent out.
+  async redirects() {
+    return [
+      { source: '/olaf-resume.pdf', destination: '/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf', permanent: true },
+    ]
+  },
   async headers() {
     return [
       {
