@@ -194,7 +194,7 @@ export function ProcessBlocks({ blocks }: { blocks: ProcessBlock[] }) {
                     </div>
                     <div className="flex flex-col gap-10">
                       {block.sides.map((side, j) => (
-                        <div key={j} className="flex flex-col">
+                        <div key={j} className={'demo' in side ? 'mx-auto flex w-full flex-col sm:w-[calc((100%-1.5rem)/2)] lg:mx-0 lg:-ml-3 lg:w-[calc(100%+0.75rem)]' : 'flex flex-col'} style={'demo' in side ? { maxWidth: PHONE_MAX_W } : undefined}>
                           {side.label && <p className="text-eyebrow text-[var(--accent)] mb-2">{side.label}</p>}
                           {side.text && <p className="text-body-2 text-[var(--color-500)] text-pretty mb-4">{side.text}</p>}
                           <div className="rounded-[0.125rem] overflow-hidden">{compareSide(side)}</div>

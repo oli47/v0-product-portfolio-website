@@ -11,12 +11,11 @@ export const content = {
     },
     hero: {
       positioning: 'Hey, I\u2019m Olaf. Enhancing things is what I actually like doing.',
-      body: 'A product designer for over 7 years now, the last four at\u00a0',
-      bodyEdrone: 'edrone',
-      bodyMid:
-        '. The logic behind a product matters to me as much as the interface on top of it. Data is where I find the next opportunity, and I ship the fix myself, with\u00a0',
+      body: 'Product designer with 7+ years in SaaS. I design how a product works as much as how it looks, find what to fix in the data and ship it myself with\u00a0',
       bodyClaude: 'Claude Code',
-      bodyEnd: '.',
+      bodyMid: '. At\u00a0',
+      bodyEdrone: 'edrone',
+      bodyEnd: ' I also covered the PM role, so I owned design end to end, from research to production.',
       contactLead: 'Email me at ',
       contactOr: ' or call ',
       contactBridge: '. My ',
@@ -30,6 +29,7 @@ export const content = {
       phone: '+48\u00a0732\u00a0188\u00a0613',
       phoneRaw: '+48732188613',
       copy: 'copy',
+      open: 'open',
       copied: '\u2713\u00a0Copied',
     },
     sections: {

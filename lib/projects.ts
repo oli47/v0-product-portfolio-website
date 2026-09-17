@@ -159,10 +159,10 @@ export const projects: Project[] = [
     title: 'Freemium launch',
     description: "Freemium, edrone's first product-led channel after a decade of sales-led growth.",
     card: {
-      lead: "I redesigned edrone's entry so a store could set itself up alone in minutes, reaching the small stores a decade of sales-led growth never could,",
+      lead: 'Opened edrone to self-serve after ten years of sales-led growth, reaching',
       number: '5,050',
-      label: 'stores acquired',
-      tail: 'in a year',
+      label: 'stores in 11 months',
+      tail: 'with 7.8% converting to paid',
     },
     metrics: [
       { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
@@ -436,11 +436,6 @@ export const projects: Project[] = [
             content: 'I started in Amplitude, checked that the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a dozen or so issues I thought were wrong.',
           },
           {
-            kind: 'image-pair',
-            left: { src: '/images/sf-research-funnel.png', alt: 'The signup funnel in Amplitude' },
-            right: { src: '/images/sf-research-session.png', alt: 'A session recording of the signup flow' },
-          },
-          {
             kind: 'text',
             content: 'Alongside it, I ran a UX agent I\'d built on Claude through the flow. It walks the screens in a browser, clicks through them the way a user would, and comes back with a report: what\'s wrong, why, and how severe.',
           },
@@ -534,9 +529,9 @@ export const projects: Project[] = [
     title: 'Contacts identification',
     description: "Identified a third more of a shop's traffic, the metric behind half its revenue.",
     card: {
-      lead: "I designed a sequence that re-identifies a shop's traffic every 30 days and starts switched on, lifting reachable traffic from 3.1% to 4.1%,",
-      number: '+32%',
-      label: 'identification rate',
+      lead: "Reactivated stores' customers through a feature built with AI in a week, making",
+      number: '32%',
+      label: 'more of them reachable by automations',
     },
     metrics: [
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
@@ -707,9 +702,9 @@ export const projects: Project[] = [
     title: 'PLO Genius',
     description: "The first PLO poker solver ever to run in a browser. Designed from zero as the sole designer.",
     card: {
-      lead: "Sole designer for a game I didn't play, I built research through poker stables, the first PLO solver in a browser, and the design system it runs on,",
-      number: '10+',
-      label: 'B2B API clients',
+      lead: 'Sole designer of the first PLO solver in a browser, from research to design system, still live four years on with',
+      number: '120+',
+      label: 'paying subscribers',
     },
     metrics: [
       { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },

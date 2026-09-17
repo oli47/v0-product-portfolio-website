@@ -58,7 +58,7 @@ const EXPERIENCE = [
 
 type CopiedId = 'email' | 'phone' | null
 
-type HoverId = 'email' | 'phone' | null
+type HoverId = 'email' | 'phone' | 'resume' | 'linkedin' | null
 
 function ContactBar() {
   const [copiedId, setCopiedId] = useState<CopiedId>(null)
@@ -128,6 +128,8 @@ function ContactBar() {
         rel="noopener noreferrer"
         aria-label="Download resume (PDF)"
         className={linkCls}
+        onMouseEnter={() => setHoverId('resume')}
+        onMouseLeave={() => setHoverId(null)}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="inline-block align-middle mr-1" aria-hidden="true">
           <path d="M21 15v4h-2v-4zm-2 4v2H5v-2zM5 15v4H3v-4zm8-12v14h-2V3z" />
@@ -135,6 +137,9 @@ function ContactBar() {
           <path d="M15 11v2h2v-2z" />
         </svg>
         <span className={wordCls}>{t.hero.closingResume}</span>
+        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'resume' ? 'opacity-100' : ''}`}>
+          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
+        </span>
       </a>
       {noOrphans(t.hero.closingMid)}
       <a
@@ -143,9 +148,14 @@ function ContactBar() {
         rel="noopener noreferrer"
         aria-label="LinkedIn profile (opens in new tab)"
         className={linkCls}
+        onMouseEnter={() => setHoverId('linkedin')}
+        onMouseLeave={() => setHoverId(null)}
       >
         <Image src="/logos/linkedin.svg" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
         <span className={wordCls}>{t.hero.closingLinkedin}</span>
+        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'linkedin' ? 'opacity-100' : ''}`}>
+          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
+        </span>
       </a>
       {noOrphans(t.hero.closingEnd)}
     </p>
@@ -173,16 +183,6 @@ export default function Home() {
             <p className="text-body-2 text-[var(--color-500)] mb-8 text-pretty">
               {noOrphans(t.hero.body)}
               <a
-                href="https://edrone.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
-              >
-                <Image src="/logos/logoedrone.png" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
-                <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyEdrone}</span>
-              </a>
-              {noOrphans(t.hero.bodyMid)}
-              <a
                 href="https://claude.com/claude-code"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -190,6 +190,16 @@ export default function Home() {
               >
                 <Image src="/logos/claude-code.svg" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
                 <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyClaude}</span>
+              </a>
+              {noOrphans(t.hero.bodyMid)}
+              <a
+                href="https://edrone.me/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"
+              >
+                <Image src="/logos/logoedrone.png" alt="" width={14} height={14} className="inline-block align-middle mr-1" />
+                <span className="underline underline-offset-2 decoration-[var(--color-100)]">{t.hero.bodyEdrone}</span>
               </a>
               {noOrphans(t.hero.bodyEnd)}
             </p>
