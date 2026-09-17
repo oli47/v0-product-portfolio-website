@@ -123,7 +123,7 @@ function ContactBar() {
       </button>
       {noOrphans(t.hero.contactBridge)}
       <a
-        href="/olaf-resume.pdf"
+        href="/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Download resume (PDF)"
