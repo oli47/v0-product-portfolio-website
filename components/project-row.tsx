@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useCursorFollow } from '@/components/cursor-follow'
 import { DEMOS } from '@/components/demos/registry'
-import { ScrambleText } from '@/components/scramble-text'
+import { CardSentence } from '@/components/card-sentence'
 import { content, defaultLang } from '@/lib/content'
 import type { Project } from '@/lib/projects'
 
@@ -95,11 +95,7 @@ export function ProjectRow({ project }: { project: Project }) {
       <div className="flex flex-col-reverse gap-3 py-3 sm:flex-row sm:items-start sm:gap-10 sm:py-4">
         <div className="flex min-w-0 flex-col gap-1 sm:flex-1">
           <p className="text-body-2 text-[var(--color-500)] text-pretty underline-offset-[0.16em] decoration-[var(--accent)] transition-[text-decoration-color] duration-[400ms] ease-in-out group-hover:underline">
-            <ScrambleText text={project.card.lead} active={hovered} />{' '}
-            <span className="text-[var(--accent)] font-[450]">
-              {project.card.number} {project.card.label}
-            </span>
-            {project.card.tail && <> {project.card.tail}</>}
+            <CardSentence text={project.card.text} scramble active={hovered} />
           </p>
         </div>
       </div>
