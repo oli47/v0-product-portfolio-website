@@ -15,15 +15,15 @@ const dmSans = DM_Sans({
 });
 
 const META_DESCRIPTION =
-  "Product designer with 7+ years in SaaS. I design how a product works as much as how it looks.";
+  "Olaf Otrząsek, Senior Product Designer with 7+ years in SaaS. I design how a product works as much as how it looks.";
 
 export const metadata: Metadata = {
-  title: { default: "Olaf Otrząsek • Design", template: "%s — Olaf Otrząsek" },
+  title: { default: "Olaf Otrząsek · Senior Product Designer", template: "%s — Olaf Otrząsek" },
   description: META_DESCRIPTION,
   metadataBase: new URL("https://www.olafotrzasek.com"),
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Olaf Otrząsek • Design",
+    title: "Olaf Otrząsek · Senior Product Designer",
     description: META_DESCRIPTION,
     url: "https://www.olafotrzasek.com",
     siteName: "Olaf Otrząsek",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Olaf Otrząsek • Design",
+    title: "Olaf Otrząsek · Senior Product Designer",
     description: META_DESCRIPTION,
     images: ["/images/og-thumbnail.png"],
   },
