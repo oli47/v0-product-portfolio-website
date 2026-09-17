@@ -46,7 +46,14 @@ export function ProjectRow({ project }: { project: Project }) {
           // lopsided, and the screen small for it. Shortening the slot to 1.68
           // and taking 91% of its width puts a 16px frame on all four sides of
           // all three, and buys the screens back about a ninth of their width.
-          <div className="demo-lift w-[91%] sm:h-[76%] sm:w-auto" data-lift={hovered}>
+          //
+          // Height binds above sm (see DemoFrame's `fit="card"` doc), so every
+          // demo here sits at the same fraction of the slot's height regardless
+          // of its own shape — and `items-end` dumps all the slack above it,
+          // not split top and bottom. At 76% that was a measured 75.7px band of
+          // beige above every demo (536x315 slot). Raised to 88% to roughly
+          // halve it, to ~38px, without changing the slot's own footprint.
+          <div className="demo-lift w-[91%] sm:h-[88%] sm:w-auto" data-lift={hovered}>
             <Demo variant="card" fit="card" play={hovered} />
           </div>
         ) : (

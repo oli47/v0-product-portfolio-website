@@ -7,16 +7,30 @@ import { Bold } from '@/components/bold'
 import { ClickableDemo } from '@/components/clickable-demo'
 import { ClickableImage } from '@/components/clickable-image'
 import { CohortChart } from '@/components/cohort-chart'
-import { MetricMain } from '@/components/metric-card'
-import { BLEED_VISUAL, FRAME_PAD, ProcessBlocks } from '@/components/process-blocks'
+import { FadeUp } from '@/components/fade-up'
+import { ImpactSummaryCard, MetricMain } from '@/components/metric-card'
+import { BLEED_VISUAL, FRAME_PAD, PHONE_MAX_W, ProcessBlocks } from '@/components/process-blocks'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { SectionBadge } from '@/components/section-badge'
 import { SectionNav, sectionId } from '@/components/section-nav'
 import { useScramble } from '@/lib/use-scramble'
+import type { DemoId } from '@/lib/projects'
 
 /** Its own badge, so the rail can carry it and it reads as a section rather
  *  than as a caption bolted to the header. */
 const MY_ROLE = 'My Role'
+
+/**
+ * Demos whose stage is a phone shape at any width, `variant`/`fit` included
+ * (`signup-story-demo.tsx`'s own `metricsForStory` ignores both, on purpose —
+ * the whole point of that family is that it is mobile, always). Every other
+ * demo switches to a desktop layout past `MOBILE_BREAKPOINT` and is meant to
+ * fill the hero's own width. Left to fill it too, a phone-shaped one scales
+ * up to match — the design meant for a ~300px card stretched to 600+,
+ * reading as a giant, blown-up mobile screenshot rather than a hero. Capped
+ * the same way the Solution section's own phones are.
+ */
+const MOBILE_ONLY_DEMOS = new Set<DemoId>(['signup-story-fixed'])
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
@@ -39,6 +53,7 @@ export default function ProjectPage() {
   const chartedMetrics = project.results.metrics.filter((m) => m.chart)
 
   const hasReflections = project.reflections && project.reflections.length > 0
+  const hasImpactSummary = Boolean(project.results.northStar && project.results.breakdownChart)
 
   // Context opens the page beside My Role: the facts of the product in one
   // column, the claim about the designer's part in it in the other, then the
@@ -81,7 +96,13 @@ export default function ProjectPage() {
                 className={`w-full rounded-sm ${FRAME_PAD} pb-0 sm:pb-0`}
                 style={{ backgroundColor: 'var(--color-000)' }}
               >
-                <ClickableDemo id={project.demo} label={project.title} variant="compact" />
+                {MOBILE_ONLY_DEMOS.has(project.demo) ? (
+                  <div className="mx-auto" style={{ maxWidth: PHONE_MAX_W }}>
+                    <ClickableDemo id={project.demo} label={project.title} variant="compact" />
+                  </div>
+                ) : (
+                  <ClickableDemo id={project.demo} label={project.title} variant="compact" />
+                )}
               </div>
             </div>
           ) : (
@@ -113,8 +134,8 @@ export default function ProjectPage() {
           {/* The card headline the homepage rows roll on, under the hero rather
               than above it: the screen first, the sentence that sums it up. The
               accent measure is kept from the home row. */}
-          <div className="flex flex-col gap-3 mt-8">
-            <h3 className="font-display text-[clamp(1.25rem,4vw,1.75rem)] leading-[1.2] text-balance">
+          <div className="flex flex-col gap-3 mt-16">
+            <h3 className="text-headline text-pretty">
               {project.card.lead}{' '}
               <span className="text-[var(--accent)] font-[450]">
                 {project.card.number} {project.card.label}
@@ -130,84 +151,102 @@ export default function ProjectPage() {
             narrative reads as its own sections under them.
 
             Deliberately not <Bold>: the role sentence is the designer's own
-            claim about their own work, which is the one place
-            CASE-STUDY-PATTERN.md says bold must never go. */}
-        <div className="grid gap-16 sm:gap-10 md:grid-cols-2">
-          {firstSection && (
-            <section id={sectionId(firstSection.badge)}>
-              <SectionBadge>{firstSection.badge}</SectionBadge>
-              <ProcessBlocks blocks={firstSection.blocks} />
+            claim about their own work, the one place bold must never go. */}
+        <FadeUp scrollLinked>
+          <div className="grid gap-16 sm:gap-10 md:grid-cols-2">
+            {firstSection && (
+              <section id={sectionId(firstSection.badge)}>
+                <SectionBadge>{firstSection.badge}</SectionBadge>
+                <ProcessBlocks blocks={firstSection.blocks} />
+              </section>
+            )}
+            <section id={sectionId(MY_ROLE)}>
+              <SectionBadge>{MY_ROLE}</SectionBadge>
+              <p className="text-body-2 text-[var(--color-500)] text-pretty">
+                {project.meta.myRole}
+              </p>
             </section>
-          )}
-          <section id={sectionId(MY_ROLE)}>
-            <SectionBadge>{MY_ROLE}</SectionBadge>
-            <p className="text-body-2 text-[var(--color-500)] text-pretty">
-              {project.meta.myRole}
-            </p>
-          </section>
-        </div>
+          </div>
+        </FadeUp>
 
         {project.sections.slice(1).map((section) => (
-          <section key={section.badge} id={sectionId(section.badge)}>
-            <SectionBadge>{section.badge}</SectionBadge>
-            <ProcessBlocks blocks={section.blocks} />
-          </section>
+          <FadeUp key={section.badge} scrollLinked>
+            <section id={sectionId(section.badge)}>
+              <SectionBadge>{section.badge}</SectionBadge>
+              <ProcessBlocks blocks={section.blocks} />
+            </section>
+          </FadeUp>
         ))}
 
         {/* Impact */}
-        <section id={sectionId('Impact')}>
-          <SectionBadge>Impact</SectionBadge>
+        <FadeUp scrollLinked>
+          <section id={sectionId('Impact')}>
+            <SectionBadge>Impact</SectionBadge>
 
-          {/* Read the outcome in prose, then meet it again in the cards. The
-              summary carries the story; the cards carry the definitions. */}
-          {project.results.summary && (
-            <p className="text-body-2 text-[var(--color-500)] text-pretty mb-8">
-              <Bold text={project.results.summary} />
-            </p>
-          )}
+            {/* Read the outcome in prose, then meet it again in the cards. The
+                summary carries the story; the cards carry the definitions. A
+                project with a `breakdownChart` (desktop vs mobile, say) tells
+                both in one `ImpactSummaryCard` instead — the prose stays paired
+                with the number it explains rather than sitting above it as its
+                own block. */}
+            {project.results.summary && !hasImpactSummary && (
+              <p className="text-body-2 text-[var(--color-500)] text-pretty mb-8">
+                <Bold text={project.results.summary} />
+              </p>
+            )}
 
-          {/* One column on every case study. Cards were side by side here and
-              stacked on freemium, which made the same section read as two
-              different layouts. Stacked wins: a metric gets the full measure for
-              its note, and a chart never has to share a row. */}
-          <div className="flex flex-col gap-3 sm:-mx-8">
-            {project.results.northStar && (
-              <MetricMain
-                label={project.results.northStar.label}
-                value={project.results.northStar.value}
-                /* The note defines the north-star number, so it belongs in that
-                   card rather than orphaned at the bottom of the section. */
-                note={project.results.note}
-              />
-            )}
-            {plainMetrics.map((metric, index) => (
-              <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
-            ))}
-            {chartedMetrics.map((metric, index) => (
-              <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description}>
-                <CohortChart data={metric.chart!.data} seriesLabel={metric.chart!.seriesLabel} />
-              </MetricMain>
-            ))}
-            {project.results.note && !project.results.northStar && (
-              <div className={`${FRAME_PAD} rounded-sm`} style={{ backgroundColor: 'var(--color-000)' }}>
-                <p className="text-body-2 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
-              </div>
-            )}
-          </div>
-        </section>
+            {/* One column on every case study. Cards were side by side here and
+                stacked on freemium, which made the same section read as two
+                different layouts. Stacked wins: a metric gets the full measure for
+                its note, and a chart never has to share a row. */}
+            <div className="flex flex-col gap-3 sm:-mx-8">
+              {project.results.northStar && project.results.breakdownChart ? (
+                <ImpactSummaryCard
+                  summary={project.results.summary}
+                  note={project.results.note}
+                  northStar={project.results.northStar}
+                  breakdownChart={project.results.breakdownChart}
+                />
+              ) : project.results.northStar && (
+                <MetricMain
+                  label={project.results.northStar.label}
+                  value={project.results.northStar.value}
+                  /* The note defines the north-star number, so it belongs in that
+                     card rather than orphaned at the bottom of the section. */
+                  note={project.results.note}
+                />
+              )}
+              {plainMetrics.map((metric, index) => (
+                <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description} />
+              ))}
+              {chartedMetrics.map((metric, index) => (
+                <MetricMain key={index} label={metric.label} value={metric.value} note={metric.description}>
+                  <CohortChart data={metric.chart!.data} seriesLabel={metric.chart!.seriesLabel} />
+                </MetricMain>
+              ))}
+              {project.results.note && !project.results.northStar && (
+                <div className={`${FRAME_PAD} rounded-sm`} style={{ backgroundColor: 'var(--color-000)' }}>
+                  <p className="text-body-2 text-[var(--color-500)] text-pretty"><Bold text={project.results.note} /></p>
+                </div>
+              )}
+            </div>
+          </section>
+        </FadeUp>
 
         {/* Reflections */}
         {hasReflections && (
-          <section id={sectionId('Reflections')}>
-            <SectionBadge>Reflections</SectionBadge>
-            <div className="flex flex-col gap-4">
-              {project.reflections.map((text, index) => (
-                <p key={index} className="text-body-2 text-[var(--color-500)] text-pretty">
-                  <Bold text={text} />
-                </p>
-              ))}
-            </div>
-          </section>
+          <FadeUp scrollLinked>
+            <section id={sectionId('Reflections')}>
+              <SectionBadge>Reflections</SectionBadge>
+              <div className="flex flex-col gap-4">
+                {project.reflections.map((text, index) => (
+                  <p key={index} className="text-body-2 text-[var(--color-500)] text-pretty">
+                    <Bold text={text} />
+                  </p>
+                ))}
+              </div>
+            </section>
+          </FadeUp>
         )}
 
         {/* Project navigation */}

@@ -71,7 +71,7 @@ export const DESKTOP: Metrics = {
   gapOAuthLegal: 51, gapLegalFooter: 51,
 }
 
-const MOBILE: Metrics = {
+export const MOBILE: Metrics = {
   mobile: true,
   stageW: 390, stageH: 700, column: 330,
   heading: 23, headingOld: 22, subtitle: 13, label: 12,
@@ -159,13 +159,26 @@ export const Heading = ({ children, size }: { children: React.ReactNode; size: n
 )
 
 export const Subtitle = ({ children, m }: { children: React.ReactNode; m: Metrics }) => (
-  <p style={{ marginTop: m.gapSubtitle, fontSize: m.subtitle, color: C.body }} className="text-center text-pretty">
+  <p
+    style={{ marginTop: m.gapSubtitle, fontSize: m.subtitle, lineHeight: 1.3, color: C.body }}
+    className="text-center text-pretty"
+  >
     {children}
   </p>
 )
 
+/**
+ * `lineHeight` is set tight and explicit, here and on every other small label
+ * in this file (`Field`, `Divider`, the button text): the page's own 1.5
+ * default inflates a 12-13px label with several extra pixels of leading, and
+ * a font's ascent/descent are rarely split evenly around that — DM Sans's
+ * isn't — so text centred by a flex row's `items-center` still reads as
+ * sitting high in its box. Tightening the line box is what actually centres
+ * the ink. `CollapsibleField`'s collapse height is measured off this same
+ * ratio, so the two never drift apart.
+ */
 export const Label = ({ children, m, style }: { children: React.ReactNode; m: Metrics; style?: React.CSSProperties }) => (
-  <span style={{ fontSize: m.label, fontWeight: 600, ...style }}>{children}</span>
+  <span style={{ fontSize: m.label, fontWeight: 600, lineHeight: 1.2, ...style }}>{children}</span>
 )
 
 export const Underlined = ({ children }: { children: React.ReactNode }) => (
@@ -175,7 +188,7 @@ export const Underlined = ({ children }: { children: React.ReactNode }) => (
 export const Divider = ({ children, m, style }: { children: React.ReactNode; m: Metrics; style?: React.CSSProperties }) => (
   <div style={style} className="flex items-center gap-3">
     <span className="h-px flex-1" style={{ background: C.border }} />
-    <span style={{ fontSize: m.dividerFont, color: C.body }}>{children}</span>
+    <span style={{ fontSize: m.dividerFont, lineHeight: 1.2, color: C.body }}>{children}</span>
     <span className="h-px flex-1" style={{ background: C.border }} />
   </div>
 )
@@ -220,6 +233,7 @@ export function Field({ name, placeholder, prefix, prefixWidth, state, m, style 
             background: C.surface,
             borderRight: `1px solid ${C.border}`,
             fontSize: m.fieldFont,
+            lineHeight: 1.2,
             color: C.body,
           }}
           className="flex shrink-0 items-center justify-center"
@@ -228,7 +242,7 @@ export function Field({ name, placeholder, prefix, prefixWidth, state, m, style 
         </span>
       )}
       <span
-        style={{ fontSize: m.fieldFont, paddingLeft: m.fieldPadX, paddingRight: m.fieldPadX }}
+        style={{ fontSize: m.fieldFont, lineHeight: 1.2, paddingLeft: m.fieldPadX, paddingRight: m.fieldPadX }}
         className="flex min-w-0 flex-1 items-center overflow-hidden whitespace-nowrap"
       >
         {value ? <span>{value}</span> : !focused && <span style={{ color: C.muted }}>{placeholder}</span>}
@@ -261,6 +275,7 @@ export function YellowButton({ target, state, m, children, style, height }: Yell
         border: `1px solid ${C.ink}`,
         background: C.yellow,
         fontSize: m.buttonFont,
+        lineHeight: 1.2,
         fontWeight: 600,
         transform: pressed ? 'scale(0.994)' : 'none',
         filter: pressed ? 'brightness(0.95)' : 'none',
@@ -273,24 +288,51 @@ export function YellowButton({ target, state, m, children, style, height }: Yell
   )
 }
 
-export const OAuthRow = ({ m, style }: { m: Metrics; style?: React.CSSProperties }) => (
+export const OAuthRow = ({ m, style, state }: { m: Metrics; style?: React.CSSProperties; state?: DemoState }) => (
   <div style={{ ...style, gap: m.oauthGap }} className="grid grid-cols-2">
-    <OAuthButton m={m} icon={<GoogleMark size={m.oauthIcon} />}>Google</OAuthButton>
-    <OAuthButton m={m} icon={<ShopifyMark size={m.oauthIcon} />}>Shopify</OAuthButton>
+    <OAuthButton target="google" state={state} m={m} icon={<GoogleMark size={m.oauthIcon} />}>Google</OAuthButton>
+    <OAuthButton target="shopify" state={state} m={m} icon={<ShopifyMark size={m.oauthIcon} />}>Shopify</OAuthButton>
   </div>
 )
 
-const OAuthButton = ({ icon, children, m }: { icon: React.ReactNode; children: React.ReactNode; m: Metrics }) => (
-  <div
-    style={{ height: m.oauthH, borderRadius: 6, border: `1px solid ${C.border}`, fontSize: m.oauthFont, fontWeight: 500 }}
-    className="flex items-center justify-center gap-2"
-  >
-    {icon}
-    {children}
-  </div>
-)
+/**
+ * `target`/`state` are only read by the signup story, the first script to
+ * actually click one of these — the shipped signup and old-signup demos pass
+ * neither, and get the same static button they always have.
+ */
+const OAuthButton = ({ icon, children, m, target, state }: {
+  icon: React.ReactNode
+  children: React.ReactNode
+  m: Metrics
+  target: string
+  state?: DemoState
+}) => {
+  const ref = useTarget(target)
+  const pressed = state?.pressed === target
 
-const GoogleMark = ({ size }: { size: number }) => (
+  return (
+    <div
+      ref={ref as React.Ref<HTMLDivElement>}
+      style={{
+        height: m.oauthH,
+        borderRadius: 6,
+        border: `1px solid ${C.border}`,
+        fontSize: m.oauthFont,
+        lineHeight: 1.2,
+        fontWeight: 500,
+        transform: pressed ? 'scale(0.994)' : 'none',
+        filter: pressed ? 'brightness(0.95)' : 'none',
+        transition: 'filter 120ms ease-out, transform 120ms ease-out',
+      }}
+      className="flex items-center justify-center gap-2"
+    >
+      {icon}
+      {children}
+    </div>
+  )
+}
+
+export const GoogleMark = ({ size }: { size: number }) => (
   <svg width={size} height={size} viewBox="0 0 18 18" aria-hidden>
     <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z" />
     <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z" />

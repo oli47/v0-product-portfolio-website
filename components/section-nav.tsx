@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useScramble } from '@/lib/use-scramble'
 
 /** Shared with the page so section ids and nav targets can never drift apart. */
 export function sectionId(badge: string) {
@@ -26,47 +25,58 @@ const RAIL_QUERY = '(min-width: 1200px)'
 // Everything above it has to be able to reach the line under its own steam.
 const BOTTOM_BAND = 80
 
+// Not `el.offsetTop`: that's relative to `offsetParent`, and any ancestor
+// with a `transform` (even `translateY(0)`) becomes one — which `<FadeUp>`
+// always sets, so every section measured through it read as offset 0 from
+// its own wrapper instead of the page, and the "you are here" line locked
+// onto whichever section happened to iterate last. `getBoundingClientRect`
+// reports true viewport position regardless of what an ancestor's transform
+// is doing, immune to that trap.
+const pageTop = (el: HTMLElement) => el.getBoundingClientRect().top + window.scrollY
+
+/** A section's own place in the rail relative to where the reader is:
+ *  `done` and `active` both read as filled — a progress bar's own trail
+ *  behind (and including) the current position is one colour, not two —
+ *  `upcoming` hasn't been reached yet. `active` still carries `aria-current`
+ *  even though it looks identical to `done`; that distinction is for
+ *  assistive tech, not the eye. */
+type SectionState = 'done' | 'active' | 'upcoming'
+
 function SectionNavItem({
   label,
   target,
-  active,
+  state,
   onSelect,
 }: {
   label: string
   target: string
-  active: boolean
+  state: SectionState
   onSelect: (label: string) => void
 }) {
-  const scramble = useScramble(label)
-
   return (
     <li>
+      {/* No label text — just the tick, so the rail reads as a slim index
+          rather than a second column of words beside the page's own. The
+          name is still there for anyone who needs it: `aria-label` for a
+          screen reader, `title` for a mouse hovering long enough to ask. */}
       <a
         href={`#${target}`}
-        aria-current={active ? 'true' : undefined}
+        aria-label={label}
+        title={label}
+        aria-current={state === 'active' ? 'true' : undefined}
         onClick={(e) => {
           e.preventDefault()
           onSelect(label)
         }}
-        onMouseEnter={scramble.scramble}
-        onMouseLeave={scramble.reset}
-        className="group flex flex-row-reverse items-center gap-3 py-1"
+        className="group flex items-center justify-center py-1"
       >
         <span
           aria-hidden="true"
-          className="h-px shrink-0 transition-all duration-[400ms] ease-in-out group-hover:bg-[var(--accent)]"
+          className="w-px h-4 shrink-0 transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--accent)]"
           style={{
-            width: active ? '2rem' : '1rem',
-            backgroundColor: active ? 'var(--color-500)' : 'var(--color-100)',
+            backgroundColor: state === 'upcoming' ? 'var(--color-100)' : 'var(--accent)',
           }}
         />
-        <span
-          ref={scramble.spanRef}
-          className="text-eyebrow transition-colors duration-[400ms] ease-in-out group-hover:text-[var(--accent)]"
-          style={{ color: active ? 'var(--color-500)' : 'var(--color-300)' }}
-        >
-          {label}
-        </span>
       </a>
     </li>
   )
@@ -129,7 +139,7 @@ export function SectionNav({ items }: { items: SectionNavItemData[] }) {
       // time the effect remounts with the padding already gone.
       const applied = parseFloat(getComputedStyle(root).getPropertyValue('--section-tail')) || 0
       const need = el && window.matchMedia(RAIL_QUERY).matches
-        ? Math.max(0, (el.offsetTop - SCROLL_OFFSET) + BOTTOM_BAND
+        ? Math.max(0, (pageTop(el) - SCROLL_OFFSET) + BOTTOM_BAND
             - (root.scrollHeight - applied - window.innerHeight))
         : 0
       if (Math.abs(need - applied) > 1) root.style.setProperty('--section-tail', `${need}px`)
@@ -149,7 +159,7 @@ export function SectionNav({ items }: { items: SectionNavItemData[] }) {
       let current = items[0].label
       for (const item of items) {
         const el = document.getElementById(item.target)
-        if (el && el.offsetTop <= line) current = item.label
+        if (el && pageTop(el) <= line) current = item.label
       }
       setActive(current)
     }
@@ -194,7 +204,7 @@ export function SectionNav({ items }: { items: SectionNavItemData[] }) {
     setActive(label)
 
     const max = document.documentElement.scrollHeight - window.innerHeight
-    const target = Math.min(Math.max(el.offsetTop - SCROLL_OFFSET, 0), Math.max(max, 0))
+    const target = Math.min(Math.max(pageTop(el) - SCROLL_OFFSET, 0), Math.max(max, 0))
     const start = window.scrollY
     const distance = target - start
 
@@ -248,18 +258,21 @@ export function SectionNav({ items }: { items: SectionNavItemData[] }) {
 
   if (items.length === 0) return null
 
+  const activeIndex = items.findIndex((it) => it.label === active)
+
   return (
     <nav
       aria-label="Case study sections"
-      className="hidden min-[1200px]:block fixed z-30 w-[11rem] text-right"
+      className="hidden min-[1200px]:block fixed z-30 w-8"
       // Not just invisible: nothing behind a transparent nav should take a
       // click, and a screen reader should not be offered a rail the page is
       // not showing yet.
       aria-hidden={!shown}
       style={{
-        // The far side of the column: half the page, out past the 45rem of
-        // content, then the same 2rem gutter the rail had on the left.
-        left: 'calc(50% + 22.5rem + 2rem)',
+        // The near side of the column, mirrored from the gutter the rail
+        // used to sit in on the right: half the page, out past the 45rem of
+        // content, then the same 2rem gutter.
+        right: 'calc(50% + 22.5rem + 2rem)',
         top: railTop ?? RAIL_PIN_TOP,
         opacity: shown ? 1 : 0,
         // `opacity: 0` alone left six links in the tab order inside an
@@ -274,16 +287,19 @@ export function SectionNav({ items }: { items: SectionNavItemData[] }) {
           : 'opacity 400ms ease-in-out, visibility 0s 400ms',
       }}
     >
-      <ul className="flex flex-col gap-4">
-        {items.map((item) => (
-          <SectionNavItem
-            key={item.label}
-            label={item.label}
-            target={item.target}
-            active={item.label === active}
-            onSelect={handleSelect}
-          />
-        ))}
+      <ul className="flex flex-col gap-1.5">
+        {items.map((item, i) => {
+          const state: SectionState = i < activeIndex ? 'done' : i === activeIndex ? 'active' : 'upcoming'
+          return (
+            <SectionNavItem
+              key={item.label}
+              label={item.label}
+              target={item.target}
+              state={state}
+              onSelect={handleSelect}
+            />
+          )
+        })}
       </ul>
     </nav>
   )

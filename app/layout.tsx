@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 });
 
 const META_DESCRIPTION =
-  "I design the moments where products start working for people.";
+  "Product designer with 7+ years in SaaS. I design how a product works as much as how it looks.";
 
 export const metadata: Metadata = {
   title: { default: "Olaf Otrząsek • Design", template: "%s — Olaf Otrząsek" },

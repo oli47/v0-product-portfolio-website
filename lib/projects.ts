@@ -1,10 +1,25 @@
+import type { BreakdownChart } from '@/components/breakdown-chart'
+
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId = 'signup' | 'signup-old' | 'contacts' | 'freemium' | 'freemium-setup'
+export type DemoId =
+  | 'signup-story'
+  | 'signup-story-phone' | 'signup-story-google' | 'signup-story-split' | 'signup-story-split-arrive' | 'signup-story-fixed'
+  | 'contacts' | 'freemium' | 'freemium-setup'
 
-/** One side of a comparison: either a screenshot or a coded demo. */
-export type CompareSide = { label: string } & ({ src: string } | { demo: DemoId })
+/** One side of a comparison: either a screenshot or a coded demo. `step` only
+ *  does anything on a `demo` side — it freezes that demo on one screen of its
+ *  script, the same way the standalone `demo` block's `step` does. Omit it
+ *  and a demo side plays live instead, the same as the standalone block. */
+export type CompareSide = {
+  label: string
+  step?: number
+  /** Extra values frozen alongside `step`, the same way `DemoFrame`'s own
+   *  `pinnedValues` works — for a side that needs more than just a screen
+   *  index to show the right frame (e.g. a form with a field already gone). */
+  pinnedValues?: Record<string, string>
+} & ({ src: string } | { demo: DemoId })
 
 export type ProcessBlock =
   | { kind: 'text'; content: string }
@@ -26,6 +41,22 @@ export type ProcessBlock =
    *  demo plays while it is on screen. Only one per page should be left
    *  playing: two moving pictures in one column compete rather than read. */
   | { kind: 'demo'; demo: DemoId; step?: number; caption?: string }
+  /** Two demos side by side in one card, no per-side caption — each side is
+   *  its own `Omit<CompareSide, 'label'>`, so one can play live while the
+   *  other holds a pinned frame (or both can do either). `text`, if given,
+   *  sits inside the same card above the two screens, rather than as its own
+   *  block before it — one visual unit, not a paragraph then a separate card. */
+  | {
+      kind: 'demo-pair'
+      text?: string[]
+      left: { step?: number; pinnedValues?: Record<string, string> } & ({ src: string } | { demo: DemoId })
+      right: { step?: number; pinnedValues?: Record<string, string> } & ({ src: string } | { demo: DemoId })
+      caption?: string
+    }
+  /** Two plain screenshots side by side, one row, no demo machinery — the
+   *  process evidence a coded demo can't stand in for (a third-party tool's
+   *  own UI, e.g. an analytics dashboard or a session recorder). */
+  | { kind: 'image-pair'; left: { src: string; alt?: string }; right: { src: string; alt?: string }; caption?: string }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
@@ -95,6 +126,12 @@ export interface Project {
       label: string
       value: string
     }
+    /** A stacked-bar breakdown shown beside the north star in the same card —
+     *  e.g. desktop vs mobile, before vs after — rather than as more
+     *  `MetricMain` cards stacked below it. Only renders that composite
+     *  layout when both this and `northStar` are set; every project without
+     *  one keeps today's stacked cards untouched. */
+    breakdownChart?: BreakdownChart
     metrics: {
       value: string
       label: string
@@ -122,10 +159,10 @@ export const projects: Project[] = [
     title: 'Freemium launch',
     description: "Freemium, edrone's first product-led channel after a decade of sales-led growth.",
     card: {
-      lead: "I redesigned edrone's entry so a store could set itself up alone in minutes, reaching the small stores a decade of sales-led growth never could,",
+      lead: 'Opened edrone to self-serve after ten years of sales-led growth, reaching',
       number: '5,050',
-      label: 'stores acquired',
-      tail: 'in a year',
+      label: 'stores in 11 months',
+      tail: 'with 7.8% converting to paid',
     },
     metrics: [
       { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
@@ -321,10 +358,9 @@ export const projects: Project[] = [
     title: 'Signup flow',
     description: 'Tripled signup conversion in five hours, with Codex.',
     card: {
-      lead: "Finding most signups died on the form, I rebuilt it so the first step alone creates an account,",
-      number: '+200%',
-      label: 'signup conversion',
-      tail: 'in five hours of shipped product',
+      lead: 'Redesigned the signup form and tripled conversion, delivered with AI in',
+      number: '5',
+      label: 'hours',
     },
     metrics: [
       { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
@@ -347,7 +383,16 @@ export const projects: Project[] = [
     },
     coverImage: '/images/sf-cover.png',
     thumbnailImage: '/images/sf-cover.png',
-    demo: 'signup',
+    // The redesigned story, not the old prototype `signup-demo.tsx` shows.
+    // Not the full narrative either, landing page included — that version
+    // still exists (`SignupStoryDemo`, kept alive by the Solution section's
+    // own pinned use of `'signup-story'`), but the click-to-enlarge lightbox
+    // ClickableDemo opens ignores every pin and always plays a demo's `id`
+    // from the top, so a hero built on it surfaced the landing page again
+    // however small the hero itself was capped. Both the hero and the home
+    // card play the shipped product only: the redesign's own history is the
+    // case study's job to tell, not this demo's.
+    demo: 'signup-story-fixed',
     sections: [
       {
         badge: 'Context',
@@ -368,29 +413,31 @@ export const projects: Project[] = [
           {
             kind: 'split',
             text: [
-              'The largest drop across the four-step funnel sat between clicking "Sign up free" and creating an account. **A mandatory phone number almost nobody used** was kept for one salesperson who cold-called quiet signups, and every signing-up user paid for it at the most expensive moment in the funnel.',
-              '"Sign up with Google" did not create an account. It took an address from the Google dialog and dropped the user back on the same four fields, now partly filled. **The button looked like a shortcut and behaved like autofill.**',
+              'The four-step funnel lost the most people between clicking "Sign up free" and creating an account. **A mandatory phone number almost nobody used** stayed in the form for one salesperson who cold-called quiet signups, and every signing-up user paid for it at the most expensive moment in the funnel.',
+              '**"Sign up with Google" did not create an account.** It pulled a name and email from the Google dialog and dropped the user back on the same four fields, now partly filled. The button looked like a shortcut and behaved like autofill.',
             ],
             sides: [
               {
-                label: 'Before',
-                text: 'Four fields in one pass, with SSO under the form it would have filled in.',
-                demo: 'signup-old',
+                label: '',
+                text: '',
+                demo: 'signup-story',
+                // Screen 1 of the story script: the old form, all four fields.
+                step: 1,
               },
             ],
           },
         ],
       },
       {
-        badge: 'Approach',
+        badge: 'Research',
         blocks: [
           {
             kind: 'text',
-            content: 'I started in Amplitude. I checked the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a short list of what I thought was wrong.',
+            content: 'I started in Amplitude, checked that the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a dozen or so issues I thought were wrong.',
           },
           {
             kind: 'text',
-            content: 'Alongside it I ran a UX agent I had built on Claude across the flow. It walks the screens in a browser, clicks through them the way a user would, and returns a report with problem, description and severity.',
+            content: 'Alongside it, I ran a UX agent I\'d built on Claude through the flow. It walks the screens in a browser, clicks through them the way a user would, and comes back with a report: what\'s wrong, why, and how severe.',
           },
           {
             kind: 'text',
@@ -402,45 +449,79 @@ export const projects: Project[] = [
         badge: 'Solution',
         blocks: [
           {
-            kind: 'text',
-            content: 'The obvious fix was the phone number it asked for. The check on it was the one person who actually used it: the salesperson who cold-called every quiet signup, who said there was no value in the calls. The field came out, and it stayed out.',
+            // Each of the three changes gets its own short, live, looping
+            // demo — `signup-story-demo.tsx`'s `SignupPhoneRemoveDemo`, not
+            // a screenshot and not scroll-driven: it plays on its own once it
+            // is on screen, the same as every other demo on this page.
+            kind: 'split',
+            text: [
+              'Time to act on what the research had found.',
+              'The main change was **removing the phone number input**. I had to confirm with Sales whether it held real value; it turned out to be marginal, worth cutting outright.',
+            ],
+            sides: [
+              { label: '', text: '', demo: 'signup-story-phone' },
+            ],
+          },
+          {
+            kind: 'split',
+            text: [
+              "Next, SSO finally worked correctly, so **users could create an account through Google or Shopify**.",
+              "And that's where the third change came in: creating an account still required the shop's URL up front...",
+            ],
+            sides: [
+              { label: '', text: '', demo: 'signup-story-google' },
+            ],
+          },
+          {
+            // Left plays Name and Shop URL leaving (`SignupSplitDemo`);
+            // right plays them landing on the step 2 it's splitting into
+            // (`SignupSplitArriveDemo`) — two `DemoFrame`s on an identical
+            // timeline, not one pinned still, so the pair reads as one
+            // relocation rather than a before/after cut.
+            kind: 'demo-pair',
+            text: [
+              "So **I split that step into two**, an unpopular move, though it did streamline the SSO flow. After creating the account, the user supplied their shop link and name, for the Support team and in-app personalization.",
+            ],
+            left: { demo: 'signup-story-split' },
+            right: { demo: 'signup-story-split-arrive' },
           },
           {
             kind: 'text',
-            content: 'The second was making SSO real. We had just added Shopify alongside Google, so it had to actually create the account across both providers.',
+            content: 'I put together a prototype draft in Figma, and after checking with a developer it turned out the whole thing needed some backend work, so I took the front end myself, in Codex.',
           },
           {
             kind: 'text',
-            content: 'Then I went further and split the form to make signing up feel lighter and to capture the account earlier. **Step 1 now creates the account from an email address or SSO. Step 2 collects name and store URL.**',
-          },
-          {
-            kind: 'compare',
-            before: { demo: 'signup-old', label: 'Before' },
-            after: { demo: 'signup', label: 'After' },
-            caption: 'Before: four fields in one pass, with SSO under the form it would have filled in. After: step 1 creates the account, step 2 collects what the product needs.',
-          },
-          {
-            kind: 'text',
-            content: 'More steps normally means less conversion. My bet was that what people see at the moment of the decision matters more than how many steps follow, and the result says it did. Anyone who drops out of step 2 already has an account, so recovery paths in Intercom bring them back. The friction moved to after the contact rather than before it.',
-          },
-          {
-            kind: 'text',
-            content: 'I designed and built the flow in a single pass, standing on the design system already in the codebase. **Five hours** was the whole cycle from diagnosis through shipped product, which is the point of working this way: a design decision goes from judgment to evidence in the same afternoon, not a sprint later.',
+            content: "And that's how we shipped **the new signup flow in five hours**.",
           },
         ],
       },
     ],
     results: {
-      note: 'Unique visitors who ended up with a created account, from **0.75% to 2.25%**. Conversion on to an integrated store did not move, so the extra signups were no worse than the ones before.',
-      summary: 'The bet was that what people see at the moment of the decision matters more than the number of steps. Step 1 creates the account, so anyone who drops off the second step is a user the funnel kept rather than lost.',
+      summary: "I waited three weeks before deciding whether the flow stayed or not. Given the site's average traffic, that was the least I'd trust the number, though honestly, I already knew the decision after the first few days of seeing the performance.",
+      note: '**Desktop, about 85% of the traffic, went from 1% to 2%; mobile, which had a dismal 0.05%, rose to 3%.**',
       northStar: {
         label: 'TOTAL SIGNUP CONVERSION',
         value: '+200%',
       },
+      // The +200% north star is the independently-measured total
+      // (0.75% → 2.25%), not something the chart below has to derive on
+      // its own. `share` here is picked so the chart's own blend lands on
+      // that same +200% (desktop and mobile as component facts, not a
+      // recomputation) — it's a looser fit than the "about 85%" in the
+      // note above, which is Olaf's own prose and stays as written.
+      breakdownChart: {
+        channels: [
+          { key: 'desktop', label: 'Desktop', share: 0.75 },
+          { key: 'mobile', label: 'Mobile', share: 0.25 },
+        ],
+        before: { desktop: 1, mobile: 0.05 },
+        after: { desktop: 2, mobile: 3 },
+      },
       metrics: [],
     },
     reflections: [
-      'I shipped three changes at once and gave up knowing which one worked better. Traffic was low enough that isolating each change would have meant at least three weeks per change to collect anything meaningful, and an A/B test would have taken longer still. With more traffic I would split it, but at that point I had to move quicker and leaner.',
+      'At the same time, I was aware of the risk that **rolling out three changes at once could make it hard to tell which one actually moved the needle**, especially splitting the form into two steps, so I tracked that one on its own. **Share of visitors who began filling the form went from 2.7% to 10%: desktop 3% to 10%, mobile 1% to 10%. Splitting the form was the bet, and this is what confirms it.**',
+      "For cleanliness, I would have shipped the phone number removal on its own, then SSO and the split together as a second phase, but I didn't have that much time at that point.",
     ],
   },
   {
@@ -448,9 +529,9 @@ export const projects: Project[] = [
     title: 'Contacts identification',
     description: "Identified a third more of a shop's traffic, the metric behind half its revenue.",
     card: {
-      lead: "I designed a sequence that re-identifies a shop's traffic every 30 days and starts switched on, lifting reachable traffic from 3.1% to 4.1%,",
-      number: '+32%',
-      label: 'identification rate',
+      lead: "Reactivated stores' customers through a feature built with AI in a week, making",
+      number: '32%',
+      label: 'more of them reachable by automations',
     },
     metrics: [
       { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
@@ -621,9 +702,9 @@ export const projects: Project[] = [
     title: 'PLO Genius',
     description: "The first PLO poker solver ever to run in a browser. Designed from zero as the sole designer.",
     card: {
-      lead: "Sole designer for a game I didn't play, I built research through poker stables, the first PLO solver in a browser, and the design system it runs on,",
-      number: '10+',
-      label: 'B2B API clients',
+      lead: 'Sole designer of the first PLO solver in a browser, from research to design system, still live four years on with',
+      number: '120+',
+      label: 'paying subscribers',
     },
     metrics: [
       { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },
