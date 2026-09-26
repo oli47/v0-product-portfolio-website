@@ -1,4 +1,4 @@
-import { getProject, projects } from '@/lib/projects'
+import { getProject, projectSummary, projects } from '@/lib/projects'
 import type { Metadata } from 'next'
 
 export function generateStaticParams() {
@@ -13,22 +13,22 @@ export async function generateMetadata({
   const project = getProject(params.slug)
   if (!project) return {}
 
-  const url = `https://www.olafotrzasek.com/projects/${params.slug}`
+  const url = `https://www.00laf.com/projects/${params.slug}`
 
   return {
-    title: project.title,  // root template adds " — Olaf Otrząsek"
-    description: project.description,
+    title: project.title,  // root template adds " · Olaf Otrząsek"
+    description: projectSummary(project),
     alternates: { canonical: `/projects/${params.slug}` },
     openGraph: {
-      title: `${project.title} — Olaf Otrząsek`,
-      description: project.description,
+      title: `${project.title} · Olaf Otrząsek`,
+      description: projectSummary(project),
       url,
       images: [{ url: project.coverImage }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${project.title} — Olaf Otrząsek`,
-      description: project.description,
+      title: `${project.title} · Olaf Otrząsek`,
+      description: projectSummary(project),
       images: [project.coverImage],
     },
   }
@@ -41,9 +41,9 @@ export default function ProjectLayout({ children, params }: { children: React.Re
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: project.title,
-    description: project.description,
-    author: { '@type': 'Person', name: 'Olaf Otrząsek', url: 'https://www.olafotrzasek.com' },
-    url: `https://www.olafotrzasek.com/projects/${params.slug}`,
+    description: projectSummary(project),
+    author: { '@type': 'Person', name: 'Olaf Otrząsek', url: 'https://www.00laf.com' },
+    url: `https://www.00laf.com/projects/${params.slug}`,
     image: project.coverImage,
   } : null
 

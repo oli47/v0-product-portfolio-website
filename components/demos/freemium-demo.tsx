@@ -244,19 +244,17 @@ const CONNECTING = 'connecting'
  *  enough to read the bold lead, which is all any of these steps asks of you. */
 const READ_MS = 2200
 
-/** And how long one stage of the setup beat holds. A fast pass: the same four
- *  stages get 1800ms each in `freemium-setup-demo`, where they are the subject;
- *  here they are the doorway into four screens that are, and a reader made to
- *  wait eight seconds for the first one leaves. */
+/** And how long one stage of the setup beat holds. A fast pass: the stages are
+ *  the doorway into four screens that matter, and a reader made to wait eight
+ *  seconds for the first one leaves. */
 const SETUP_MS = 520
 
 const SCRIPT: Step[] = [
   // The account is minutes old and the content does not exist yet. The four
   // things above land in turn; the bar under them fills as they do.
   { kind: 'screen', index: PREPARING },
-  // `READY` is the stage that is running, not the count of finished ones — see
-  // `freemium-setup-demo`, which holds the same four stages for longer and where
-  // counting the other way was leaving the first picture on screen for less time
+  // `READY` is the stage that is running, not the count of finished ones:
+  // counting the other way left the first picture on screen for less time
   // than its own entrance animation takes.
   ...SETUP_ITEMS.flatMap((_, i): Step[] => [
     { kind: 'set',  field: READY, text: String(i) },

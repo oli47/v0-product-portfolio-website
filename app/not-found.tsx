@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '404 — Olaf Otrząsek',
+  title: '404 · Olaf Otrząsek',
 }
 
 export default function NotFound() {
@@ -12,9 +12,9 @@ export default function NotFound() {
         <p className="font-display text-[clamp(4rem,15vw,8rem)] leading-none text-[var(--color-100)] select-none mb-6">
           404
         </p>
-        <p className="text-body-2 text-[var(--color-500)] mb-8">
+        <h1 className="text-body-2 text-[var(--color-500)] mb-8">
           This page does not exist.
-        </p>
+        </h1>
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-eyebrow text-[var(--color-300)] hover:text-[var(--accent)] transition-colors duration-[400ms] ease-in-out"

@@ -18,21 +18,21 @@ const META_DESCRIPTION =
   "Olaf Otrząsek, Senior Product Designer with 7+ years in SaaS. I design how a product works as much as how it looks.";
 
 export const metadata: Metadata = {
-  title: { default: "Olaf Otrząsek · Senior Product Designer", template: "%s — Olaf Otrząsek" },
+  title: { default: "Olaf Otrząsek · Senior Product Designer", template: "%s · Olaf Otrząsek" },
   description: META_DESCRIPTION,
-  metadataBase: new URL("https://www.olafotrzasek.com"),
+  metadataBase: new URL("https://www.00laf.com"),
   alternates: { canonical: "/" },
   openGraph: {
     title: "Olaf Otrząsek · Senior Product Designer",
     description: META_DESCRIPTION,
-    url: "https://www.olafotrzasek.com",
+    url: "https://www.00laf.com",
     siteName: "Olaf Otrząsek",
     images: [
       {
         url: "/images/og-thumbnail.png",
         width: 1200,
         height: 630,
-        alt: "Olaf Otrząsek — Senior Product Designer",
+        alt: "Olaf Otrząsek · Senior Product Designer",
       },
     ],
     type: "website",
@@ -79,7 +79,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Olaf Otrząsek",
-              url: "https://www.olafotrzasek.com",
+              url: "https://www.00laf.com",
               jobTitle: "Senior Product Designer",
               description: META_DESCRIPTION,
               sameAs: ["https://www.linkedin.com/in/olafotrzasek/"],

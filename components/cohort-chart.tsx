@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { BarChart } from '@/components/dither-kit/bar-chart'
-import { Bar } from '@/components/dither-kit/bar'
+import { AreaChart } from '@/components/dither-kit/area-chart'
+import { Area } from '@/components/dither-kit/area'
 import { XAxis } from '@/components/dither-kit/x-axis'
 import { YAxis } from '@/components/dither-kit/y-axis'
 import { Grid } from '@/components/dither-kit/grid'
@@ -13,13 +13,9 @@ import { hexToRgb, mix } from '@/components/dither-kit/site-colors'
 
 export type CohortPoint = { label: string; full: string; value: number }
 
-export function CohortChart({
-  data,
-  seriesLabel,
-}: {
-  data: CohortPoint[]
-  seriesLabel: string
-}) {
+/** A metric's monthly cohorts as one dithered area, for a trend across many
+ *  points where each point on its own matters less than the line. */
+export function CohortChart({ data, seriesLabel }: { data: CohortPoint[]; seriesLabel: string }) {
   const { resolvedTheme } = useTheme()
   const [seedTick, setSeedTick] = useState(0)
 
@@ -41,21 +37,23 @@ export function CohortChart({
 
   return (
     <figure className="mt-6">
-      <BarChart
+      <AreaChart
         data={data}
         config={config}
         className="h-[200px] w-full"
-        margins={{ left: 34, right: 6, top: 10, bottom: 22 }}
+        margins={{ left: 40, right: 12, top: 10, bottom: 24 }}
         bloom="off"
       >
-        <Grid />
-        <YAxis tickCount={3} tickFormatter={(v) => `${v}%`} />
-        <XAxis dataKey="label" maxTicks={11} />
-        <Bar dataKey="value" variant="gradient" />
+        <Grid ticks={[40, 80]} />
+        {/* 40% and 80%, the top of the range, and no 0%: the 0% tick sat on
+            top of the first month's label in the corner the two axes share. */}
+        <YAxis ticks={[40, 80]} tickFormatter={(v) => `${v}%`} />
+        <XAxis dataKey="label" maxTicks={4} />
+        <Area dataKey="value" variant="gradient" />
         {/* `full` rather than `label`: the axis tick has to stay short, but the
             tooltip is the place that explains, so it spells the month out. */}
         <Tooltip labelKey="full" valueFormatter={(v) => `${v}%`} />
-      </BarChart>
+      </AreaChart>
 
       {/* The chart is canvas-painted, so the numbers also exist as text. */}
       <table className="sr-only">

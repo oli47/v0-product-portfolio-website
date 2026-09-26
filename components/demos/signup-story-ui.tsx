@@ -3,7 +3,7 @@
 import { useTarget } from '@/components/demos/demo-cursor'
 import { C, Screen } from '@/components/demos/edrone-tokens'
 import {
-  Field, Heading, Label, MOBILE, type Metrics, Subtitle,
+  DESKTOP, Field, Heading, Label, type Metrics, Subtitle,
 } from '@/components/demos/signup-ui'
 import type { DemoState } from '@/components/demos/use-demo-script'
 
@@ -29,76 +29,22 @@ export interface StoryMetrics extends Metrics {
 }
 
 /**
- * One fixed stage, not a responsive table: the whole point of this demo is
- * that it is a phone, always, whatever width the column hands it. `MOBILE`
- * from `signup-ui.tsx` is the base, so the old-form and new-flow screens land
- * on the exact fields the shipped signup demos use.
+ * The same story on a desktop stage, for a landscape slot (a case study's
+ * demo row) where a phone reads as a cut-off strip. `DESKTOP` from
+ * `signup-ui.tsx` at the home card's 1510 x 834, so it matches the ratio the
+ * other two desktop demos run at.
  */
-export const STORY: StoryMetrics = {
-  ...MOBILE,
-  gapDotsHeading: 14,
-  ring: 40, gapRingHeading: 22, gapHeadingSub: 6,
-  confetti: 8,
+export const STORY_DESKTOP: StoryMetrics = {
+  ...DESKTOP,
+  stageW: 1510, stageH: 834,
+  gapDotsHeading: 20,
+  ring: 56, gapRingHeading: 30, gapHeadingSub: 8,
+  confetti: 11,
 }
 
-/** Ignores both arguments: this demo never switches away from its own phone
- *  shape, whatever column width or variant a caller hands it. */
-export function metricsForStory(): StoryMetrics {
-  return STORY
+export function metricsForStoryDesktop(): StoryMetrics {
+  return STORY_DESKTOP
 }
-
-// ─── Landing ─────────────────────────────────────────────────────────────────
-
-/**
- * edrone's real marketing site, not a coded reproduction — the one screen in
- * this whole story that is a screenshot rather than a rebuild. Every other
- * screen here is the product itself, reproduced in code because the point is
- * to show exactly what changed in it; this one only has to read as "a
- * website", and a hand-drawn stand-in for that read as a stand-in. The real
- * thing is one image and free.
- *
- * The tap target is an invisible box over the real "Try now for free" button.
- * Its source position was measured by scanning the file for the button's own
- * dark pixels, not eyeballed: x 22.1-77.8%, y 44.9-51.4% of the 918×1806 PNG.
- * `object-fit: cover` with `object-position: top` only ever crops the
- * image's own bottom edge (the stage is slightly wider, relatively, than the
- * screenshot), never its sides, so the x fraction carries over unchanged —
- * but the y fraction does not: cover scales the image up until it fills the
- * stage's width, which stretches it past the stage's height too, so a y
- * fraction measured against the *uncropped* source has to be rescaled by
- * that same zoom factor to land on the right pixel of the *cropped* stage.
- * The box below is that rescaled result, not the raw source fraction.
- */
-export function LandingScreen({ state }: { state: DemoState; m: StoryMetrics }) {
-  const ref = useTarget('cta')
-  const pressed = state.pressed === 'cta'
-
-  return (
-    <div className="relative h-full w-full overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element -- a fixed-size
-          stage inside a scaled, transformed demo frame; next/image's own
-          responsive sizing has nothing to measure against here. */}
-      <img
-        src="/images/sf-landing.png"
-        alt=""
-        aria-hidden
-        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-      />
-      <div
-        ref={ref as React.Ref<HTMLDivElement>}
-        aria-hidden
-        className="absolute rounded-md"
-        style={{
-          left: '22%', top: '49%', width: '56%', height: '7%',
-          background: pressed ? 'rgba(255, 255, 255, 0.28)' : 'transparent',
-          transition: 'background 120ms ease-out',
-        }}
-      />
-    </div>
-  )
-}
-
-// ─── Step indicator ──────────────────────────────────────────────────────────
 
 /** The "step 1 of 2" pair the split form gains — absent from the old
  *  single-pass form on purpose, since having none is the point about it. */

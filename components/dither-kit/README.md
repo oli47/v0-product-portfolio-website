@@ -4,6 +4,10 @@ Installed with `npx @dither-kit/cli add bar-chart`. These files are vendored, so
 they are ours to edit, but **`@dither-kit/cli update` will overwrite them** and
 silently undo the first patch below. Re-apply after any update.
 
+Only the area chart is used now (`cohort-chart.tsx`, `breakdown-chart.tsx`).
+The bar chart, polar charts, legends, dots and reference lines were deleted
+2026-09-26 as unused; a re-install brings them back, patches and all.
+
 ## 1. React 19 context JSX → `.Provider` (breaks the build without it)
 
 Upstream writes `<SomeContext value={…}>`, which is React 19 only. This app is on
@@ -11,7 +15,8 @@ React 18.3, where that is not a valid component: the page 500s and `tsc` reports
 `TS2604: JSX element type 'ChartContext' does not have any construct or call
 signatures`.
 
-Patched in `bar.tsx`, `area.tsx`, `cartesian-root.tsx`, `polar-root.tsx` —
+Patched in `area.tsx` and `cartesian-root.tsx` (and in the since-deleted
+`bar.tsx` / `polar-root.tsx`) —
 every `<XContext value=…>` / `</XContext>` rewritten to `<XContext.Provider …>`.
 
 `dither-kit add` (not just `update`) re-triggers this on any shared file the
@@ -53,13 +58,13 @@ label in a generic `font-mono text-[10px]`/`text-[11px]`. Swapped for the
 site's own `.text-eyebrow` (PPNeueBit) so a chart's numbers read in the same
 type as everything else on the page instead of a mismatched system-mono font.
 
-Patched in `x-axis.tsx`, `y-axis.tsx`, `legend.tsx`, `block-legend.tsx`,
-`reference-line.tsx`, `tooltip.tsx` (the last two rows above are also this
-file). `dot.tsx`'s `var(--card, var(--bg-card))` fallback is the same idea
-for a colour rather than type — upstream hardcodes `var(--card, #0b0b0c)`,
-which is a dark-mode value baked in regardless of theme.
+Patched in `x-axis.tsx`, `y-axis.tsx` and `tooltip.tsx` (the legends, dot
+and reference line carried the same patch before they were deleted).
 
 ## 5. `Tooltip` gains `forceIndex` and `order` (site-specific, no upstream equivalent)
+
+No longer used: `breakdown-chart.tsx` dropped its tooltip. The props stay as
+no-ops rather than a further edit to vendored code.
 
 `breakdown-chart.tsx`'s two-point growth curve stacks mobile under desktop (so
 the smaller, faster-growing channel reads as a thin band becoming a real one)
@@ -89,3 +94,10 @@ every ref handed in is created `useRef(ctx)`/`useRef(targets)`/`useRef(stars)`
 `.current` read fail strict-null-check (~40 sites). Retyped the three
 fields to `MutableRefObject<T>` (`.current: T`) instead of asserting `!` at
 each one.
+
+## 7. `YAxis` and `Grid` take exact `ticks` (site-specific, no upstream equivalent)
+
+`cohort-chart.tsx` labels 40% and 80% only. Nice ticks from
+`tickCount` could not give that pair, and `Grid` hard-coded `ticks(4)`, so its
+lines missed the labels. Both now take an optional `ticks: number[]` (and `Grid`
+a `tickCount`). No-ops when omitted.

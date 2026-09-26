@@ -90,21 +90,6 @@ interface DemoFrameProps<M extends StageMetrics> {
   pinnedValues?: Record<string, string>
   variant?: DemoVariant
   /**
-   * Which axis the caller is sizing by.
-   *
-   * `width` (the default) is the ordinary case: the column gives a width and the
-   * stage's ratio sets the height. `height` inverts it, for a slot with a fixed
-   * height and room to spare across.
-   *
-   * `card` is the home row, which is both: above sm its slot is 2.125 wide to
-   * one tall and height is the binding constraint, so sizing by height is what
-   * lets every demo sit in it identically whatever its own ratio is. On a phone
-   * the same slot is 1.609, narrower than any stage, so height-sizing pushed
-   * every demo out to 97-101% of the slot — margins that ranged from a hairline
-   * to none, and one screen clipped. There, width binds.
-   */
-  fit?: 'width' | 'height' | 'card'
-  /**
    * The type colour and family every screen inherits.
    *
    * Required, and it has no default on purpose. A demo reproduces another
@@ -120,10 +105,10 @@ interface DemoFrameProps<M extends StageMetrics> {
 }
 
 /** What a demo component takes and forwards straight to its frame. */
-export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'pinnedScreen' | 'pinnedValues' | 'variant' | 'fit'>
+export type DemoProps = Pick<DemoFrameProps<StageMetrics>, 'play' | 'pinnedScreen' | 'pinnedValues' | 'variant'>
 
 export function DemoFrame<M extends StageMetrics>({
-  script, restState, metrics, children, play, pinnedScreen, pinnedValues, variant = 'inline', fit = 'width',
+  script, restState, metrics, children, play, pinnedScreen, pinnedValues, variant = 'inline',
   holdLastFrame = false, ink, typeface,
 }: DemoFrameProps<M>) {
   const hostRef = useRef<HTMLDivElement>(null)
@@ -180,11 +165,7 @@ export function DemoFrame<M extends StageMetrics>({
     <div
       ref={hostRef}
       aria-hidden
-      className={`relative select-none overflow-hidden rounded-[0.125rem] bg-white ${
-        fit === 'height' ? 'h-full w-auto'
-        : fit === 'card' ? 'w-full sm:h-full sm:w-auto'
-        : 'w-full'
-      }`}
+      className="relative w-full select-none overflow-hidden rounded-[0.125rem] bg-white"
       style={{ aspectRatio: `${m.stageW} / ${m.stageH}` }}
     >
       <TargetRegistry>

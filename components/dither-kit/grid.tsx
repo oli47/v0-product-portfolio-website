@@ -6,8 +6,14 @@ export function Grid({
   horizontal = true,
   vertical = false,
   strokeDasharray = "3 3",
+  tickCount = 4,
+  ticks,
 }: {
   horizontal?: boolean
+  /** Match the YAxis `tickCount`, so every label sits on a line. (Local patch.) */
+  tickCount?: number
+  /** Exact values to draw lines at, matching the YAxis `ticks`. (Local patch.) */
+  ticks?: number[]
   vertical?: boolean
   strokeDasharray?: string
 }) {
@@ -18,8 +24,7 @@ export function Grid({
   return (
     <g className="stroke-border" strokeDasharray={strokeDasharray}>
       {horizontal &&
-        ctx.y
-          .ticks(4)
+        (ticks ?? ctx.y.ticks(tickCount))
           .map((t) => (
             <line
               key={`h-${t}`}

@@ -4,9 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { Area } from '@/components/dither-kit/area'
 import { AreaChart } from '@/components/dither-kit/area-chart'
-import { Grid } from '@/components/dither-kit/grid'
-import { Tooltip } from '@/components/dither-kit/tooltip'
-import { PALETTE, rgb } from '@/components/dither-kit/palette'
+import { PALETTE } from '@/components/dither-kit/palette'
 import { hexToRgb, mix } from '@/components/dither-kit/site-colors'
 
 export type BreakdownChart = {
@@ -18,10 +16,13 @@ export type BreakdownChart = {
   /** Each channel's own conversion rate (percentage points), before. */
   before: Record<string, number>
   after: Record<string, number>
+  /** The measured total, before and after (percent). Its own fact, not the
+   *  channels' blend: see `signup-redesign`'s `share`. */
+  total: { before: number; after: number }
 }
 
 /**
- * The Impact section's channel split, as one stacked area under two points
+ * The Outcome card's channel split, as one stacked area under two points
  * (Before, After) instead of flat number cards beside the north star. The
  * curve's height at each point is its channels' rates turned into their
  * share of the combined total, so the rise from "Before" to "After" *is*
@@ -31,15 +32,10 @@ export type BreakdownChart = {
  * north star here is a fact in its own right, not something derived from
  * the per-channel numbers. The stack order puts the smaller,
  * faster-growing channel at the base and the larger one on top of it, so
- * mobile going from invisible to a real band reads as exactly that — the
- * opposite of the *listed*
- * order below, which keeps desktop first since that is still the bigger,
- * more familiar number to read first.
+ * mobile going from invisible to a real band reads as exactly that.
  *
- * The tooltip un-does the weighting: it always shows "after"'s own rate and
- * growth per channel — the numbers a reader actually recognises, not the
- * abstract contribution the curve's height plots, and not a tooltip that
- * reshapes into a bare "before" reading depending on where the cursor lands.
+ * No tooltip, grid or legend: the numbers a reader recognises, each channel's
+ * own rate and growth, sit under the chart as text (`ImpactSummaryCard`).
  */
 export function BreakdownAreaChart({ chart }: { chart: BreakdownChart }) {
   const { resolvedTheme } = useTheme()
@@ -65,12 +61,8 @@ export function BreakdownAreaChart({ chart }: { chart: BreakdownChart }) {
     [chart]
   )
 
-  // `config`'s own key order drives the stack (first key = base layer) *and*
-  // the tooltip's/legend's natural row order — the same order doing two
-  // different jobs that want different answers here, so the two are split:
-  // this key order is stacking order only (mobile first → mobile at the
-  // base), and `listOrder`/the manual legend below fix the *display* order
-  // back to desktop-first independently.
+  // `config`'s own key order drives the stack, first key = base layer:
+  // reversed, so mobile sits at the base.
   const config = useMemo(
     () => Object.fromEntries(
       [...chart.channels].reverse().map((c) => [
@@ -83,79 +75,24 @@ export function BreakdownAreaChart({ chart }: { chart: BreakdownChart }) {
     [chart, seedTick]
   )
 
-  const listOrder = useMemo(() => chart.channels.map((c) => c.key), [chart])
-
-  const shareOf = useMemo(
-    () => Object.fromEntries(chart.channels.map((c) => [c.key, c.share])),
-    [chart]
-  )
-
   return (
     <figure>
       <AreaChart
         data={data}
         config={config}
         stackType="stacked"
+        // Tall on purpose: the fill is drawn in 2px cells, so a shallow
+        // slope steps. At 96px the rise was one cell every ~20px of width,
+        // a visible staircase; at 200px the steps are short enough to read
+        // as a line.
         className="h-[200px] w-full"
-        margins={{ left: 6, right: 6, top: 10, bottom: 6 }}
+        margins={{ left: 0, right: 0, top: 0, bottom: 0 }}
         bloom="off"
       >
-        {/* `Grid` paints on the "back" SVG layer, behind the canvas fill —
-            no axis text, so no margin space to reserve for it. Purely
-            decorative reference lines, not a scale to read. */}
-        <Grid horizontal vertical={false} />
         {chart.channels.map((c) => (
           <Area key={c.key} dataKey={c.key} variant="gradient" />
         ))}
-        {/* Reads back each channel's own rate (value ÷ its traffic share)
-            and its own growth — the numbers a reader actually recognises,
-            not the abstract contribution the curve's height plots.
-            `forceIndex={1}` ("after") and `order`: one tooltip, always the
-            same shape and the same story, rather than one that reshapes
-            into a bare "before" reading depending on where the cursor
-            lands, or lists mobile above desktop because that's what the
-            stack order happens to be. */}
-        <Tooltip
-          labelKey="label"
-          forceIndex={1}
-          order={listOrder}
-          valueFormatter={(value, name) => {
-            const share = shareOf[name] ?? 1
-            const rate = Math.round((value / share) * 100) / 100
-            const before = chart.before[name]
-            // Guards a 0% "before" rate: growth off a zero baseline is
-            // undefined, not a number this can round to a sign and a "%".
-            const growth = before
-              ? Math.round(((chart.after[name] - before) / before) * 100)
-              : null
-            return (
-              <>
-                {growth != null && (
-                  <span className="text-muted-foreground">({growth > 0 ? '+' : ''}{growth}%) </span>
-                )}
-                {rate}%
-              </>
-            )
-          }}
-        />
       </AreaChart>
-
-      {/* In-flow, desktop-first — not `<BlockLegend>`, which would iterate
-          `config`'s own (reversed, stacking) key order. No axis labels tell
-          the curve's two points apart anymore (the tooltip's heading does
-          that on hover), so this is the one thing that's always on: which
-          colour is which channel. */}
-      <ul className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1.5 px-1">
-        {chart.channels.map((c) => (
-          <li key={c.key} className="flex items-center gap-1.5 text-eyebrow text-muted-foreground">
-            <span
-              className="size-2 rounded-[1px]"
-              style={{ backgroundColor: rgb(PALETTE[config[c.key].color].fill) }}
-            />
-            <span>{c.label}</span>
-          </li>
-        ))}
-      </ul>
 
       {/* The chart is canvas-painted, so the numbers also exist as text. */}
       <table className="sr-only">

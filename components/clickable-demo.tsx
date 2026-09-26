@@ -20,14 +20,13 @@ import type { DemoId } from '@/lib/projects'
  */
 
 /**
- * Stage width the phone toggle pins the demo to.
- *
- * The demos already switch layout on the width they are handed — that is the
- * same path a real narrow viewport takes — so the toggle needs no new API and
- * cannot drift from what a phone actually gets. It only has to land below
- * MOBILE_BREAKPOINT, which is 520 in both UI modules.
+ * Width-to-height of a demo's stage when enlarged, so it can be capped to fit
+ * the window's height as well as its width. A dashboard is landscape, and
+ * switches to its own phone layout below the demos' 520px breakpoint, which is
+ * roughly what a phone viewport hands it.
  */
-const PHONE_W = 390
+const DESKTOP_RATIO = 1846 / 1002
+const DASHBOARD_PHONE_RATIO = 390 / 858
 
 export function ClickableDemo({ id, label, pinnedScreen, pinnedValues, variant = 'inline' }: {
   id: DemoId
@@ -43,14 +42,14 @@ export function ClickableDemo({ id, label, pinnedScreen, pinnedValues, variant =
   variant?: DemoVariant
 }) {
   const [open, setOpen] = useState(false)
-  const [phone, setPhone] = useState(false)
+  const [narrow, setNarrow] = useState(false)
   const Demo = DEMOS[id]
 
   return (
     <>
       <button
         type="button"
-        onClick={() => { setPhone(false); setOpen(true) }}
+        onClick={() => { setNarrow(window.matchMedia('(max-width: 639px)').matches); setOpen(true) }}
         // `text-left` is load-bearing: a button centres its text by default, and
         // the screens inside set alignment only where they mean to differ from
         // the page's, so without it a whole dashboard silently centres.
@@ -66,54 +65,16 @@ export function ClickableDemo({ id, label, pinnedScreen, pinnedValues, variant =
 
       {open && (
         <Lightbox alt={label} onClose={() => setOpen(false)}>
-          <div className="flex flex-col items-center gap-4">
-            {/* Desktop only: on a phone the viewport is already the answer, and
-                a control offering to shrink it further would be noise. */}
-            <div
-              role="group"
-              aria-label="Demo layout"
-              className="hidden items-center gap-1 rounded-[0.125rem] p-1 sm:flex"
-              style={{ background: 'rgba(250, 247, 242, 0.14)' }}
-            >
-              <LayoutTab active={!phone} onSelect={() => setPhone(false)}>Desktop</LayoutTab>
-              <LayoutTab active={phone} onSelect={() => setPhone(true)}>Mobile</LayoutTab>
-            </div>
-
-            {/* A cross-fade, not a morph. Easing the width looked right on
-                paper, but the two layouts are different shapes — 1.8:1 against
-                0.45:1 — so the box has to get narrower and much taller at the
-                same time, and the content snaps to the other layout partway
-                through. Fading between two finished states is the honest move:
-                nothing is mid-anything. Keyed so each swap replays it. */}
-            <div
-              key={phone ? 'phone' : 'desktop'}
-              className="demo-viewport"
-              style={{ width: phone ? PHONE_W : '100%' }}
-            >
-              <Demo variant="inline" />
-            </div>
+          {/* As wide as the window allows, but never taller than it: the
+              width is capped by the height the stage's ratio would need. */}
+          <div
+            className="demo-viewport mx-auto"
+            style={{ width: `min(100%, calc((100dvh - 140px) * ${narrow ? DASHBOARD_PHONE_RATIO : DESKTOP_RATIO}))` }}
+          >
+            <Demo variant="inline" />
           </div>
         </Lightbox>
       )}
     </>
   )
 }
-
-const LayoutTab = ({ active, onSelect, children }: {
-  active: boolean
-  onSelect: () => void
-  children: React.ReactNode
-}) => (
-  <button
-    type="button"
-    onClick={onSelect}
-    aria-pressed={active}
-    className="text-eyebrow rounded-[0.125rem] px-3 py-1.5 transition-colors duration-200"
-    style={{
-      background: active ? 'var(--on-overlay)' : 'transparent',
-      color: active ? '#1A1714' : 'var(--on-overlay-muted)',
-    }}
-  >
-    {children}
-  </button>
-)
