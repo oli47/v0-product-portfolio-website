@@ -3,65 +3,32 @@ import type { BreakdownChart } from '@/components/breakdown-chart'
 // ─── Process content block types ────────────────────────────────────────────
 
 /** A product screen rebuilt in code. Resolved to a component in components/demos/registry.tsx. */
-export type DemoId =
-  | 'signup-story'
-  | 'signup-story-phone' | 'signup-story-google' | 'signup-story-split' | 'signup-story-split-arrive' | 'signup-story-fixed'
-  | 'contacts' | 'freemium' | 'freemium-setup'
+export type DemoId = 'signup-story-desktop' | 'contacts' | 'freemium'
 
-/** One side of a comparison: either a screenshot or a coded demo. `step` only
- *  does anything on a `demo` side — it freezes that demo on one screen of its
- *  script, the same way the standalone `demo` block's `step` does. Omit it
- *  and a demo side plays live instead, the same as the standalone block. */
-export type CompareSide = {
-  label: string
-  step?: number
-  /** Extra values frozen alongside `step`, the same way `DemoFrame`'s own
-   *  `pinnedValues` works — for a side that needs more than just a screen
-   *  index to show the right frame (e.g. a form with a field already gone). */
-  pinnedValues?: Record<string, string>
-} & ({ src: string } | { demo: DemoId })
+/** One tile of a `demo-row`: a coded demo (optionally pinned to one screen of
+ *  its script), a screenshot, or a customer quote. */
+export type DemoRowItem =
+  | DemoId
+  | { demo: DemoId; step?: number }
+  /** `crop` covers the 16:9 frame around a point instead of fitting in it;
+   *  `bleed: 'top-left'` runs a crop of the app's corner off those two edges. */
+  | { src: string; alt: string; width?: number; height?: number; crop?: string; bleed?: 'top-left' }
+  | { quote: string; author: string; href?: string }
 
 export type ProcessBlock =
   | { kind: 'text'; content: string }
-  | { kind: 'heading'; content: string }
-  | { kind: 'image'; src: string; caption?: string }
-  | { kind: 'compare'; before: CompareSide; after: CompareSide; caption?: string }
-  /** Copy beside a pair of screens stacked one over the other: the paragraphs
-   *  in the text column, each screen under its own heading with the point of
-   *  that version in text under it. */
-  | { kind: 'split'; text: string[]; sides: ({ text: string } & CompareSide)[]; caption?: string }
-  | { kind: 'contact-flow'; caption?: string }
-  /** `title` is optional: omit it and the card is one paragraph, with bold
-   *  carrying the emphasis a heading would have carried. */
-  | { kind: 'decisions'; items: { num: string; title?: string; description: string }[] }
-  | { kind: 'slideshow'; images: string[]; caption?: string }
-  /** `step` holds the demo still on one screen of its script, by that script's
-   *  `screen` index, so the same demo can sit beside three different paragraphs
-   *  with each one showing what its paragraph is about. Leave it off and the
-   *  demo plays while it is on screen. Only one per page should be left
-   *  playing: two moving pictures in one column compete rather than read. */
-  | { kind: 'demo'; demo: DemoId; step?: number; caption?: string }
-  /** Two demos side by side in one card, no per-side caption — each side is
-   *  its own `Omit<CompareSide, 'label'>`, so one can play live while the
-   *  other holds a pinned frame (or both can do either). `text`, if given,
-   *  sits inside the same card above the two screens, rather than as its own
-   *  block before it — one visual unit, not a paragraph then a separate card. */
-  | {
-      kind: 'demo-pair'
-      text?: string[]
-      left: { step?: number; pinnedValues?: Record<string, string> } & ({ src: string } | { demo: DemoId })
-      right: { step?: number; pinnedValues?: Record<string, string> } & ({ src: string } | { demo: DemoId })
-      caption?: string
-    }
-  /** Two plain screenshots side by side, one row, no demo machinery — the
-   *  process evidence a coded demo can't stand in for (a third-party tool's
-   *  own UI, e.g. an analytics dashboard or a session recorder). */
-  | { kind: 'image-pair'; left: { src: string; alt?: string }; right: { src: string; alt?: string }; caption?: string }
+  /** A bulleted list, read with the paragraphs around it. */
+  | { kind: 'list'; items: string[] }
+  /** Blocks folded into a closed `Collapse` box: there for whoever wants them. */
+  | { kind: 'collapse'; label: string; blocks: ProcessBlock[] }
+  /** The UI after the copy that explains it: full window width, one column on
+   *  a phone, two on a tablet, three from lg, every tile a 16:9 frame. */
+  | { kind: 'demo-row'; demos: DemoRowItem[] }
 
 // ─── Project interface ───────────────────────────────────────────────────────
 
-/** A badged section rendered between the header and Impact. Add as many as the
- *  story needs — the badge is the label shown above the blocks. */
+/** A badged section. The first one is Context and folds into a closed box at
+ *  the foot of the second; the rest read as Problem, Research, Solution. */
 export interface ProjectSection {
   badge: string
   blocks: ProcessBlock[]
@@ -70,43 +37,14 @@ export interface ProjectSection {
 export interface Project {
   slug: string
   title: string
-  /** The one shared one-liner for the project: rendered on the home card,
-   *  under the header of the case study, and in its SEO, Open Graph, Twitter
-   *  and JSON-LD metadata. There is no separate tagline to drift from it. */
-  description: string
-  /** The card headline, one sentence that carries its own accents. Anything
-   *  inside `[[ ]]` renders in the accent colour — at most two per sentence,
+  /** The card headline, one sentence that carries its own accents: rendered
+   *  on the home card, under the case study's hero and, stripped of its
+   *  accents by `projectSummary`, as the page's SEO, Open Graph, Twitter and
+   *  JSON-LD description. There is no separate description to drift from it.
+   *  Anything inside `[[ ]]` renders in the accent colour — at most two per sentence,
    *  the second one always the number. Rendered by `CardSentence`. */
   card: {
     text: string
-  }
-  metrics: {
-    value: string
-    label: string
-    color?: 'accent' | 'ink'
-  }[]
-  /** The 30-second skim under the case-study header: Problem, Solution,
-   *  Result, one line each. Rendered outside the section rail. */
-  tldr: {
-    problem: string
-    solution: string
-    result: string
-  }
-  meta: {
-    company: string
-    domain: string
-    role: string
-    team: string
-    duration: string
-    /**
-     * One sentence: what was mine and what was somebody else's.
-     *
-     * No bold, ever. Bold marks the insight or the number; bolding your own
-     * role is the thing that rule exists to stop.
-     */
-    myRole: string
-    /** The shipped product, linked from the header. Prototypes have none. */
-    live?: { label: string; url: string }
   }
   coverImage: string
   coverImagePosition?: 'bottom-right' | 'center-bottom'
@@ -117,35 +55,30 @@ export interface Project {
   demo?: DemoId
   sections: ProjectSection[]
   results: {
-    /** One paragraph of what happened, read before the metric cards. */
+    /** One paragraph that says what the card does not: when and on what it was
+     *  measured, and what it means. */
     summary?: string
-    note?: string
-    northStar?: {
+    northStar: {
       label: string
       value: string
+      /** Beside the number: its before and after, or a short fact backing it. */
+      badge?: string
     }
-    /** A stacked-bar breakdown shown beside the north star in the same card —
-     *  e.g. desktop vs mobile, before vs after — rather than as more
-     *  `MetricMain` cards stacked below it. Only renders that composite
-     *  layout when both this and `northStar` are set; every project without
-     *  one keeps today's stacked cards untouched. */
+    /** Desktop vs mobile growth, drawn in the north star's card (signup). */
     breakdownChart?: BreakdownChart
     metrics: {
       value: string
       label: string
-      description?: string
-      color?: 'accent' | 'ink'
-      /** Drawn inside this metric's card, under its number. One bar per cohort,
-       *  and a metric that carries a chart is rendered full-width.
-       *  `label` is the axis tick, kept short; `full` is what the tooltip says,
-       *  where there is room to spell it out. */
+      badge?: string
+      /** A cohort chart: this metric then leads the card with the chart under
+       *  it. `label` is the axis tick, `full` the tooltip. */
       chart?: {
         seriesLabel: string
         data: { label: string; full: string; value: number }[]
       }
     }[]
   }
-  /** Rendered as plain paragraphs under a Reflections badge. */
+  /** Short paragraphs read under the Outcome card. */
   reflections: string[]
 }
 
@@ -154,29 +87,9 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'freemium-activation',
-    title: 'Freemium launch',
-    description: "Freemium, edrone's first product-led channel after a decade of sales-led growth.",
+    title: 'Freemium onboarding',
     card: {
-      text: 'Opened edrone to self-serve after ten years of sales-led growth, reaching [[5,050 stores in 11 months]] with [[7.8% converting to paid]]',
-    },
-    metrics: [
-      { value: '5,050', label: 'STORES ACQUIRED', color: 'accent' },
-    ],
-    tldr: {
-      problem: 'For ten years every customer was set up by a person, so the stores that could not pay for a person were never worth acquiring. Almost nobody had ever run edrone alone.',
-      solution: 'I rebuilt the entry so a store sets itself up in minutes: nothing is asked, seven automations are already running, and the one ask lands at the end.',
-      result: '5,050 stores in under a year, 393 of them paying, adding 16% to a base built over ten years.',
-    },
-    meta: {
-      company: 'edrone',
-      domain: 'Marketing automation for ecommerce',
-      role: 'Sr Product Designer & Team Lead',
-      team: '2 developers, 2 freemium specialists',
-      duration: '11 months',
-      // The eleven months are in Approach ("The build was quick. The eleven
-      // months were the iterating"), so they are not repeated here.
-      myRole: 'I decided what the setup keeps, what it asks, and what it decides on its own, then designed every screen that carries those decisions. Dozens of calls with small stores redrew each pass of the design.',
-      live: { label: 'edrone.me', url: 'https://edrone.me' },
+      text: 'Led and designed edrone\'s freemium onboarding, bringing in [[5050 stores in 11 months]] with [[7.8% converting to paid]]',
     },
     coverImage: '/thumbnails/freemium-activation.png',
     thumbnailImage: '/thumbnails/freemium-activation.png',
@@ -187,7 +100,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'edrone is marketing automation for ecommerce. Automated messages bring shoppers back to buy: an abandoned cart, a first order, the next one.',
+            content: 'edrone is a marketing automation platform for online stores. It sends automated emails and newsletters that bring shoppers back to buy, for example after they leave a full cart or to nudge them towards their next order.',
           },
         ],
       },
@@ -196,65 +109,29 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'For ten years every customer came through a Salesperson and stayed with a Support team. **The product always had people doing its setup, which is exactly what a small store cannot pay for.**',
+            content: 'A small store had no way into edrone. For ten years every customer was set up by Support\'s onboarding team, and **that cost made small stores not worth acquiring**.',
           },
           {
             kind: 'text',
-            content: 'Small stores were never worth acquiring: the cost of a person sat on top of every setup, and no path ran without one. Almost nobody had ever run edrone alone.',
+            content: 'Freemium had to reach them with **nobody doing the setup**, and almost nobody had ever run edrone alone.',
           },
         ],
       },
       {
-        badge: 'Goal',
+        badge: 'Research',
         blocks: [
           {
             kind: 'text',
-            content: '**Open edrone to the stores the old model could not afford to serve.** No salesperson, no Support team. The product sells itself, sets itself up and earns its keep.',
+            content: 'Research ran from before launch through the **11 months** after it:',
           },
           {
-            // The definition of the number, in the section that is supposed to
-            // define it. It spent a while at the foot of Solution, where it
-            // read as a caveat arriving after the work rather than as the bar
-            // the work was aimed at.
-            kind: 'text',
-            content: 'Ten years of the old model built 2,500 paying stores. Freemium had to reach the ones it never could, and most of those would never pay.',
-          },
-          {
-            kind: 'text',
-            content: 'Active meant a store had connected its shop to edrone, had automations running, and was doing around fifty orders a month. Not logins.',
-          },
-        ],
-      },
-      {
-        badge: 'Approach',
-        blocks: [
-          {
-            kind: 'text',
-            content: 'A person had set up every paying customer, so the product had never stood on its own. Freemium had to turn everything that person used to do into decisions the product makes itself.',
-          },
-          {
-            kind: 'text',
-            content: 'Those customers still wrote their own newsletters, so it was never all or nothing. **I had to find the line: what is done before the store arrives, and what it still wants to do itself.**',
-          },
-          {
-            kind: 'text',
-            content: 'Then a third thing. A newsletter only counts if the next one is coming. **Setup that runs once is a demo.**',
-          },
-          {
-            kind: 'text',
-            content: 'The build was quick; the eleven months were the iterating. Dozens of calls with small stores redrew the design each pass: the step they stalled on, the automation they switched off, what they asked us for.',
-          },
-          {
-            kind: 'decisions',
+            kind: 'list',
             items: [
-              {
-                num: 'PROBLEM 1',
-                description: 'A trial ends on a date. Freemium ends when the store outgrows it. **Which one holds a store long enough to be worth anything?**',
-              },
-              {
-                num: 'PROBLEM 2',
-                description: 'No two stores want the same messages going out under their name. **If the store has to decide, the setup is not finished. If I decide for everyone, some of it is wrong for someone.**',
-              },
+              '**Around 100 user interviews**, run with the 2 freemium specialists on my team, on what stores expect and where they get stuck',
+              '**Onboarding team calls and exit calls**, to see what the team set up by hand for every new customer and why stores left',
+              '**Session recordings**, to see where stores hesitate or drop off',
+              '**Onboarding analytics** I set up myself in **{{amplitude|Amplitude}}**, read alongside **{{tableau|Tableau}}** and **{{vitally|Vitally}}**',
+              '**Competitors and other self-serve SaaS**, to see how they onboard new accounts',
             ],
           },
         ],
@@ -264,66 +141,72 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: '**Freemium, not a trial.** Orders come when shoppers are ready, not when we are. A trial closes the account before that happens; a free one costs us nothing to leave open.',
+            content: 'Every part of freemium went through many iterations, the onboarding most of all.',
           },
           {
-            // The list this used to carry (campaigns written, automations
-            // built, pop-up ready) is the still below it. Saying it twice made
-            // the picture an illustration of the sentence instead of the
-            // evidence for it.
-            kind: 'text',
-            content: "Everything is built from the store's own site in the minutes after signup. It gives us a URL and nothing else.",
-          },
-          {
-            kind: 'demo',
-            demo: 'freemium-setup',
-            caption: 'Account creation in full. Four stages, no question asked at any of them, all of it read off the one address the store typed.',
-          },
-          {
-            // Same cut: the seven automations were named one by one here and
-            // are named again on their own cards in the still below.
-            kind: 'text',
-            content: 'Someone still had to decide what runs, and I took it. edrone knows what works better than a store that never ran marketing automation, so I switched everything on. Seven automations are live before the store logs in.',
-          },
-          {
-            kind: 'demo',
-            demo: 'freemium',
-            step: 0,
-            caption: 'What the store finds waiting: seven automations, all of them running. Each keeps an off switch, because disagreeing with edrone should cost a click.',
+            kind: 'collapse',
+            label: 'How the onboarding evolved',
+            blocks: [
+              {
+                kind: 'list',
+                items: [
+                  '**Shop connected to edrone first, then 3 automations switched on in onboarding cards.** Stores clicked "next" without reading, and were angry when emails went out.',
+                  '**Shop connected first, then a checklist and walkthrough** for stores to set things up themselves. Most were new to marketing automation and did not see the value.',
+                  '**Shop connected first, then live events with suggested tasks**, like "someone just added to cart, turn on abandoned cart". Stores still did not act, and some waited for a call.',
+                  '**Everything ready first, shop connected last.** An onboarding widget walks the store through what is already built, and it connects its shop only after its aha moment. **Fewer stores connected**, but those that did knew what they would get, and the share of active stores kept climbing.',
+                ],
+              },
+            ],
           },
           {
             kind: 'text',
-            content: 'I started with two, to see whether a store would leave running something it had no hand in making. Nobody switched them off, so the rest followed.',
+            content: 'What shipped:',
+          },
+          {
+            kind: 'list',
+            items: [
+              '**Freemium, not a trial.** Small stores need time to grow before a paid plan makes sense, and freemium let them stay with us until it did.',
+              '**Built from the store\'s URL alone.** AI generates every email ready to send, from layout and images to copy.',
+              '**Everything on from the start**, with 7 core automations across channels, a pop-up to grow the customer base, Contacts activation and a widget showing recent purchases.',
+              '**1-click shop connection**, which I pushed hard for, since connecting the shop was a major blocker.',
+            ],
           },
           {
             kind: 'text',
-            content: '**Nothing is asked before something is shown.** Tailoring means questions, and a question comes before anything runs. So the same seven run for a furniture store and a sock shop, each with an off switch. Disagreeing costs a click, not a setup.',
+            content: 'I led it with 2 developers and 2 freemium specialists, and built parts myself in {{codex|Codex}}.',
           },
           {
-            kind: 'text',
-            content: 'Nothing sends until the store connects its shop, so that ask falls last, not first: by then the store has seen what it is getting.',
-          },
-          {
-            // The whole walkthrough, and it belongs here rather than three
-            // paragraphs earlier. It ends on the store connecting, which is
-            // what the paragraph above it is about; run before that and the
-            // section showed the full sequence and then its own ending again.
-            kind: 'demo',
-            demo: 'freemium',
-            caption: 'The shipped onboarding, end to end. Four steps of showing what is already done, and one ask at the end of them.',
+            // The whole onboarding playing, the customer's words, then the
+            // screens it walks through.
+            kind: 'demo-row',
+            demos: [
+              'freemium',
+              {
+                quote: 'It was love at first sight. As soon as I set it up on your freemium plan, I could use it freely with the small base we had. [\u2026] We moved to the paid plan simply because our base grew. There was never even a moment of asking if it was worth it.',
+                author: 'Kuba, co-founder of Malviva, on edrone\'s podcast (translated from Polish)',
+                href: 'https://www.youtube.com/watch?v=9c7pFdssDug&t=557s',
+              },
+              { src: '/images/fm-automations-ready.png', alt: 'Automations built from the store\'s site, ready before it connects', width: 1920, height: 1080 },
+              { src: '/images/fm-popup-ready.png', alt: 'A subscriber pop-up, ready before the store connects', width: 1920, height: 1080 },
+              { src: '/images/fm-integrate-last.png', alt: 'Connecting the shop, the last onboarding step', width: 1920, height: 1080 },
+              { src: '/images/fm-widget-corner.png', alt: 'The onboarding widget, step 2 of 4', width: 2571, height: 1446, bleed: 'top-left' },
+            ],
           },
         ],
       },
     ],
     results: {
-      summary: 'Almost nobody had ever run edrone alone; a year later more than five thousand stores had. The entrance the old model could not afford to serve became the one most stores came through.',
+      summary: 'Ten years of the sales-led model built 2500 paying stores. In 11 months freemium signed up **twice that many stores**, free and paid, with nobody from Support setting them up, and its paying stores **grew the paid base by 16%**. An active store is one with its automations running.',
+      northStar: {
+        label: 'STORES ACQUIRED',
+        value: '5050',
+        badge: 'in 11 months',
+      },
       metrics: [
-        { value: '5,050', label: 'STORES ACQUIRED', color: 'accent', description: 'Signed up in under a year, without a salesperson or an onboarding team, the two costs that made a small store unprofitable. **393 started paying, adding 16% to a base built over ten years.**' },
         {
           value: '77%',
           label: 'ACTIVE STORES',
-          color: 'accent',
-          description: 'Every monthly cohort above. **Over the same months, the median time to a first attributed order fell from 35 days to 5.** That is a sale from a shopper who came back through an edrone message.',
+          badge: '2.2× since launch',
           chart: {
             seriesLabel: 'ACTIVE STORES',
             data: [
@@ -341,62 +224,31 @@ export const projects: Project[] = [
             ],
           },
         },
+        { value: '7.8%', label: 'FREE TO PAID', badge: '393 stores' },
       ],
     },
     reflections: [
-      'Everything shipped as one preset. Next I would give the store a small set of choices, so it has a say without adding a step to setup.',
-      'The model was built to take Support out of the customer, and Support\u2019s workload went up anyway. I never put a number on that, which is the first thing anyone should ask of a model that claims to remove a cost.',
+      'The onboarding ended at the integration. After that, nothing in the app led a store to its next step, only Intercom messages did, and that is the part I would design next.',
     ],
   },
   {
     slug: 'signup-redesign',
     title: 'Signup flow',
-    description: 'Tripled signup conversion in five hours, with Codex.',
     card: {
       text: 'Redesigned the signup form and [[tripled conversion]], delivered with AI in [[5 hours]]',
     },
-    metrics: [
-      { value: '+200%', label: 'SIGNUP CONVERSION', color: 'accent' },
-    ],
-    tldr: {
-      problem: 'Signup lost 97 of every 100 visitors who reached the form. A phone number almost nobody used sat on the most expensive moment in the funnel, and the SSO button did not create an account.',
-      solution: 'Cut the phone number, made SSO real, and split the form so step 1 alone creates the account.',
-      result: '0.75% to 2.25% of unique visitors, with conversion on to an integrated store unmoved.',
-    },
-    meta: {
-      company: 'edrone',
-      domain: 'Marketing automation for ecommerce',
-      role: 'Sr Product Designer',
-      team: 'Design and build solo, paired with Codex',
-      duration: 'One afternoon',
-      // "Five hours" is the description and the last line of Solution. Twice
-      // is already the limit; a third place would be the punchline told again.
-      myRole: 'I diagnosed the drop from event data and session recordings, then bet the redesign on one judgment: that splitting the form and creating the account on the first step would raise conversion despite adding a step. It did. I designed the flow and built its frontend in Codex.',
-      live: { label: 'edrone.me', url: 'https://edrone.me' },
-    },
     coverImage: '/images/sf-cover.png',
     thumbnailImage: '/images/sf-cover.png',
-    // The redesigned story, not the old prototype `signup-demo.tsx` shows.
-    // Not the full narrative either, landing page included — that version
-    // still exists (`SignupStoryDemo`, kept alive by the Solution section's
-    // own pinned use of `'signup-story'`), but the click-to-enlarge lightbox
-    // ClickableDemo opens ignores every pin and always plays a demo's `id`
-    // from the top, so a hero built on it surfaced the landing page again
-    // however small the hero itself was capped. Both the hero and the home
-    // card play the shipped product only: the redesign's own history is the
-    // case study's job to tell, not this demo's.
-    demo: 'signup-story-fixed',
+    // The shipped product only, form through Google to success, on the same
+    // desktop stage the other cards and heroes use.
+    demo: 'signup-story-desktop',
     sections: [
       {
         badge: 'Context',
         blocks: [
           {
             kind: 'text',
-            content: 'edrone is a marketing automation CRM for ecommerce. Automated messages and newsletters bring shoppers to the store to buy: a cart they left behind, a first order, the next one.',
-          },
-          {
-            kind: 'text',
-            content: 'For ten years edrone sold one way only, through Sales. Freemium was the company\'s first product-led channel, and this work landed four months into it.',
+            content: 'edrone is a marketing automation platform for online stores. It sends automated emails and newsletters that bring shoppers back to buy, for example after they leave a full cart or to nudge them towards their next order.',
           },
         ],
       },
@@ -404,20 +256,8 @@ export const projects: Project[] = [
         badge: 'Problem',
         blocks: [
           {
-            kind: 'split',
-            text: [
-              'The four-step funnel lost the most people between clicking "Sign up free" and creating an account. **A mandatory phone number almost nobody used** stayed in the form for one salesperson who cold-called quiet signups, and every signing-up user paid for it at the most expensive moment in the funnel.',
-              '**"Sign up with Google" did not create an account.** It pulled a name and email from the Google dialog and dropped the user back on the same four fields, now partly filled. The button looked like a shortcut and behaved like autofill.',
-            ],
-            sides: [
-              {
-                label: '',
-                text: '',
-                demo: 'signup-story',
-                // Screen 1 of the story script: the old form, all four fields.
-                step: 1,
-              },
-            ],
+            kind: 'text',
+            content: 'Freemium was edrone\'s first product-led channel, and four months in, **acquisition was the focus**. But most people who clicked "Sign up free" left the form without creating an account. Signup conversion sat at 0.75%, **far below the 2 to 5% typical for the industry**.',
           },
         ],
       },
@@ -426,15 +266,15 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'I started in Amplitude, checked that the event data was sound, then watched session recordings of that exact step to see what people were doing on the form. That gave me a dozen or so issues I thought were wrong.',
+            content: 'To find out why people left, I went through the flow three ways:',
           },
           {
-            kind: 'text',
-            content: 'Alongside it, I ran a UX agent I\'d built on Claude through the flow. It walks the screens in a browser, clicks through them the way a user would, and comes back with a report: what\'s wrong, why, and how severe.',
-          },
-          {
-            kind: 'text',
-            content: 'I used the agent to test my own hypotheses rather than to produce them. It confirmed most of what I had already found, added candidates I had not considered, and ranked them. I picked the ones worth the time and cost of building.',
+            kind: 'list',
+            items: [
+              'Analyzed the signup flow\'s event data in **{{amplitude|Amplitude}}**',
+              'Watched **session recordings** of the form',
+              'Ran my self-built **UX Audit Agent** on {{codex|Codex}} through the flow',
+            ],
           },
         ],
       },
@@ -442,58 +282,37 @@ export const projects: Project[] = [
         badge: 'Solution',
         blocks: [
           {
-            // Each of the three changes gets its own short, live, looping
-            // demo — `signup-story-demo.tsx`'s `SignupPhoneRemoveDemo`, not
-            // a screenshot and not scroll-driven: it plays on its own once it
-            // is on screen, the same as every other demo on this page.
-            kind: 'split',
-            text: [
-              'Time to act on what the research had found.',
-              'The main change was **removing the phone number input**. I had to confirm with Sales whether it held real value; it turned out to be marginal, worth cutting outright.',
-            ],
-            sides: [
-              { label: '', text: '', demo: 'signup-story-phone' },
-            ],
+            kind: 'text',
+            content: 'The research pointed to three changes that could lift conversion:',
           },
           {
-            kind: 'split',
-            text: [
-              "Next, SSO finally worked correctly, so **users could create an account through Google or Shopify**.",
-              "And that's where the third change came in: creating an account still required the shop's URL up front...",
+            kind: 'list',
+            items: [
+              '**Removed the phone number input**, after Sales confirmed it was worth little.',
+              '**Made Google and Shopify sign-in create the account**, instead of only filling in the form.',
+              '**Split the form into two steps**, with the account first and the shop\'s name and URL after. It adds a step, but it lets SSO work without asking for the URL first.',
             ],
-            sides: [
-              { label: '', text: '', demo: 'signup-story-google' },
-            ],
-          },
-          {
-            // Left plays Name and Shop URL leaving (`SignupSplitDemo`);
-            // right plays them landing on the step 2 it's splitting into
-            // (`SignupSplitArriveDemo`) — two `DemoFrame`s on an identical
-            // timeline, not one pinned still, so the pair reads as one
-            // relocation rather than a before/after cut.
-            kind: 'demo-pair',
-            text: [
-              "So **I split that step into two**, an unpopular move, though it did streamline the SSO flow. After creating the account, the user supplied their shop link and name, for the Support team and in-app personalization.",
-            ],
-            left: { demo: 'signup-story-split' },
-            right: { demo: 'signup-story-split-arrive' },
           },
           {
             kind: 'text',
-            content: 'I put together a prototype draft in Figma, and after checking with a developer it turned out the whole thing needed some backend work, so I took the front end myself, in Codex.',
+            content: "I built the frontend in **{{codex|Codex}}** and shipped **the new signup flow in 5 hours**.",
           },
           {
-            kind: 'text',
-            content: "And that's how we shipped **the new signup flow in five hours**.",
+            // The shipped flow playing, then its two steps.
+            kind: 'demo-row',
+            demos: [
+              'signup-story-desktop',
+              { src: '/images/su-step-account.png', alt: 'Step 1: create the account with email, Google or Shopify', width: 1920, height: 1400, crop: '50% 50%' },
+              { src: '/images/su-step-shop.png', alt: 'Step 2: the shop\'s name and URL, after the account exists', width: 1920, height: 1400, crop: '50% 50%' },
+            ],
           },
         ],
       },
     ],
     results: {
-      summary: "I waited three weeks before deciding whether the flow stayed or not. Given the site's average traffic, that was the least I'd trust the number, though honestly, I already knew the decision after the first few days of seeing the performance.",
-      note: '**Desktop, about 85% of the traffic, went from 1% to 2%; mobile, which had a dismal 0.05%, rose to 3%.**',
+      summary: 'After 3 weeks of live traffic, signup conversion had tripled. The biggest jump was on mobile, which went from almost no signups to converting better than desktop.',
       northStar: {
-        label: 'TOTAL SIGNUP CONVERSION',
+        label: 'TOTAL CONVERSION',
         value: '+200%',
       },
       // The +200% north star is the independently-measured total
@@ -509,38 +328,20 @@ export const projects: Project[] = [
         ],
         before: { desktop: 1, mobile: 0.05 },
         after: { desktop: 2, mobile: 3 },
+        total: { before: 0.75, after: 2.25 },
       },
       metrics: [],
     },
     reflections: [
-      'At the same time, I was aware of the risk that **rolling out three changes at once could make it hard to tell which one actually moved the needle**, especially splitting the form into two steps, so I tracked that one on its own. **Share of visitors who began filling the form went from 2.7% to 10%: desktop 3% to 10%, mobile 1% to 10%. Splitting the form was the bet, and this is what confirms it.**',
-      "For cleanliness, I would have shipped the phone number removal on its own, then SSO and the split together as a second phase, but I didn't have that much time at that point.",
+      'Shipping three changes in one release made it hard to tell which one moved the number. With more time I would have shipped them separately.',
+      'To hedge, I added extra tracking in {{amplitude|Amplitude}}. It clearly confirmed the split, as **the share of visitors who began filling the form went from 2.7% to 10%**.',
     ],
   },
   {
     slug: 'contacts-activation',
     title: 'Contacts identification',
-    description: "Identified a third more of a shop's traffic, the metric behind half its revenue.",
     card: {
-      text: "Reactivated stores' customers through a feature built with AI in a week, making [[32% more of them reachable by automations]]",
-    },
-    metrics: [
-      { value: '+32%', label: 'IDENTIFICATION RATE', color: 'accent' },
-    ],
-    tldr: {
-      problem: 'An automation can only fire at a contact edrone has identified by a cookie, and for the median store that was 3.1% of traffic. Nothing on the market raises it, and it decays on its own.',
-      solution: 'A seven-email sequence that repeats every 30 days, starts switched on, and is written in the store\'s own voice by AI.',
-      result: '3.1% to 4.1% reachable traffic in the first month, with 860 stores having kept it on against 42.',
-    },
-    meta: {
-      company: 'edrone',
-      domain: 'Marketing automation for ecommerce',
-      role: 'Sr Product Designer',
-      team: '1 product analyst, AI-written copy',
-      duration: 'One week',
-      // The six days close Solution, so they are not repeated here.
-      myRole: 'I decided the concept, the sequence, the frequency and every screen: how often to send, what is and is not marketing, and that the feature starts on. A product analyst verified the data behind each call.',
-      live: { label: 'edrone.me', url: 'https://edrone.me' },
+      text: "Designed a new feature that made [[32% more contacts reachable]] by automations, delivered with AI in [[6 days]]",
     },
     coverImage: '/images/ci-cover.png',
     thumbnailImage: '/images/ci-thumbnail.png',
@@ -551,7 +352,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: "edrone is marketing automation for ecommerce. Automations fire off what a shopper does on the site; newsletters go out by hand to subscribers. Each brings half the revenue edrone can earn a shop, and a store pays by the size of the contact base it keeps there.",
+            content: 'edrone is a marketing automation platform for online stores. It sends automated emails and newsletters that bring shoppers back to buy, for example after they leave a full cart or to nudge them towards their next order.',
           },
         ],
       },
@@ -559,62 +360,31 @@ export const projects: Project[] = [
         badge: 'Problem',
         blocks: [
           {
-            kind: 'decisions',
+            kind: 'text',
+            content: 'Stores pay edrone for their whole contact base, but automations, which bring half the revenue they get from edrone, **reached only 3.1% of it**.',
+          },
+          {
+            kind: 'text',
+            content: 'An automation can only reach a contact identified by a cookie, and nothing in the product helped a store raise that. Stores saw little return for what they paid, and **churn was rising**.',
+          },
+        ],
+      },
+      {
+        badge: 'Research',
+        blocks: [
+          {
+            kind: 'text',
+            content: 'To understand what drives identification and how stores see it, I went five ways:',
+          },
+          {
+            kind: 'list',
             items: [
-              {
-                num: 'PROBLEM 1',
-                title: 'Nothing identifies a contact unless the contact acts first',
-                description: 'It takes an open, a click, a signup or an order. Only the first can be repeated, and only if the store mails its whole base.',
-              },
-              {
-                num: 'PROBLEM 2',
-                title: 'Identification decays on its own',
-                description: 'Cookies clear on their own within about 30 days, so anything sent once stops working.',
-              },
-              {
-                num: 'PROBLEM 3',
-                title: 'Almost nobody knows identification exists',
-                description: 'Three quarters of users did not know a contact has to be identified at all. The feature had to explain its own value fast, or nobody would use it.',
-              },
+              'Ran **6 user interviews** to test my hypothesis that most stores did not know identification existed',
+              'Ran **internal research** with the **Support Team** on how they were already dealing with it',
+              'Checked the data in **{{tableau|Tableau}}** and compared **store cohorts** to see what affects identification',
+              'Reviewed whether and how **competitors** handle identification',
+              'Researched **technical ways to raise identification** and talked them through with **developers**',
             ],
-          },
-        ],
-      },
-      {
-        badge: 'Goal',
-        blocks: [
-          {
-            kind: 'text',
-            content: "An automation can only fire at a contact edrone has identified by a cookie.",
-          },
-          {
-            kind: 'contact-flow',
-            caption: "Opening an email loads a tracking pixel, which sets the cookie connecting a contact's browsing to their profile.",
-          },
-          {
-            kind: 'text',
-            content: "For the median store that was **3.1%**. The other 97% of the traffic got no automations at all, which makes identification the biggest lever in the product.",
-          },
-          {
-            kind: 'text',
-            content: "The ceiling is higher than it looks: an automation needs no marketing consent, so it reaches contacts a newsletter never will. Every point is leverage on a base the store already pays for.",
-          },
-        ],
-      },
-      {
-        badge: 'Approach',
-        blocks: [
-          {
-            kind: 'text',
-            content: "My product analyst checked the data first, in case 3.1% was a reporting artefact. It was real.",
-          },
-          {
-            kind: 'text',
-            content: "Then Klaviyo, HubSpot, Omnisend, Brevo and a few others. **None of them do anything to raise it.** Identification happens where a contact engages on their own, and nowhere else.",
-          },
-          {
-            kind: 'text',
-            content: "Support was already solving it by hand: a short series of emails to a store's whole base, purely to get contacts identified. For a handful of stores, one at a time, once.",
           },
         ],
       },
@@ -623,94 +393,61 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: "What to send. Marketing cannot go to contacts without consent, and those are exactly the ones worth reaching, so nothing in the sequence is marketing.",
+            content: 'Support was already raising identification by emailing a store\'s whole base, and the research pointed the same way, since more opened emails mean more identified contacts. I turned that into **Contacts activation**, the first step of a larger area for activating a store\'s base, built around an automated email sequence:',
+          },
+          {
+            kind: 'list',
+            items: [
+              '**Branded as the store and sent automatically**, with every email generated by AI.',
+              '**Multiple different emails**, so a monthly send keeps getting opened.',
+              '**A 30-day cycle**, because cookies clear on their own within about 30 days.',
+              '**Neutral content**, not marketing, so it can go to the whole base.',
+            ],
           },
           {
             kind: 'text',
-            content: "How often. One send lifts identification and loses it again as the cookies clear, so the sequence repeats every 30 days.",
-          },
-          {
-            kind: 'demo',
-            demo: 'contacts',
-            step: 0,
-            caption: 'The sequence as the user sees it: each send 30 days after the one before, and a repeat at the end rather than a stop.',
+            content: 'On the dashboard it is a module with **a preview of every email**, its sending details and its performance. The interviews showed some stores did not get identification, so it also has a short **How it works** section.',
           },
           {
             kind: 'text',
-            content: "Variety. Seven different emails, not one resent: a base that gets the same message monthly stops opening it, and an unopened email identifies nobody.",
+            content: 'Most importantly, **it is on by default**, shown in onboarding as already running, since stores would never look for a feature they did not understand.',
           },
           {
             kind: 'text',
-            content: "The content. Each message had to look like the store rather than like edrone, so AI writes it from the store's own branding.",
+            content: 'With one backend developer and {{codex|Codex}}, we shipped the feature in **6 days**.',
           },
           {
-            kind: 'demo',
-            demo: 'contacts',
-            step: 1,
-            caption: "One send opened in the preview drawer, carrying the store's own branding rather than edrone's.",
-          },
-          {
-            kind: 'text',
-            content: "Who turns it on. Left off until someone found the setting, nobody would have, so **the feature starts on**, shown in onboarding as something already running. It comes off in one click.",
-          },
-          {
-            kind: 'demo',
-            demo: 'contacts',
-            caption: 'The identification screen in the walkthrough. I designed the template structure; AI writes the content.',
-          },
-          {
-            kind: 'text',
-            content: "I validated it first with the eight people in Support who had been sending those emails by hand.",
-          },
-          {
-            kind: 'text',
-            content: "Existing customers did not get it switched on automatically. For them it became one click for Support, instead of the campaign they used to send themselves.",
-          },
-          {
-            kind: 'text',
-            content: "The screen, the template structure and the sequence shipped together in **six days**, because each decision carried its own evidence: the repeat cadence from how the cookies clear, the 'starts on' default from nobody searching for the setting, the content from the store's own branding.",
+            // The screen playing, the sequences, then one email previewed.
+            kind: 'demo-row',
+            demos: [
+              'contacts',
+              { src: '/images/ci-sequences.png', alt: 'Contacts activation with the identification sequence running', width: 1920, height: 1080 },
+              { src: '/images/ci-email-preview.png', alt: 'One email of the sequence in the preview drawer', width: 1920, height: 1080 },
+            ],
           },
         ],
       },
     ],
     results: {
-      summary: 'Eight people in Support had been sending these emails by hand, one store at a time. The feature condensed that into one screen that writes its own copy from the store\'s branding and defaults to running.',
-      note: "Share of contacts an automation could reach, from **3.1% to 4.1%** a month after rollout.",
+      summary: 'In the first 2 months after release, **902 new stores** got it by default (about 12% of all stores). Their automations now reach a third more of the base they pay for, which could mean **around 15% more revenue** from edrone.',
       northStar: {
         label: 'IDENTIFICATION RATE',
         value: '+32%',
+        badge: '3.1% → 4.1%',
       },
       metrics: [
-        { value: '95%', label: 'KEPT IT ON', description: 'The sequence starts on, and 860 stores left it that way against 42 who switched it off.', color: 'accent' },
+        { value: '95%', label: 'ADOPTION', badge: '860 of 902 kept it on' },
       ],
     },
     reflections: [
-      "The first version sent to the whole base every cycle, including contacts it had already identified that month. That is volume spent on nothing and a tax on deliverability. Skipping anyone who opened an email in the last 30 days would have fixed it, and there was no room for that before launch.",
+      'The first version emailed the whole base every cycle, including contacts already identified that month, which wastes sends and hurts deliverability. Skipping anyone who opened an email in the last 30 days would have fixed it, but there was no room for that before launch.',
     ],
   },
   {
     slug: 'plo-genius',
     title: 'PLO Genius',
-    description: "The first PLO poker solver ever to run in a browser. Designed from zero as the sole designer.",
     card: {
-      text: 'Sole designer of the first PLO solver in a browser, from research to design system, still live [[four years on]] with [[120+ paying subscribers]]',
-    },
-    metrics: [
-      { value: '10+', label: 'B2B API CLIENTS', color: 'accent' },
-    ],
-    tldr: {
-      problem: 'PLO players studied without a solver: the only option was a $5,000+ PC running MonkerSolver, and the output was a frequency matrix most players could not read.',
-      solution: 'I turned a proven neural-net engine into a browser product whose whole interface taught players to read its output: preflop and postflop solvers, a trainer, and the marketing site.',
-      result: 'Four years on: 120+ paying subscribers on the app I designed, 10+ platforms licensing the engine.',
-    },
-    meta: {
-      company: 'Deepsolver',
-      domain: 'SaaS · Poker / GTO solver',
-      role: 'Sole product designer',
-      team: 'Solo design; engineers owned the engine',
-      duration: '10 months',
-      myRole: 'Research, UX, UI, the marketing site and the design system. The core judgment was treating the interface as the product: the engine was proven, the players who needed it most could not read its output, so the whole design existed to make that matrix readable.',
-      live: { label: 'plogenius.com', url: 'https://www.plogenius.com' },
+      text: 'Designed the first PLO solver in a browser as its sole designer, still live [[four years on]] with [[120+ paying subscribers]]',
     },
     coverImage: '/images/plo-cover.png',
     coverImagePosition: 'center-bottom',
@@ -721,15 +458,7 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'PLO Genius is a cloud-based Pot-Limit Omaha solver and GTO trainer, built to run in a browser on a subscription a player could justify.',
-          },
-          {
-            kind: 'text',
-            content: 'Deepsolver (NLH) had already proven that a neural-net cloud solver could work. PLO Genius brought the same approach to Omaha: a more complex game with far fewer learning tools.',
-          },
-          {
-            kind: 'text',
-            content: 'I was the sole designer, and that constraint shaped every decision. There was no onboarding team and no brand to fall back on, so whatever the product needed to teach had to be designed into the product itself.',
+            content: 'PLO Genius is a Pot-Limit Omaha solver and GTO trainer that runs in a browser. Its sister product Deepsolver had already proven a neural-net cloud solver for No-Limit Hold\u2019em.',
           },
         ],
       },
@@ -738,41 +467,28 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'Before it, studying PLO with a solver meant buying a **$5,000+ PC to run MonkerSolver**. There was no affordable, browser-based alternative, so most PLO players studied without a solver at all.',
+            content: 'Studying Pot-Limit Omaha with a solver meant buying a **$5000+ PC to run MonkerSolver**, so most players studied without one.',
           },
           {
             kind: 'text',
-            content: 'A solver answers with a matrix of frequencies and stops there. **The players who needed one most were the least able to read it**: the tool that was supposed to teach demanded a language the learner did not have yet.',
-          },
-        ],
-      },
-      {
-        badge: 'Goal',
-        blocks: [
-          {
-            kind: 'text',
-            content: '**Put a PLO solver in a browser at a price a player could justify.** The bar was the alternative: hardware, software, minutes per calculation. Most players would not pay any of it, so they studied without a solver.',
-          },
-          {
-            kind: 'text',
-            content: 'Deepsolver had already shown a neural-net cloud solver worked for No-Limit Hold’em, so the engine was never the open question. **The interface was.** The product had to exist to make the solver’s output readable.',
+            content: 'And a solver answers with a matrix of frequencies. **The players who needed it most could not read it.** The engine was proven, so the open question was the interface.',
           },
         ],
       },
       {
-        badge: 'Approach',
+        badge: 'Research',
         blocks: [
           {
             kind: 'text',
-            content: "I was designing a learning tool for a game I didn't play. The usual sources failed in useful ways: beginners could not say what they needed because they did not know the game yet, and pros operated on intuition that would not translate into interface decisions. Neither could validate a judgment about how a solver should teach.",
+            content: 'I was designing a learning tool for a game I did not play, so I learned it through players:',
           },
           {
-            kind: 'text',
-            content: 'The bridge turned out to be poker stables: organizations where a knowledgeable lead managed groups of players at different levels. Those leads understood both the theory and the learning process, which made them the most useful collaborators for validating design decisions.',
-          },
-          {
-            kind: 'text',
-            content: 'Validation ran through those stables. Each new surface went to a lead who both understood the theory and taught it, and the design changed on what they said: which charts confused, which drills held, where a screen asked more than a player could know yet.',
+            kind: 'list',
+            items: [
+              '**Beginners and pros**, who showed the gap. Beginners could not say what they needed, and pros played on intuition',
+              '**Leads of poker stables**, who teach players at every level, as my main collaborators',
+              '**Every new screen validated with a stable lead**, to find what confused, what held and where a screen asked too much',
+            ],
           },
         ],
       },
@@ -781,47 +497,56 @@ export const projects: Project[] = [
         blocks: [
           {
             kind: 'text',
-            content: 'The design broke the matrix into three surfaces, each answering one question a player actually asks. Each one carries its own piece of the teaching, with no onboarding team to explain anything outside the screen.',
+            content: 'I broke the solver\u2019s matrix into 3 surfaces, each answering one question a player actually asks:',
           },
           {
-            kind: 'image',
-            src: '/images/plo-preflop.png',
-            caption: 'Preflop: "what should I play here." Range charts and matrices across stack sizes, positions and rake, drawn from the trained network.',
-          },
-          {
-            kind: 'image',
-            src: '/images/plo-postflop.png',
-            caption: 'Postflop: "how does my hand do against that range on this board." Equity visualisations turn the matrix into a picture.',
-          },
-          {
-            kind: 'image',
-            src: '/images/plo-trainer.png',
-            caption: 'GTO Trainer: up to four tables at once, tuned to feel like a real session so learned play transfers to it. No custom bets, so the drill stays on correct play.',
+            kind: 'list',
+            items: [
+              '**Preflop**, for "what should I play here", with range charts across stack sizes, positions and rake.',
+              '**Postflop**, for "how does my hand do on this board", with equity visuals in place of the matrix.',
+              '**GTO Trainer**, for practice, with up to 4 tables tuned to feel like a real session and no custom bets, so the drill stays on correct play.',
+            ],
           },
           {
             kind: 'text',
-            content: 'The marketing site had to teach the same idea to people who had never used a solver: it led with the player\'s question, not with the engine, because nobody buys a matrix they cannot read.',
+            content: 'Most importantly, **I treated the interface as the product**. With no onboarding team, every screen had to teach on its own, and the marketing site led with the player\u2019s question, not the engine.',
           },
           {
             kind: 'text',
-            content: 'Launch. The product found paying users, and the screens above are the ones it shipped with.',
+            content: 'I designed it alone over **10 months**, from research to the design system, while engineers owned the engine.',
+          },
+          {
+            kind: 'demo-row',
+            demos: [
+              { src: '/images/plo-preflop.png', alt: 'Preflop range charts' },
+              { src: '/images/plo-postflop.png', alt: 'Postflop equity view' },
+              { src: '/images/plo-trainer.png', alt: 'GTO Trainer tables' },
+            ],
           },
         ],
       },
     ],
     results: {
-      summary: 'The product shipped with paying users and is still live four years later, while the engine it presented is licensed to other platforms. Both revenue lines ran through the same interface: something players could read well enough to pay for, and platforms could recognize well enough to license.',
+      summary: 'The app is still live four years later, and the engine behind it is licensed to other platforms, which became the main revenue channel.',
+      northStar: {
+        label: 'PAYING SUBSCRIBERS',
+        value: '120+',
+      },
       metrics: [
-        { value: '10+', label: 'B2B API CLIENTS', color: 'accent', description: 'Platforms licensing the neural-net engine. Primary revenue channel.' },
-        { value: '120+', label: 'PAYING SUBSCRIBERS', color: 'accent', description: 'Players using the app I designed. Three tiers: $0 / $59 / $125.' },
+        { value: '10+', label: 'B2B API CLIENTS' },
       ],
     },
     reflections: [
-      'The engine sold better than the app around it. Ten platforms licensed the API against 120 subscribers on the product I spent ten months designing. Knowing that, I would put the design effort where the revenue was and treat the consumer app as the demo for it.',
-      'Nothing in the product let players teach each other. PLO study already happens inside stables and the groups around them, which is where my own research came from, and the product never gave those groups anything to work with. A trainer a stable lead could set drills in would have grown through the people already doing that work by hand.',
+      'The engine sold better than the app around it, with 10 platforms licensing the API against 120 subscribers. Knowing that, I would have designed the app as the demo for the API.',
+      'Nothing in the product let players teach each other. A trainer where a stable lead sets drills would have grown through the groups already teaching PLO by hand.',
     ],
   },
 ]
+
+/** The card sentence as plain text, for metadata. */
+export function projectSummary(project: Project): string {
+  return project.card.text.replace(/\[\[|\]\]/g, '')
+}
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug)

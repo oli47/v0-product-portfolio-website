@@ -174,9 +174,10 @@ export default function Home() {
 
           {/* The one-line identity, then the story under it. */}
           <FadeUp delay={0}>
-            <p className="text-body-2 font-[450] text-[var(--color-500)] mb-3 text-pretty">
+            {/* The page's one h1, in body type: the identity line, not a banner. */}
+            <h1 className="text-body-2 font-[450] text-[var(--color-500)] mb-3 text-pretty">
               {noOrphans(t.hero.positioning)}
-            </p>
+            </h1>
           </FadeUp>
 
           <FadeUp delay={0.08}>

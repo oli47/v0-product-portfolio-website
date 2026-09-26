@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 
 const ZOOM_SCALE = 2.5
 
@@ -204,7 +205,10 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0, child
     </div>
   ) : null
 
-  return (
+  // Portalled to <body>: a fixed overlay inside a transformed ancestor (the
+  // full-bleed demo row, a FadeUp) is positioned against that ancestor, not the
+  // viewport, and came out as a strip the height of the row.
+  return createPortal(
     <div
       ref={dialogRef}
       role="dialog"
@@ -280,5 +284,7 @@ export function Lightbox({ src, alt = '', onClose, images, startIndex = 0, child
         )}
       </div>
     </div>
+    ,
+    document.body,
   )
 }

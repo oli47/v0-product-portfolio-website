@@ -13,7 +13,7 @@ export function ClickableImage({ src, alt, width, height, className, priority, o
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="block w-full cursor-zoom-in"
+        className="block w-full h-full cursor-zoom-in"
         aria-label={`Enlarge image: ${alt}`}
       >
         <Image

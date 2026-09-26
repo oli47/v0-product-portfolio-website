@@ -5,7 +5,7 @@ import { useTarget } from '@/components/demos/demo-cursor'
 import { DemoFrame, type DemoProps } from '@/components/demos/demo-frame'
 import { C, Screen, TYPEFACE } from '@/components/demos/edrone-tokens'
 import {
-  arriveOf, CollapsibleField, Confetti, DustBurst, LandingScreen, leaveOf, metricsForStory, type StoryMetrics,
+  arriveOf, CollapsibleField, Confetti, DustBurst, leaveOf, metricsForStoryDesktop, type StoryMetrics,
   StepDots, SuccessScreen,
 } from '@/components/demos/signup-story-ui'
 import {
@@ -14,121 +14,24 @@ import {
 import type { DemoState, Step } from '@/components/demos/use-demo-script'
 
 // `useLayoutEffect` is a no-op warning on the server — same guard
-// `demo-frame.tsx`/`compare-slider.tsx`/`dashboard-ui.tsx` already use.
+// `demo-frame.tsx`/`dashboard-ui.tsx` already use.
 const useMeasure = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
 /**
- * The signup redesign, told as one continuous story rather than a before/after
- * pair: a visitor lands on the site, meets the old four-field form, watches it
- * lose the phone number and split into steps, signs in with Google — a real
- * account picker, not a cut — and lands on the account it just created. Mobile
- * only — the simplest shape to read a story like this in.
+ * The shipped signup, played on a desktop stage: the form, Google sign-in
+ * through a real account picker, step 2, and the account it just created. It
+ * is the home card, the case study hero and a tile in the case study's UI row.
  *
- * The old form and the new flow are not rebuilt from scratch: `signup-ui.tsx`'s
- * `Field`/`Heading`/`YellowButton`/etc are the same shared primitives every
- * signup screen on this page reads from, because the point of this demo is
- * that the product on both ends of the story is the same one. And the old form and
- * step 1 of the new flow are not two screens either: they are one screen that
- * loses fields under the visitor rather than being swapped for another —
- * screen changes here are reserved for scenes that are genuinely different.
- *
- * The screens and the screen-index constants are exported so the three
- * shorter demos below (`SignupPhoneRemoveDemo`, `SignupGoogleSignupDemo`,
- * `SignupSplitDemo`) can drive the same screens with their own, much shorter
- * script — one beat of this same story each, for the case study's Solution
- * section, which tells the three changes as three separate cards rather than
- * one long one. Their scripts are lifted straight out of `SCRIPT` below.
+ * `FormScreen` still carries the old four-field form it grew out of (the phone
+ * field, Name and Shop URL leaving to step 2); the rest state below starts it
+ * already in its shipped shape, with those fields gone.
  */
 
-export const LANDING = 0
 export const FORM = 1
 export const STEP2 = 2
 export const SUCCESS = 3
 
-const SCRIPT: Step[] = [
-  // Beat 1 — a visitor lands on the site, and clicks through.
-  { kind: 'wait',   ms: 1200 },
-  { kind: 'move',   target: 'cta' },
-  { kind: 'click',  target: 'cta' },
-  { kind: 'screen', index: FORM },
-
-  // Beat 2 — the old form, empty: the point of this screen is how many
-  // fields it asks for, which reads on its own with nothing typed into them.
-  { kind: 'wait', ms: 2200 },
-
-  // Beat 3 — the phone number comes out: it dims to flag it, then closes.
-  { kind: 'set',  field: 'phonePhase', text: 'fading' },
-  { kind: 'wait', ms: 450 },
-  { kind: 'set',  field: 'phonePhase', text: 'gone' },
-  { kind: 'wait', ms: 1000 },
-
-  // Beat 4 — the form splits into steps: Name and Shop URL leave together —
-  // one field, `nameUrlLeave`, both read from (see FormScreen) — the copy
-  // relabels itself, and the step indicator appears.
-  { kind: 'set',  field: 'nameUrlLeave', text: 'fading' },
-  { kind: 'wait', ms: 700 },
-  { kind: 'set',  field: 'nameUrlLeave', text: 'gone' },
-  { kind: 'wait', ms: 700 },
-  { kind: 'set',  field: 'splitDone', text: '1' },
-  { kind: 'wait', ms: 1100 },
-
-  // Beat 5 — SSO, working this time: an actual account picker opens, shows
-  // the right account, and hands control back on its own click, rather than
-  // the screen just cutting to the next thing.
-  { kind: 'move',  target: 'google' },
-  { kind: 'click', target: 'google' },
-  { kind: 'set',   field: 'chooserOpen', text: '1' },
-  { kind: 'wait',  ms: 1800 },   // sheet slides up, then holds so the account reads
-  { kind: 'move',  target: 'chooser-continue' },
-  { kind: 'click', target: 'chooser-continue' },
-  { kind: 'set',   field: 'chooserOpen', text: '0' },
-  { kind: 'wait',  ms: 550 },
-
-  // Beat 6 — step 2. The account already exists; this collects what the
-  // product still needs.
-  { kind: 'screen', index: STEP2 },
-  { kind: 'wait',   ms: 500 },
-  { kind: 'move',   target: 'name' },
-  { kind: 'click',  target: 'name' },
-  { kind: 'type',   field: 'name', text: 'My Store', cps: 13 },
-  { kind: 'wait',   ms: 350 },
-  { kind: 'click',  target: 'url' },
-  { kind: 'type',   field: 'url',  text: 'mystore.com', cps: 15 },
-  { kind: 'wait',   ms: 650 },
-
-  // Beat 7 — submit. Beat 8 — success.
-  { kind: 'click',  target: 'create' },
-  { kind: 'screen', index: SUCCESS },
-  { kind: 'wait',   ms: 2400 },
-]
-
-/**
- * The poster is the landing screen. The old form's fields stay empty even
- * pinned — the script never fills them either, so a frame pinned to `FORM`
- * correctly shows the untouched, four-field original with nothing typed in.
- */
-const REST: Partial<DemoState> = {
-  screen: LANDING,
-  values: { name: 'My Store', url: 'mystore.com' },
-}
-
-export function SignupStoryDemo(props: DemoProps) {
-  return (
-    <DemoFrame
-      script={SCRIPT} restState={REST} metrics={metricsForStory}
-      ink={C.ink} typeface={TYPEFACE} holdLastFrame
-      {...props}
-    >
-      {(state, m) => <SignupStoryScreens state={state} m={m} />}
-    </DemoFrame>
-  )
-}
-
-// Beats 5-8 of `SCRIPT`, verbatim — SSO through to success — behind a form
-// that starts already in its shipped shape, rather than the story's own
-// opening beats (landing page, old four-field form, the removal/split
-// animation). The home card is a preview of the product, not a trailer for
-// its own redesign history; that history is what the case study is for.
+// SSO through to success, behind a form that starts in its shipped shape.
 const FIXED_SCRIPT: Step[] = [
   { kind: 'wait', ms: 1400 },
 
@@ -162,12 +65,12 @@ const FIXED_REST: Partial<DemoState> = {
   values: { phonePhase: 'gone', nameUrlLeave: 'gone', splitDone: '1' },
 }
 
-/** The home card's own cut: the shipped form straight through SSO to
- *  success, no earlier beat of the story it links to. */
-export function SignupStoryFixedDemo(props: DemoProps) {
+/** The home card's cut on a desktop stage: same script, same screens, laid
+ *  out for a landscape slot instead of a phone. */
+export function SignupStoryFixedDesktopDemo(props: DemoProps) {
   return (
     <DemoFrame
-      script={FIXED_SCRIPT} restState={FIXED_REST} metrics={metricsForStory}
+      script={FIXED_SCRIPT} restState={FIXED_REST} metrics={metricsForStoryDesktop}
       ink={C.ink} typeface={TYPEFACE} holdLastFrame
       {...props}
     >
@@ -176,147 +79,6 @@ export function SignupStoryFixedDemo(props: DemoProps) {
   )
 }
 
-// ─── The three changes, told as three short demos ───────────────────────────
-//
-// The Solution section shows each change as its own card, so each gets its
-// own small, ordinary looping demo — the same `play ?? inView` every other
-// demo on this site uses, not the story's own scroll-driven telling. Each
-// script below is lifted verbatim out of `SCRIPT` above, just shorter: no
-// `holdLastFrame`, because each one ends back where its own poster begins,
-// so the loop resets cleanly rather than needing to hold a different frame.
-
-const PHONE_REMOVE_SCRIPT: Step[] = [
-  { kind: 'wait', ms: 900 },
-  { kind: 'set',  field: 'phonePhase', text: 'fading' },
-  { kind: 'wait', ms: 450 },
-  { kind: 'set',  field: 'phonePhase', text: 'gone' },
-  { kind: 'wait', ms: 1700 },
-]
-const PHONE_REMOVE_REST: Partial<DemoState> = { screen: FORM }
-
-/** Change 1 — the phone number field dissolves out of the old form. */
-export function SignupPhoneRemoveDemo(props: DemoProps) {
-  return (
-    <DemoFrame
-      script={PHONE_REMOVE_SCRIPT} restState={PHONE_REMOVE_REST} metrics={metricsForStory}
-      ink={C.ink} typeface={TYPEFACE}
-      {...props}
-    >
-      {(state, m) => <SignupStoryScreens state={state} m={m} />}
-    </DemoFrame>
-  )
-}
-
-const GOOGLE_SIGNUP_SCRIPT: Step[] = [
-  { kind: 'wait',  ms: 700 },
-  { kind: 'move',  target: 'google' },
-  { kind: 'click', target: 'google' },
-  { kind: 'set',   field: 'chooserOpen', text: '1' },
-  { kind: 'wait',  ms: 1800 },
-  { kind: 'move',  target: 'chooser-continue' },
-  { kind: 'click', target: 'chooser-continue' },
-  { kind: 'set',   field: 'chooserOpen', text: '0' },
-  { kind: 'wait',  ms: 900 },
-]
-const GOOGLE_SIGNUP_REST: Partial<DemoState> = { screen: FORM }
-
-/** Change 2 — SSO working correctly: a real account picker, not a cut. */
-export function SignupGoogleSignupDemo(props: DemoProps) {
-  return (
-    <DemoFrame
-      script={GOOGLE_SIGNUP_SCRIPT} restState={GOOGLE_SIGNUP_REST} metrics={metricsForStory}
-      ink={C.ink} typeface={TYPEFACE}
-      {...props}
-    >
-      {(state, m) => <SignupStoryScreens state={state} m={m} />}
-    </DemoFrame>
-  )
-}
-
-// No `splitDone` here, unlike `SCRIPT`'s own Beat 4 — that flip also swaps
-// the heading down a size, the subtitle to different copy, and drops the
-// step dots in, all in the same instant, none of it eased. Buried in the
-// full story that one jump cut passes; as the entire content of its own
-// short, looping card it read as the copy itself glitching. This card's
-// job is Name and Shop URL relocating — the copy above it already says
-// what they land on — so it holds on the emptied form instead of also
-// re-litigating that in a jump cut.
-// One `set` straight to 'gone', not the two-step 'fading' → wait → 'gone'
-// `SCRIPT`'s own Beat 4 uses: that leaves the field sitting half-faded,
-// half-slid for a full 700ms between the two `set`s, which read as the
-// motion stalling partway rather than as a beat with room to read — a CSS
-// transition already eases the whole 0→1 `leave` range in one continuous
-// move, so there is nothing the pause was buying.
-const SPLIT_SCRIPT: Step[] = [
-  { kind: 'wait', ms: 700 },
-  { kind: 'set',  field: 'nameUrlLeave', text: 'gone' },
-  { kind: 'wait', ms: 3000 },
-]
-/** Starts with the phone number already gone — by this point in the story
- *  it already left, in the previous card. */
-const SPLIT_REST: Partial<DemoState> = { screen: FORM, values: { phonePhase: 'gone' } }
-
-/** Change 3 — Name and Shop URL relocate together to their own step. */
-export function SignupSplitDemo(props: DemoProps) {
-  return (
-    <DemoFrame
-      script={SPLIT_SCRIPT} restState={SPLIT_REST} metrics={metricsForStory}
-      ink={C.ink} typeface={TYPEFACE}
-      {...props}
-    >
-      {(state, m) => <SignupStoryScreens state={state} m={m} />}
-    </DemoFrame>
-  )
-}
-
-// Step 2's own half of the same motion — same beats, same durations as
-// `SPLIT_SCRIPT`, just `arrive` instead of `nameUrlLeave`. The two demos are
-// separate `DemoFrame`s (each card is its own stage) with no shared clock,
-// so this is what keeps them reading as one relocation rather than two
-// coincidentally similar animations: mounted side by side, both start on
-// the same `inView` moment, and an identical timeline keeps them from
-// drifting apart across loops the way two different-length scripts would.
-// The whole screen builds itself, not just its fields: chrome first
-// (dots/heading/subtitle), then Name and Shop URL landing at t=700ms —
-// still the exact moment `SPLIT_SCRIPT` finishes losing them on the card
-// beside it, so the two stay in lockstep — then the buttons close it out.
-const SPLIT_ARRIVE_SCRIPT: Step[] = [
-  { kind: 'wait', ms: 300 },
-  { kind: 'set',  field: 'screenPhase', text: 'chrome' },
-  { kind: 'wait', ms: 400 },
-  { kind: 'set',  field: 'arrive', text: 'here' },
-  { kind: 'wait', ms: 300 },
-  { kind: 'set',  field: 'screenPhase', text: 'complete' },
-  { kind: 'wait', ms: 2700 },
-]
-/** Starts with nothing built yet — no chrome, no fields — so the loop
- *  restarts on a blank stage rather than jumping backward from a finished
- *  screen. */
-const SPLIT_ARRIVE_REST: Partial<DemoState> = {
-  screen: STEP2,
-  values: { arrive: 'hidden', screenPhase: 'hidden' },
-}
-
-/** Change 3, step 2's half: Name and Shop URL land here, in sync with
- *  `SignupSplitDemo` losing them on the card beside it. */
-export function SignupSplitArriveDemo(props: DemoProps) {
-  return (
-    <DemoFrame
-      script={SPLIT_ARRIVE_SCRIPT} restState={SPLIT_ARRIVE_REST} metrics={metricsForStory}
-      ink={C.ink} typeface={TYPEFACE}
-      {...props}
-    >
-      {(state, m) => <SignupStoryScreens state={state} m={m} />}
-    </DemoFrame>
-  )
-}
-
-/**
- * The screen-index switch, shared by `SignupStoryDemo` (the full story, on
- * loop) and the three shorter demos below (each one beat, on their own loop)
- * — one place that turns a `DemoState.screen` into a component, so they never
- * quietly drift into showing different things for the same screen index.
- */
 export function SignupStoryScreens({ state, m }: { state: DemoState; m: StoryMetrics }) {
   return (
     <>
@@ -326,12 +88,8 @@ export function SignupStoryScreens({ state, m }: { state: DemoState; m: StoryMet
       >
         <div
           key={state.screen}
-          style={{
-            width: state.screen === LANDING ? '100%' : m.column,
-            height: state.screen === LANDING ? '100%' : undefined,
-          }}
+          style={{ width: m.column }}
         >
-          {state.screen === LANDING && <LandingScreen state={state} m={m} />}
           {state.screen === FORM && <FormScreen state={state} m={m} />}
           {state.screen === STEP2 && <StepTwo state={state} m={m} />}
           {state.screen === SUCCESS && <SuccessScreen m={m} />}
@@ -477,13 +235,24 @@ export function GoogleChooser({ open, state, m }: { open: boolean; state: DemoSt
   return (
     <>
       <div className="demo-scrim pointer-events-none absolute inset-0 z-10" style={{ background: 'rgba(5, 5, 5, 0.32)', opacity: open ? 1 : 0 }} />
+      {/* A bottom sheet on a phone. On desktop Google opens its own window,
+          so the picker is a dialog in the middle of the stage, scaled up by
+          the ratio the desktop form's type runs at over the phone's. */}
       <div
-        className="demo-drawer absolute inset-x-0 bottom-0 z-20"
-        style={{
+        className={`demo-drawer absolute z-20 ${m.mobile ? 'inset-x-0 bottom-0' : ''}`}
+        style={m.mobile ? {
           transform: open ? 'none' : 'translateY(calc(100% + 24px))',
           background: '#FFFFFF',
           borderRadius: '14px 14px 0 0',
           boxShadow: '0 -8px 30px rgba(5, 5, 5, 0.18)',
+          padding: '22px 20px 26px',
+        } : {
+          left: '50%', top: '50%', width: 400,
+          transform: `translate(-50%, -50%) scale(${open ? 1.3 : 1.2})`,
+          opacity: open ? 1 : 0,
+          background: '#FFFFFF',
+          borderRadius: 14,
+          boxShadow: '0 12px 40px rgba(5, 5, 5, 0.22)',
           padding: '22px 20px 26px',
         }}
       >

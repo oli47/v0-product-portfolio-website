@@ -31,33 +31,17 @@ export function ProjectRow({ project }: { project: Project }) {
       {/* Thumbnail — full-bleed on mobile, inset on a card fill on desktop.
           Where the project has a coded demo it takes the same slot, still at
           rest and playing while the row is hovered. */}
-      <div className="flex w-full items-center justify-center overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] aspect-[378/236] sm:items-end sm:aspect-[680/400] transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
-        {Demo ? (
-          // Every demo shows the same screen here that the case study shows,
-          // and those screens are not all the same shape, so the slot measures
-          // from whichever side binds: its width on a phone, its height above
-          // sm. Each one then lands on the same margin rather than needing its
-          // own number, and `demo-lift` scales it up while the row is hovered
-          // (see globals.css).
-          //
-          // The phone numbers are solved rather than picked. A 1.6 slot is far
-          // taller than any of the three stages, so filling its width left a
-          // 60px band of beige above a screen with 32px beside it — even, but
-          // lopsided, and the screen small for it. Shortening the slot to 1.68
-          // and taking 91% of its width puts a 16px frame on all four sides of
-          // all three, and buys the screens back about a ninth of their width.
-          //
-          // Height binds above sm (see DemoFrame's `fit="card"` doc), so every
-          // demo here sits at the same fraction of the slot's height regardless
-          // of its own shape — and `items-end` dumps all the slack above it,
-          // not split top and bottom. At 76% that was a measured 75.7px band of
-          // beige above every demo (536x315 slot). Raised to 88% to roughly
-          // halve it, to ~38px, without changing the slot's own footprint.
-          <div className="demo-lift w-[91%] sm:h-[88%] sm:w-auto" data-lift={hovered}>
-            <Demo variant="card" fit="card" play={hovered} />
-          </div>
-        ) : (
-          <div className="demo-lift h-full w-full sm:h-auto sm:w-[82.5%]" data-lift={hovered}>
+      {/* The screen sits in a fixed mat, not a fixed slot: the same padding
+          on top and both sides on every card (and below on a phone), with the
+          card as tall as its screen needs. The stages are not all one shape
+          (freemium 1.78, signup 1.81, contacts 1.84), so a fixed slot could
+          only give them equal margins by cropping or padding the screens. A
+          few px of height between cards is the invisible side of that trade. */}
+      <div className="overflow-hidden rounded-[0.125rem] bg-[var(--color-000)] p-4 sm:px-6 sm:pt-6 sm:pb-0 transition-colors duration-[400ms] ease-in-out group-hover:bg-[var(--color-100)]">
+        <div className="demo-lift overflow-hidden rounded-[0.125rem]" data-lift={hovered}>
+          {Demo ? (
+            <Demo variant="card" play={hovered} />
+          ) : (
             <Image
               src={project.thumbnailImage}
               alt=""
@@ -65,10 +49,10 @@ export function ProjectRow({ project }: { project: Project }) {
               height={423}
               quality={95}
               sizes="(max-width: 640px) 100vw, 514px"
-              className="h-full w-full object-cover sm:h-auto sm:w-full sm:object-contain"
+              className="h-auto w-full"
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Hover CTA — trails the pointer across the whole card; desktop only,

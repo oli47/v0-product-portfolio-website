@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Olaf Otrząsek, Senior Product Designer</title>
+<style>
+  /* Fonts and tokens mirror the portfolio: app/globals.css and app/layout.tsx */
+  @font-face { font-family: 'DM Sans'; src: url('assets/dmsans-400.ttf') format('truetype'); font-weight: 400; }
+  @font-face { font-family: 'DM Sans'; src: url('assets/dmsans-600.ttf') format('truetype'); font-weight: 600; }
+  @font-face { font-family: 'PPMondwest'; src: url('assets/ppmondwest-regular.woff2') format('woff2'); font-weight: 400; }
+  @font-face { font-family: 'PPNeueBit'; src: url('assets/ppneuebit-bold.woff2') format('woff2'); font-weight: 700; }
+
+  :root {
+    --accent:    #B84A12;
+    --color-500: #1A1714;
+    --color-300: #544D45;
+    --color-200: #B5A990;
+    --color-100: #E8E0D0;
+    --color-000: #F2EDE3;
+    --white:     #FAF7F2;
+  }
+
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; hyphens: none; }
+  html { background: var(--white); }
+  body {
+    zoom: 0.8;
+    width: calc(210mm / 0.8); min-height: calc(297mm / 0.8);
+    padding: 52px 64px 40px;
+    background: var(--white); color: var(--color-500);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; line-height: 24px; font-weight: 400;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  p, li { text-wrap: pretty; }
+  a { color: inherit; text-decoration: none; }
+  b { font-weight: 600; }
+
+  /* text-eyebrow */
+  .eyebrow {
+    font-family: 'PPNeueBit', monospace; font-weight: 700;
+    font-size: 17px; line-height: 24px; text-transform: uppercase; letter-spacing: 0;
+    color: var(--color-300);
+  }
+  .nw { white-space: nowrap; }
+  .u { text-decoration: underline; text-underline-offset: 2px; text-decoration-color: var(--color-100); }
+  .icon { display: inline-block; width: 14px; height: 14px; vertical-align: middle; margin: -2px 4px 0 0; }
+
+  h1 { font-family: 'PPMondwest', serif; font-weight: 400; font-size: 34px; line-height: 1.2; }
+  .title { margin-top: 2px; }
+  .summary { margin-top: 14px; }
+  .contact { margin-top: 10px; }
+
+  /* SectionBadge */
+  .badge { display: inline-block; padding: 6px 0; margin: 30px 0 18px; border-bottom: 1px solid var(--accent); }
+
+  .job + .job { margin-top: 18px; }
+  .row { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    flex: none; width: 36px; height: 36px; padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--color-100); background: var(--color-000); border-radius: 2px;
+  }
+  .logo img { width: 26px; height: 26px; object-fit: contain; border-radius: 2px; }
+  .head { flex: 1; min-width: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .date { white-space: nowrap; }
+  .body { margin: 6px 0 0 48px; }
+  .ctx { color: var(--color-300); }
+  ul { margin: 2px 0 0 18px; }
+  li { padding-left: 2px; }
+  li + li { margin-top: 2px; }
+  li::marker { color: var(--color-200); }
+
+  .rows p { display: flex; gap: 12px; }
+  .rows p + p { margin-top: 4px; }
+  .rows .eyebrow { flex: none; width: 96px; }
+</style>
+</head>
+<body>
+
+<h1>Olaf Otrząsek</h1>
+<p class="eyebrow title">Senior Product Designer</p>
+
+<p class="summary">Product designer with 7+ years in SaaS. I design how a product works as much as how it looks, find what to fix in the data and ship it myself with Claude Code. At edrone I also covered the PM role, so I owned design end to end, from research to production.</p>
+
+<p class="contact">Check my portfolio <a href="https://www.00laf.com/"><span class="u">right here</span></a>, and get in touch at <a href="mailto:olafotrzasek@gmail.com"><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 8h2v2H6zm2 2h2v2H8zm10-2h-2v2h2zm-2 2h-2v2h2zm-6 2h4v2h-4zM2 6h2v12H2zm18 0h2v12h-2zM4 4h16v2H4zm0 14h16v2H4z"/></svg><span class="u">olafotrzasek@gmail.com</span></a>, <a href="tel:+48732188613"><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 1h5v2H4zm5 2h2v4H9zM7 7h2v4H7zm-3 5h2v2H4zM2 3h2v9H2zm7 8h2v2H9zm2 2h2v2h-2zm2 2h4v2h-4zm4-2h4v2h-4zm4 2h2v5h-2zM6 14h2v2H6zm2 2h2v2H8zm2 2h2v2h-2zm2 2h9v2h-9z"/></svg><span class="u">+48 732 188 613</span></a> or <a href="https://www.linkedin.com/in/olafotrzasek/"><img class="icon" src="assets/linkedin.svg" alt=""><span class="u">LinkedIn</span></a>.</p>
+
+<div class="badge eyebrow">Experience</div>
+
+<div class="job">
+  <div class="row">
+    <div class="logo"><img src="assets/logoedrone.png" alt=""></div>
+    <div class="head">
+      <p class="eyebrow">Senior Product Designer &amp; Team Lead <a href="https://edrone.me/">/ edrone</a></p>
+      <p class="eyebrow date">Nov 2022 – Mar 2026</p>
+    </div>
+  </div>
+  <div class="body">
+    <p class="ctx"><span class="nw">AI-powered</span> marketing automation and CRM for <span class="nw">e-commerce</span>, serving 7000+ stores in Poland and Brazil.</p>
+    <ul>
+      <li>Owned <b>product strategy</b> and how edrone designs and builds. I set up the <b>design process</b>, rebuilt most of the product over 3 years, and designed the company’s <b><a href="https://www.00laf.com/projects/freemium-activation"><span class="u">first <span class="nw">product-led</span> channel</span></a></b> after ten years of <span class="nw">sales-led</span> growth, reaching <b>5050&nbsp;stores&nbsp;in&nbsp;11&nbsp;months</b> with <b>7.8%&nbsp;converting&nbsp;to&nbsp;paid</b>.</li>
+      <li>Led <b>product discovery</b> to find <b>growth opportunities</b> beyond the core product, combining user interviews with data from Amplitude.</li>
+      <li><b>AI</b> turned me from a designer who hands off into one who <b>ships code</b>, so I redesigned and shipped <b><a href="https://www.00laf.com/projects/signup-redesign"><span class="u">signup&nbsp;in&nbsp;5&nbsp;hours</span></a></b> with Codex, lifting conversion by 200%, and built a <b><span class="nw">UX-audit</span> agent</b> on Codex that walks flows like a user to flag what’s wrong.</li>
+      <li>Built the <b>design system</b> from scratch, with <b>50+ Storybook components</b> built to WCAG standards and <b>interactive prototypes</b> as specs. Every change went through Chromatic for my approval, and Codex built from it directly.</li>
+      <li>Grew and led the <b>design team from solo to four</b>, and ran recruiting.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="job">
+  <div class="row">
+    <div class="logo"><img src="assets/logodeepsolver.png" alt=""></div>
+    <div class="head">
+      <p class="eyebrow">Product Designer <a href="https://deepsolver.com/">/ Deepsolver</a></p>
+      <p class="eyebrow date">Nov 2020 – Oct 2022</p>
+    </div>
+  </div>
+  <div class="body">
+    <p><b>Sole product designer</b> on Deepsolver and <a href="https://www.00laf.com/projects/plo-genius"><span class="u">PLO Genius</span></a>, <b>built from zero</b> across research, UX and UI. Four years on, PLO Genius, the first PLO solver to run in a browser, has <b>120+ paying subscribers</b> and <b>10+&nbsp;platforms</b> licensing the engine, its main revenue channel.</p>
+  </div>
+</div>
+
+<div class="job">
+  <div class="row">
+    <div class="logo"><img src="assets/logoeq.png" alt=""></div>
+    <div class="head">
+      <p class="eyebrow">UX Designer <a href="https://www.eqsystem.pl/en/">/ eq system</a></p>
+      <p class="eyebrow date">Sep 2019 – Jul 2020</p>
+    </div>
+  </div>
+  <div class="body">
+    <p>Designed modular ERP, CRM and HRM systems across desktop, tablet and mobile for enterprise clients.</p>
+  </div>
+</div>
+
+<div class="job">
+  <div class="row">
+    <div class="logo"><img src="assets/logois.png" alt=""></div>
+    <div class="head">
+      <p class="eyebrow">Junior UX/UI Designer <a href="https://inventivesoftwarellc.com/">/ Inventive Software</a></p>
+      <p class="eyebrow date">Jan 2019 – Jun 2019</p>
+    </div>
+  </div>
+  <div class="body">
+    <p>Designed interfaces for real estate and <span class="nw">e-commerce</span> platforms as my first UX/UI role.</p>
+  </div>
+</div>
+
+<div class="badge eyebrow">Skills</div>
+<div class="rows">
+  <p><span class="eyebrow">Product</span><span>Product strategy, Product discovery, User research, Usability testing, <span class="nw">Product-led</span> growth</span></p>
+  <p><span class="eyebrow">Design</span><span>Figma, Prototyping, Design systems, Accessibility (WCAG)</span></p>
+  <p><span class="eyebrow">Tools</span><span>Amplitude, Tableau, Vitally, HTML, CSS, Claude Code, Codex</span></p>
+  <p><span class="eyebrow">Languages</span><span>English C1, Polish native</span></p>
+</div>
+
+<div class="badge eyebrow">Education</div>
+<div class="job">
+  <div class="row">
+    <div class="logo"><img src="assets/logowsb.png" alt=""></div>
+    <div class="head">
+      <p class="eyebrow">Bachelor of Management <a href="https://wsb.edu.pl/en">/ WSB University</a></p>
+      <p class="eyebrow date">2017 – 2020</p>
+    </div>
+  </div>
+  <div class="body">
+    <p>Business Psychology, focus on consumer behaviour and <span class="nw">decision-making</span>.</p>
+  </div>
+</div>
+
+</body>
+</html>
