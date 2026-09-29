@@ -126,7 +126,7 @@ function ContactBar() {
       <span className="whitespace-nowrap">
         {t.hero.closingLead}
         <a
-          href="/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf"
+          href="/Olaf-Otrzasek-Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Download resume (PDF)"
