@@ -122,25 +122,29 @@ function ContactBar() {
         </span>
       </button>
       {noOrphans(t.hero.contactBridge)}
-      <a
-        href="/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Download resume (PDF)"
-        className={linkCls}
-        onMouseEnter={() => setHoverId('resume')}
-        onMouseLeave={() => setHoverId(null)}
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="inline-block align-middle mr-1" aria-hidden="true">
-          <path d="M21 15v4h-2v-4zm-2 4v2H5v-2zM5 15v4H3v-4zm8-12v14h-2V3z" />
-          <path d="M7 11v2h10v-2zm2 2v2h2v-2zm4 0v2h2v-2z" />
-          <path d="M15 11v2h2v-2z" />
-        </svg>
-        <span className={wordCls}>{t.hero.closingResume}</span>
-        <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'resume' ? 'opacity-100' : ''}`}>
-          {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
-        </span>
-      </a>
+      {/* "My" rides with the link, so it never ends a line on its own. */}
+      <span className="whitespace-nowrap">
+        {t.hero.closingLead}
+        <a
+          href="/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Download resume (PDF)"
+          className={linkCls}
+          onMouseEnter={() => setHoverId('resume')}
+          onMouseLeave={() => setHoverId(null)}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="inline-block align-middle mr-1" aria-hidden="true">
+            <path d="M21 15v4h-2v-4zm-2 4v2H5v-2zM5 15v4H3v-4zm8-12v14h-2V3z" />
+            <path d="M7 11v2h10v-2zm2 2v2h2v-2zm4 0v2h2v-2z" />
+            <path d="M15 11v2h2v-2z" />
+          </svg>
+          <span className={wordCls}>{t.hero.closingResume}</span>
+          <span aria-hidden="true" className={`${tooltipOpen} ${hoverId === 'resume' ? 'opacity-100' : ''}`}>
+            {t.contact.open}<span className={`${tooltipSym} text-[var(--color-200)]`}>↗</span>
+          </span>
+        </a>
+      </span>
       {noOrphans(t.hero.closingMid)}
       <a
         href="https://www.linkedin.com/in/olafotrzasek/"
