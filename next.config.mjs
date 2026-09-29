@@ -9,7 +9,8 @@ const nextConfig = {
   // alive for links already sent out.
   async redirects() {
     return [
-      { source: '/olaf-resume.pdf', destination: '/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf', permanent: true },
+      { source: '/olaf-resume.pdf', destination: '/Olaf-Otrzasek-Resume.pdf', permanent: true },
+      { source: '/Olaf-Otrzasek-Senior-Product-Designer-CV.pdf', destination: '/Olaf-Otrzasek-Resume.pdf', permanent: true },
     ]
   },
   async headers() {
